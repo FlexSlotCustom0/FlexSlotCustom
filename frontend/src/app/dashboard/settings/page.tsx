@@ -7,21 +7,31 @@ import { useState } from "react";
 
 export default function SettingsPage() {
   const [theme, setTheme] = useState('sigma-dark');
+  const [schema, setSchema] = useState(JSON.stringify({
+    "theme": "sigma-dark",
+    "branding": {
+      "primary": "#3b82f6",
+      "font": "Geist Sans"
+    },
+    "layout": "brutalist-grid",
+    "isolation": "UUID_V4"
+  }, null, 2));
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 flex">
       <aside className="w-64 glass border-r border-white/5 flex flex-col h-screen sticky top-0 hidden lg:flex">
         <div className="h-16 flex items-center px-6 border-b border-white/5">
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
               <Settings className="w-4 h-4 text-white" />
             </div>
             <span className="font-semibold tracking-tight">System Settings</span>
-          </Link>
+          </div>
         </div>
         <div className="flex-1 py-6 px-3 space-y-1">
           <NavItem href="/dashboard" label="Overview" />
           <NavItem href="/dashboard/services" label="Services" />
+          <NavItem href="/dashboard/bookings" label="Booking & Slots" />
           <NavItem href="/dashboard/customers" label="Customers" />
           <NavItem href="/dashboard/ai" label="AI Insights" />
           <NavItem href="/dashboard/settings" label="Settings" active />
@@ -43,95 +53,51 @@ export default function SettingsPage() {
           </div>
 
           <div className="space-y-8">
-            {/* Business Identity */}
+            {/* UI Schema Editor */}
             <section className="glass-card rounded-3xl border border-white/5 overflow-hidden">
               <div className="p-6 border-b border-white/5 flex items-center gap-3 bg-white/5">
-                <Globe className="w-5 h-5 text-blue-400" />
-                <h3 className="font-bold">Business Persona</h3>
+                <Palette className="w-5 h-5 text-blue-400" />
+                <h3 className="font-bold">UI Schema Editor</h3>
               </div>
-              <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Business Name</label>
-                  <input type="text" defaultValue="Sigma Consulting" className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all font-medium" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Tenant Slug (URL)</label>
-                  <div className="flex items-center">
-                    <span className="px-4 py-3 bg-slate-800 rounded-l-xl text-xs text-slate-500 border border-white/10 border-r-0">flexslot.io/</span>
-                    <input type="text" defaultValue="sigma-consult" className="w-full bg-slate-900/50 border border-white/10 rounded-r-xl px-4 py-3 focus:outline-none font-medium" />
-                  </div>
-                </div>
+              <div className="p-8">
+                <p className="text-xs text-slate-500 mb-4 font-mono uppercase tracking-tighter">
+                  // Modify the JSON schema to update tenant branding and grid layouts instantly.
+                </p>
+                <textarea 
+                  value={schema}
+                  onChange={(e) => setSchema(e.target.value)}
+                  spellCheck={false}
+                  className="w-full h-48 bg-black/40 border border-white/10 rounded-xl p-4 font-mono text-xs text-blue-300 focus:outline-none focus:border-blue-500/50 resize-none scrollbar-hide"
+                />
               </div>
             </section>
 
-            {/* Dynamic Theming */}
-            <section className="glass-card rounded-3xl border border-white/5 overflow-hidden">
-              <div className="p-6 border-b border-white/5 flex items-center gap-3 bg-white/5">
-                <Palette className="w-5 h-5 text-purple-400" />
-                <h3 className="font-bold">UI Theme Engine</h3>
-              </div>
-              <div className="p-8 space-y-8">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <ThemeOption active={theme === 'sigma-dark'} onClick={() => setTheme('sigma-dark')} label="Sigma Dark" color="bg-slate-900" />
-                  <ThemeOption active={theme === 'brutalist'} onClick={() => setTheme('brutalist')} label="Brutalist" color="bg-zinc-100" />
-                  <ThemeOption active={theme === 'emerald'} onClick={() => setTheme('emerald')} label="Emerald Depth" color="bg-emerald-950" />
-                  <ThemeOption active={theme === 'cyber'} onClick={() => setTheme('cyber')} label="Cybernetic" color="bg-indigo-950" />
-                </div>
-                <div className="p-6 rounded-2xl bg-slate-900/50 border border-white/10 border-dashed flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="font-medium">Custom JSON Schema</p>
-                    <p className="text-xs text-slate-500">Override base components with a raw configuration file.</p>
-                  </div>
-                  <button className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs transition-all">Upload Schema</button>
-                </div>
-              </div>
-            </section>
-
-            {/* AI Engine Settings */}
-            <section className="glass-card rounded-3xl border border-white/5 overflow-hidden">
-              <div className="p-6 border-b border-white/5 flex items-center gap-3 bg-white/5">
-                <Bot className="w-5 h-5 text-indigo-400" />
-                <h3 className="font-bold">LLM Infrastructure</h3>
-              </div>
-              <div className="p-8 space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">Active Model</h4>
-                    <p className="text-xs text-slate-500">Self-hosted instances on your private cluster.</p>
-                  </div>
-                  <select className="bg-slate-900 border border-white/10 rounded-xl px-4 py-2 text-sm outline-none">
-                    <option>TinyLlama 1.1B v1.4 (Default)</option>
-                    <option>DeepSeek R1-Distill-7B</option>
-                  </select>
-                </div>
-                <div className="space-y-4 pt-4 border-t border-white/5">
-                  <ConfigToggle label="Asynchronous AI Parsing" description="Process natural language requests in background workers to reduce UI latency." defaultChecked />
-                  <ConfigToggle label="Data Locality Compliance" description="Ensure all AI computational tasks remain strictly on your server-side infrastructure." defaultChecked />
-                  <ConfigToggle label="Automated SEO Extraction" description="Automatically generate descriptions for every new service created." />
-                </div>
-              </div>
-            </section>
-
-            {/* Security & Isolation */}
+            {/* Security & RLS */}
             <section className="glass-card rounded-3xl border border-white/5 overflow-hidden">
               <div className="p-6 border-b border-white/5 flex items-center gap-3 bg-white/5">
                 <Shield className="w-5 h-5 text-emerald-400" />
-                <h3 className="font-bold">Data Isolation & Security</h3>
+                <h3 className="font-bold">Security Compliance (RLS)</h3>
               </div>
-              <div className="p-8 space-y-6">
+              <div className="p-8">
+                <div className="mb-6">
+                   <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-500 uppercase mb-2">
+                     <span className="w-2 h-2 rounded-full bg-emerald-500" /> PostgreSQL Active Policy
+                   </div>
+                   <div className="p-4 rounded-xl bg-slate-950 border border-white/5 font-mono text-[10px] leading-relaxed text-slate-400">
+                     <span className="text-emerald-500">CREATE POLICY</span> tenant_isolation_policy <span className="text-emerald-500">ON</span> bookings<br/>
+                     <span className="text-emerald-500">FOR ALL</span><br/>
+                     <span className="text-emerald-500">USING</span> (tenant_id = current_setting(<span className="text-blue-400">'app.current_tenant'</span>)::uuid);
+                   </div>
+                </div>
+                
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
                   <Database className="w-5 h-5 text-emerald-400 mt-1" />
                   <div>
-                    <h4 className="font-medium text-emerald-400">PostgreSQL Row Level Security (RLS)</h4>
-                    <p className="text-sm text-slate-400 leading-relaxed">System-wide RLS is currently <strong>Active</strong>. Your tenant data is logically isolated at the persistence layer using UUID-based partitioning.</p>
+                    <h4 className="font-medium text-emerald-400 text-sm">Hardened Multi-Tenancy</h4>
+                    <p className="text-[10px] text-slate-400 leading-relaxed mt-1">
+                      Data is logically isolated at the database level. Each transaction is scoped to the authenticated tenant UUID before execution.
+                    </p>
                   </div>
-                </div>
-                <div className="flex items-center justify-between pt-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Bell className="w-4 h-4 text-slate-500" />
-                    Notify me on cross-tenant access attempts
-                  </div>
-                  <input type="checkbox" className="w-5 h-5 rounded-md bg-slate-900 border-white/10 text-blue-600 focus:ring-blue-500" defaultChecked />
                 </div>
               </div>
             </section>
@@ -139,35 +105,6 @@ export default function SettingsPage() {
         </div>
       </main>
     </div>
-  );
-}
-
-function ConfigToggle({ label, description, defaultChecked }: { label: string, description: string, defaultChecked?: boolean }) {
-  return (
-    <div className="flex items-center justify-between">
-      <div className="space-y-1 pr-8">
-        <h4 className="text-sm font-medium">{label}</h4>
-        <p className="text-xs text-slate-500">{description}</p>
-      </div>
-      <label className="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" className="sr-only peer" defaultChecked={defaultChecked} />
-        <div className="w-11 h-6 bg-slate-800 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-500/50 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-      </label>
-    </div>
-  );
-}
-
-function ThemeOption({ active, onClick, label, color }: { active: boolean, onClick: () => void, label: string, color: string }) {
-  return (
-    <button 
-      onClick={onClick}
-      className={`relative p-1 rounded-2xl border-2 transition-all ${active ? 'border-blue-500 scale-105' : 'border-transparent hover:border-white/10'}`}
-    >
-      <div className={`h-24 rounded-xl ${color} mb-2 border border-white/5 overflow-hidden`}>
-        <div className="w-1/3 h-full bg-black/20" />
-      </div>
-      <span className="text-xs font-bold text-slate-300">{label}</span>
-    </button>
   );
 }
 
