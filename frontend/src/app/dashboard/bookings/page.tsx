@@ -40,14 +40,14 @@ export default function BookingsShowcase() {
           <NavItem href="/dashboard/settings" label="Settings" />
         </div>
         <div className="p-4 border-t border-white/5">
-          <div className="p-3 rounded-xl bg-slate-900 border border-white/10">
-             <div className="text-[10px] font-bold text-blue-500 uppercase mb-2 flex items-center gap-1">
+          <div className="p-3 rounded-xl bg-black/40 border border-white/5 font-mono">
+             <div className="text-[10px] font-bold text-accent-purple uppercase mb-2 flex items-center gap-1">
                <Database className="w-3 h-3" /> Transaction Log
              </div>
-             <div className="space-y-2 font-mono text-[9px] text-slate-500">
+             <div className="space-y-2 text-[9px] text-white/50">
                <div>[09:41:02] BEGIN TRANSACTION;</div>
-               {lockingSlot && <div className="text-blue-400 animate-pulse">[09:42:10] SELECT * FROM slots WHERE id={lockingSlot} FOR UPDATE;</div>}
-               {lockedSlots.length > 0 && <div className="text-emerald-500">[09:42:11] ROW_LOCK ACQUIRED; COMMIT;</div>}
+               {lockingSlot && <div className="text-gold-light animate-pulse">[09:42:10] SELECT * FROM slots WHERE id={lockingSlot} FOR UPDATE;</div>}
+               {lockedSlots.length > 0 && <div className="text-gold-deep">[09:42:11] ROW_LOCK ACQUIRED; COMMIT;</div>}
              </div>
           </div>
         </div>
@@ -55,24 +55,24 @@ export default function BookingsShowcase() {
 
       <main className="flex-1 flex flex-col">
         <header className="h-16 glass border-b border-white/5 flex items-center justify-between px-8 sticky top-0 z-10">
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            Availability Grid <span className="text-[10px] bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded border border-emerald-500/20">LIVE PARTITION</span>
+          <h1 className="text-xl font-bold flex items-center gap-2 text-gold-light">
+            Availability Grid <span className="text-[10px] bg-gold-deep/10 text-gold-deep px-2 py-0.5 rounded border border-gold-deep/20">LIVE PARTITION</span>
           </h1>
-          <div className="flex items-center gap-4 text-xs font-mono text-slate-500">
+          <div className="flex items-center gap-4 text-xs font-mono text-white/40">
              <div className="flex items-center gap-2">
-               <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" /> Synchronous IO
+               <span className="w-2 h-2 rounded-full bg-gold-light animate-ping" /> Synchronous IO
              </div>
              <div className="flex items-center gap-2">
-               <span className="w-2 h-2 rounded-full bg-emerald-500" /> ACID Compliant
+               <span className="w-2 h-2 rounded-full bg-gold-deep" /> ACID Compliant
              </div>
           </div>
         </header>
 
-        <div className="p-8">
+        <div className="p-8 bg-[radial-gradient(circle_at_bottom_right,_var(--tw-gradient-stops))] from-accent-purple/5 via-background to-background">
           <div className="mb-10 max-w-2xl">
-            <h2 className="text-3xl font-bold mb-4">The Concurrency Showcase</h2>
-            <p className="text-slate-400 leading-relaxed italic border-l-2 border-blue-500/50 pl-4 bg-blue-500/5 py-2">
-              Demonstrating <strong>Pessimistic Concurrency Control</strong>. Selecting a slot initiates an exclusive row-level lock on the PostgreSQL instance, preventing double-bookings during the transaction lifetime.
+            <h2 className="text-3xl font-bold mb-4 text-gold-light">The Concurrency Showcase</h2>
+            <p className="text-white/60 leading-relaxed italic border-l-2 border-gold-deep/50 pl-4 bg-gold-deep/5 py-2">
+              Demonstrating <strong>Pessimistic Concurrency Control</strong>. Selecting a slot initiates an exclusive row-level lock on the PostgreSQL instance.
             </p>
           </div>
 
@@ -87,19 +87,19 @@ export default function BookingsShowcase() {
                   onClick={() => handleSlotClick(slot.id)}
                   disabled={isLocked || isLocking}
                   className={`relative p-6 rounded-3xl border-2 transition-all text-left overflow-hidden group ${
-                    isLocked ? 'border-emerald-500/20 bg-emerald-500/5' :
-                    isLocking ? 'border-blue-500 bg-blue-500/10' :
-                    'border-white/5 bg-white/5 hover:border-blue-500/50'
+                    isLocked ? 'border-gold-deep/40 bg-gold-deep/10' :
+                    isLocking ? 'border-gold-light bg-gold-light/10' :
+                    'border-white/5 bg-white/5 hover:border-gold-light/50'
                   }`}
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <Clock className={`w-5 h-5 ${isLocked ? 'text-emerald-400' : isLocking ? 'text-blue-400' : 'text-slate-500 group-hover:text-blue-400'}`} />
-                    {isLocked && <Lock className="w-4 h-4 text-emerald-400" />}
+                    <Clock className={`w-5 h-5 ${isLocked ? 'text-gold-deep' : isLocking ? 'text-gold-light' : 'text-slate-500 group-hover:text-gold-light'}`} />
+                    {isLocked && <Lock className="w-4 h-4 text-gold-deep" />}
                   </div>
                   
-                  <div className="font-bold text-lg mb-1">{slot.time}</div>
-                  <div className={`text-[10px] font-bold uppercase tracking-widest ${isLocked ? 'text-emerald-500' : isLocking ? 'text-blue-500' : 'text-slate-500'}`}>
-                    {isLocked ? 'Confirmed' : isLocking ? 'SELECTING...' : 'Available'}
+                  <div className="font-bold text-lg mb-1 text-gold-light">{slot.time}</div>
+                  <div className={`text-[10px] font-bold uppercase tracking-widest ${isLocked ? 'text-gold-deep' : isLocking ? 'text-gold-light' : 'text-slate-500'}`}>
+                    {isLocked ? 'Locked' : isLocking ? 'SELECTING...' : 'Available'}
                   </div>
 
                   <AnimatePresence>
@@ -107,10 +107,10 @@ export default function BookingsShowcase() {
                       <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 bg-blue-600/20 backdrop-blur-[2px] flex flex-col items-center justify-center gap-2"
+                        className="absolute inset-0 bg-gold-deep/20 backdrop-blur-[2px] flex flex-col items-center justify-center gap-2"
                       >
-                        <Cpu className="w-8 h-8 text-blue-400 animate-spin" />
-                        <span className="text-[9px] font-mono text-blue-300 font-bold bg-slate-900 px-2 rounded tracking-tighter">FOR UPDATE</span>
+                        <Cpu className="w-8 h-8 text-gold-light animate-spin" />
+                        <span className="text-[9px] font-mono text-gold-light font-bold bg-slate-950 px-2 rounded tracking-tighter">FOR UPDATE</span>
                       </motion.div>
                     )}
                   </AnimatePresence>

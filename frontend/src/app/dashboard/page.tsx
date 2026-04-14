@@ -31,14 +31,14 @@ export default function Dashboard() {
           <NavItem href="/dashboard/settings" label="Settings" />
         </div>
 
-        <div className="p-4 border-t border-white/5">
-          <div className="p-3 rounded-xl bg-slate-900 border border-white/10 text-xs">
-            <div className="flex items-center gap-2 mb-2 text-slate-500 font-bold uppercase tracking-widest">
-              <ShieldCheck className="w-3 h-3 text-emerald-500" /> System Integrity
+        <div className="p-4 border-t border-white/5 font-mono">
+          <div className="p-3 rounded-xl bg-black/40 border border-white/5 text-xs text-white/70">
+            <div className="flex items-center gap-2 mb-2 text-gold-light/50 font-bold uppercase tracking-widest">
+              <ShieldCheck className="w-3 h-3 text-gold-deep" /> System Audit
             </div>
             <div className="space-y-1">
-              <div className="flex justify-between"><span>Tenant ID:</span> <span className="text-[10px] text-blue-400">UUID-v4</span></div>
-              <div className="flex justify-between"><span>RLS Filter:</span> <span className="text-[10px] text-emerald-400 px-1 bg-emerald-500/10 rounded">ACTIVE</span></div>
+              <div className="flex justify-between"><span>Tenant Partition:</span> <span className="text-[10px] text-gold-light">UUID-v4</span></div>
+              <div className="flex justify-between"><span>RLS Policy:</span> <span className="text-[10px] text-accent-purple px-1 bg-accent-purple/10 rounded font-bold">ENFORCED</span></div>
             </div>
           </div>
         </div>
@@ -51,48 +51,39 @@ export default function Dashboard() {
           <div className="flex items-center gap-4">
             {/* Tenant Switcher */}
             <div className="flex items-center gap-2 bg-slate-900 border border-white/10 rounded-full pl-2 pr-1 py-1">
-              <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-bold">
+              <div className="w-6 h-6 rounded-full bg-gold-deep flex items-center justify-center text-[10px] font-bold text-black">
                 {currentTenant.name.charAt(0)}
               </div>
               <select 
-                className="bg-transparent text-sm font-medium border-none focus:ring-0 outline-none pr-6 appearance-none cursor-pointer"
+                className="bg-transparent text-sm font-medium border-none focus:ring-0 outline-none pr-6 appearance-none cursor-pointer text-gold-light"
                 onChange={(e) => setCurrentTenant(prev => ({ ...prev, name: e.target.value }))}
               >
                 <option value="Sigma Consulting">Sigma Consulting</option>
                 <option value="Brutalist Design Corp">Brutalist Design Corp</option>
                 <option value="Emerald Advisors">Emerald Advisors</option>
               </select>
-              <div className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-mono">
-                /{currentTenant.slug}
-              </div>
             </div>
           </div>
           
           <div className="flex items-center gap-4">
             <button className="relative p-2 rounded-full hover:bg-white/5 transition-colors">
-              <Bell className="w-5 h-5 text-slate-400" />
-              <span className="absolute top-1 right-1.5 w-2 h-2 bg-blue-500 rounded-full" />
+              <Bell className="w-5 h-5 text-gold-light/60" />
+              <span className="absolute top-1 right-1.5 w-2 h-2 bg-gold-deep rounded-full ring-2 ring-slate-950" />
             </button>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 border border-white/10" />
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gold-deep to-accent-purple border border-white/10" />
           </div>
         </header>
 
         {/* Dashboard Content */}
-        <div className="p-8 flex-1 overflow-y-auto">
+        <div className="p-8 flex-1 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-purple/10 via-background to-background">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8 flex justify-between items-end"
           >
             <div>
-              <h1 className="text-3xl font-bold mb-1">Command Center</h1>
-              <p className="text-slate-400 text-sm">Real-time status of the <span className="text-blue-400 font-semibold">{currentTenant.name}</span> partition.</p>
-            </div>
-            <div className="text-right">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">Partition Seed</div>
-              <div className="font-mono text-xs text-slate-200 bg-slate-900 px-3 py-1 rounded border border-white/5">
-                {currentTenant.id}
-              </div>
+              <h1 className="text-3xl font-bold mb-1 text-gold-light">Command Center</h1>
+              <p className="text-white/60 text-sm">Real-time status of the <span className="text-gold-deep font-semibold">{currentTenant.name}</span> partition.</p>
             </div>
           </motion.div>
 

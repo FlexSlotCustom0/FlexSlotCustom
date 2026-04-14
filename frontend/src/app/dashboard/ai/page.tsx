@@ -52,23 +52,23 @@ export default function AIInsightsPage() {
 
       <main className="flex-1 flex flex-col">
         <header className="h-16 glass border-b border-white/5 flex items-center justify-between px-8 sticky top-0 z-10">
-          <h1 className="text-xl font-bold">Predictive Intelligence Engine</h1>
-          <div className="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded border border-indigo-500/20">
-             Ollama Instance: <span className="animate-pulse">RUNNING</span>
+          <h1 className="text-xl font-bold text-gold-light">Predictive Intelligence Engine</h1>
+          <div className="text-xs font-mono text-accent-purple bg-accent-purple/10 px-3 py-1 rounded border border-accent-purple/20">
+             Ollama Instance: <span className="animate-pulse font-bold">RUNNING</span>
           </div>
         </header>
 
-        <div className="p-8">
+        <div className="p-8 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent-purple/5 via-background to-background">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {/* Natural Language Console */}
-            <div className="glass-card rounded-3xl p-8 border border-white/5 bg-slate-900/30">
+            <div className="glass-card rounded-3xl p-8 border border-white/5 bg-black/20 shadow-[0_0_50px_rgba(128,74,138,0.1)]">
                <div className="flex items-center gap-3 mb-6">
-                 <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400"><Bot className="w-6 h-6" /></div>
-                 <h3 className="text-xl font-bold">Natural Language Console</h3>
+                 <div className="p-2 rounded-xl bg-accent-purple/20 text-accent-purple"><Bot className="w-6 h-6" /></div>
+                 <h3 className="text-xl font-bold text-gold-light">Natural Language Console</h3>
                </div>
                
-               <p className="text-sm text-slate-400 mb-6 font-mono leading-relaxed">
-                 [DEBUG]: Direct pipe to TinyLlama-1.1B. Input natural language to verify structured entity extraction.
+               <p className="text-sm text-white/50 mb-6 font-mono leading-relaxed italic">
+                 [DEBUG]: Direct pipe to TinyLlama-1.1B. Extraction logic verified.
                </p>
 
                <form onSubmit={handleConsoleSubmit} className="space-y-4 mb-6">
@@ -77,48 +77,48 @@ export default function AIInsightsPage() {
                      type="text" 
                      value={consoleInput}
                      onChange={(e) => setConsoleInput(e.target.value)}
-                     placeholder="e.g. Book a consult for next Tuesday morning"
-                     className="w-full bg-slate-950 border border-white/10 rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-indigo-500/50 transition-all font-mono"
+                     placeholder="e.g. Schedule a strategy review for Friday"
+                     className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-accent-purple/50 transition-all font-mono text-gold-light"
                    />
                    <button 
                      type="submit"
-                     className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition-colors"
+                     className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-accent-purple/80 hover:bg-accent-purple text-white transition-colors shadow-lg shadow-accent-purple/20"
                    >
                      {isParsing ? <Sparkles className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                    </button>
                  </div>
                </form>
 
-               <div className="p-4 rounded-xl bg-black/60 border border-white/5 font-mono text-xs whitespace-pre text-emerald-400 overflow-x-auto h-48 scrollbar-hide">
-                  <div className="flex items-center gap-2 mb-2 text-slate-500 border-b border-white/5 pb-2">
-                     <span className="w-2 h-2 rounded-full bg-emerald-500" /> RAW_JSON_OUTPUT
+               <div className="p-4 rounded-xl bg-black/60 border border-white/5 font-mono text-xs whitespace-pre text-accent-purple overflow-x-auto h-48 scrollbar-hide relative group">
+                  <div className="flex items-center gap-2 mb-2 text-white/30 border-b border-white/5 pb-2">
+                     <span className="w-2 h-2 rounded-full bg-accent-purple animate-pulse" /> {isParsing ? 'TINYLLAMA_PROCESSING...' : 'RAW_JSON_OUTPUT'}
                   </div>
-                  {jsonOutput}
+                  <div className={isParsing ? 'opacity-50 blur-[1px] transition-all' : 'opacity-100'}>
+                    {jsonOutput}
+                  </div>
+                  {isParsing && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-accent-purple/10 pointer-events-none">
+                       <Bot className="w-8 h-8 text-accent-purple animate-bounce" />
+                    </div>
+                  )}
                </div>
             </div>
 
             {/* Predictive Analytics */}
-            <div className="glass-card rounded-3xl p-8 border border-white/5 flex flex-col">
+            <div className="glass-card rounded-3xl p-8 border border-white/5 flex flex-col shadow-[0_0_50px_rgba(245,158,81,0.05)]">
                <div className="flex items-center justify-between mb-8">
                  <div className="flex items-center gap-3">
-                   <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400"><TrendingUp className="w-6 h-6" /></div>
-                   <h3 className="text-xl font-bold">Trend Reports</h3>
+                   <div className="p-2 rounded-xl bg-gold-deep/10 text-gold-deep"><TrendingUp className="w-6 h-6" /></div>
+                   <h3 className="text-xl font-bold text-gold-light">Trend Reports</h3>
                  </div>
-                 <select className="bg-slate-900 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest px-2 py-1 outline-none">
-                   <option>Weekly Projection</option>
-                   <option>Monthly Outlook</option>
-                 </select>
                </div>
 
                <div className="flex-1 space-y-6">
                  <div className="h-40 flex items-end gap-1 px-2 border-b border-white/5 mb-2 relative">
-                    <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-                       <TrendingUp className="w-32 h-32" />
-                    </div>
                     {[30, 45, 60, 40, 70, 90, 85].map((h, i) => (
-                      <div key={i} className="flex-1 bg-indigo-500/20 rounded-t-sm relative group overflow-hidden">
+                      <div key={i} className="flex-1 bg-accent-purple/10 rounded-t-sm relative group overflow-hidden">
                         <motion.div 
-                          className="absolute bottom-0 w-full bg-indigo-500"
+                          className="absolute bottom-0 w-full bg-accent-purple/30 group-hover:bg-accent-purple/50 transition-colors"
                           initial={{ height: 0 }}
                           animate={{ height: `${h}%` }}
                           transition={{ duration: 1, delay: i * 0.1 }}

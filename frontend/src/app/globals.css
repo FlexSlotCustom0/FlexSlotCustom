@@ -1,24 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --primary: #3b82f6;
+  --background: #fdfcfb;
+  --foreground: #1c1917;
+  --primary: #f59e51;
   --primary-foreground: #ffffff;
+  --gold-light: #f8d299;
+  --gold-deep: #f59e51;
+  --accent-purple: #804a8a;
   --card: #ffffff;
-  --card-foreground: #0f172a;
-  --border: #e2e8f0;
+  --card-foreground: #1c1917;
+  --border: #e7e5e4;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #020617;
-    --foreground: #f8fafc;
-    --primary: #3b82f6;
+    --background: #0c0a09;
+    --foreground: #f2f2f2;
+    --primary: #f59e51;
     --primary-foreground: #ffffff;
-    --card: #0f172a;
-    --card-foreground: #f8fafc;
-    --border: #1e293b;
+    --gold-light: #f8d299;
+    --gold-deep: #f59e51;
+    --accent-purple: #804a8a;
+    --card: #1c1917;
+    --card-foreground: #f2f2f2;
+    --border: #262626;
   }
 }
 
@@ -33,22 +39,26 @@ body {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
+  --color-gold-light: var(--gold-light);
+  --color-gold-deep: var(--gold-deep);
+  --color-accent-purple: var(--accent-purple);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-black/20 backdrop-blur-xl border border-white/5;
   }
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border shadow-xl;
+    @apply bg-card/40 backdrop-blur-2xl border border-border/50 shadow-2xl;
   }
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500;
+  .text-gold {
+    @apply text-gold-light;
+  }
+  .text-gold-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-light to-gold-deep;
   }
 }
