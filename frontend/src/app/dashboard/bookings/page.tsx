@@ -26,9 +26,9 @@ export default function BookingsShowcase() {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 flex">
-      <aside className="w-64 glass border-r border-white/5 flex flex-col h-screen sticky top-0 hidden lg:flex">
-        <div className="h-16 flex items-center px-6 border-b border-white/5 font-bold tracking-tight">
+    <div className="min-h-screen bg-background text-foreground flex">
+      <aside className="w-64 glass border-r border-border/10 flex flex-col h-screen sticky top-0 hidden lg:flex">
+        <div className="h-16 flex items-center px-6 border-b border-border/10 font-bold tracking-tight">
           Concurrency Engine
         </div>
         <div className="flex-1 py-6 px-3 space-y-1">
@@ -39,44 +39,44 @@ export default function BookingsShowcase() {
           <NavItem href="/dashboard/ai" label="AI Insights" />
           <NavItem href="/dashboard/settings" label="Settings" />
         </div>
-        <div className="p-4 border-t border-white/5">
-          <div className="p-3 rounded-xl bg-black/40 border border-white/5 font-mono">
-             <div className="text-[10px] font-bold text-accent-purple uppercase mb-2 flex items-center gap-1">
+        <div className="p-4 border-t border-border/10">
+          <div className="p-3 rounded-xl bg-white/[0.05] border border-white/5 font-mono">
+             <div className="text-[10px] font-black text-white/40 uppercase mb-2 flex items-center gap-1">
                <Database className="w-3 h-3" /> Transaction Log
              </div>
-             <div className="space-y-2 text-[9px] text-white/50">
-               <div>[09:41:02] BEGIN TRANSACTION;</div>
-               {lockingSlot && <div className="text-gold-light animate-pulse">[09:42:10] SELECT * FROM slots WHERE id={lockingSlot} FOR UPDATE;</div>}
-               {lockedSlots.length > 0 && <div className="text-gold-deep">[09:42:11] ROW_LOCK ACQUIRED; COMMIT;</div>}
+             <div className="space-y-1 text-[9px] text-white/20">
+                <div>[09:41:02] BEGIN;</div>
+                {lockingSlot && <div className="text-white animate-pulse tracking-tighter">[LOCKING] SELECT_FOR_UPDATE(id:{lockingSlot});</div>}
+                {lockedSlots.length > 0 && <div className="text-white font-bold">[COMMIT] ROW_LOCK_ACQUIRED;</div>}
              </div>
           </div>
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="h-16 glass border-b border-white/5 flex items-center justify-between px-8 sticky top-0 z-10">
-          <h1 className="text-xl font-bold flex items-center gap-2 text-gold-light">
-            Availability Grid <span className="text-[10px] bg-gold-deep/10 text-gold-deep px-2 py-0.5 rounded border border-gold-deep/20">LIVE PARTITION</span>
+        <header className="h-16 glass border-b border-border/10 flex items-center justify-between px-8 sticky top-0 z-10">
+          <h1 className="text-xl font-black flex items-center gap-2">
+            Availability Grid <span className="text-[9px] bg-white text-black px-2 py-0.5 rounded font-black tracking-widest uppercase">Partition_v3</span>
           </h1>
-          <div className="flex items-center gap-4 text-xs font-mono text-white/40">
+          <div className="flex items-center gap-6 text-[10px] font-black uppercase text-white/30 tracking-widest">
              <div className="flex items-center gap-2">
-               <span className="w-2 h-2 rounded-full bg-gold-light animate-ping" /> Synchronous IO
+               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> Sync_IO
              </div>
              <div className="flex items-center gap-2">
-               <span className="w-2 h-2 rounded-full bg-gold-deep" /> ACID Compliant
+               <div className="w-1.5 h-1.5 rounded-full bg-white/20" /> ACID_READY
              </div>
           </div>
         </header>
 
-        <div className="p-8 bg-[radial-gradient(circle_at_bottom_right,_var(--tw-gradient-stops))] from-accent-purple/5 via-background to-background">
-          <div className="mb-10 max-w-2xl">
-            <h2 className="text-3xl font-bold mb-4 text-gold-light">The Concurrency Showcase</h2>
-            <p className="text-white/60 leading-relaxed italic border-l-2 border-gold-deep/50 pl-4 bg-gold-deep/5 py-2">
-              Demonstrating <strong>Pessimistic Concurrency Control</strong>. Selecting a slot initiates an exclusive row-level lock on the PostgreSQL instance.
+        <div className="p-10 flex-1 overflow-y-auto">
+          <div className="mb-16 max-w-2xl">
+            <h2 className="text-4xl lg:text-6xl font-black mb-6 tracking-tighter">Concurrency Control</h2>
+            <p className="text-foreground/40 leading-relaxed font-light text-lg">
+              Demonstrating <strong className="text-white font-bold">Pessimistic Locking</strong>. Selecting a slot initiates an exclusive row-level lock to prevent race conditions in multi-tenant environments.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {slots.map((slot) => {
               const isLocking = lockingSlot === slot.id;
               const isLocked = lockedSlots.includes(slot.id);
@@ -86,53 +86,24 @@ export default function BookingsShowcase() {
                   key={slot.id}
                   onClick={() => handleSlotClick(slot.id)}
                   disabled={isLocked || isLocking}
-                  className={`relative p-6 rounded-3xl border-2 transition-all text-left overflow-hidden group ${
-                    isLocked ? 'border-gold-deep/40 bg-gold-deep/10' :
-                    isLocking ? 'border-gold-light bg-gold-light/10' :
-                    'border-white/5 bg-white/5 hover:border-gold-light/50'
+                  className={`relative p-8 rounded-[2rem] border-2 transition-all text-left overflow-hidden group ${
+                    isLocked ? 'border-white bg-white text-black' :
+                    isLocking ? 'border-white/40 bg-white/5 animate-pulse' :
+                    'border-white/5 bg-white/[0.02] hover:border-white/20'
                   }`}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <Clock className={`w-5 h-5 ${isLocked ? 'text-gold-deep' : isLocking ? 'text-gold-light' : 'text-slate-500 group-hover:text-gold-light'}`} />
-                    {isLocked && <Lock className="w-4 h-4 text-gold-deep" />}
+                  <div className="flex justify-between items-start mb-6">
+                    <Clock className={`w-5 h-5 ${isLocked ? 'text-black/40' : 'text-white/20'}`} />
+                    {isLocked && <Lock className="w-4 h-4 text-black/40" />}
                   </div>
                   
-                  <div className="font-bold text-lg mb-1 text-gold-light">{slot.time}</div>
-                  <div className={`text-[10px] font-bold uppercase tracking-widest ${isLocked ? 'text-gold-deep' : isLocking ? 'text-gold-light' : 'text-slate-500'}`}>
-                    {isLocked ? 'Locked' : isLocking ? 'SELECTING...' : 'Available'}
+                  <div className={`font-black text-xl mb-1 ${isLocked ? 'text-black' : 'text-white'}`}>{slot.time}</div>
+                  <div className={`text-[10px] font-black uppercase tracking-widest ${isLocked ? 'text-black/30' : 'text-white/20'}`}>
+                    {isLocked ? 'COMMITTED' : isLocking ? 'LOCKING...' : 'AVAILABLE'}
                   </div>
-
-                  <AnimatePresence>
-                    {isLocking && (
-                      <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="absolute inset-0 bg-gold-deep/20 backdrop-blur-[2px] flex flex-col items-center justify-center gap-2"
-                      >
-                        <Cpu className="w-8 h-8 text-gold-light animate-spin" />
-                        <span className="text-[9px] font-mono text-gold-light font-bold bg-slate-950 px-2 rounded tracking-tighter">FOR UPDATE</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </button>
               );
             })}
-          </div>
-
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="glass-card p-8 rounded-3xl border border-white/5">
-               <div className="flex items-center gap-3 mb-6">
-                 <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-400"><ShieldAlert className="w-6 h-6" /></div>
-                 <h3 className="text-xl font-bold">Atomicity Check</h3>
-               </div>
-               <p className="text-sm text-slate-400 leading-relaxed mb-6">
-                 If two users attempt to lock the same row simultaneously, the second transaction is forced into a <code className="text-blue-400">WAIT</code> state until the first either <code className="text-emerald-400">COMMITS</code> or <code className="text-red-400">ROLLBACKS</code>.
-               </p>
-               <div className="flex gap-2">
-                 <span className="px-3 py-1 bg-slate-900 rounded-full border border-white/5 text-[10px] font-mono text-slate-500">SERIALIZABLE</span>
-                 <span className="px-3 py-1 bg-slate-900 rounded-full border border-white/5 text-[10px] font-mono text-slate-500">ROW_LOCK</span>
-               </div>
-            </div>
           </div>
         </div>
       </main>
@@ -144,10 +115,10 @@ function NavItem({ href, label, active }: { href: string, label: string, active?
   return (
     <Link 
       href={href}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold tracking-tight transition-all ${
         active 
-          ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]' 
-          : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+          ? 'bg-white text-black' 
+          : 'text-white/30 hover:bg-white/5 hover:text-white'
       }`}
     >
       {label}

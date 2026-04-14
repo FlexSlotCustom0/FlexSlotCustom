@@ -13,14 +13,14 @@ const CUSTOMERS = [
 
 export default function CustomersPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 flex">
-      <aside className="w-64 glass border-r border-white/5 flex flex-col h-screen sticky top-0 hidden lg:flex">
-        <div className="h-16 flex items-center px-6 border-b border-white/5">
+    <div className="min-h-screen bg-background text-foreground flex">
+      <aside className="w-64 glass border-r border-border/10 flex flex-col h-screen sticky top-0 hidden lg:flex">
+        <div className="h-16 flex items-center px-6 border-b border-border/10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+              <ShieldCheck className="w-4 h-4 text-black" />
             </div>
-            <span className="font-semibold tracking-tight">Audit Archive</span>
+            <span className="font-bold tracking-tight">Audit Archive</span>
           </div>
         </div>
         <div className="flex-1 py-6 px-3 space-y-1">
@@ -34,88 +34,88 @@ export default function CustomersPage() {
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="h-16 glass border-b border-white/5 flex items-center justify-between px-8 sticky top-0 z-10">
-          <div className="flex items-center gap-2">
-             <h1 className="text-xl font-bold text-gold-light">Booking Audit Trail</h1>
-             <span className="text-[10px] text-white/40 bg-black/40 px-2 py-0.5 rounded border border-white/5 font-mono uppercase tracking-tighter">IMMUTABLE_LOG</span>
-          </div>
+        <header className="h-16 glass border-b border-border/10 flex items-center justify-between px-8 sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-white/50 uppercase">
-               Background Tasks: <span className="text-gold-deep flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-gold-deep animate-pulse" /> POLL_V3</span>
+             <h1 className="text-xl font-black">Audit Trail</h1>
+             <span className="text-[10px] text-white/40 bg-white/5 px-2 py-0.5 rounded border border-white/5 font-mono uppercase tracking-widest font-black">Immutable</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
+               Async Engine: <span className="text-white flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> POLL_V3</span>
             </div>
           </div>
         </header>
 
-        <div className="p-8 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gold-deep/5 via-background to-background">
-          <div className="mb-8 flex justify-between items-start">
+        <div className="p-10">
+          <div className="mb-12 flex justify-between items-start">
             <div>
-              <h2 className="text-3xl font-bold mb-1 text-gold-light">Finalized Transactions</h2>
-              <p className="text-white/60">Archived records with asynchronous synchronization status verified.</p>
+              <h2 className="text-4xl font-black mb-2 tracking-tighter">Finalized Transactions</h2>
+              <p className="text-foreground/30 font-light">Archived records with asynchronous synchronization status verified.</p>
             </div>
-            <div className="flex gap-2">
-               <div className="p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-[100px]">
-                  <span className="text-[9px] text-white/30 font-bold uppercase mb-1">Sync Health</span>
-                  <span className="text-gold-light font-mono text-xs">99.8%</span>
+            <div className="flex gap-4">
+               <div className="p-5 rounded-[1.5rem] bg-white text-black border border-white flex flex-col items-center justify-center min-w-[120px]">
+                  <span className="text-[9px] font-black uppercase mb-1 opacity-50">Sync Health</span>
+                  <span className="font-mono text-xs font-black tracking-widest">99.8%</span>
                </div>
-               <div className="p-3 rounded-2xl bg-black/40 border border-white/5 flex flex-col items-center justify-center min-w-[100px]">
-                  <span className="text-[9px] text-white/30 font-bold uppercase mb-1">Async Queue</span>
-                  <span className="text-accent-purple font-mono text-xs font-bold">0 items</span>
+               <div className="p-5 rounded-[1.5rem] bg-white/5 border border-white/10 flex flex-col items-center justify-center min-w-[120px]">
+                  <span className="text-[9px] text-white/20 font-black uppercase mb-1 tracking-widest">Async Queue</span>
+                  <span className="font-mono text-xs text-white font-black tracking-widest">0 items</span>
                </div>
             </div>
           </div>
 
-          <div className="glass-card rounded-3xl border border-white/5 overflow-hidden shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+          <div className="glass-card rounded-[2.5rem] border border-white/5 overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-white/5 bg-white/5 text-[10px] font-bold uppercase tracking-widest text-white/30 font-mono">
-                    <th className="px-6 py-4">Transaction ID</th>
-                    <th className="px-6 py-4">Customer Relation</th>
-                    <th className="px-6 py-4">Partition Status</th>
-                    <th className="px-6 py-4">G-Cal Sync</th>
-                    <th className="px-6 py-4">Email Ack</th>
-                    <th className="px-6 py-4"></th>
+                  <tr className="border-b border-white/5 bg-white/5 text-[9px] font-black uppercase tracking-[0.4em] text-white/20 font-mono">
+                    <th className="px-8 py-5">Transaction ID</th>
+                    <th className="px-8 py-5">Relation</th>
+                    <th className="px-8 py-5">Status</th>
+                    <th className="px-8 py-5">G-Cal Sync</th>
+                    <th className="px-8 py-5">Email Ack</th>
+                    <th className="px-8 py-5"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5 font-mono text-white/70">
+                <tbody className="divide-y divide-white/5 font-mono text-white/50">
                   {CUSTOMERS.map((customer, idx) => (
                     <motion.tr 
                       key={customer.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="hover:bg-white/[0.02] transition-colors group text-xs"
+                      className="hover:bg-white/[0.02] transition-all group text-xs"
                     >
-                      <td className="px-6 py-5 text-gold-deep font-bold italic">
+                      <td className="px-8 py-6 text-white font-black italic">
                         TXN-{customer.id.split('-')[1]}
                       </td>
-                      <td className="px-6 py-5">
+                      <td className="px-8 py-6">
                         <div>
-                          <div className="font-semibold text-gold-light">{customer.name}</div>
-                          <div className="text-[10px] text-white/40">{customer.email}</div>
+                          <div className="font-bold text-white mb-0.5">{customer.name}</div>
+                          <div className="text-[10px] text-white/20">{customer.email}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-5">
-                        <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded ${
-                          customer.status === 'VIP' ? 'bg-gold-deep/10 text-gold-deep' : 'bg-white/5 text-white/40'
+                      <td className="px-8 py-6">
+                        <span className={`text-[9px] font-black uppercase px-2 py-1 rounded-lg ${
+                          customer.status === 'VIP' ? 'bg-white text-black' : 'bg-white/5 text-white/30'
                         }`}>
                           {customer.status}
                         </span>
                       </td>
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-gold-light bg-gold-light/5 px-2 py-1 rounded-full border border-gold-light/20 w-fit">
-                           <CheckCircle2 className="w-3 h-3 text-gold-deep" /> SUCCESS
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black text-white bg-white/5 px-2.5 py-1.5 rounded-full border border-white/10 w-fit">
+                           <CheckCircle2 className="w-3 h-3" /> SUCCESS
                         </div>
                       </td>
-                      <td className="px-6 py-5">
-                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-accent-purple bg-accent-purple/5 px-2 py-1 rounded-full border border-accent-purple/20 w-fit">
+                      <td className="px-8 py-6">
+                         <div className="flex items-center gap-1.5 text-[10px] font-black text-white/30 bg-white/5 px-2.5 py-1.5 rounded-full border border-white/5 w-fit">
                            <Send className="w-3 h-3" /> DISPATCHED
                         </div>
                       </td>
-                      <td className="px-6 py-5 text-right flex justify-end">
-                        <div className="p-2 rounded-lg bg-black/40 border border-white/5 flex items-center gap-2 group-hover:border-gold-deep/30 transition-all cursor-pointer">
-                           <FileText className="w-4 h-4 text-white/30 group-hover:text-gold-light" />
-                           <span className="text-[10px] font-bold text-white/30 group-hover:text-white/60">AUDIT_LOG</span>
+                      <td className="px-8 py-6 text-right flex justify-end">
+                        <div className="px-4 py-2 rounded-xl bg-white/[0.02] border border-white/5 flex items-center gap-3 group-hover:bg-white group-hover:text-black transition-all cursor-pointer">
+                           <FileText className="w-4 h-4 opacity-50" />
+                           <span className="text-[9px] font-black uppercase tracking-widest">Audit_Log</span>
                         </div>
                       </td>
                     </motion.tr>
@@ -125,26 +125,26 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col md:flex-row gap-6">
-            <div className="flex-1 glass-card p-6 rounded-3xl border border-white/5 flex items-center gap-4">
-              <div className="p-4 rounded-2xl bg-slate-900 border border-white/10">
-                <Mail className="w-6 h-6 text-blue-400" />
+          <div className="mt-10 flex flex-col md:flex-row gap-8">
+            <div className="flex-1 glass-card p-8 rounded-[2rem] border border-white/5 flex items-center gap-6">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                <Mail className="w-6 h-6 text-white/20" />
               </div>
               <div>
-                <h4 className="font-bold">Mass Outreach</h4>
-                <p className="text-sm text-slate-500">Send an update to all your {CUSTOMERS.length} active clients.</p>
+                <h4 className="font-black text-lg">Mass Dispatch</h4>
+                <p className="text-sm text-foreground/30 font-light">Send updates to your {CUSTOMERS.length} active clients.</p>
               </div>
-              <button className="ml-auto px-4 py-2 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition-all">Draft</button>
+              <button className="ml-auto px-6 py-2.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all">Draft</button>
             </div>
-            <div className="flex-1 glass-card p-6 rounded-3xl border border-white/5 flex items-center gap-4">
-              <div className="p-4 rounded-2xl bg-slate-900 border border-white/10">
-                <Phone className="w-6 h-6 text-emerald-400" />
+            <div className="flex-1 glass-card p-8 rounded-[2rem] border border-white/5 flex items-center gap-6">
+               <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                <Phone className="w-6 h-6 text-white/20" />
               </div>
               <div>
-                <h4 className="font-bold">Sync Contacts</h4>
-                <p className="text-sm text-slate-500">Import your external customer database entries.</p>
+                <h4 className="font-black text-lg">Sync Archive</h4>
+                <p className="text-sm text-foreground/30 font-light">Import external customer database entries.</p>
               </div>
-              <button className="ml-auto px-4 py-2 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition-all">Sync</button>
+              <button className="ml-auto px-6 py-2.5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all">Import</button>
             </div>
           </div>
         </div>
@@ -157,10 +157,10 @@ function NavItem({ href, label, active }: { href: string, label: string, active?
   return (
     <Link 
       href={href}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+      className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold tracking-tight transition-all ${
         active 
-          ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]' 
-          : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+          ? 'bg-white text-black shadow-lg' 
+          : 'text-white/20 hover:bg-white/5 hover:text-white'
       }`}
     >
       {label}

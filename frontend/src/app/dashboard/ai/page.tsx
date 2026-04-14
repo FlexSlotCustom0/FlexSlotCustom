@@ -30,14 +30,14 @@ export default function AIInsightsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 flex">
-      <aside className="w-64 glass border-r border-white/5 flex flex-col h-screen sticky top-0 hidden lg:flex">
-        <div className="h-16 flex items-center px-6 border-b border-white/5">
+    <div className="min-h-screen bg-background text-foreground flex">
+      <aside className="w-64 glass border-r border-border/10 flex flex-col h-screen sticky top-0 hidden lg:flex">
+        <div className="h-16 flex items-center px-6 border-b border-border/10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-              <BrainCircuit className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+              <BrainCircuit className="w-4 h-4 text-black" />
             </div>
-            <span className="font-semibold tracking-tight">FlexSlot Intelligence</span>
+            <span className="font-bold tracking-tight">Intelligence Console</span>
           </div>
         </div>
         <div className="flex-1 py-6 px-3 space-y-1">
@@ -51,92 +51,85 @@ export default function AIInsightsPage() {
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="h-16 glass border-b border-white/5 flex items-center justify-between px-8 sticky top-0 z-10">
-          <h1 className="text-xl font-bold text-gold-light">Predictive Intelligence Engine</h1>
-          <div className="text-xs font-mono text-accent-purple bg-accent-purple/10 px-3 py-1 rounded border border-accent-purple/20">
-             Ollama Instance: <span className="animate-pulse font-bold">RUNNING</span>
+        <header className="h-16 glass border-b border-border/10 flex items-center justify-between px-8 sticky top-0 z-10">
+          <h1 className="text-xl font-black">Predictive Engine</h1>
+          <div className="text-[10px] font-black uppercase tracking-widest text-white/40 bg-white/5 px-3 py-1 rounded border border-white/10">
+             Ollama Instance: <span className="animate-pulse text-white">READY</span>
           </div>
         </header>
 
-        <div className="p-8 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent-purple/5 via-background to-background">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="p-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
             {/* Natural Language Console */}
-            <div className="glass-card rounded-3xl p-8 border border-white/5 bg-black/20 shadow-[0_0_50px_rgba(128,74,138,0.1)]">
-               <div className="flex items-center gap-3 mb-6">
-                 <div className="p-2 rounded-xl bg-accent-purple/20 text-accent-purple"><Bot className="w-6 h-6" /></div>
-                 <h3 className="text-xl font-bold text-gold-light">Natural Language Console</h3>
+            <div className="glass-card rounded-[2.5rem] p-10 border border-white/10 bg-white/[0.01]">
+               <div className="flex items-center gap-4 mb-8">
+                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-black shadow-xl"><Bot className="w-6 h-6" /></div>
+                 <h3 className="text-2xl font-black tracking-tighter">Extraction Console</h3>
                </div>
                
-               <p className="text-sm text-white/50 mb-6 font-mono leading-relaxed italic">
-                 [DEBUG]: Direct pipe to TinyLlama-1.1B. Extraction logic verified.
+               <p className="text-xs text-foreground/30 mb-8 font-mono leading-relaxed italic">
+                 [SYSTEM]: Direct pipe to TinyLlama-1.1B. Processing raw string input.
                </p>
 
-               <form onSubmit={handleConsoleSubmit} className="space-y-4 mb-6">
+               <form onSubmit={handleConsoleSubmit} className="space-y-6 mb-10">
                  <div className="relative">
-                   <input 
-                     type="text" 
-                     value={consoleInput}
-                     onChange={(e) => setConsoleInput(e.target.value)}
-                     placeholder="e.g. Schedule a strategy review for Friday"
-                     className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-accent-purple/50 transition-all font-mono text-gold-light"
-                   />
-                   <button 
-                     type="submit"
-                     className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-accent-purple/80 hover:bg-accent-purple text-white transition-colors shadow-lg shadow-accent-purple/20"
-                   >
-                     {isParsing ? <Sparkles className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                   </button>
+                    <input 
+                      type="text" 
+                      value={consoleInput}
+                      onChange={(e) => setConsoleInput(e.target.value)}
+                      placeholder="e.g. Schedule a strategy review for Friday"
+                      className="w-full bg-white/[0.03] border border-white/10 rounded-[1.5rem] px-6 py-5 text-sm focus:outline-none focus:border-white/30 transition-all font-mono text-white"
+                    />
+                    <button 
+                      type="submit"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-xl bg-white text-black hover:opacity-90 transition-all"
+                    >
+                      {isParsing ? <Sparkles className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    </button>
                  </div>
                </form>
 
-               <div className="p-4 rounded-xl bg-black/60 border border-white/5 font-mono text-xs whitespace-pre text-accent-purple overflow-x-auto h-48 scrollbar-hide relative group">
-                  <div className="flex items-center gap-2 mb-2 text-white/30 border-b border-white/5 pb-2">
-                     <span className="w-2 h-2 rounded-full bg-accent-purple animate-pulse" /> {isParsing ? 'TINYLLAMA_PROCESSING...' : 'RAW_JSON_OUTPUT'}
+               <div className="p-6 rounded-[1.5rem] bg-black border border-white/5 font-mono text-[11px] whitespace-pre text-white/40 overflow-x-auto h-56 scrollbar-hide relative">
+                  <div className="flex items-center gap-2 mb-4 text-white/20 border-b border-white/5 pb-4 uppercase tracking-widest">
+                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> {isParsing ? 'Processing...' : 'Entity_Log_v3'}
                   </div>
-                  <div className={isParsing ? 'opacity-50 blur-[1px] transition-all' : 'opacity-100'}>
+                  <div className={isParsing ? 'opacity-20 transition-all' : 'opacity-100'}>
                     {jsonOutput}
                   </div>
-                  {isParsing && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-accent-purple/10 pointer-events-none">
-                       <Bot className="w-8 h-8 text-accent-purple animate-bounce" />
-                    </div>
-                  )}
                </div>
             </div>
 
             {/* Predictive Analytics */}
-            <div className="glass-card rounded-3xl p-8 border border-white/5 flex flex-col shadow-[0_0_50px_rgba(245,158,81,0.05)]">
-               <div className="flex items-center justify-between mb-8">
-                 <div className="flex items-center gap-3">
-                   <div className="p-2 rounded-xl bg-gold-deep/10 text-gold-deep"><TrendingUp className="w-6 h-6" /></div>
-                   <h3 className="text-xl font-bold text-gold-light">Trend Reports</h3>
-                 </div>
+            <div className="glass-card rounded-[2.5rem] p-10 border border-white/10 bg-white/[0.01] flex flex-col">
+               <div className="flex items-center gap-4 mb-10">
+                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center"><TrendingUp className="w-6 h-6" /></div>
+                 <h3 className="text-2xl font-black tracking-tighter">Trend Analysis</h3>
                </div>
 
-               <div className="flex-1 space-y-6">
-                 <div className="h-40 flex items-end gap-1 px-2 border-b border-white/5 mb-2 relative">
-                    {[30, 45, 60, 40, 70, 90, 85].map((h, i) => (
-                      <div key={i} className="flex-1 bg-accent-purple/10 rounded-t-sm relative group overflow-hidden">
+               <div className="flex-1 space-y-10">
+                 <div className="h-44 flex items-end gap-1 px-4 border-b border-white/5 mb-4 relative">
+                    {[30, 45, 60, 40, 70, 90, 85, 50, 65, 80].map((h, i) => (
+                      <div key={i} className="flex-1 bg-white/5 rounded-t-sm relative group overflow-hidden">
                         <motion.div 
-                          className="absolute bottom-0 w-full bg-accent-purple/30 group-hover:bg-accent-purple/50 transition-colors"
+                          className="absolute bottom-0 w-full bg-white/20 group-hover:bg-white/40 transition-colors"
                           initial={{ height: 0 }}
                           animate={{ height: `${h}%` }}
-                          transition={{ duration: 1, delay: i * 0.1 }}
+                          transition={{ duration: 1, delay: i * 0.05 }}
                         />
                       </div>
                     ))}
                  </div>
                  
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-2xl bg-slate-900 border border-white/5">
-                       <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Peak Demand</div>
-                       <div className="text-lg font-bold">Tuesdays</div>
-                       <div className="text-[9px] text-emerald-400 font-bold">+18% increase expected</div>
+                 <div className="grid grid-cols-2 gap-6">
+                    <div className="p-6 rounded-[1.5rem] bg-white text-black">
+                       <div className="text-[9px] font-black uppercase mb-2 opacity-50 tracking-widest">Peak Period</div>
+                       <div className="text-xl font-black">Tuesdays</div>
+                       <div className="text-[10px] uppercase font-bold mt-1 opacity-60">+18% Confidence</div>
                     </div>
-                    <div className="p-4 rounded-2xl bg-slate-900 border border-white/5">
-                       <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Service Trend</div>
-                       <div className="text-lg font-bold truncate">Tax Audit</div>
-                       <div className="text-[9px] text-blue-400 font-bold">Rising social interest</div>
+                    <div className="p-6 rounded-[1.5rem] bg-white/5 border border-white/10">
+                       <div className="text-[9px] font-black uppercase mb-2 text-white/30 tracking-widest">Volume Trend</div>
+                       <div className="text-xl font-black text-white">UPWARD</div>
+                       <div className="text-[10px] uppercase font-bold mt-1 text-white/20">STABLE FLOW</div>
                     </div>
                  </div>
                </div>
@@ -144,12 +137,12 @@ export default function AIInsightsPage() {
           </div>
 
           {/* Prompt Logs/Interactions */}
-          <div className="glass-card rounded-3xl border border-white/5 overflow-hidden">
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-              <h3 className="font-bold">Recent Natural Language Extractions</h3>
-              <select className="bg-slate-900 border border-white/10 rounded-lg px-3 py-1 text-sm outline-none">
-                <option>All Extractions</option>
-                <option>Successes Only</option>
+          <div className="glass-card rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl">
+            <div className="p-8 border-b border-white/10 bg-white/[0.01] flex items-center justify-between">
+              <h3 className="font-black text-lg tracking-tighter">Extraction History</h3>
+              <select className="bg-black border border-white/10 rounded-full px-5 py-2 text-[10px] font-black uppercase tracking-widest outline-none cursor-pointer">
+                <option>ALL_EXTRACTIONS</option>
+                <option>SUCCESS_ONLY</option>
               </select>
             </div>
             <div className="divide-y divide-white/5">
@@ -178,31 +171,19 @@ export default function AIInsightsPage() {
 
 function ExtractionRow({ input, output, latency }: { input: string, output: string, latency: string }) {
   return (
-    <div className="p-4 flex flex-col md:flex-row md:items-center gap-4 hover:bg-white/5 transition-colors group">
+    <div className="p-8 flex flex-col lg:flex-row lg:items-center gap-8 hover:bg-white/[0.01] transition-all group">
       <div className="flex-1">
-        <div className="text-xs text-slate-500 mb-1 flex items-center gap-2">
-          <MessageSquare className="w-3 h-3 text-indigo-400" /> User Input
+        <div className="text-[9px] font-black uppercase tracking-widest text-white/20 mb-3 flex items-center gap-2">
+          <MessageSquare className="w-3 h-3" /> Input Request
         </div>
-        <p className="text-sm font-medium text-slate-200 group-hover:text-white">{input}</p>
+        <p className="text-base font-bold text-white group-hover:text-white/80 transition-colors">{input}</p>
       </div>
-      <div className="flex-1 font-mono text-xs bg-black/40 p-3 rounded-lg border border-white/5 text-emerald-400">
+      <div className="flex-1 font-mono text-[10px] bg-black p-5 rounded-2xl border border-white/5 text-white/50 tracking-tight">
         {output}
       </div>
-      <div className="flex flex-col items-end whitespace-nowrap">
-        <span className="text-xs text-slate-500">Latency</span>
-        <span className="text-sm font-bold text-slate-300">{latency}</span>
-      </div>
-    </div>
-  );
-}
-
-function ForecastItem({ label, value, up }: { label: string, value: string, up?: boolean }) {
-  return (
-    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-white/5">
-      <span className="text-sm text-slate-400">{label}</span>
-      <div className="flex items-center gap-1 font-bold">
-        {value}
-        {up ? <ArrowUpRight className="w-4 h-4 text-emerald-400" /> : <ArrowDownRight className="w-4 h-4 text-red-400" />}
+      <div className="flex flex-col items-end whitespace-nowrap min-w-[100px]">
+        <span className="text-[9px] font-black uppercase tracking-widest text-white/20 mb-1">Latency</span>
+        <span className="text-sm font-black text-white">{latency}</span>
       </div>
     </div>
   );
@@ -212,10 +193,10 @@ function NavItem({ href, label, active }: { href: string, label: string, active?
   return (
     <Link 
       href={href}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+      className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold tracking-tight transition-all ${
         active 
-          ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]' 
-          : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+          ? 'bg-white text-black shadow-lg' 
+          : 'text-white/20 hover:bg-white/5 hover:text-white'
       }`}
     >
       {label}
