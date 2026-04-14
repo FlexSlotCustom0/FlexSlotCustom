@@ -1,375 +1,264 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
-  ArrowRight, Bot, Calendar, Layers, ShieldCheck, Zap, 
-  Cpu, Database, Clock, Lock, Send, Sparkles, Code2, 
-  CheckCircle2, ExternalLink, FileText, Terminal
+  ArrowRight, Calendar, ChevronDown, Monitor, Clock, 
+  MapPin, User, Check, Plus, Search, HelpCircle, 
+  Laptop, Smartphone, Coffee, Music, Bike, Layout,
+  Share2, Globe, MessageSquare
 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-export default function LandingPage() {
-  const [isAiParsing, setIsAiParsing] = useState(false);
-  const [aiInput, setAiInput] = useState("I need a consult next Tuesday at 10 AM");
-  const [aiOutput, setAiOutput] = useState("");
-  const [latency, setLatency] = useState(42);
-
-  // Simulated live metrics
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLatency(38 + Math.floor(Math.random() * 10));
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleAiPlayground = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsAiParsing(true);
-    setAiOutput("");
-    setTimeout(() => {
-      setAiOutput(JSON.stringify({
-        intent: "REQUEST_APPOINTMENT",
-        entities: {
-          type: "consultation",
-          day: "Tuesday",
-          slot: "10:00:00",
-          timezone: "UTC+5:30"
-        },
-        probability: 0.98,
-        engine: "TinyLlama-1.1B"
-      }, null, 2));
-      setIsAiParsing(false);
-    }, 1500);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
-  };
-
-  const floatingVariant = {
-    initial: { y: 0 },
-    animate: { 
-      y: [-10, 10, -10],
-      transition: { duration: 6, repeat: Infinity }
-    }
-  };
-
+export default function NotionCalendarClone() {
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white/30">
+    <div className="min-h-screen bg-white text-black font-sans selection:bg-blue-100">
       {/* Navigation */}
-      <nav className="fixed w-full z-50 glass border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center border border-white/20">
-              <Calendar className="w-6 h-6 text-black" />
+      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-lg">FlexSlot</span>
+            </Link>
+            
+            <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
+              <button className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
+              <button className="flex items-center gap-1 hover:text-black transition-colors">Download <ChevronDown className="w-3 h-3" /></button>
+              <Link href="#" className="hover:text-black transition-colors">Enterprise</Link>
+              <Link href="#" className="hover:text-black transition-colors">Pricing</Link>
             </div>
-            <span className="font-bold text-xl tracking-tight">FlexSlot</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/50">
-            <Link href="#features" className="hover:text-white transition-colors">Infrastructure</Link>
-            <Link href="#pulse" className="hover:text-white transition-colors">System Metrics</Link>
-            <Link href="#ai" className="hover:text-white transition-colors">AI Playground</Link>
-            <Link href="/dashboard" className="px-6 py-2.5 rounded-full bg-white text-black hover:bg-white/90 transition-all border border-white/10 font-bold">
-              Console
+
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
+            <Link href="/dashboard" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
+              Get FlexSlot free
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-32 lg:pt-56 lg:pb-48 overflow-hidden">
-        {/* Background Radial Gradient - Strictly Black/White */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a1a_0%,_#000000_100%)] -z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div 
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-          >
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 text-white/40 text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              Black & White Infrastructure
-            </motion.div>
-            
-            <motion.h1 variants={itemVariants} className="text-6xl lg:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
-              Monochrome <br/>
-              <span className="text-white/40">Execution.</span>
-            </motion.h1>
-            
-            <motion.p variants={itemVariants} className="text-lg lg:text-xl text-white/30 mb-12 leading-relaxed font-light max-w-xl">
-              A high-density Multi-Tenant SaaS solution engineered for extreme concurrency and data isolation. Refined into a distilled monochrome aesthetic.
-            </motion.p>
-            
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-5">
-              <Link href="/dashboard" className="w-full sm:w-auto px-10 py-5 rounded-full bg-white text-black font-black transition-all flex items-center justify-center gap-3 hover:bg-white/90 active:scale-95 group">
-                Enter Dashboard
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href="#" className="w-full sm:w-auto px-10 py-5 rounded-full border border-white/20 hover:bg-white/5 text-white font-bold transition-all flex items-center justify-center gap-2">
-                Technical Stack
-              </Link>
-            </motion.div>
-          </motion.div>
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* Floating Icons Style */}
+        <div className="absolute inset-0 pointer-events-none">
+          <FloatingIcon icon={<Laptop />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
+          <FloatingIcon icon={<Music />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
+          <FloatingIcon icon={<Bike />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
+          <FloatingIcon icon={<Coffee />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
+          <FloatingIcon icon={<User />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
+          <FloatingIcon icon={<MapPin />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
+        </div>
 
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1 }}
-            className="relative hidden lg:block"
+            className="flex justify-center mb-6"
           >
-            <motion.div 
-              variants={floatingVariant}
-              initial="initial"
-              animate="animate"
-              className="relative z-10 p-10 glass-card border border-white/10 rounded-[3rem] shadow-[0_0_50px_rgba(255,255,255,0.05)] bg-white/[0.02]"
-            >
-              <div className="flex items-center gap-3 mb-10 opacity-30">
-                <div className="w-3 h-3 rounded-full bg-white" />
-                <div className="w-3 h-3 rounded-full bg-white/50" />
-                <div className="w-3 h-3 rounded-full bg-white/20" />
-              </div>
-              
-              <div className="space-y-8">
-                <div className="h-6 w-1/3 bg-white/10 rounded-full" />
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="h-40 rounded-[2rem] bg-white/[0.05] border border-white/5 p-6 flex flex-col justify-between">
-                     <div className="text-[10px] font-black uppercase tracking-widest text-white/20">Data Partition</div>
-                     <div className="space-y-3">
-                       <div className="h-2 w-full bg-white/20 rounded-full" />
-                       <div className="h-2 w-2/3 bg-white/10 rounded-full" />
-                     </div>
-                  </div>
-                  <div className="h-40 rounded-[2rem] bg-white border border-white/5 p-6 flex flex-col justify-between">
-                     <div className="text-[10px] font-black uppercase tracking-widest text-black/20">System Lock</div>
-                     <Lock className="w-10 h-10 text-black" />
-                  </div>
-                </div>
-                <div className="h-16 w-full border border-white/10 rounded-2xl flex items-center px-6 gap-4 bg-white/5">
-                   <Bot className="w-6 h-6 text-white/40" />
-                   <div className="h-2 flex-1 bg-white/10 rounded-full" />
-                </div>
-              </div>
-            </motion.div>
+            <div className="w-16 h-16 bg-white border-2 border-black rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden">
+               <span className="font-bold text-2xl">14</span>
+               <div className="absolute top-0 left-0 w-full h-2 bg-black opacity-10" />
+            </div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlot AI</h4>
+            <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
+              It’s time.
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-500 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
+              All of your commitments, now in one place. Meet the beautifully designed, fully integrated calendar for your work and life.
+            </p>
+            <div className="flex justify-center">
+              <Link href="/dashboard" className="bg-black text-white px-8 py-3.5 rounded-lg font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:scale-[1.02]">
+                Get FlexSlot free
+              </Link>
+            </div>
           </motion.div>
         </div>
-      </section>
 
-      {/* Technical Bento Grid */}
-      <section id="features" className="py-32 border-t border-white/5 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="mb-24">
-            <h2 className="text-4xl lg:text-6xl font-black mb-6 tracking-tighter">Technical Core</h2>
-            <p className="text-white/20 max-w-2xl font-light text-lg">Architectural primitives distilled into a high-contrast environment.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <BentoCard 
-              icon={<Layers />}
-              title="Multi-Tenant"
-              detail="Logical isolation powered by PostgreSQL RLS."
-              hook="STRICT_DATA_ISOLATION_v3"
-            />
-            <BentoCard 
-              icon={<ShieldCheck />}
-              title="Atomic Lock"
-              detail="Pessimistic concurrency control for slot safety."
-              hook="ROW_LEVEL_LOCK_ACTIVE"
-            />
-            <BentoCard 
-              icon={<Bot />}
-              title="Private AI"
-              detail="Self-hosted TinyLlama (1.1B) for local parsing."
-              hook="SERVER_SIDE_LLM_LOADED"
-            />
-            <BentoCard 
-              icon={<Zap />}
-              title="Background Sync"
-              detail="Event-driven FastAPI worker architecture."
-              hook="SYNC_WORKER_0_HEALTHY"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* System Pulse Section */}
-      <section id="pulse" className="py-40 border-t border-white/5 bg-black">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-24 items-center">
-            <div>
-              <h2 className="text-4xl lg:text-7xl font-black mb-16 tracking-tighter">System Pulse</h2>
-              <div className="space-y-12">
-                <div className="flex items-center gap-16">
-                  <div>
-                    <div className="text-6xl font-black mb-2">{latency}<span className="text-xl text-white/30">ms</span></div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Latency</div>
-                  </div>
-                  <div className="h-16 w-px bg-white/10" />
-                  <div>
-                    <div className="text-6xl font-black mb-2">100<span className="text-xl text-white/30">%</span></div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">Integrity</div>
-                  </div>
-                </div>
-
-                <div className="p-10 border border-white/10 rounded-[2.5rem] space-y-6 bg-white/[0.01]">
-                  <div className="text-xs font-black uppercase tracking-widest text-white/40">Resource Utilization</div>
-                  <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-white"
-                      initial={{ width: "20%" }}
-                      animate={{ width: "72%" }}
-                    />
-                  </div>
-                  <p className="text-[10px] font-mono text-white/20 leading-loose">
-                    [KERNEL]: Logical threads persistent. Redis cache: 98% hit rate. No deadlocks detected in Postgres partition clusters.
-                  </p>
-                </div>
+        {/* Hero Image Component */}
+        <motion.div 
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
+          className="max-w-6xl mx-auto px-6 mt-20"
+        >
+          <div className="bg-gray-100 p-2 md:p-4 rounded-[32px] shadow-2xl border border-gray-200">
+            <div className="bg-white rounded-[24px] shadow-inner overflow-hidden border border-gray-200">
+              {/* Fake UI Header */}
+              <div className="h-10 bg-gray-50 border-b border-gray-100 flex items-center px-4 gap-2">
+                 <div className="flex gap-1.5">
+                   <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                   <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                   <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                 </div>
+                 <div className="h-5 w-32 bg-gray-200 rounded-md mx-auto" />
+              </div>
+              {/* UI Content (Mockup Calendar) */}
+              <div className="aspect-video bg-[#fafafa] p-8 grid grid-cols-7 gap-4">
+                 {[...Array(7)].map((_, i) => (
+                    <div key={i} className="space-y-4">
+                       <div className="h-4 w-12 bg-gray-200 rounded animate-pulse" />
+                       <div className="h-full border-r border-gray-100 pt-4 flex flex-col gap-2">
+                          {i % 2 === 0 && <div className="h-12 bg-blue-100 border-l-4 border-blue-500 rounded p-2 text-[8px] font-bold">Strategy</div>}
+                          {i === 3 && <div className="h-20 bg-emerald-100 border-l-4 border-emerald-500 rounded p-2 text-[8px] font-bold">AI Extraction</div>}
+                          {i === 2 && <div className="h-10 bg-purple-100 border-l-4 border-purple-500 rounded p-2 text-[8px] font-bold">Sync</div>}
+                       </div>
+                    </div>
+                 ))}
+                 <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white/80 backdrop-blur-md px-10 py-5 rounded-3xl border border-gray-200 shadow-2xl flex items-center gap-4 scale-110">
+                       <div className="w-12 h-12 rounded-2xl bg-black flex items-center justify-center">
+                          <Plus className="text-white" />
+                       </div>
+                       <div>
+                          <p className="font-bold text-lg">New Booking</p>
+                          <p className="text-sm text-gray-500">Atomic Lock Guaranteed</p>
+                       </div>
+                    </div>
+                 </div>
               </div>
             </div>
-
-            <div className="p-12 border border-white/10 rounded-[3rem] bg-white/[0.02] relative group">
-               <div className="space-y-12 relative">
-                  <div className="flex justify-center">
-                     <div className="px-8 py-5 rounded-2xl bg-white text-black font-black text-sm uppercase tracking-widest">Next.js 15</div>
-                  </div>
-                  <div className="flex justify-center items-center py-4">
-                     <div className="w-px h-12 bg-white/20" />
-                  </div>
-                  <div className="flex justify-center gap-6">
-                     <div className="px-8 py-5 rounded-2xl border border-white/20 text-white font-black text-sm uppercase tracking-widest">FastAPI</div>
-                     <div className="px-8 py-5 rounded-2xl border border-white/10 text-white/30 font-black text-sm uppercase tracking-widest">Ollama</div>
-                  </div>
-                  <div className="flex justify-center items-center py-4">
-                     <div className="w-px h-12 bg-white/20" />
-                  </div>
-                  <div className="flex justify-center">
-                     <div className="px-10 py-8 rounded-3xl bg-white/5 border border-white/10 text-white font-black text-lg uppercase tracking-widest relative">
-                       PostgreSQL
-                       <Database className="absolute -top-6 -right-6 w-12 h-12 text-white/10" />
-                     </div>
-                  </div>
-               </div>
-            </div>
           </div>
+        </motion.div>
+      </section>
+
+      {/* Unified Section */}
+      <section className="py-32 bg-white">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
+           <div>
+              <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">Time management, simplified.</h2>
+              <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
+                FlexSlot integrates your disparate bookings into a unified, high-performance interface. One place for your work, your life, and your AI assistant.
+              </p>
+              <ul className="space-y-4">
+                 <FeaturePoint text="Unified multi-tenant data engine" />
+                 <FeaturePoint text="Real-time occupancy visualization" />
+                 <FeaturePoint text="PostgreSQL Row Level Security" />
+              </ul>
+           </div>
+           <div className="bg-gray-50 rounded-[48px] p-12 aspect-square flex items-center justify-center border border-gray-100 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-gray-100 to-transparent group-hover:scale-110 transition-transform duration-1000" />
+              <Layout className="w-40 h-40 text-black/10 relative z-10" />
+           </div>
         </div>
       </section>
 
-      {/* AI Playground */}
-      <section id="ai" className="py-32 border-t border-white/5 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-24">
-            <h2 className="text-4xl lg:text-7xl font-black mb-6">Distilled AI</h2>
-            <p className="text-white/20 max-w-xl mx-auto text-lg font-light">Self-hosted local inference. Zero-leak privacy.</p>
+      {/* Scheduling Section */}
+      <section className="py-32 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
+          <div className="order-2 md:order-1 bg-white rounded-[48px] p-12 aspect-square flex flex-col justify-center border border-gray-100 shadow-lg relative overflow-hidden">
+             <div className="absolute top-10 left-10 p-4 bg-blue-500 rounded-2xl text-white font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-500/20">
+                Pessimistic Lock
+             </div>
+             <div className="space-y-6">
+                <div className="h-6 w-3/4 bg-gray-100 rounded-full" />
+                <div className="h-6 w-1/2 bg-gray-50 rounded-full" />
+                <div className="h-32 w-full border-2 border-dashed border-gray-100 rounded-3xl flex items-center justify-center text-gray-300 font-black italic">
+                   ASYNC_SYNC_ACTIVE
+                </div>
+             </div>
           </div>
-
-          <div className="grid lg:grid-cols-2 gap-10">
-            <div className="p-12 border border-white/10 rounded-[3rem] bg-black">
-               <textarea 
-                  value={aiInput}
-                  onChange={(e) => setAiInput(e.target.value)}
-                  className="w-full h-48 bg-white/5 border-none p-0 text-lg text-white font-light focus:ring-0 resize-none placeholder:text-white/10"
-                  placeholder="Input natural language..."
-               />
-               <button 
-                  onClick={handleAiPlayground}
-                  className="mt-8 px-10 py-5 rounded-full bg-white text-black font-black hover:opacity-90 transition-all flex items-center gap-3"
-                  disabled={isAiParsing}
-               >
-                 {isAiParsing ? "Parsing..." : "Extract Logic"}
-                 <Send className="w-5 h-5" />
-               </button>
-            </div>
-
-            <div className="p-12 border border-white/5 rounded-[3rem] bg-white/[0.01] font-mono text-xs whitespace-pre overflow-auto min-h-[300px]">
-               <AnimatePresence mode="wait">
-                  {isAiParsing ? (
-                    <motion.div 
-                      key="p"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      className="h-full flex items-center justify-center text-white/20 uppercase tracking-[0.5em]"
-                    >
-                      Process_Entities...
-                    </motion.div>
-                  ) : (
-                    <motion.div key="r" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                      {aiOutput || "// Structured JSON logic will render here"}
-                    </motion.div>
-                  )}
-               </AnimatePresence>
-            </div>
-          </div>
+          <div className="order-1 md:order-2">
+              <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">Built-in scheduling.</h2>
+              <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
+                No more jumping between apps. Send availability and book meetings directly from your command center with atomic precision.
+              </p>
+              <div className="flex gap-4">
+                 <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <Clock className="w-6 h-6" />
+                 </div>
+                 <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <Plus className="w-6 h-6" />
+                 </div>
+              </div>
+           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-32 border-t border-white/10 bg-black">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
+      {/* CTA Section */}
+      <section className="py-40 text-center bg-white border-t border-gray-100">
+         <div className="max-w-4xl mx-auto px-6">
+            <h2 className="text-6xl md:text-8xl font-serif mb-10 tracking-tight leading-[1.1]">Ready to <br/>Master your time?</h2>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+               <Link href="/dashboard" className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-3">
+                  Get FlexSlot free <ArrowRight className="w-5 h-5" />
+               </Link>
+               <Link href="/dashboard" className="w-full sm:w-auto text-gray-400 hover:text-black font-bold text-lg transition-colors underline underline-offset-8">
+                  Contact sales
+               </Link>
+            </div>
+         </div>
+      </section>
+
+      {/* Real Footer */}
+      <footer className="bg-gray-50 border-t border-gray-100 py-20 px-6">
+         <div className="max-w-7xl mx-auto grid md:grid-cols-4 lg:grid-cols-6 gap-12">
             <div className="col-span-2">
-               <div className="flex items-center gap-4 mb-10">
-                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black font-black">FS</div>
-                  <span className="text-2xl font-black uppercase tracking-tighter">FlexSlot Infrastructure</span>
+               <div className="flex items-center gap-2 mb-6">
+                  <div className="w-6 h-6 bg-black rounded flex items-center justify-center"><Calendar className="w-4 h-4 text-white" /></div>
+                  <span className="font-bold">FlexSlot</span>
                </div>
-               <p className="text-white/20 max-w-sm leading-relaxed font-light">
-                 A professional demonstration of cloud-native multi-tenant architecture and private AI primitives. Optimized for performance and high-density data integrity.
-               </p>
-            </div>
-            
-            <div className="space-y-8">
-               <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">Core Stack</h4>
-               <ul className="grid grid-cols-2 gap-4 text-xs font-bold text-white/40">
-                 <li>Next.js 15</li>
-                 <li>FastAPI</li>
-                 <li>Postgres</li>
-                 <li>Redis</li>
-                 <li>Ollama</li>
-                 <li>Tailwind</li>
-               </ul>
-            </div>
-
-            <div className="space-y-10">
-               <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">Connectivity</h4>
-               <div className="flex gap-6">
-                  <Link href="#" className="text-white/20 hover:text-white transition-colors"><ExternalLink /></Link>
-                  <Link href="#" className="text-white/20 hover:text-white transition-colors"><FileText /></Link>
+               <div className="flex gap-4 mb-8">
+                  <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Globe className="w-4 h-4" /></Link>
+                  <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Share2 className="w-4 h-4" /></Link>
+                  <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><MessageSquare className="w-4 h-4" /></Link>
                </div>
-               <div className="flex items-center gap-3 text-[10px] font-black uppercase text-emerald-500/50">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> SYSTEM_ONLINE_v32
-               </div>
+               <p className="text-sm text-gray-400">© 2026 FlexSlot Labs, Inc.</p>
             </div>
-          </div>
-
-          <div className="pt-20 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-10 opacity-20">
-             <div className="text-[10px] font-black uppercase tracking-[0.5em]">© 2026 FlexSlot Infrastructure.</div>
-             <div className="text-[10px] font-mono tracking-widest text-center">BUILD_SUCCESSFUL // SHA_8F4C2D // DISCRETE_MODE_ACTIVE</div>
-          </div>
-        </div>
+            {["Product", "Download", "Resources", "Company"].map((col) => (
+               <div key={col} className="space-y-4 text-[14px]">
+                  <h4 className="font-bold text-gray-900">{col}</h4>
+                  <ul className="space-y-2 text-gray-500 font-medium">
+                     <li><Link href="#" className="hover:text-black">Overview</Link></li>
+                     <li><Link href="#" className="hover:text-black">Features</Link></li>
+                     <li><Link href="#" className="hover:text-black">Integrations</Link></li>
+                     <li><Link href="#" className="hover:text-black">Mobile</Link></li>
+                  </ul>
+               </div>
+            ))}
+         </div>
       </footer>
     </div>
   );
 }
 
-function BentoCard({ icon, title, detail, hook }: { icon: React.ReactNode, title: string, detail: string, hook: string }) {
+function FloatingIcon({ icon, color, accent, top, left, right, bottom, delay = 0 }: any) {
   return (
-    <motion.div 
-      whileHover={{ y: -5 }}
-      className="p-10 border border-white/10 rounded-[3rem] bg-white/[0.02] flex flex-col h-full hover:bg-white/[0.05] transition-all group border-b-[3px] border-b-white/5"
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
+      transition={{ 
+        opacity: { duration: 0.5, delay },
+        scale: { duration: 0.5, delay },
+        y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay }
+      }}
+      className="absolute border border-gray-100 rounded-3xl p-5 shadow-2xl backdrop-blur-sm"
+      style={{ backgroundColor: color, top, left, right, bottom }}
     >
-      <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-black mb-10 group-hover:scale-110 transition-transform">
+      <div className="w-10 h-10 flex items-center justify-center rounded-xl" style={{ border: `2px solid ${accent}`, color: accent }}>
         {icon}
       </div>
-      <h3 className="text-xl font-black uppercase tracking-tight mb-4">{title}</h3>
-      <p className="text-sm text-white/30 leading-relaxed font-light mb-auto">{detail}</p>
-      <div className="mt-10 pt-8 border-t border-white/5 text-[9px] font-mono text-white/40 uppercase tracking-[0.3em]">
-        {hook}
-      </div>
     </motion.div>
+  );
+}
+
+function FeaturePoint({ text }: { text: string }) {
+  return (
+    <li className="flex items-center gap-3 text-gray-600 font-medium">
+       <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+          <Check className="w-3 h-3 text-white" strokeWidth={4} />
+       </div>
+       {text}
+    </li>
   );
 }
