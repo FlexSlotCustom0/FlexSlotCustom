@@ -54,7 +54,7 @@ export default function Dashboard() {
               <div className="w-6 h-6 rounded-full bg-gold-deep flex items-center justify-center text-[10px] font-bold text-black">
                 {currentTenant.name.charAt(0)}
               </div>
-              <select 
+              <select
                 className="bg-transparent text-sm font-medium border-none focus:ring-0 outline-none pr-6 appearance-none cursor-pointer text-gold-light"
                 onChange={(e) => setCurrentTenant(prev => ({ ...prev, name: e.target.value }))}
               >
@@ -64,7 +64,7 @@ export default function Dashboard() {
               </select>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <button className="relative p-2 rounded-full hover:bg-white/5 transition-colors">
               <Bell className="w-5 h-5 text-gold-light/60" />
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
         {/* Dashboard Content */}
         <div className="p-8 flex-1 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-purple/10 via-background to-background">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8 flex justify-between items-end"
@@ -107,13 +107,13 @@ export default function Dashboard() {
               <div className="h-64 flex items-end gap-2 px-2">
                 {[40, 65, 30, 85, 50, 75, 95].map((h, i) => (
                   <div key={i} className="flex-1 bg-slate-900/50 rounded-t-lg relative group overflow-hidden">
-                    <motion.div 
+                    <motion.div
                       className="absolute bottom-0 w-full bg-blue-500/10 rounded-t-lg"
                       initial={{ height: 0 }}
                       animate={{ height: `${h}%` }}
                       transition={{ duration: 1, delay: i * 0.1 }}
                     />
-                    <motion.div 
+                    <motion.div
                       className="absolute bottom-0 w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg border-t border-blue-400/50"
                       initial={{ height: 0 }}
                       animate={{ height: `${h - 20}%` }}
@@ -135,7 +135,7 @@ export default function Dashboard() {
                 </div>
                 <h2 className="text-lg font-semibold">Live AI Telemetry</h2>
               </div>
-              
+
               <div className="flex-1 space-y-4">
                 <div className="p-4 rounded-xl bg-slate-950/50 border border-white/5">
                   <div className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-2">Model: TinyLlama 1.1B</div>
@@ -143,7 +143,7 @@ export default function Dashboard() {
                     "Partition {currentTenant.slug} is experiencing peak concurrency. Background workers scaled to 4 threads."
                   </p>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3 rounded-xl bg-slate-900 border border-white/5 text-center">
                     <div className="text-[10px] text-slate-500 uppercase mb-1">NL Tokens/Sec</div>
@@ -165,13 +165,12 @@ export default function Dashboard() {
 
 function NavItem({ href, label, active }: { href: string, label: string, active?: boolean }) {
   return (
-    <Link 
+    <Link
       href={href}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-        active 
-          ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]' 
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${active
+          ? 'bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]'
           : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-      }`}
+        }`}
     >
       {label}
     </Link>
