@@ -50,11 +50,11 @@ body {
 
 @layer utilities {
   .glass {
-    @apply bg-black/20 backdrop-blur-xl border border-white/5;
+    @apply bg-background/20 backdrop-blur-xl border border-foreground/5;
   }
 
   .glass-card {
-    @apply bg-card/40 backdrop-blur-2xl border border-border/50 shadow-2xl;
+    @apply bg-card/10 backdrop-blur-2xl border border-foreground/10 shadow-2xl;
   }
 
   .text-gold {
