@@ -6,7 +6,7 @@ import {
   X, Save, RotateCcw, Layout, Users, ShoppingBag, 
   Settings, Phone, MapPin, Clock, Type, Palette, 
   Plus, Trash2, ChevronRight, Check, Image as ImageIcon,
-  MessageSquare, HelpCircle, Sparkles
+  MessageSquare, HelpCircle, Sparkles, Rocket, CheckCircle2
 } from "lucide-react";
 import { useTemplateContext, Staff, Faq, Tip, Review } from "./TemplateContext";
 import { HexColorPicker } from "react-colorful";
@@ -20,12 +20,25 @@ export const TemplateEditor: React.FC = () => {
     tips, setTips,
     reviews, setReviews,
     isEditorOpen, setIsEditorOpen,
-    resetToDefault
+    resetToDefault,
+    publishClinic
   } = useTemplateContext();
 
   const [activeTab, setActiveTab] = useState<"branding" | "visuals" | "team" | "offerings" | "content">("branding");
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   if (!isEditorOpen) return null;
+
+  const handlePublish = () => {
+    setIsPublishing(true);
+    setTimeout(() => {
+      publishClinic();
+      setIsPublishing(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }, 1500);
+  };
 
   const currentTemplateId = window.location.pathname.split("/").pop() || "";
 
@@ -478,24 +491,50 @@ export const TemplateEditor: React.FC = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 bg-white flex items-center gap-3">
+        <div className="p-6 border-t border-gray-100 bg-white grid gap-3">
           <button 
-            onClick={() => {
-              if (confirm("Reset all customizations? This will restore global clinical defaults.")) {
-                resetToDefault(currentTemplateId);
-              }
-            }}
-            className="flex-1 py-3 px-4 rounded-xl border border-gray-100 font-bold text-xs text-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+            onClick={handlePublish}
+            disabled={isPublishing || showSuccess}
+            className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl transition-all duration-500 overflow-hidden relative flex items-center justify-center gap-2 ${
+              showSuccess ? 'bg-emerald-500 text-white' : 'bg-black text-white hover:bg-gray-800'
+            }`}
           >
-            <RotateCcw className="w-3 h-3" /> Reset
+            {isPublishing ? (
+              <div className="flex gap-1">
+                <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            ) : showSuccess ? (
+              <>
+                <CheckCircle2 className="w-4 h-4" /> Clinic Published
+              </>
+            ) : (
+              <>
+                <Rocket className="w-4 h-4" /> Go Live & Publish
+              </>
+            )}
           </button>
-          <button 
-            onClick={() => setIsEditorOpen(false)}
-            className="flex-1 py-3 px-4 rounded-xl text-white font-bold text-xs shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-            style={{ backgroundColor: shopData.primaryColor }}
-          >
-            <Check className="w-3 h-3" /> Apply Styles
-          </button>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => {
+                if (confirm("Reset all customizations? This will restore global clinical defaults.")) {
+                  resetToDefault(currentTemplateId);
+                }
+              }}
+              className="flex-1 py-3 px-4 rounded-xl border border-gray-100 font-bold text-xs text-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+            >
+              <RotateCcw className="w-3 h-3" /> Reset
+            </button>
+            <button 
+              onClick={() => setIsEditorOpen(false)}
+              className="flex-1 py-3 px-4 rounded-xl text-white font-bold text-xs shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+              style={{ backgroundColor: shopData.primaryColor }}
+            >
+              <Check className="w-3 h-3" /> Apply Styles
+            </button>
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>

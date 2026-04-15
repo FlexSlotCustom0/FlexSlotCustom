@@ -8,7 +8,7 @@ import {
   Plus, ExternalLink, Stethoscope, Briefcase, Activity, Heart, ShieldPlus
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const [role, setRole] = useState<"owner" | "customer">("owner");
@@ -247,10 +247,18 @@ function TemplateSelectionView() {
     </div>
   );
 }
-
 // --- CUSTOMER VIEWS ---
 
 function CustomerDashboardView({ tab }: { tab: string }) {
+  const [publishedClinics, setPublishedClinics] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("flexslot_public_clinics");
+    if (saved) {
+      setPublishedClinics(JSON.parse(saved));
+    }
+  }, []);
+
   return (
     <div className="space-y-10">
       <div>
@@ -260,6 +268,21 @@ function CustomerDashboardView({ tab }: { tab: string }) {
 
       {/* Discovery Marketplace */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {publishedClinics.length > 0 && publishedClinics.map((clinic, i) => (
+          <ServiceCard 
+            key={`published-${i}`}
+            image={clinic.id === 'clinic-clean' ? 'bg-blue-100' : 'bg-orange-100'} 
+            title={clinic.name} 
+            category={clinic.category} 
+            rating={clinic.rating} 
+            price="$60+" 
+            tag="VIEW" 
+            active
+            id={clinic.id}
+          />
+        ))}
+
+        {/* Featured / Default Clinics */}
         <ServiceCard 
           image="bg-orange-100" 
           title="Nova Salon & Spa" 
@@ -268,16 +291,18 @@ function CustomerDashboardView({ tab }: { tab: string }) {
           price="$45+" 
           tag="RESERVE" 
         />
-        <ServiceCard 
-          image="bg-blue-100" 
-          title="Dr. Emily's Clinic" 
-          category="Healthcare" 
-          rating={5.0} 
-          price="$120+" 
-          tag="VIEW" 
-          active
-          id="clinic-clean"
-        />
+        {publishedClinics.length === 0 && (
+          <ServiceCard 
+            image="bg-blue-100" 
+            title="Dr. Emily's Clinic" 
+            category="Healthcare" 
+            rating={5.0} 
+            price="$120+" 
+            tag="VIEW" 
+            active
+            id="clinic-clean"
+          />
+        )}
         <ServiceCard 
           image="bg-purple-100" 
           title="Elite Web Studio" 

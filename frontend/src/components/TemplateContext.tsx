@@ -85,6 +85,7 @@ interface TemplateContextType {
   isEditorOpen: boolean;
   setIsEditorOpen: (open: boolean) => void;
   resetToDefault: (templateId: string) => void;
+  publishClinic: () => void;
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(undefined);
@@ -295,6 +296,35 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
+  const publishClinic = () => {
+    if (!activeTemplate) return;
+
+    const publicClinicsJson = localStorage.getItem("flexslot_public_clinics");
+    const publicClinics = publicClinicsJson ? JSON.parse(publicClinicsJson) : [];
+
+    const newClinic = {
+      id: activeTemplate,
+      name: shopData.name,
+      tagline: shopData.tagline,
+      logo: shopData.logo,
+      logoUrl: shopData.logoUrl,
+      primaryColor: shopData.primaryColor,
+      category: activeTemplate === 'clinic-clean' ? 'Healthcare' : 'Veterinary',
+      rating: shopData.rating || 5.0,
+      publishedAt: new Date().toISOString()
+    };
+
+    // Update existing or add new
+    const index = publicClinics.findIndex((c: any) => c.name === newClinic.name);
+    if (index > -1) {
+      publicClinics[index] = newClinic;
+    } else {
+      publicClinics.push(newClinic);
+    }
+
+    localStorage.setItem("flexslot_public_clinics", JSON.stringify(publicClinics));
+  };
+
   return (
     <TemplateContext.Provider
       value={{
@@ -313,6 +343,7 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         isEditorOpen,
         setIsEditorOpen,
         resetToDefault,
+        publishClinic,
       }}
     >
       {children}
