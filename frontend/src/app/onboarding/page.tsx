@@ -122,12 +122,16 @@ export default function OnboardingPage() {
           className="mt-20 w-full max-w-4xl"
         >
           {selected ? (
-            <Link 
-              href={`/templates/${selected}?manage=true`}
+            <button 
+              onClick={() => {
+                const niche = selected === 'clinic-clean' ? 'medical' : 'veterinary';
+                localStorage.setItem('flexslot_clinic_niche', niche);
+                window.location.href = `/templates/${selected}?manage=true`;
+              }}
               className="w-full bg-black text-white py-6 rounded-3xl font-bold text-xl flex items-center justify-center gap-3 shadow-2xl hover:bg-gray-800 transition-all hover:scale-[1.01]"
             >
               Start Personalizing <ArrowRight className="w-5 h-5" />
-            </Link>
+            </button>
           ) : (
             <button 
               disabled
