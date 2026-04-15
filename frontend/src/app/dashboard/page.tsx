@@ -5,10 +5,11 @@ import {
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Send, Layout, Store, User, BookOpen, Clock, ChevronRight, 
-  Plus, ExternalLink, Stethoscope, Briefcase, Activity, Heart, ShieldPlus
+  Plus, ExternalLink, Stethoscope, Briefcase, Activity, Heart, ShieldPlus, ShoppingBag,
+  Zap, Sparkles, PawPrint, Star
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const [role, setRole] = useState<"owner" | "customer">("owner");
@@ -163,6 +164,11 @@ function SideNavItem({ icon, label, active, onClick }: { icon: any, label: strin
 
 function OwnerDashboardView({ tab }: { tab: string }) {
   if (tab === "templates") return <TemplateSelectionView />;
+  if (tab === "services") return <TreatmentsView />;
+  if (tab === "bookings") return <AppointmentsView role="owner" />;
+  if (tab === "customers") return <PatientRecordsView />;
+  if (tab === "ai") return <MedicalAIView />;
+  if (tab === "settings") return <PharmacyInventoryView />;
   
   return (
     <div className="space-y-10">
@@ -233,6 +239,12 @@ function OwnerDashboardView({ tab }: { tab: string }) {
 }
 
 function TemplateSelectionView() {
+  const [niche, setNiche] = useState<string | null>(null);
+
+  useEffect(() => {
+    setNiche(localStorage.getItem("flexslot_clinic_niche"));
+  }, []);
+
   return (
     <div className="space-y-8">
       <div>
@@ -240,17 +252,42 @@ function TemplateSelectionView() {
         <p className="text-gray-400 font-medium italic">Select your professional medical or veterinary digital presence.</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" id="clinic-clean" manage={true} />
-        <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" id="vet-warm" manage={true} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {(!niche || niche === 'medical') && (
+          <>
+            <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Modern Medical" id="clinic-clean" manage={true} />
+            <TemplateCard icon={<Zap className="text-indigo-600" />} title="Pulse Modern" category="Imaging & Diagnostics" id="pulse-modern" manage={true} />
+            <TemplateCard icon={<Sparkles className="text-teal-600" />} title="Dental Bright" category="Cosmetic Dental" id="dental-bright" manage={true} />
+          </>
+        )}
+        {(!niche || niche === 'veterinary') && (
+          <>
+            <TemplateCard icon={<Heart />} title="Vet Warm" category="Neighborhood Vet" id="vet-warm" manage={true} />
+            <TemplateCard icon={<Star className="text-amber-500" />} title="Paw Luxe" category="Luxury Pet Care" id="paws-premium" manage={true} />
+            <TemplateCard icon={<PawPrint className="text-emerald-600" />} title="Wild Frontier" category="Wildlife & Exotics" id="wild-med" manage={true} />
+          </>
+        )}
       </div>
     </div>
   );
 }
-
 // --- CUSTOMER VIEWS ---
 
 function CustomerDashboardView({ tab }: { tab: string }) {
+  const [publishedClinics, setPublishedClinics] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("flexslot_public_clinics");
+    if (saved) {
+      setPublishedClinics(JSON.parse(saved));
+    }
+  }, []);
+
+  if (tab === "bookings") return <AppointmentsView role="customer" />;
+  if (tab === "history") return <PatientRecordsView isPatient />;
+  if (tab === "ai") return <MedicalAIView />;
+  if (tab === "settings") return <PharmacyInventoryView />;
+
   return (
     <div className="space-y-10">
       <div>
@@ -260,39 +297,38 @@ function CustomerDashboardView({ tab }: { tab: string }) {
 
       {/* Discovery Marketplace */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <ServiceCard 
-          image="bg-orange-100" 
-          title="Nova Salon & Spa" 
-          category="Beauty" 
-          rating={4.9} 
-          price="$45+" 
-          tag="RESERVE" 
-        />
-        <ServiceCard 
-          image="bg-blue-100" 
-          title="Dr. Emily's Clinic" 
-          category="Healthcare" 
-          rating={5.0} 
-          price="$120+" 
-          tag="VIEW" 
-          active
-          id="clinic-clean"
-        />
-        <ServiceCard 
-          image="bg-purple-100" 
-          title="Elite Web Studio" 
-          category="Development" 
-          rating={4.8} 
-          price="$200+" 
-          tag="VIEW" 
-        />
+        {publishedClinics.length > 0 && publishedClinics.map((clinic, i) => (
+          <ServiceCard 
+            key={`published-${i}`}
+            image={clinic.id === 'clinic-clean' ? 'bg-blue-100' : 'bg-orange-100'} 
+            title={clinic.name} 
+            category={clinic.category} 
+            rating={clinic.rating} 
+            price="$60+" 
+            tag="VIEW" 
+            active
+            id={clinic.id}
+          />
+        ))}
+
+        {publishedClinics.length === 0 && (
+          <ServiceCard 
+            image="bg-blue-100" 
+            title="Dr. Emily's Clinic" 
+            category="Healthcare" 
+            rating={5.0} 
+            price="$120+" 
+            tag="VIEW" 
+            active
+            id="clinic-clean"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-10 border-t border-gray-100">
         <div className="lg:col-span-2 space-y-6">
           <h3 className="text-xl font-bold">Upcoming Appointments</h3>
           <AppointmentRow service="Dr. Emily's Clinic" date="Oct 24, 2026" time="10:00 AM" status="Confirmed" />
-          <AppointmentRow service="Nova Salon & Spa" date="Oct 28, 2026" time="2:30 PM" status="Pending" />
         </div>
         
         <div className="bg-black text-white rounded-[2.5rem] p-8 flex flex-col justify-between shadow-xl">
@@ -429,6 +465,323 @@ function AppointmentRow({ service, date, time, status }: { service: string, date
         <button className="p-2.5 rounded-xl hover:bg-gray-50 transition-colors">
           <FileText className="w-4 h-4 text-gray-400" />
         </button>
+      </div>
+    </div>
+  );
+}
+// --- CLINICAL MODULE COMPONENTS ---
+
+function TreatmentsView() {
+  const categories = [
+    { name: "General Checkups", count: 24, status: "Active" },
+    { name: "Specialist Consultation", count: 18, status: "Active" },
+    { name: "Laboratory Tests", count: 32, status: "Maintenance" },
+    { name: "Vaccination", count: 12, status: "Active" },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-serif tracking-tight">Treatments & Services</h2>
+          <p className="text-gray-400 text-sm font-medium italic">Manage your clinic's offerings and pricing.</p>
+        </div>
+        <button className="bg-black text-white px-6 py-3 rounded-2xl text-xs font-bold flex items-center gap-2 shadow-xl hover:bg-gray-800 transition-all">
+          <Plus className="w-4 h-4" /> Add Treatment
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {categories.map((cat, i) => (
+          <div key={i} className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm relative overflow-hidden group">
+            <div className={`absolute top-0 right-0 w-1 p-8 h-full ${cat.status === 'Active' ? 'bg-emerald-500' : 'bg-orange-400'}`} />
+            <h3 className="font-bold mb-1">{cat.name}</h3>
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{cat.count} ACTIVE SERVICES</p>
+            <div className="mt-4 flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+              <span className={cat.status === 'Active' ? 'text-emerald-600' : 'text-orange-500'}>{cat.status}</span>
+              <button className="text-gray-300 hover:text-black transition-colors"><Settings className="w-3.5 h-3.5" /></button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white rounded-[2.5rem] border border-gray-50 shadow-sm overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-50/50 border-b border-gray-50">
+            <tr>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Treatment Name</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Category</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Base Price</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Status</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {[
+              { name: "Comprehensive Physical", cat: "General", price: "$85.00", status: "Active" },
+              { name: "Cardiac ECG Screening", cat: "Specialist", price: "$120.00", status: "Active" },
+              { name: "Dermatology Consultation", cat: "Specialist", price: "$95.00", status: "Inactive" },
+              { name: "Paediatric Wellness", cat: "General", price: "$65.00", status: "Active" },
+            ].map((row, i) => (
+              <tr key={i} className="hover:bg-gray-50/30 transition-colors">
+                <td className="px-8 py-6 font-bold text-sm">{row.name}</td>
+                <td className="px-8 py-6 text-xs text-gray-400 font-bold uppercase tracking-widest">{row.cat}</td>
+                <td className="px-8 py-6 font-mono text-sm font-bold">{row.price}</td>
+                <td className="px-8 py-6">
+                  <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg ${row.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}`}>
+                    {row.status}
+                  </span>
+                </td>
+                <td className="px-8 py-6 text-right">
+                  <button className="p-2 hover:bg-white rounded-lg transition-all shadow-sm"><ChevronRight className="w-4 h-4 text-gray-400" /></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function AppointmentsView({ role }: { role: "owner" | "customer" }) {
+  const appointments = [
+    { patient: "Alex Miller", treatment: "General Checkup", time: "10:00 AM", date: "Today", status: "Confirmed", type: "In-Person" },
+    { patient: "Sarah Jennings", treatment: "Blood Panel", time: "11:30 AM", date: "Today", status: "Pending", type: "Home Visit" },
+    { patient: "Michael Chen", treatment: "Vaccination", time: "02:15 PM", date: "Tomorrow", status: "Confirmed", type: "In-Person" },
+    { patient: "Jessica Bloom", treatment: "Specialist Consult", time: "09:00 AM", date: "Oct 24", status: "Cancelled", type: "Telehealth" },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-3xl font-serif tracking-tight">{role === 'owner' ? 'Clinical Appointments' : 'My Medical Visits'}</h2>
+        <p className="text-gray-400 text-sm font-medium italic">Track and manage upcoming clinical consultations.</p>
+      </div>
+
+      <div className="flex gap-4">
+        {['Upcoming', 'Completed', 'Requests', 'Cancelled'].map((f, i) => (
+          <button key={i} className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all ${i === 0 ? 'bg-black text-white border-black' : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300'}`}>
+            {f}
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-4">
+        {appointments.map((app, i) => (
+          <div key={i} className="bg-white p-6 rounded-[2rem] border border-gray-50 shadow-sm flex items-center gap-6 group hover:translate-x-1 transition-all">
+            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex flex-col items-center justify-center font-mono">
+              <span className="text-[10px] text-gray-400 font-bold uppercase">Oct</span>
+              <span className="text-xl font-black">24</span>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm font-bold">{role === 'owner' ? app.patient : app.treatment}</span>
+                <span className="h-1 w-1 bg-gray-300 rounded-full" />
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{app.type}</span>
+              </div>
+              <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">{role === 'owner' ? app.treatment : 'Kindred Medical Centre'} · {app.time}</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className={`text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-xl ${
+                app.status === 'Confirmed' ? 'bg-emerald-50 text-emerald-600' : 
+                app.status === 'Pending' ? 'bg-orange-50 text-orange-600' : 'bg-gray-50 text-gray-400'
+              }`}>
+                {app.status}
+              </span>
+              <button className="p-3 bg-gray-50 rounded-xl hover:bg-black hover:text-white transition-all">
+                <ExternalLink className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PatientRecordsView({ isPatient }: { isPatient?: boolean }) {
+  const records = [
+    { name: "Alex Miller", id: "P-4421", blood: "A+", age: 34, lastVisit: "Oct 12, 2026", condition: "Healthy" },
+    { name: "Sarah Jennings", id: "P-4425", blood: "O-", age: 29, lastVisit: "Oct 15, 2026", condition: "Thyroid" },
+    { name: "Michael Chen", id: "P-4430", blood: "B+", age: 41, lastVisit: "Oct 10, 2026", condition: "Hypertension" },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-serif tracking-tight">{isPatient ? 'My Medical History' : 'Electronic Patient Records'}</h2>
+          <p className="text-gray-400 text-sm font-medium italic">Secure EMR system for clinical history tracking.</p>
+        </div>
+        {!isPatient && (
+          <button className="bg-blue-600 text-white px-6 py-3 rounded-2xl text-xs font-bold flex items-center gap-2 shadow-xl hover:bg-blue-700 transition-all">
+            <Plus className="w-4 h-4" /> New Record
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {records.map((rec, i) => (
+          <div key={i} className="bg-white rounded-[2.5rem] p-8 border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all duration-500">
+            <div className="flex justify-between items-start mb-6">
+              <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center font-bold text-gray-400">
+                {rec.name.split(' ').map(n => n[0]).join('')}
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-1">Blood Group</div>
+                <div className="text-lg font-black text-blue-600 font-mono">{rec.blood}</div>
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-bold mb-1 tracking-tight">{isPatient ? 'Comprehensive History' : rec.name}</h3>
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-6 italic">{isPatient ? 'Kindred Ecosystem ID' : 'ID: ' + rec.id} · {rec.age} Years</p>
+
+            <div className="space-y-3 pt-6 border-t border-gray-50">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Last Visit</span>
+                <span className="text-xs font-bold">{rec.lastVisit}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Primary Diagnosis</span>
+                <span className="text-xs font-bold text-emerald-600">{rec.condition}</span>
+              </div>
+            </div>
+
+            <button className="w-full mt-8 py-4 rounded-3xl bg-gray-50 text-gray-400 text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">
+              Open Full Record
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MedicalAIView() {
+  return (
+    <div className="h-full flex flex-col space-y-8">
+      <div className="flex items-center gap-6">
+        <div className="w-16 h-16 rounded-[2rem] bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-100">
+          <Bot className="w-8 h-8 text-white" />
+        </div>
+        <div>
+          <h2 className="text-3xl font-serif tracking-tight">Kindred Intelligence</h2>
+          <p className="text-gray-400 text-sm font-medium italic">AI clinical assistant powered by secure medical LLMs.</p>
+        </div>
+      </div>
+
+      <div className="flex-1 bg-white rounded-[3rem] border border-gray-50 shadow-sm p-10 flex flex-col relative overflow-hidden">
+        {/* Background Gradient */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+        
+        <div className="flex-1 space-y-8 overflow-y-auto pr-4 no-scrollbar">
+          <div className="flex gap-4">
+            <div className="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center flex-none mt-1">
+              <Bot className="w-4 h-4 text-indigo-400" />
+            </div>
+            <div className="p-6 bg-gray-50 rounded-2xl rounded-tl-none max-w-[80%]">
+              <p className="text-sm leading-relaxed text-gray-600 font-medium">
+                Good afternoon, Dr. Elite. I've analyzed today's appointments. 
+                <span className="font-bold text-black px-1 underline cursor-pointer">Sarah Jennings</span>' current medication for Thyroid may interact with the upcoming treatment. 
+                Would you like me to flag this for your review?
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 flex-row-reverse">
+            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center flex-none mt-1 text-white">
+              <User className="w-4 h-4" />
+            </div>
+            <div className="p-6 bg-blue-600 text-white rounded-2xl rounded-tr-none max-w-[80%] shadow-lg shadow-blue-100">
+              <p className="text-sm leading-relaxed font-bold italic">
+                Yes, please flag it and suggest an alternative dosage plan based on her last blood work.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-8 flex gap-3">
+          <div className="flex-1 relative">
+            <input type="text" placeholder="Type clinical query or instruction here..." className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/10 transition-all pr-12" />
+            <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-indigo-600 text-white rounded-xl shadow-lg">
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        {['Summarize Today', 'Check Drug Interaction', 'Analyze Vitals'].map((s, i) => (
+          <button key={i} className="p-6 bg-white rounded-3xl border border-gray-50 shadow-sm text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-indigo-600 hover:border-indigo-100 transition-all text-center">
+            {s}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PharmacyInventoryView() {
+  const stock = [
+    { name: "Amoxicillin 500mg", batch: "AX-221", qty: 450, status: "Healthy", expiry: "2027-04" },
+    { name: "Paracetamol Syrup", batch: "PA-098", qty: 12, status: "Low Stock", expiry: "2026-11" },
+    { name: "Lipitor 20mg", batch: "LP-111", qty: 89, status: "Critical", expiry: "2026-08" },
+    { name: "Surgical Gloves", batch: "SG-552", qty: 1200, status: "Healthy", expiry: "2029-12" },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-serif tracking-tight">Pharmacy & Inventory</h2>
+          <p className="text-gray-400 text-sm font-medium italic">Real-time tracking of medications and clinical gear.</p>
+        </div>
+        <div className="flex gap-2">
+          <button className="bg-white border border-gray-100 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest">Generate Report</button>
+          <button className="bg-black text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl">Reorder All Low</button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <MetricCard label="Total Stock Value" value="$42,800" trend="+4%" icon={<ShoppingBag />} />
+        <MetricCard label="Pending Orders" value="14" trend="-2" icon={<Clock />} />
+        <MetricCard label="Expiring Soon" value="08" trend="Urgent" icon={<Bell />} />
+      </div>
+
+      <div className="bg-white rounded-[2.5rem] border border-gray-50 shadow-sm overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-50/50 border-b border-gray-50">
+            <tr>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Inventory Item</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Batch ID</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">In-Stock</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Condition</th>
+              <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Expiry</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {stock.map((row, i) => (
+              <tr key={i} className="hover:bg-gray-50/30 transition-colors">
+                <td className="px-8 py-6">
+                  <div className="text-sm font-bold">{row.name}</div>
+                  <div className="text-[10px] text-gray-300 font-bold uppercase">Generic Bio-Care</div>
+                </td>
+                <td className="px-8 py-6 font-mono text-xs font-bold text-gray-400">{row.batch}</td>
+                <td className="px-8 py-6 font-bold text-sm tracking-tight">{row.qty} Units</td>
+                <td className="px-8 py-6">
+                  <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg ${
+                    row.status === 'Healthy' ? 'bg-emerald-50 text-emerald-600' : 
+                    row.status === 'Low Stock' ? 'bg-orange-50 text-orange-600' : 'bg-rose-50 text-rose-600'
+                  }`}>
+                    {row.status}
+                  </span>
+                </td>
+                <td className="px-8 py-6 font-mono text-xs text-gray-400">{row.expiry}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
