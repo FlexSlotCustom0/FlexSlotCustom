@@ -183,7 +183,6 @@ export default function NotionCalendarClone() {
       <section id="product" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-[12px] font-black tracking-widest uppercase text-gray-400 mb-3">Core Competencies</h2>
             <h3 className="text-4xl md:text-5xl font-serif tracking-tight">Software Engineering Priority</h3>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -229,7 +228,7 @@ export default function NotionCalendarClone() {
                   <Search className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xl">Search (The Discovery Phase)</h4>
+                  <h4 className="font-bold text-xl">Search</h4>
                   <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
                     This highlights the platform's versatility. It shows that both medical doctors and veterinarians are available in one unified marketplace.
                   </p>
@@ -241,7 +240,7 @@ export default function NotionCalendarClone() {
                   <CalendarClock className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xl">Select Slot (The Real-Time Phase)</h4>
+                  <h4 className="font-bold text-xl">Select Slot</h4>
                   <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
                     This builds trust. It proves the system is live and accurate, reassuring the user that the time they pick is reserved specifically for them.
                   </p>
@@ -253,7 +252,7 @@ export default function NotionCalendarClone() {
                   <CheckCircle2 className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xl">Confirm (The Outcome Phase)</h4>
+                  <h4 className="font-bold text-xl">Confirm</h4>
                   <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
                     This provides closure. It emphasizes the speed of your FastAPI backend and the automation of your background workers (email/calendar sync).
                   </p>
