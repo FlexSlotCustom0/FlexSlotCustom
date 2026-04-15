@@ -71,7 +71,7 @@ export default function NotionCalendarClone() {
             className="flex justify-center mb-6"
           >
             <div className="w-20 h-20 bg-white border-2 border-black rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden group">
-               <CalendarClock className="w-10 h-10 text-black group-hover:scale-110 transition-transform" />
+              <CalendarClock className="w-10 h-10 text-black group-hover:scale-110 transition-transform" />
             </div>
           </motion.div>
 
@@ -140,25 +140,41 @@ export default function NotionCalendarClone() {
       <section id="ai-playground" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">The AI Playground.</h2>
-
-            <div className="space-y-6">
+            <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">How it Works.</h2>
+            <div className="space-y-8">
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 border border-gray-100">
-                  <Terminal className="w-5 h-5 text-gray-600" />
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100">
+                  <Search className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">Natural Language Parsing</h4>
-                  <p className="text-gray-500 font-medium text-sm mt-1">Intelligently parses phrases like "consult next Tuesday" into strictly formatted, validated JSON payloads.</p>
+                  <h4 className="font-bold text-xl">Search (The Discovery Phase)</h4>
+                  <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
+                    This highlights the platform's versatility. It shows that both medical doctors and veterinarians are available in one unified marketplace.
+                  </p>
                 </div>
               </div>
+
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 border border-gray-100">
-                  <ShieldCheck className="w-5 h-5 text-gray-600" />
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100">
+                  <CalendarClock className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">Privacy Focus</h4>
-                  <p className="text-gray-500 font-medium text-sm mt-1">All sensitive operations process entirely server-side, guaranteeing zero operational costs for the business owner.</p>
+                  <h4 className="font-bold text-xl">Select Slot (The Real-Time Phase)</h4>
+                  <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
+                    This builds trust. It proves the system is live and accurate, reassuring the user that the time they pick is reserved specifically for them.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100">
+                  <CheckCircle2 className="w-6 h-6 text-black" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-xl">Confirm (The Outcome Phase)</h4>
+                  <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
+                    This provides closure. It emphasizes the speed of your FastAPI backend and the automation of your background workers (email/calendar sync).
+                  </p>
                 </div>
               </div>
             </div>
@@ -169,64 +185,60 @@ export default function NotionCalendarClone() {
       </section>
 
 
-      {/* 4. How it Works Section - High-End Dark Mode Sanctuary */}
-      <section id="enterprise" className="py-32 bg-[#000000] text-white relative overflow-hidden">
-        {/* Subtle background ambient light */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-white opacity-[0.02] blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-white opacity-[0.03] blur-[120px] rounded-full pointer-events-none" />
-
+      {/* 4. How it Works Section - High-End Light Mode Sanctuary */}
+      <section id="enterprise" className="py-32 bg-white text-black relative overflow-hidden border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-500 mb-4">The Process</h2>
-            <h3 className="text-5xl md:text-6xl font-serif tracking-tight text-white mb-6">How it Works</h3>
-            <p className="text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed">
-              We’ve reduced cognitive load to a minimum. Our three-step architecture focus on your ease of mind, 
+            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-4">The Process</h2>
+            <h3 className="text-5xl md:text-6xl font-serif tracking-tight text-black mb-6">How it Works</h3>
+            <p className="text-gray-500 max-w-2xl mx-auto font-medium leading-relaxed">
+              We’ve reduced cognitive load to a minimum. Our three-step architecture focus on your ease of mind,
               removing complex backend hurdles from your discovery journey.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Step 1: Search */}
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 hover:bg-white/10 transition-all duration-500 group"
+              className="bg-gray-50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
             >
-              <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
                 <Search className="w-6 h-6" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-4">Step 01</div>
-              <h4 className="text-2xl font-bold mb-4 text-white">Search</h4>
-              <p className="text-gray-400 font-medium leading-relaxed text-[15px]">
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-4">Step 01</div>
+              <h4 className="text-2xl font-bold mb-4 text-black">Search</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
                 The Discovery Phase. Highlights our platform's versatility across medical doctors and veterinarians in one unified marketplace.
               </p>
             </motion.div>
 
             {/* Step 2: Select Slot */}
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 hover:bg-white/10 transition-all duration-500 group shadow-2xl"
+              className="bg-gray-50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
             >
-              <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
                 <CalendarClock className="w-6 h-6" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-4">Step 02</div>
-              <h4 className="text-2xl font-bold mb-4 text-white">Select Slot</h4>
-              <p className="text-gray-400 font-medium leading-relaxed text-[15px]">
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-4">Step 02</div>
+              <h4 className="text-2xl font-bold mb-4 text-black">Select Slot</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
                 The Real-Time Phase. Proves the system is live and accurate, reassuring you that the time you pick is reserved specifically for you.
               </p>
             </motion.div>
 
             {/* Step 3: Confirm */}
-            <motion.div 
+            <motion.div
               whileHover={{ y: -10 }}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 hover:bg-white/10 transition-all duration-500 group"
+              className="bg-gray-50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
             >
-              <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-4">Step 03</div>
-              <h4 className="text-2xl font-bold mb-4 text-white">Confirm</h4>
-              <p className="text-gray-400 font-medium leading-relaxed text-[15px]">
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-4">Step 03</div>
+              <h4 className="text-2xl font-bold mb-4 text-black">Confirm</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
                 The Outcome Phase. Emphasizes the speed of our FastAPI backend and the seamless automation of background calendar synchronization.
               </p>
             </motion.div>
@@ -485,8 +497,8 @@ function BookingDemo() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.08 }}
                   className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${selectedSlot === i
-                      ? "border-black bg-black text-white shadow-lg scale-105"
-                      : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
+                    ? "border-black bg-black text-white shadow-lg scale-105"
+                    : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
                     }`}
                 >
                   <Clock className="w-3.5 h-3.5 inline mr-1 mb-0.5" />
