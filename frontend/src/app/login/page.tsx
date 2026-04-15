@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Calendar, ArrowRight, User, Store, Scissors, Code, 
-  Stethoscope, Briefcase, Check, ChevronLeft, Layout, 
+import {
+  Calendar, ArrowRight, User, Store, Scissors, Code,
+  Stethoscope, Briefcase, Check, ChevronLeft, Layout,
   Sparkles, Lock, Mail
 } from "lucide-react";
 import Link from "next/link";
@@ -40,7 +40,7 @@ export default function AuthFlow() {
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-black rounded-full blur-[120px]" />
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-xl relative z-10"
@@ -58,10 +58,10 @@ export default function AuthFlow() {
 
         <div className="bg-white border border-gray-100 rounded-[3rem] p-12 shadow-2xl relative overflow-hidden group">
           <AnimatePresence mode="wait">
-            
+
             {/* STEP: CHOICE */}
             {step === "choice" && (
-              <motion.div 
+              <motion.div
                 key="choice"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -73,13 +73,13 @@ export default function AuthFlow() {
                   <p className="text-gray-400 font-medium italic">Select your entry point to the ecosystem.</p>
                 </div>
                 <div className="grid gap-4">
-                  <button 
+                  <button
                     onClick={() => nextStep("role")}
                     className="w-full py-5 bg-black text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-800 transition-all shadow-lg"
                   >
                     Get Started <ArrowRight className="w-4 h-4" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => router.push("/dashboard")}
                     className="w-full py-5 border border-gray-100 rounded-2xl font-bold hover:bg-gray-50 transition-all"
                   >
@@ -91,7 +91,7 @@ export default function AuthFlow() {
 
             {/* STEP: ROLE */}
             {step === "role" && (
-              <motion.div 
+              <motion.div
                 key="role"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -99,21 +99,21 @@ export default function AuthFlow() {
                 className="space-y-8"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5"/></button>
+                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Identity Selection</span>
                 </div>
                 <h1 className="text-4xl font-serif mb-8">How will you use <br />FlexSlot?</h1>
                 <div className="grid grid-cols-2 gap-6">
-                  <RoleCard 
-                    icon={<Store className="w-8 h-8"/>} 
-                    title="I'm an Owner" 
-                    desc="I want to list services and manage slots." 
+                  <RoleCard
+                    icon={<Store className="w-8 h-8" />}
+                    title="I'm an Owner"
+                    desc="I want to list services and manage slots."
                     onClick={() => { setRole("owner"); nextStep("service"); }}
                   />
-                  <RoleCard 
-                    icon={<User className="w-8 h-8"/>} 
-                    title="I'm a Customer" 
-                    desc="I want to book services and meet experts." 
+                  <RoleCard
+                    icon={<User className="w-8 h-8" />}
+                    title="I'm a Customer"
+                    desc="I want to book services and meet experts."
                     onClick={() => { setRole("customer"); nextStep("finalize"); }}
                   />
                 </div>
@@ -122,17 +122,17 @@ export default function AuthFlow() {
 
             {/* STEP: SERVICE CATEGORY (Owner Only) */}
             {step === "service" && (
-              <motion.div 
+              <motion.div
                 key="service"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="space-y-8"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5"/></button>
+                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Specialization</span>
                 </div>
-                <h1 className="text-4xl font-serif mb-8">What do you <br/>offer?</h1>
+                <h1 className="text-4xl font-serif mb-8">What do you <br />offer?</h1>
                 <div className="grid grid-cols-2 gap-4">
                   <ServiceTypeBtn icon={<Scissors />} label="Salon & Spa" value="salon" selected={service === 'salon'} onClick={() => { setService('salon'); nextStep('template'); }} />
                   <ServiceTypeBtn icon={<Code />} label="Web & Tech" value="tech" selected={service === 'tech'} onClick={() => { setService('tech'); nextStep('template'); }} />
@@ -144,14 +144,14 @@ export default function AuthFlow() {
 
             {/* STEP: TEMPLATE SELECTION (Owner Only) */}
             {step === "template" && (
-              <motion.div 
+              <motion.div
                 key="template"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="space-y-8"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5"/></button>
+                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Niche Interface</span>
                 </div>
                 <div>
@@ -167,14 +167,14 @@ export default function AuthFlow() {
 
             {/* STEP: FINALIZE */}
             {step === "finalize" && (
-              <motion.div 
+              <motion.div
                 key="finalize"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="space-y-8"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5"/></button>
+                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Finalizing Credentials</span>
                 </div>
                 <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
@@ -187,7 +187,7 @@ export default function AuthFlow() {
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input type="password" placeholder="Password" className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" />
                   </div>
-                  <button 
+                  <button
                     onClick={handleFinish}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
                   >
@@ -211,7 +211,7 @@ export default function AuthFlow() {
 
 function RoleCard({ icon, title, desc, onClick }: { icon: any, title: string, desc: string, onClick: () => void }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="bg-white border border-gray-100 rounded-[2rem] p-8 text-left hover:border-black/10 hover:shadow-xl hover:shadow-black/[0.02] transition-all group relative overflow-hidden h-full"
     >
@@ -227,7 +227,7 @@ function RoleCard({ icon, title, desc, onClick }: { icon: any, title: string, de
 
 function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: string, value: string, selected: boolean, onClick: () => void }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className={`flex items-center gap-4 p-5 rounded-2xl border transition-all text-left ${selected ? 'border-black bg-black text-white' : 'border-gray-50 bg-gray-50/30 hover:bg-gray-50'}`}
     >
@@ -241,20 +241,20 @@ function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: 
 
 function TemplatePreview({ name, type, onClick }: { name: string, type: string, onClick: () => void }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="bg-white border border-gray-100 rounded-[2rem] p-6 text-left hover:border-black/20 hover:shadow-xl transition-all group overflow-hidden relative"
     >
       <div className="w-full aspect-[4/3] bg-gray-50 rounded-2xl mb-4 p-4 overflow-hidden">
         <div className="w-full h-full border border-gray-200 rounded-lg flex flex-col p-2 gap-2 bg-white">
-           <div className="w-1/2 h-2 bg-gray-100 rounded-full" />
-           <div className="w-full h-1 bg-gray-50 rounded-full" />
-           <div className="w-full h-1 bg-gray-50 rounded-full" />
-           <div className="mt-auto grid grid-cols-3 gap-2">
-             <div className="h-6 bg-gray-50 rounded" />
-             <div className="h-6 bg-gray-100 rounded" />
-             <div className="h-6 bg-gray-50 rounded" />
-           </div>
+          <div className="w-1/2 h-2 bg-gray-100 rounded-full" />
+          <div className="w-full h-1 bg-gray-50 rounded-full" />
+          <div className="w-full h-1 bg-gray-50 rounded-full" />
+          <div className="mt-auto grid grid-cols-3 gap-2">
+            <div className="h-6 bg-gray-50 rounded" />
+            <div className="h-6 bg-gray-100 rounded" />
+            <div className="h-6 bg-gray-50 rounded" />
+          </div>
         </div>
       </div>
       <h4 className="font-bold text-sm mb-0.5">{name}</h4>
