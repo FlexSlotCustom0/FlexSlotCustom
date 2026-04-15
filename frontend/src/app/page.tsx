@@ -351,17 +351,6 @@ export default function NotionCalendarClone() {
             </div>
             <p className="text-sm text-gray-400">© 2026 FlexSlotCustom Labs, Inc.</p>
           </div>
-          {["Product", "Download", "Resources", "Company"].map((col) => (
-            <div key={col} className="space-y-4 text-[14px]">
-              <h4 className="font-bold text-gray-900">{col}</h4>
-              <ul className="space-y-2 text-gray-500 font-medium">
-                <li><Link href="#" className="hover:text-black">Overview</Link></li>
-                <li><Link href="#" className="hover:text-black">Features</Link></li>
-                <li><Link href="#" className="hover:text-black">Integrations</Link></li>
-                <li><Link href="#" className="hover:text-black">Mobile</Link></li>
-              </ul>
-            </div>
-          ))}
         </div>
       </footer>
     </div>
