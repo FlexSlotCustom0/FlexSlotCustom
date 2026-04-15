@@ -36,9 +36,9 @@ export default function NotionCalendarClone() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
-              <button onClick={() => scrollToSection('product')} className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
-              <button onClick={() => scrollToSection('ai-playground')} className="flex items-center gap-1 hover:text-black transition-colors">AI <ChevronDown className="w-3 h-3" /></button>
-              <button onClick={() => scrollToSection('enterprise')} className="hover:text-black transition-colors">Enterprise</button>
+              <button onClick={() => scrollToSection('services')} className="hover:text-black transition-colors">Services</button>
+              <button onClick={() => scrollToSection('product')} className="hover:text-black transition-colors">Features</button>
+              <button onClick={() => scrollToSection('workflow')} className="hover:text-black transition-colors">Workflow</button>
               <button onClick={() => scrollToSection('pricing')} className="hover:text-black transition-colors">Pricing</button>
             </div>
           </div>
@@ -108,10 +108,9 @@ export default function NotionCalendarClone() {
       </div>
 
       {/* 2. Our Services Section - Symmetrical Discovery */}
-      <section className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
+      <section id="services" className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="text-center mb-16">
-            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-2">Our Reach</h2>
             <h3 className="text-4xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
           </div>
 
@@ -183,7 +182,6 @@ export default function NotionCalendarClone() {
       <section id="product" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-[12px] font-black tracking-widest uppercase text-gray-400 mb-3">Core Competencies</h2>
             <h3 className="text-4xl md:text-5xl font-serif tracking-tight">Software Engineering Priority</h3>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -219,7 +217,7 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* 3. The AI "Playground" Section */}
-      <section id="ai-playground" className="py-24 bg-white">
+      <section id="workflow" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">How it Works.</h2>
@@ -229,7 +227,7 @@ export default function NotionCalendarClone() {
                   <Search className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xl">Search (The Discovery Phase)</h4>
+                  <h4 className="font-bold text-xl">Search</h4>
                   <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
                     This highlights the platform's versatility. It shows that both medical doctors and veterinarians are available in one unified marketplace.
                   </p>
@@ -241,7 +239,7 @@ export default function NotionCalendarClone() {
                   <CalendarClock className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xl">Select Slot (The Real-Time Phase)</h4>
+                  <h4 className="font-bold text-xl">Select Slot</h4>
                   <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
                     This builds trust. It proves the system is live and accurate, reassuring the user that the time they pick is reserved specifically for them.
                   </p>
@@ -253,7 +251,7 @@ export default function NotionCalendarClone() {
                   <CheckCircle2 className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xl">Confirm (The Outcome Phase)</h4>
+                  <h4 className="font-bold text-xl">Confirm</h4>
                   <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
                     This provides closure. It emphasizes the speed of your FastAPI backend and the automation of your background workers (email/calendar sync).
                   </p>
@@ -272,7 +270,6 @@ export default function NotionCalendarClone() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
-            <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300 shadow-sm">
@@ -354,17 +351,6 @@ export default function NotionCalendarClone() {
             </div>
             <p className="text-sm text-gray-400">© 2026 FlexSlotCustom Labs, Inc.</p>
           </div>
-          {["Product", "Download", "Resources", "Company"].map((col) => (
-            <div key={col} className="space-y-4 text-[14px]">
-              <h4 className="font-bold text-gray-900">{col}</h4>
-              <ul className="space-y-2 text-gray-500 font-medium">
-                <li><Link href="#" className="hover:text-black">Overview</Link></li>
-                <li><Link href="#" className="hover:text-black">Features</Link></li>
-                <li><Link href="#" className="hover:text-black">Integrations</Link></li>
-                <li><Link href="#" className="hover:text-black">Mobile</Link></li>
-              </ul>
-            </div>
-          ))}
         </div>
       </footer>
     </div>
