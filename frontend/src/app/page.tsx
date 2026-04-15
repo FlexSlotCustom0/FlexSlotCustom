@@ -97,6 +97,21 @@ export default function NotionCalendarClone() {
 
       </section>
 
+      {/* Transitional Brand Bar */}
+      <div className="bg-black py-8 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 transition-all">
+          <h2 className="text-white text-2xl md:text-3xl font-serif tracking-tight text-center md:text-left">
+            Ready to make time for what matters?
+          </h2>
+          <div className="flex items-center gap-4">
+            <div className="h-[1px] w-24 bg-white/20 hidden lg:block" />
+            <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] whitespace-nowrap">
+              FlexSlotCustom Identity
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* 2. Our Services Section - Symmetrical Discovery */}
       <section className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
