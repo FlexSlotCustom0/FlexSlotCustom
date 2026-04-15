@@ -238,6 +238,12 @@ function OwnerDashboardView({ tab }: { tab: string }) {
 }
 
 function TemplateSelectionView() {
+  const [niche, setNiche] = useState<string | null>(null);
+
+  useEffect(() => {
+    setNiche(localStorage.getItem("flexslot_clinic_niche"));
+  }, []);
+
   return (
     <div className="space-y-8">
       <div>
@@ -246,8 +252,12 @@ function TemplateSelectionView() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" id="clinic-clean" manage={true} />
-        <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" id="vet-warm" manage={true} />
+        {(!niche || niche === 'medical') && (
+          <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" id="clinic-clean" manage={true} />
+        )}
+        {(!niche || niche === 'veterinary') && (
+          <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" id="vet-warm" manage={true} />
+        )}
       </div>
     </div>
   );
