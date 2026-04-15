@@ -169,60 +169,67 @@ export default function NotionCalendarClone() {
       </section>
 
 
-      {/* 4. The System Integrity Section */}
-      <section id="enterprise" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-16 items-center">
-            <div className="flex-1">
-              <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">System Integrity.</h2>
+      {/* 4. How it Works Section - High-End Dark Mode Sanctuary */}
+      <section id="enterprise" className="py-32 bg-[#000000] text-white relative overflow-hidden">
+        {/* Subtle background ambient light */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-white opacity-[0.02] blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-white opacity-[0.03] blur-[120px] rounded-full pointer-events-none" />
 
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-500 mb-4">The Process</h2>
+            <h3 className="text-5xl md:text-6xl font-serif tracking-tight text-white mb-6">How it Works</h3>
+            <p className="text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed">
+              We’ve reduced cognitive load to a minimum. Our three-step architecture focus on your ease of mind, 
+              removing complex backend hurdles from your discovery journey.
+            </p>
+          </div>
 
-              <div className="space-y-8">
-                <div className="flex gap-4 items-start">
-                  <div className="p-3 bg-red-50 rounded-2xl text-red-600 mt-1">
-                    <Lock className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold mb-2">Security Compliance</h4>
-                    <p className="text-gray-500 font-medium">
-                      Core implementation of PostgreSQL Row Level Security (RLS) entirely prevents data leakage and enforces strict structural compliance constraints.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4 items-start">
-                  <div className="p-3 bg-blue-50 rounded-2xl text-blue-600 mt-1">
-                    <Cpu className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold mb-2">Sustained Performance</h4>
-                    <p className="text-gray-500 font-medium">
-                      Redis functions heavily as a distributed lock engine mitigating race windows alongside massive concurrency facilitated by FastAPI.
-                    </p>
-                  </div>
-                </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Step 1: Search */}
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 hover:bg-white/10 transition-all duration-500 group"
+            >
+              <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <Search className="w-6 h-6" />
               </div>
-            </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-4">Step 01</div>
+              <h4 className="text-2xl font-bold mb-4 text-white">Search</h4>
+              <p className="text-gray-400 font-medium leading-relaxed text-[15px]">
+                The Discovery Phase. Highlights our platform's versatility across medical doctors and veterinarians in one unified marketplace.
+              </p>
+            </motion.div>
 
-            <div className="flex-1 w-full bg-white rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden shadow-sm">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
-
-              <div className="relative z-10 w-full max-w-sm space-y-4">
-                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                  <span className="font-mono text-sm font-bold text-gray-600">GET /api/v1/availability</span>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">12ms</span>
-                </div>
-                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-8">
-                  <span className="font-mono text-sm font-bold text-gray-600">Row Level Auth</span>
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">PASSED</span>
-                </div>
-                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-16">
-                  <span className="font-mono text-sm font-bold text-gray-600">Redis Lock: slot_24</span>
-                  <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">ACQUIRED</span>
-                </div>
+            {/* Step 2: Select Slot */}
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 hover:bg-white/10 transition-all duration-500 group shadow-2xl"
+            >
+              <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <CalendarClock className="w-6 h-6" />
               </div>
-            </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-4">Step 02</div>
+              <h4 className="text-2xl font-bold mb-4 text-white">Select Slot</h4>
+              <p className="text-gray-400 font-medium leading-relaxed text-[15px]">
+                The Real-Time Phase. Proves the system is live and accurate, reassuring you that the time you pick is reserved specifically for you.
+              </p>
+            </motion.div>
+
+            {/* Step 3: Confirm */}
+            <motion.div 
+              whileHover={{ y: -10 }}
+              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[40px] p-10 hover:bg-white/10 transition-all duration-500 group"
+            >
+              <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-500 uppercase mb-4">Step 03</div>
+              <h4 className="text-2xl font-bold mb-4 text-white">Confirm</h4>
+              <p className="text-gray-400 font-medium leading-relaxed text-[15px]">
+                The Outcome Phase. Emphasizes the speed of our FastAPI backend and the seamless automation of background calendar synchronization.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
