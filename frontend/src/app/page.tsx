@@ -96,7 +96,7 @@ export default function NotionCalendarClone() {
         </div>
 
       </section>
-      
+
       {/* 2. Our Services Section - Symmetrical Discovery */}
       <section className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
@@ -106,7 +106,7 @@ export default function NotionCalendarClone() {
           </div>
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24 relative">
-            
+
             {/* Split Background Effect */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
               <div className="w-[1px] h-full bg-black relative">
@@ -115,7 +115,7 @@ export default function NotionCalendarClone() {
             </div>
 
             {/* Category 01: Medical Channeling */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -138,16 +138,16 @@ export default function NotionCalendarClone() {
             <div className="relative w-32 h-64 flex items-center justify-center">
               <div className="absolute w-[1px] h-full bg-gray-100" />
               {/* Pulsing Heartbeat / Wave */}
-              <motion.div 
-                animate={{ 
+              <motion.div
+                animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.1, 0.4, 0.1]
                 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="w-24 h-24 rounded-full border border-black/10 flex items-center justify-center"
               >
-                <motion.div 
-                  animate={{ 
+                <motion.div
+                  animate={{
                     scale: [1, 1.4, 1],
                     opacity: [0.2, 0.6, 0.2]
                   }}
@@ -155,8 +155,8 @@ export default function NotionCalendarClone() {
                   className="w-12 h-12 rounded-full border border-black/20"
                 />
               </motion.div>
-              <motion.div 
-                animate={{ 
+              <motion.div
+                animate={{
                   y: [-20, 20, -20]
                 }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -167,7 +167,7 @@ export default function NotionCalendarClone() {
             </div>
 
             {/* Category 02: Veterinary Care */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
