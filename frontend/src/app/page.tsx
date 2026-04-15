@@ -185,67 +185,6 @@ export default function NotionCalendarClone() {
       </section>
 
 
-      {/* 4. How it Works Section - High-End Light Mode Sanctuary */}
-      <section id="enterprise" className="py-32 bg-white text-black relative overflow-hidden border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-4">The Process</h2>
-            <h3 className="text-5xl md:text-6xl font-serif tracking-tight text-black mb-6">How it Works</h3>
-            <p className="text-gray-500 max-w-2xl mx-auto font-medium leading-relaxed">
-              We’ve reduced cognitive load to a minimum. Our three-step architecture focus on your ease of mind,
-              removing complex backend hurdles from your discovery journey.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Step 1: Search */}
-            <motion.div
-              whileHover={{ y: -10 }}
-              className="bg-gray-50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
-            >
-              <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                <Search className="w-6 h-6" />
-              </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-4">Step 01</div>
-              <h4 className="text-2xl font-bold mb-4 text-black">Search</h4>
-              <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
-                The Discovery Phase. Highlights our platform's versatility across medical doctors and veterinarians in one unified marketplace.
-              </p>
-            </motion.div>
-
-            {/* Step 2: Select Slot */}
-            <motion.div
-              whileHover={{ y: -10 }}
-              className="bg-gray-50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
-            >
-              <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                <CalendarClock className="w-6 h-6" />
-              </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-4">Step 02</div>
-              <h4 className="text-2xl font-bold mb-4 text-black">Select Slot</h4>
-              <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
-                The Real-Time Phase. Proves the system is live and accurate, reassuring you that the time you pick is reserved specifically for you.
-              </p>
-            </motion.div>
-
-            {/* Step 3: Confirm */}
-            <motion.div
-              whileHover={{ y: -10 }}
-              className="bg-gray-50 border border-gray-100 rounded-[40px] p-10 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
-            >
-              <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase mb-4">Step 03</div>
-              <h4 className="text-2xl font-bold mb-4 text-black">Confirm</h4>
-              <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
-                The Outcome Phase. Emphasizes the speed of our FastAPI backend and the seamless automation of background calendar synchronization.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* 5. Pricing Plans */}
       <section id="pricing" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
