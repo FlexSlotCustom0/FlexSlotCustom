@@ -1,82 +1,25 @@
-# FlexSlot Engine - Frontend Implementation Plan
+# FlexSlot - Live Template Editor Implementation Plan
 
-This document outlines the frontend implementation plan for the FlexSlot Engine, a multi-tenant SaaS appointment booking platform for small businesses (salons, clinics, cleaning services, etc.) and their customers.
+This plan aims to transform the 6 static business templates into a dynamic "Shop Builder" experience. Shop owners will be able to click a "Customize" button and edit their brand name, colors, images, banner, staff, and services in real-time.
 
 ## User Review Required
 
-> [!IMPORTANT]  
-> Please review the core architecture, routing structure, and theming approach below. If this aligns with your vision, I will begin implementing the scaffolding and foundational components.
-
-## Business Context & Core Features
-- **Target Audience:** Small business owners (admin) and their customers (end-users).
-- **Core Loop:** Businesses register, setup services and templates. Customers search for services/businesses on the platform or land directly on a business page to book time slots.
-- **Dynamic Theming:** Business pages must support different "templates" depending on the service category (e.g., Salon vs. Vet Clinic).
+> [!IMPORTANT]
+> The current templates use hardcoded constants. This refactor will move all shop data into a React Context. While this enables the "Live Editor," it changes how data is initialized. I will ensure each template still feels unique but shares a common editing engine.
 
 ---
 
-## 1. Routing Structure (Next.js App Router)
+## Proposed Changes
 
-We are using Next.js App Router. The directory structure will follow tenant separation logic:
-
-### Customer Facing (Public & Booking)
-- `/` - **Global Landing Page:** Hero section, global search for services (e.g. "Haircuts near me"), categories, and featured businesses.
-- `/explore` - **Search Results:** Filterable directory of registered businesses.
-- `/[businessSlug]` - **Business Profile Page:** Dynamically styled page utilizing the business's chosen template (Salon, Clinic, etc.).
-- `/[businessSlug]/book` - **Booking Flow:** Multi-step wizard (Service -> Staff -> Date/Time Slot -> Details -> Confirmation).
-
-### Business Owner Facing (Admin)
-- `/register` / `/login` - **Authentication:** Sign-up and login portal.
-- `/dashboard` - **Overview:** High-level metrics, today's appointments.
-- `/dashboard/calendar` - **Calendar View:** Manage daily/weekly scheduling blocks.
-- `/dashboard/services` - **Service Management:** CRUD operations for what the business offers.
-- `/dashboard/shop-setup` - **Template & Profile Builder:** Select category templates, upload logos, establish primary brand colors to be consumed by `[businessSlug]`.
-
----
-
-## 2. Component Architecture (`src/components`)
-
-We will enforce a modular component architecture grouped by domain:
-
-- **`ui/` (Design System):** Highly reusable primitive components powered by Tailwind CSS + Framer Motion + Lucide Icons (e.g., `Button`, `Input`, `Modal`, `Card`).
-- **`booking-wizard/`:** Components specifically for the customer booking flow step-by-step UI (`ServiceSelector`, `CalendarSlotPicker`, etc.).
-- **`templates/`:** Layout wrappers for `[businessSlug]` pages. For example:
-  - `templates/SalonTemplate.tsx`
-  - `templates/ClinicTemplate.tsx`
-  - `templates/CleaningTemplate.tsx`
-- **`dashboard/`:** Business admin components (`StatCard`, `AppointmentsList`, `ServiceForm`).
-
----
-
-## 3. Dynamic Theming (Templates)
-
-To support custom templates for shops depending on the service, we will implement a configuration-driven rendering approach:
-
-- **Data Driven Layouts:** The backend API for a business profile will return a `templateType` (e.g., 'salon', 'medical') and a `theme` object (primaryColor, fontStyle).
-- **CSS Variables & Tailwind:** We will map the database `theme` preferences to inline CSS variable wrappers (e.g., `style={{ '--theme-primary': data.colors.primary }}`) so Tailwind utility classes (`bg-[var(--theme-primary)]`) will seamlessly adapt to the specific shop's branding.
-- **Component Strategy:** On the `/[businessSlug]/page.tsx` level, we will have a switch statement that wraps the fetched data in the respective `TemplateType` component, altering the visual structure based on the category while reusing the same core Booking buttons.
-
----
-
-## 4. State Management
-
-- **Server State (Data Fetching):** Handled predominantly via Next.js React Server Components (RSC) to keep the bundle size small and load times fast. For client-side mutations (booking an appointment), we will use standard React actions / forms.
-- **Client State (Booking Flow):** The multi-step booking form requires state that persists across steps (Service -> Date -> Details). We will use React Context (`BookingProvider`) alongside `useReducer` to manage the complex state of building an appointment before final submission.
+1. Unified Shop Context (TemplateProvider.tsx)
+2. Interactive Editor Sidebar (TemplateEditor.tsx)
+3. Refactoring 6 templates to use shared state.
+4. Floating "Edit" button for all template pages.
 
 ---
 
 ## Open Questions
 
-> [!WARNING]  
-> Please clarify the following before we begin the heavy implementation:
-
-1. **Authentication:** Do we already have an authentication provider in mind? (e.g., NextAuth/Auth.js, Supabase, Clerk)
-2. **Backend/API:** Is the backend already being built parallel to this, or should we mock the data for now using hardcoded JSON arrays to build out the UI?
-3. **Primary Templates:** Should we start by building the first core template (e.g., the "Salon" template) and perfectly flush out that booking flow, or focus on the generic Landing Page and Owner Dashboard first?
-
-## Verification Plan
-
-### Next Steps (Post-Approval)
-1. Initialize the directory structure (`components`, custom layouts, empty route pages).
-2. Set up the Design System (Typography, base UI components).
-3. Build the core multi-step Booking Flow UI mockups.
-4. Scaffold the dynamic `/[businessSlug]` routing logic.
+1. Persistence Strategy: Is localStorage sufficient for this demo?
+2. Icon Selection: Text/Emojis or full Lucide set?
+3. Image Uploads: Placeholders or real integration (Cloudinary)?

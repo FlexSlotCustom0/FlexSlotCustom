@@ -5,7 +5,7 @@ import {
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Send, Layout, Store, User, BookOpen, Clock, ChevronRight, 
-  Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase, CalendarClock
+  Plus, ExternalLink, Stethoscope, Briefcase, Activity, Heart, ShieldPlus
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -15,13 +15,13 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="min-h-screen bg-white text-black flex font-sans selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-white text-black flex font-sans selection:bg-blue-600 selection:text-white">
       {/* Sidebar */}
       <aside className="w-72 border-r border-gray-100 flex flex-col h-screen sticky top-0 bg-white z-20">
         <div className="h-20 flex items-center px-8 border-b border-gray-50">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
-              <CalendarClock className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+              <Stethoscope className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold tracking-tight text-lg">Kindred Calendar</span>
           </Link>
@@ -41,13 +41,13 @@ export default function Dashboard() {
             />
             <button 
               onClick={() => setRole("owner")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "owner" ? "text-black" : "text-gray-400"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "owner" ? "text-blue-600" : "text-gray-400"}`}
             >
-              <Store className="w-3.5 h-3.5" /> Clinic
+              <ShieldPlus className="w-3.5 h-3.5" /> Provider
             </button>
             <button 
               onClick={() => setRole("customer")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "customer" ? "text-black" : "text-gray-400"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "customer" ? "text-blue-600" : "text-gray-400"}`}
             >
               <User className="w-3.5 h-3.5" /> Patient
             </button>
@@ -55,37 +55,37 @@ export default function Dashboard() {
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 space-y-1">
-          <div className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Main Menu</div>
+          <div className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Management</div>
           {role === "owner" ? (
             <>
-              <SideNavItem icon={<BarChart3 />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
-              <SideNavItem icon={<Layout />} label="Clinic Themes" active={activeTab === "templates"} onClick={() => setActiveTab("templates")} />
-              <SideNavItem icon={<BookOpen />} label="Treatments" active={activeTab === "services"} onClick={() => setActiveTab("services")} />
+              <SideNavItem icon={<BarChart3 />} label="Clinic Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
+              <SideNavItem icon={<Layout />} label="My Templates" active={activeTab === "templates"} onClick={() => setActiveTab("templates")} />
+              <SideNavItem icon={<Activity />} label="Treatments" active={activeTab === "services"} onClick={() => setActiveTab("services")} />
               <SideNavItem icon={<Calendar />} label="Appointments" active={activeTab === "bookings"} onClick={() => setActiveTab("bookings")} />
-              <SideNavItem icon={<Users />} label="Patients" active={activeTab === "customers"} onClick={() => setActiveTab("customers")} />
+              <SideNavItem icon={<Heart />} label="Patient Records" active={activeTab === "customers"} onClick={() => setActiveTab("customers")} />
             </>
           ) : (
             <>
-              <SideNavItem icon={<Search />} label="Explore" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
-              <SideNavItem icon={<Calendar />} label="My Bookings" active={activeTab === "bookings"} onClick={() => setActiveTab("bookings")} />
-              <SideNavItem icon={<Store />} label="Favorites" active={activeTab === "favorites"} onClick={() => setActiveTab("favorites")} />
+              <SideNavItem icon={<Search />} label="Find Clinics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
+              <SideNavItem icon={<Calendar />} label="My Visits" active={activeTab === "bookings"} onClick={() => setActiveTab("bookings")} />
+              <SideNavItem icon={<Heart />} label="Medical History" active={activeTab === "history"} onClick={() => setActiveTab("history")} />
             </>
           )}
 
           <div className="px-4 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">System</div>
-          <SideNavItem icon={<Bot />} label="AI Assistant" active={activeTab === "ai"} onClick={() => setActiveTab("ai")} />
-          <SideNavItem icon={<Settings />} label="Preferences" active={activeTab === "settings"} onClick={() => setActiveTab("settings")} />
+          <SideNavItem icon={<Bot />} label="Medical AI" active={activeTab === "ai"} onClick={() => setActiveTab("ai")} />
+          <SideNavItem icon={<Settings />} label="Pharmacy & Inv" active={activeTab === "settings"} onClick={() => setActiveTab("settings")} />
         </div>
 
         <div className="p-6 border-t border-gray-50">
           <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-bold">
-              {role === "owner" ? "JD" : "AM"}
+            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+              {role === "owner" ? "EP" : "AM"}
             </div>
             <div className="flex-1 overflow-hidden">
-              <div className="text-sm font-bold truncate">{role === "owner" ? "Medical HQ" : "Alex Miller"}</div>
+              <div className="text-sm font-bold truncate">{role === "owner" ? "Elite Pediatrics" : "Alex Miller"}</div>
               <div className="text-[10px] text-gray-400 truncate uppercase tracking-widest font-bold font-mono">
-                {role === "owner" ? "CLINIC ADMIN" : "PATIENT PORTAL"}
+                {role === "owner" ? "HOSPITAL ACCOUNT" : "PATIENT ID: 882"}
               </div>
             </div>
           </div>
@@ -97,24 +97,24 @@ export default function Dashboard() {
         {/* Header */}
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-10">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-serif text-black">{role === "owner" ? "Clinic HQ" : "Patient Portal"}</h2>
+            <h2 className="text-xl font-serif text-black">{role === "owner" ? "Medical Control Center" : "Healthcare Discovery"}</h2>
             <div className="h-4 w-[1px] bg-gray-200" />
             <div className="text-xs font-medium text-gray-400 uppercase tracking-widest flex items-center gap-2">
-              Status: <span className="flex items-center gap-1.5 text-black"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live</span>
+              Status: <span className="flex items-center gap-1.5 text-black"><span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" /> Dedicated System</span>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-2 bg-gray-50 border border-gray-100 rounded-full px-4 py-2">
               <Search className="w-4 h-4 text-gray-400" />
-              <input type="text" placeholder="Search system..." className="bg-transparent border-none text-xs outline-none w-40 font-medium" />
+              <input type="text" placeholder="Search patients..." className="bg-transparent border-none text-xs outline-none w-40 font-medium" />
             </div>
             <button className="relative p-2 rounded-xl hover:bg-gray-50 transition-colors">
               <Bell className="w-5 h-5 text-gray-400" />
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-black rounded-full ring-2 ring-white" />
+              <span className="absolute top-2 right-2.5 w-2 h-2 bg-blue-600 rounded-full ring-2 ring-white" />
             </button>
-            <button className="bg-black text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-gray-800 transition-all shadow-md">
-              {role === "owner" ? "New Service" : "Quick Book"}
+            <button className="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition-all shadow-md">
+              {role === "owner" ? "Add Patient" : "Book Visit"}
             </button>
           </div>
         </header>
@@ -168,8 +168,8 @@ function OwnerDashboardView({ tab }: { tab: string }) {
     <div className="space-y-10">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-4xl font-serif mb-2 tracking-tight">Studio Overview</h1>
-          <p className="text-gray-400 font-medium italic">Welcome back, your business is performing <span className="text-black font-bold">+14% better</span> this week.</p>
+          <h1 className="text-4xl font-serif mb-2 tracking-tight">Clinic Overview</h1>
+          <p className="text-gray-400 font-medium italic">Welcome back, your clinic is performing <span className="text-blue-600 font-bold">+14% better</span> this week.</p>
         </div>
         <div className="flex gap-2">
           <button className="p-3 rounded-2xl bg-white border border-gray-100 shadow-sm hover:bg-gray-50 transition-colors">
@@ -183,10 +183,10 @@ function OwnerDashboardView({ tab }: { tab: string }) {
 
       {/* Grid Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <MetricCard label="Total Revenue" value="$12,840" trend="+22%" icon={<TrendingUp />} />
-        <MetricCard label="Active Appointments" value="48" trend="+5" icon={<Calendar />} />
-        <MetricCard label="New Customers" value="12" trend="+14%" icon={<Users />} />
-        <MetricCard label="Avg. Rating" value="4.9" trend="High" icon={<ShieldCheck />} />
+        <MetricCard label="Monthly Revenue" value="$12,840" trend="+22%" icon={<TrendingUp />} />
+        <MetricCard label="Active Consultations" value="48" trend="+5" icon={<Calendar />} />
+        <MetricCard label="New Patients" value="12" trend="+14%" icon={<Users />} />
+        <MetricCard label="Patient Rating" value="4.9" trend="High" icon={<ShieldCheck />} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
@@ -194,12 +194,12 @@ function OwnerDashboardView({ tab }: { tab: string }) {
         <div className="lg:col-span-4 bg-white rounded-[2.5rem] p-10 border border-gray-50 shadow-sm overflow-hidden relative group">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h3 className="text-xl font-bold mb-1">Booking Performance</h3>
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest font-mono">METRIC: BOOKINGS/DAY</p>
+              <h3 className="text-xl font-bold mb-1">Clinic Performance</h3>
+              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest font-mono">METRIC: APPOINTMENTS/DAY</p>
             </div>
             <div className="flex gap-2">
               {['W', 'M', 'Y'].map(t => (
-                <button key={t} className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold border transition-all ${t === 'M' ? 'bg-black text-white border-black' : 'bg-transparent text-gray-400 border-gray-100 font-medium'}`}>{t}</button>
+                <button key={t} className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold border transition-all ${t === 'M' ? 'bg-blue-600 text-white border-blue-600' : 'bg-transparent text-gray-400 border-gray-100 font-medium'}`}>{t}</button>
               ))}
             </div>
           </div>
@@ -207,7 +207,7 @@ function OwnerDashboardView({ tab }: { tab: string }) {
             {[40, 65, 30, 85, 50, 75, 95, 60, 45, 90, 80, 55].map((h, i) => (
               <div key={i} className="flex-1 bg-gray-50 rounded-full relative group/bar overflow-hidden">
                 <motion.div
-                  className="absolute bottom-0 w-full bg-black rounded-full"
+                  className="absolute bottom-0 w-full bg-blue-600 rounded-full"
                   initial={{ height: 0 }}
                   animate={{ height: `${h}%` }}
                   transition={{ duration: 1.5, delay: i * 0.05, ease: "circOut" }}
@@ -219,12 +219,12 @@ function OwnerDashboardView({ tab }: { tab: string }) {
 
         {/* Active Services */}
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-lg font-bold px-2">Top Services</h3>
-          <ServiceCompactItem icon={<Scissors />} name="Hair Styling" bookings={142} color="bg-orange-50 text-orange-600" />
-          <ServiceCompactItem icon={<Store />} name="Facial Treatment" bookings={98} color="bg-blue-50 text-blue-600" />
-          <ServiceCompactItem icon={<Briefcase />} name="Consultation" bookings={65} color="bg-purple-50 text-purple-600" />
+          <h3 className="text-lg font-bold px-2">Top Treatments</h3>
+          <ServiceCompactItem icon={<ShieldPlus />} name="General Checkup" bookings={142} color="bg-blue-50 text-blue-600" />
+          <ServiceCompactItem icon={<Activity />} name="Diagnostic Scan" bookings={98} color="bg-cyan-50 text-cyan-600" />
+          <ServiceCompactItem icon={<Stethoscope />} name="Specialist Consult" bookings={65} color="bg-indigo-50 text-indigo-600" />
           <button className="w-full py-4 rounded-3xl border border-dashed border-gray-200 text-gray-400 text-sm font-bold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-            <Plus className="w-4 h-4" /> Add Service
+            <Plus className="w-4 h-4" /> Add Treatment
           </button>
         </div>
       </div>
@@ -236,15 +236,13 @@ function TemplateSelectionView() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-serif mb-2">Service Templates</h1>
-        <p className="text-gray-400 font-medium italic">Choose a high-conversion template and customize it in seconds.</p>
+        <h1 className="text-4xl font-serif mb-2">Clinic Templates</h1>
+        <p className="text-gray-400 font-medium italic">Select your professional medical or veterinary digital presence.</p>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <TemplateCard icon={<Scissors />} title="The Modern Salon" category="Beauty & Grooming" />
-        <TemplateCard icon={<Code />} title="Dev Studio" category="Professional" />
-        <TemplateCard icon={<Stethoscope />} title="Private Health" category="Medical" />
-        <TemplateCard icon={<Briefcase />} title="Executive Consulting" category="Business" />
+        <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" id="clinic-clean" manage={true} />
+        <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" id="vet-warm" manage={true} />
       </div>
     </div>
   );
@@ -276,8 +274,9 @@ function CustomerDashboardView({ tab }: { tab: string }) {
           category="Healthcare" 
           rating={5.0} 
           price="$120+" 
-          tag="BOOKED" 
+          tag="VIEW" 
           active
+          id="clinic-clean"
         />
         <ServiceCard 
           image="bg-purple-100" 
@@ -345,28 +344,35 @@ function ServiceCompactItem({ icon, name, bookings, color }: { icon: any, name: 
   );
 }
 
-function TemplateCard({ icon, title, category }: { icon: any, title: string, category: string }) {
+function TemplateCard({ icon, title, category, id, manage }: { icon: any, title: string, category: string, id: string, manage?: boolean }) {
+  const href = `/templates/${id}${manage ? "?manage=true" : ""}`;
+
   return (
-    <div className="group bg-white rounded-[2.5rem] p-8 border border-gray-50 shadow-sm hover:shadow-xl hover:border-black/5 transition-all duration-500 cursor-pointer overflow-hidden relative">
-      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition-colors">
+    <Link 
+      href={href}
+      className="group bg-white rounded-[2.5rem] p-8 border border-gray-50 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-500 cursor-pointer overflow-hidden relative block"
+    >
+      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
         {icon}
       </div>
       <h3 className="text-lg font-bold mb-1 leading-tight">{title}</h3>
       <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{category}</p>
       
       <div className="mt-8 pt-6 border-t border-gray-50 flex items-center justify-between">
-        <span className="text-[10px] font-black uppercase tracking-widest text-black">Preview Site</span>
-        <ExternalLink className="w-4 h-4 text-gray-300" />
+        <span className="text-[10px] font-black uppercase tracking-widest text-black">
+          {manage ? "Manage Template" : "Preview Site"}
+        </span>
+        <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-blue-600 transition-colors" />
       </div>
 
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gray-50 rounded-full translate-x-12 -translate-y-12 group-hover:bg-black/5 transition-colors" />
-    </div>
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gray-50 rounded-full translate-x-12 -translate-y-12 group-hover:bg-blue-600/5 transition-colors" />
+    </Link>
   );
 }
 
-function ServiceCard({ image, title, category, rating, price, tag, active }: { image: string, title: string, category: string, rating: number, price: string, tag: string, active?: boolean }) {
-  return (
-    <div className="bg-white rounded-[2.5rem] p-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden">
+function ServiceCard({ image, title, category, rating, price, tag, active, id }: { image: string, title: string, category: string, rating: number, price: string, tag: string, active?: boolean, id?: string }) {
+  const cardContent = (
+    <>
       <div className={`w-full aspect-video ${image} rounded-3xl mb-6 relative overflow-hidden`}>
         {active && (
           <div className="absolute top-4 left-4 bg-black text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded">ACTIVE NOW</div>
@@ -384,10 +390,24 @@ function ServiceCard({ image, title, category, rating, price, tag, active }: { i
       </div>
       <div className="flex items-center justify-between pt-6 border-t border-gray-50">
         <span className="text-sm font-black font-mono italic">{price}</span>
-        <button className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] transition-all ${active ? 'bg-black text-white' : 'bg-gray-100 text-gray-400 hover:bg-black hover:text-white'}`}>
+        <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] transition-all ${active ? 'bg-black text-white' : 'bg-gray-100 text-gray-400 hover:bg-black hover:text-white'}`}>
           {tag}
-        </button>
+        </div>
       </div>
+    </>
+  );
+
+  if (id) {
+    return (
+      <Link href={`/templates/${id}`} className="bg-white rounded-[2.5rem] p-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden block">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-[2.5rem] p-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden">
+      {cardContent}
     </div>
   );
 }
