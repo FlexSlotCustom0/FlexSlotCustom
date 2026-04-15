@@ -32,7 +32,7 @@ export default function NotionCalendarClone() {
               <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
                 <CalendarClock className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg">Kindred Calendar</span>
+              <span className="font-bold text-lg">FlexSlotCustom</span>
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
@@ -46,7 +46,7 @@ export default function NotionCalendarClone() {
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
             <Link href="/login" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
-              Get Kindred free
+              Get FlexSlotCustom free
             </Link>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">Kindred Calendar</h4>
+            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCustom</h4>
             <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
               Care simplified.
             </h1>
@@ -89,7 +89,7 @@ export default function NotionCalendarClone() {
             </p>
             <div className="flex justify-center">
               <Link href="/login" className="bg-black text-white px-8 py-3.5 rounded-lg font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:scale-[1.02]">
-                Get Kindred free
+                Get FlexSlotCustom free
               </Link>
             </div>
           </motion.div>
@@ -308,7 +308,7 @@ export default function NotionCalendarClone() {
           <h2 className="text-6xl md:text-8xl font-serif mb-10 tracking-tight leading-[1.1]">Ready to make time <br />for what matters?</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link href="/dashboard" className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-3">
-              Get Kindred free <ArrowRight className="w-5 h-5" />
+              Get FlexSlotCustom free <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/dashboard" className="w-full sm:w-auto text-gray-400 hover:text-black font-bold text-lg transition-colors underline underline-offset-8">
               Contact sales
@@ -349,14 +349,14 @@ export default function NotionCalendarClone() {
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-6 h-6 bg-black rounded flex items-center justify-center"><Calendar className="w-4 h-4 text-white" /></div>
-              <span className="font-bold">Kindred Calendar</span>
+              <span className="font-bold">FlexSlotCustom</span>
             </div>
             <div className="flex gap-4 mb-8">
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Globe className="w-4 h-4" /></Link>
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Share2 className="w-4 h-4" /></Link>
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><MessageSquare className="w-4 h-4" /></Link>
             </div>
-            <p className="text-sm text-gray-400">© 2026 Kindred Labs, Inc.</p>
+            <p className="text-sm text-gray-400">© 2026 FlexSlotCustom Labs, Inc.</p>
           </div>
           {["Product", "Download", "Resources", "Company"].map((col) => (
             <div key={col} className="space-y-4 text-[14px]">
