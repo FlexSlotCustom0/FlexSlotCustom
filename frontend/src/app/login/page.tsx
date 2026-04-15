@@ -51,7 +51,7 @@ export default function AuthFlow() {
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
               <CalendarClock className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-2xl tracking-tighter">FlexSlotCustom</span>
+            <span className="font-bold text-2xl tracking-tighter">Kindred Calendar</span>
           </Link>
           <div className="h-1 w-12 bg-gray-100 rounded-full" />
         </div>

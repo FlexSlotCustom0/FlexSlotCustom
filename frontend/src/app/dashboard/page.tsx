@@ -23,7 +23,7 @@ export default function Dashboard() {
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
               <CalendarClock className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold tracking-tight text-lg">FlexSlotCustom</span>
+            <span className="font-bold tracking-tight text-lg">Kindred Calendar</span>
           </Link>
         </div>
 
