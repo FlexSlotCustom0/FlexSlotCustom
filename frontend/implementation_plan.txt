@@ -1,82 +1,89 @@
-# FlexSlot Engine - Frontend Implementation Plan
+# FlexSlot Engine - Template Design & Implementation Plan
 
-This document outlines the frontend implementation plan for the FlexSlot Engine, a multi-tenant SaaS appointment booking platform for small businesses (salons, clinics, cleaning services, etc.) and their customers.
+This document details exactly how the business-facing **Templates** will be implemented within the `/app/[businessSlug]` route. Since different businesses (Salons, Clinics, Cleaners) have vastly different customer expectations, the templates must adapt structurally and visually while using the same underlying booking engine.
 
 ## User Review Required
 
 > [!IMPORTANT]  
-> Please review the core architecture, routing structure, and theming approach below. If this aligns with your vision, I will begin implementing the scaffolding and foundational components.
-
-## Business Context & Core Features
-- **Target Audience:** Small business owners (admin) and their customers (end-users).
-- **Core Loop:** Businesses register, setup services and templates. Customers search for services/businesses on the platform or land directly on a business page to book time slots.
-- **Dynamic Theming:** Business pages must support different "templates" depending on the service category (e.g., Salon vs. Vet Clinic).
+> Please review the layouts and specific features for the 3 core templates outlined below. Do these align with the visual identities and requirements you envision for these business categories?
 
 ---
 
-## 1. Routing Structure (Next.js App Router)
+## 1. Core Common Architecture (Shared Across All Templates)
 
-We are using Next.js App Router. The directory structure will follow tenant separation logic:
+Regardless of the template, certain elements are mandatory for the booking engine to function properly.
 
-### Customer Facing (Public & Booking)
-- `/` - **Global Landing Page:** Hero section, global search for services (e.g. "Haircuts near me"), categories, and featured businesses.
-- `/explore` - **Search Results:** Filterable directory of registered businesses.
-- `/[businessSlug]` - **Business Profile Page:** Dynamically styled page utilizing the business's chosen template (Salon, Clinic, etc.).
-- `/[businessSlug]/book` - **Booking Flow:** Multi-step wizard (Service -> Staff -> Date/Time Slot -> Details -> Confirmation).
-
-### Business Owner Facing (Admin)
-- `/register` / `/login` - **Authentication:** Sign-up and login portal.
-- `/dashboard` - **Overview:** High-level metrics, today's appointments.
-- `/dashboard/calendar` - **Calendar View:** Manage daily/weekly scheduling blocks.
-- `/dashboard/services` - **Service Management:** CRUD operations for what the business offers.
-- `/dashboard/shop-setup` - **Template & Profile Builder:** Select category templates, upload logos, establish primary brand colors to be consumed by `[businessSlug]`.
+- **Booking Floating Action (Mobile):** A sticky "Book Now" CTA at the bottom of the screen on mobile devices.
+- **Service Selection Engine:** The UI that allows selecting items, putting them in the "cart", and picking a time.
+- **Business Identity:** Logo, Business Name, Location Map/Address, Operating Hours, and Reviews widget.
+- **Color Theming Mapping:** The primary brand color from the DB seamlessly applies to buttons and active states via inline CSS variables (e.g., `style={{"--theme-color": data.primaryColor}}`).
 
 ---
 
-## 2. Component Architecture (`src/components`)
+## 2. Template Categories & Layout Specs
 
-We will enforce a modular component architecture grouped by domain:
+### Template A: Beauty & Wellness (Salons, Barbers, Spas)
+**Vibe:** Highly visual, chic, modern, and image-forward. Glassmorphism UI where appropriate.
+**Layout Priorities:**
+1. **Hero Section:** Large edge-to-edge carousel of high-quality images (salon interior, haircuts, nail art).
+2. **Staff/Stylist Spotlight:** Customers often book by the *person*. This template prioritizes a horizontal scrolling list of staff with rounded avatars. Clicking a staff member filters the services they offer.
+3. **Service Menu Layout:** Presented like a curated catalog. Divided into distinct tabs (e.g., "Hair", "Nails", "Face"). Includes thumbnail images for specific services.
+4. **Social Proof:** An Instagram feed integration or a visual gallery grid of "Recent Work" right below the service menu.
 
-- **`ui/` (Design System):** Highly reusable primitive components powered by Tailwind CSS + Framer Motion + Lucide Icons (e.g., `Button`, `Input`, `Modal`, `Card`).
-- **`booking-wizard/`:** Components specifically for the customer booking flow step-by-step UI (`ServiceSelector`, `CalendarSlotPicker`, etc.).
-- **`templates/`:** Layout wrappers for `[businessSlug]` pages. For example:
-  - `templates/SalonTemplate.tsx`
-  - `templates/ClinicTemplate.tsx`
-  - `templates/CleaningTemplate.tsx`
-- **`dashboard/`:** Business admin components (`StatCard`, `AppointmentsList`, `ServiceForm`).
+### Template B: Medical & Healthcare (Private Clinics, Vet Clinics)
+**Vibe:** Clean, trustworthy, professional, high-contrast typography, and accessible. Whitespace-heavy.
+**Layout Priorities:**
+1. **Hero Section:** Split layout. Left: Trust-building copy (e.g., "Certified Veterinarians in NY") + prominent "Book Appointment" CTA. Right: Professional hero image or video.
+2. **Alerts/Announcements Bar:** A top banner for important updates (e.g., "COVID protocols," "Emergency Walk-ins Accepted").
+3. **Service Menu Layout:** List-based and utilitarian. Focuses on clear descriptions rather than imagery. Categories organized by symptoms or care type (e.g., "Routine Checkups", "Vaccinations").
+4. **Staff Display:** Presented as "Our Doctors/Specialists" with credentials clearly listed under their names.
+5. **FAQ/Preparation Section:** Crucial for clinics (e.g., "What to do before your blood test").
+
+### Template C: Home & Utility Services (Cleaning, Handyman, Moving)
+**Vibe:** Practical, bold, action-oriented, and mobile-optimized.
+**Layout Priorities:**
+1. **Hero Section:** Bold headline focusing on the outcome (e.g., "Sparkling Clean Homes") with a highly visible "Get a Quote / Book Now" button front and center.
+2. **Service Menu Layout:** Card-based grid. Services are often packages (e.g., "Deep Clean - 3 Bed, 2 Bath", "Standard Clean").
+3. **Add-on Focus:** The booking flow for this template needs prominent "Extras" selection (e.g., "+ Clean inside fridge", "+ Clean baseboards").
+4. **Coverage Map:** A visual map or clear list of Zip Codes/Areas served right on the main page.
+5. **Before/After Sliders:** Interactive image sliders (draggable left-right) to show the quality of work.
 
 ---
 
-## 3. Dynamic Theming (Templates)
+## 3. Implementation Strategy (Technical Spec)
 
-To support custom templates for shops depending on the service, we will implement a configuration-driven rendering approach:
+To achieve this cleanly without duplicating effort, we will use a **Wrapper Pattern** in Next.js.
 
-- **Data Driven Layouts:** The backend API for a business profile will return a `templateType` (e.g., 'salon', 'medical') and a `theme` object (primaryColor, fontStyle).
-- **CSS Variables & Tailwind:** We will map the database `theme` preferences to inline CSS variable wrappers (e.g., `style={{ '--theme-primary': data.colors.primary }}`) so Tailwind utility classes (`bg-[var(--theme-primary)]`) will seamlessly adapt to the specific shop's branding.
-- **Component Strategy:** On the `/[businessSlug]/page.tsx` level, we will have a switch statement that wraps the fetched data in the respective `TemplateType` component, altering the visual structure based on the category while reusing the same core Booking buttons.
+### Step 1: The Page Router
+The page `src/app/[businessSlug]/page.tsx` will fetch the database data, check the `templateType` (e.g., `salon`, `clinic`, `cleaning`), and render the respective Template container.
 
----
+```tsx
+// Abstract example logic
+const templateMap = {
+  salon: SalonTemplate,
+  clinic: ClinicTemplate,
+  cleaning: CleaningTemplate,
+};
 
-## 4. State Management
+export default function BusinessPage({ data }) {
+  const TemplateComponent = templateMap[data.templateType] || DefaultTemplate;
+  
+  return (
+    <ThemeProvider color={data.primaryColor}>
+      <TemplateComponent business={data} />
+    </ThemeProvider>
+  );
+}
+```
 
-- **Server State (Data Fetching):** Handled predominantly via Next.js React Server Components (RSC) to keep the bundle size small and load times fast. For client-side mutations (booking an appointment), we will use standard React actions / forms.
-- **Client State (Booking Flow):** The multi-step booking form requires state that persists across steps (Service -> Date -> Details). We will use React Context (`BookingProvider`) alongside `useReducer` to manage the complex state of building an appointment before final submission.
+### Step 2: Granular Booking Components (Injected)
+Instead of building a separate booking flow for each template, we build a *single, smart Booking Flow Modal/Section component*.
+The template dictates **how** the user initiates the booking (e.g., clicking a Stylist avatar vs clicking a "Book Now" header button), but once initiated, the shared robust Booking Wizard takes over.
 
 ---
 
 ## Open Questions
 
 > [!WARNING]  
-> Please clarify the following before we begin the heavy implementation:
-
-1. **Authentication:** Do we already have an authentication provider in mind? (e.g., NextAuth/Auth.js, Supabase, Clerk)
-2. **Backend/API:** Is the backend already being built parallel to this, or should we mock the data for now using hardcoded JSON arrays to build out the UI?
-3. **Primary Templates:** Should we start by building the first core template (e.g., the "Salon" template) and perfectly flush out that booking flow, or focus on the generic Landing Page and Owner Dashboard first?
-
-## Verification Plan
-
-### Next Steps (Post-Approval)
-1. Initialize the directory structure (`components`, custom layouts, empty route pages).
-2. Set up the Design System (Typography, base UI components).
-3. Build the core multi-step Booking Flow UI mockups.
-4. Scaffold the dynamic `/[businessSlug]` routing logic.
+> 1. Do you want the booking flow to be a **Modal** (pops up over the template) or a **Dedicated Page** (navigates to `/[businessSlug]/book`)?
+> 2. Are there any other business categories you want a specific custom layout for at launch?
