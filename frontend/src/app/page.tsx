@@ -134,36 +134,9 @@ export default function NotionCalendarClone() {
               </button>
             </motion.div>
 
-            {/* Middle Animation: The Life Pulse */}
+            {/* Middle Spacer */}
             <div className="relative w-32 h-64 flex items-center justify-center">
-              <div className="absolute w-[1px] h-full bg-gray-100" />
-              {/* Pulsing Heartbeat / Wave */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.1, 0.4, 0.1]
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="w-24 h-24 rounded-full border border-black/10 flex items-center justify-center"
-              >
-                <motion.div
-                  animate={{
-                    scale: [1, 1.4, 1],
-                    opacity: [0.2, 0.6, 0.2]
-                  }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-12 h-12 rounded-full border border-black/20"
-                />
-              </motion.div>
-              <motion.div
-                animate={{
-                  y: [-20, 20, -20]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute z-10 w-8 h-8 bg-white flex items-center justify-center rounded-lg shadow-sm border border-gray-100"
-              >
-                <HeartPulse className="w-4 h-4 text-black animate-pulse" />
-              </motion.div>
+              <div className="absolute w-[1px] h-full bg-gray-50" />
             </div>
 
             {/* Category 02: Veterinary Care */}
