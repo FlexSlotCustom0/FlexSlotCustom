@@ -2,13 +2,15 @@
 
 import { motion } from "framer-motion";
 import {
-  ArrowRight, Calendar, ChevronDown, Monitor, Clock,
-  MapPin, User, Check, Plus, Search, HelpCircle,
-  Laptop, Smartphone, Coffee, Music, Bike, Layout,
-  Share2, Globe, MessageSquare, Zap, Bot, Terminal, Code, Cpu, Shield, Layers, Database, Lock, ShieldCheck
+  BarChart3, Users, Calendar, Settings, Bot, Search, Bell,
+  TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText,
+  Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase, Check, ArrowRight,
+  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronDown, Share2, MessageSquare,
+  HeartPulse, Syringe, Cross, PawPrint, Bone, Laptop, Music, Bike, Coffee, User, MapPin, Terminal, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+
 
 export default function NotionCalendarClone() {
 
@@ -28,7 +30,7 @@ export default function NotionCalendarClone() {
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-white" />
+                <CalendarClock className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-lg">FlexSlotCustom</span>
             </Link>
@@ -54,12 +56,12 @@ export default function NotionCalendarClone() {
       <section className="relative pt-32 pb-20 overflow-hidden">
         {/* Floating Icons Style */}
         <div className="absolute inset-0 pointer-events-none">
-          <FloatingIcon icon={<Laptop />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
-          <FloatingIcon icon={<Music />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
-          <FloatingIcon icon={<Bike />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
-          <FloatingIcon icon={<Coffee />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
-          <FloatingIcon icon={<User />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
-          <FloatingIcon icon={<MapPin />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
+          <FloatingIcon icon={<Stethoscope />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
+          <FloatingIcon icon={<HeartPulse />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
+          <FloatingIcon icon={<Syringe />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
+          <FloatingIcon icon={<Cross />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
+          <FloatingIcon icon={<PawPrint />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
+          <FloatingIcon icon={<Bone />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
         </div>
 
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
@@ -68,9 +70,8 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, scale: 1 }}
             className="flex justify-center mb-6"
           >
-            <div className="w-16 h-16 bg-white border-2 border-black rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden">
-              <span className="font-bold text-2xl">14</span>
-              <div className="absolute top-0 left-0 w-full h-2 bg-black opacity-10" />
+            <div className="w-20 h-20 bg-white border-2 border-black rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden group">
+               <CalendarClock className="w-10 h-10 text-black group-hover:scale-110 transition-transform" />
             </div>
           </motion.div>
 
@@ -79,12 +80,12 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCustom AI</h4>
+            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlot Clinic Engine</h4>
             <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
-              It’s time.
+              Care simplified.
             </h1>
             <p className="text-xl md:text-2xl text-gray-500 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-              All of your commitments, now in one place. Meet the beautifully designed, fully integrated calendar for your work and life.
+              The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.
             </p>
             <div className="flex justify-center">
               <Link href="/login" className="bg-black text-white px-8 py-3.5 rounded-lg font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:scale-[1.02]">
@@ -164,7 +165,7 @@ export default function NotionCalendarClone() {
               </div>
             </div>
           </div>
-          
+
           <BookingDemo />
         </div>
       </section>
@@ -179,7 +180,7 @@ export default function NotionCalendarClone() {
               <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
                 Engineered for maximum reliability, strictly validating robust system design requirements natively.
               </p>
-              
+
               <div className="space-y-8">
                 <div className="flex gap-4 items-start">
                   <div className="p-3 bg-red-50 rounded-2xl text-red-600 mt-1">
@@ -192,7 +193,7 @@ export default function NotionCalendarClone() {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-4 items-start">
                   <div className="p-3 bg-blue-50 rounded-2xl text-blue-600 mt-1">
                     <Cpu className="w-6 h-6" />
@@ -206,25 +207,25 @@ export default function NotionCalendarClone() {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex-1 w-full bg-white rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
-                
-                <div className="relative z-10 w-full max-w-sm space-y-4">
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <span className="font-mono text-sm font-bold text-gray-600">GET /api/v1/availability</span>
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">12ms</span>
-                  </div>
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-8">
-                    <span className="font-mono text-sm font-bold text-gray-600">Row Level Auth</span>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">PASSED</span>
-                  </div>
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-16">
-                    <span className="font-mono text-sm font-bold text-gray-600">Redis Lock: slot_24</span>
-                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">ACQUIRED</span>
-                  </div>
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
+
+              <div className="relative z-10 w-full max-w-sm space-y-4">
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+                  <span className="font-mono text-sm font-bold text-gray-600">GET /api/v1/availability</span>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">12ms</span>
                 </div>
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-8">
+                  <span className="font-mono text-sm font-bold text-gray-600">Row Level Auth</span>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">PASSED</span>
+                </div>
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-16">
+                  <span className="font-mono text-sm font-bold text-gray-600">Redis Lock: slot_24</span>
+                  <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">ACQUIRED</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -248,7 +249,7 @@ export default function NotionCalendarClone() {
               </ul>
               <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-100 transition-colors">Start Trial</button>
             </div>
-            
+
             <div className="bg-black text-white rounded-[32px] p-10 border border-gray-800 flex flex-col shadow-2xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
               <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] tracking-widest font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
               <h3 className="font-bold text-xl mb-2">Professional</h3>
@@ -260,7 +261,7 @@ export default function NotionCalendarClone() {
               </ul>
               <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
             </div>
-            
+
             <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
               <h3 className="font-bold text-xl mb-2">Enterprise</h3>
               <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
@@ -384,7 +385,7 @@ function BookingDemo() {
   const [typed, setTyped] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
 
-  const fullText = "consult next Tuesday";
+  const fullText = "Vet checkup for Max next Tuesday";
   const slots = ["9:00 AM", "11:30 AM", "2:00 PM", "4:30 PM"];
 
   // Typewriter effect
@@ -480,11 +481,10 @@ function BookingDemo() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.08 }}
-                  className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${
-                    selectedSlot === i
+                  className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${selectedSlot === i
                       ? "border-black bg-black text-white shadow-lg scale-105"
                       : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <Clock className="w-3.5 h-3.5 inline mr-1 mb-0.5" />
                   {slot}
