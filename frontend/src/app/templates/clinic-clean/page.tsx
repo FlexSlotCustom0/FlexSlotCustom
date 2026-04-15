@@ -7,50 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-/* ── Editable shop data ── */
-const shop = {
-  name: "Evergreen Medical Centre",
-  tagline: "Your health, our priority",
-  logo: "🏥",
-  primaryColor: "#2563eb",
-  address: "155 Hospital Road, Colombo 03",
-  phone: "+94 11 234 5678",
-  hours: "Mon–Fri · 8 AM – 6 PM | Sat · 9 AM – 1 PM",
-  rating: 4.9,
-  reviewCount: 412,
-  announcement: "Now accepting online consultations. Book a virtual appointment today.",
-};
-
-const doctors = [
-  { name: "Dr. Sarah Perera", role: "General Practitioner", credentials: "MBBS, MD", avatar: "👩‍⚕️" },
-  { name: "Dr. Kamal Silva", role: "Cardiologist", credentials: "MBBS, MRCP (UK)", avatar: "👨‍⚕️" },
-  { name: "Dr. Nisha Fernando", role: "Dermatologist", credentials: "MBBS, DDV", avatar: "👩‍⚕️" },
-];
-
-const serviceCategories = [
-  {
-    category: "Primary Care",
-    services: [
-      { name: "General Consultation", price: "$60", duration: "30 min", desc: "Comprehensive health assessment and diagnosis" },
-      { name: "Annual Health Checkup", price: "$150", duration: "1 hr", desc: "Full body examination, blood work, and report" },
-      { name: "Vaccination", price: "$40", duration: "15 min", desc: "All standard and travel vaccinations available" },
-    ],
-  },
-  {
-    category: "Specialist Care",
-    services: [
-      { name: "Cardiology Consult", price: "$120", duration: "45 min", desc: "Heart health assessment and ECG screening" },
-      { name: "Dermatology Visit", price: "$90", duration: "30 min", desc: "Skin conditions, cosmetic concerns, and treatments" },
-      { name: "Lab Work Panel", price: "$80", duration: "20 min", desc: "Comprehensive blood panels and diagnostic tests" },
-    ],
-  },
-];
-
-const faqs = [
-  { q: "What should I bring to my first appointment?", a: "Please bring your national ID, insurance card, and any previous medical records or prescriptions." },
-  { q: "Do you accept insurance?", a: "Yes, we accept all major insurance providers. Please contact us for specific plan details." },
-  { q: "How do I prepare for a blood test?", a: "Fasting for 8-12 hours before the test is required. Water is allowed." },
-];
+import { useTemplateContext } from "@/components/TemplateContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -62,6 +19,12 @@ const fadeUp = {
 };
 
 export default function ClinicCleanTemplate() {
+  const { shopData: shop, staff: doctors, offerings: serviceCategories } = useTemplateContext();
+  const faqs = [
+    { q: "What should I bring to my first appointment?", a: "Please bring your national ID, insurance card, and any previous medical records or prescriptions." },
+    { q: "Do you accept insurance?", a: "Yes, we accept all major insurance providers. Please contact us for specific plan details." },
+    { q: "How do I prepare for a blood test?", a: "Fasting for 8-12 hours before the test is required. Water is allowed." },
+  ];
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-blue-100">
       {/* ── Announcement Bar ── */}
@@ -184,9 +147,9 @@ export default function ClinicCleanTemplate() {
         <section className="py-14 border-t border-gray-100">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {serviceCategories.map((cat, catIdx) => (
-              <div key={cat.category} className={catIdx > 0 ? "mt-10" : ""}>
+              <div key={cat.label || cat.category} className={catIdx > 0 ? "mt-10" : ""}>
                 <motion.h2 custom={catIdx} variants={fadeUp} className="text-xs font-black tracking-widest uppercase text-gray-400 mb-2">
-                  {cat.category}
+                  {cat.label || cat.category}
                 </motion.h2>
                 <div className="space-y-2 mt-4">
                   {cat.services.map((svc, i) => (

@@ -1,89 +1,25 @@
-# FlexSlot Engine - Template Design & Implementation Plan
+# FlexSlot - Live Template Editor Implementation Plan
 
-This document details exactly how the business-facing **Templates** will be implemented within the `/app/[businessSlug]` route. Since different businesses (Salons, Clinics, Cleaners) have vastly different customer expectations, the templates must adapt structurally and visually while using the same underlying booking engine.
+This plan aims to transform the 6 static business templates into a dynamic "Shop Builder" experience. Shop owners will be able to click a "Customize" button and edit their brand name, colors, images, banner, staff, and services in real-time.
 
 ## User Review Required
 
-> [!IMPORTANT]  
-> Please review the layouts and specific features for the 3 core templates outlined below. Do these align with the visual identities and requirements you envision for these business categories?
+> [!IMPORTANT]
+> The current templates use hardcoded constants. This refactor will move all shop data into a React Context. While this enables the "Live Editor," it changes how data is initialized. I will ensure each template still feels unique but shares a common editing engine.
 
 ---
 
-## 1. Core Common Architecture (Shared Across All Templates)
+## Proposed Changes
 
-Regardless of the template, certain elements are mandatory for the booking engine to function properly.
-
-- **Booking Floating Action (Mobile):** A sticky "Book Now" CTA at the bottom of the screen on mobile devices.
-- **Service Selection Engine:** The UI that allows selecting items, putting them in the "cart", and picking a time.
-- **Business Identity:** Logo, Business Name, Location Map/Address, Operating Hours, and Reviews widget.
-- **Color Theming Mapping:** The primary brand color from the DB seamlessly applies to buttons and active states via inline CSS variables (e.g., `style={{"--theme-color": data.primaryColor}}`).
-
----
-
-## 2. Template Categories & Layout Specs
-
-### Template A: Beauty & Wellness (Salons, Barbers, Spas)
-**Vibe:** Highly visual, chic, modern, and image-forward. Glassmorphism UI where appropriate.
-**Layout Priorities:**
-1. **Hero Section:** Large edge-to-edge carousel of high-quality images (salon interior, haircuts, nail art).
-2. **Staff/Stylist Spotlight:** Customers often book by the *person*. This template prioritizes a horizontal scrolling list of staff with rounded avatars. Clicking a staff member filters the services they offer.
-3. **Service Menu Layout:** Presented like a curated catalog. Divided into distinct tabs (e.g., "Hair", "Nails", "Face"). Includes thumbnail images for specific services.
-4. **Social Proof:** An Instagram feed integration or a visual gallery grid of "Recent Work" right below the service menu.
-
-### Template B: Medical & Healthcare (Private Clinics, Vet Clinics)
-**Vibe:** Clean, trustworthy, professional, high-contrast typography, and accessible. Whitespace-heavy.
-**Layout Priorities:**
-1. **Hero Section:** Split layout. Left: Trust-building copy (e.g., "Certified Veterinarians in NY") + prominent "Book Appointment" CTA. Right: Professional hero image or video.
-2. **Alerts/Announcements Bar:** A top banner for important updates (e.g., "COVID protocols," "Emergency Walk-ins Accepted").
-3. **Service Menu Layout:** List-based and utilitarian. Focuses on clear descriptions rather than imagery. Categories organized by symptoms or care type (e.g., "Routine Checkups", "Vaccinations").
-4. **Staff Display:** Presented as "Our Doctors/Specialists" with credentials clearly listed under their names.
-5. **FAQ/Preparation Section:** Crucial for clinics (e.g., "What to do before your blood test").
-
-### Template C: Home & Utility Services (Cleaning, Handyman, Moving)
-**Vibe:** Practical, bold, action-oriented, and mobile-optimized.
-**Layout Priorities:**
-1. **Hero Section:** Bold headline focusing on the outcome (e.g., "Sparkling Clean Homes") with a highly visible "Get a Quote / Book Now" button front and center.
-2. **Service Menu Layout:** Card-based grid. Services are often packages (e.g., "Deep Clean - 3 Bed, 2 Bath", "Standard Clean").
-3. **Add-on Focus:** The booking flow for this template needs prominent "Extras" selection (e.g., "+ Clean inside fridge", "+ Clean baseboards").
-4. **Coverage Map:** A visual map or clear list of Zip Codes/Areas served right on the main page.
-5. **Before/After Sliders:** Interactive image sliders (draggable left-right) to show the quality of work.
-
----
-
-## 3. Implementation Strategy (Technical Spec)
-
-To achieve this cleanly without duplicating effort, we will use a **Wrapper Pattern** in Next.js.
-
-### Step 1: The Page Router
-The page `src/app/[businessSlug]/page.tsx` will fetch the database data, check the `templateType` (e.g., `salon`, `clinic`, `cleaning`), and render the respective Template container.
-
-```tsx
-// Abstract example logic
-const templateMap = {
-  salon: SalonTemplate,
-  clinic: ClinicTemplate,
-  cleaning: CleaningTemplate,
-};
-
-export default function BusinessPage({ data }) {
-  const TemplateComponent = templateMap[data.templateType] || DefaultTemplate;
-  
-  return (
-    <ThemeProvider color={data.primaryColor}>
-      <TemplateComponent business={data} />
-    </ThemeProvider>
-  );
-}
-```
-
-### Step 2: Granular Booking Components (Injected)
-Instead of building a separate booking flow for each template, we build a *single, smart Booking Flow Modal/Section component*.
-The template dictates **how** the user initiates the booking (e.g., clicking a Stylist avatar vs clicking a "Book Now" header button), but once initiated, the shared robust Booking Wizard takes over.
+1. Unified Shop Context (TemplateProvider.tsx)
+2. Interactive Editor Sidebar (TemplateEditor.tsx)
+3. Refactoring 6 templates to use shared state.
+4. Floating "Edit" button for all template pages.
 
 ---
 
 ## Open Questions
 
-> [!WARNING]  
-> 1. Do you want the booking flow to be a **Modal** (pops up over the template) or a **Dedicated Page** (navigates to `/[businessSlug]/book`)?
-> 2. Are there any other business categories you want a specific custom layout for at launch?
+1. Persistence Strategy: Is localStorage sufficient for this demo?
+2. Icon Selection: Text/Emojis or full Lucide set?
+3. Image Uploads: Placeholders or real integration (Cloudinary)?

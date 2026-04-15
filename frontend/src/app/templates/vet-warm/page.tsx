@@ -7,40 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-/* ── Editable shop data ── */
-const shop = {
-  name: "Happy Paws Clinic",
-  tagline: "Compassionate care for your furry family",
-  logo: "🐾",
-  primaryColor: "#ea580c",
-  accentColor: "#fef3c7",
-  address: "28 Pet Lane, Nugegoda",
-  phone: "+94 11 567 8901",
-  hours: "Mon–Sat · 8 AM – 7 PM | Sun · Emergency Only",
-  rating: 4.9,
-  reviewCount: 327,
-};
-
-const vets = [
-  { name: "Dr. Anjali", role: "Lead Veterinarian", specialty: "Surgery & Internal Medicine", avatar: "👩‍⚕️" },
-  { name: "Dr. Ruwan", role: "Veterinarian", specialty: "Dermatology & Allergies", avatar: "👨‍⚕️" },
-  { name: "Priya", role: "Vet Nurse", specialty: "Post-Op Care & Therapy", avatar: "🧑‍⚕️" },
-];
-
-const services = [
-  { name: "Wellness Checkup", price: "$45", duration: "30 min", icon: "🩺", desc: "Nose-to-tail examination for your pet" },
-  { name: "Vaccination", price: "$35", duration: "15 min", icon: "💉", desc: "Core and non-core vaccines available" },
-  { name: "Dental Cleaning", price: "$120", duration: "1 hr", icon: "🦷", desc: "Professional scaling and polishing" },
-  { name: "Surgery Consultation", price: "$80", duration: "45 min", icon: "🔬", desc: "Pre-surgical assessment and planning" },
-  { name: "Grooming & Bath", price: "$50", duration: "1 hr", icon: "🛁", desc: "Full bath, nail trim, and ear cleaning" },
-  { name: "Emergency Visit", price: "$100+", duration: "Varies", icon: "🚨", desc: "24/7 emergency care available" },
-];
-
-const petTips = [
-  { title: "Before Your Visit", tip: "Bring your pet's medical records, vaccination history, and a favourite toy to keep them calm." },
-  { title: "Vaccination Schedule", tip: "Puppies should start vaccinations at 6-8 weeks. Adult pets need annual boosters." },
-  { title: "Emergency Signs", tip: "Difficulty breathing, sudden collapse, or seizures require immediate emergency attention." },
-];
+import { useTemplateContext } from "@/components/TemplateContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -52,6 +19,12 @@ const fadeUp = {
 };
 
 export default function VetWarmTemplate() {
+  const { shopData: shop, staff: vets, offerings: services } = useTemplateContext();
+  const petTips = [
+    { title: "Before Your Visit", tip: "Bring your pet's medical records, vaccination history, and a favourite toy to keep them calm." },
+    { title: "Vaccination Schedule", tip: "Puppies should start vaccinations at 6-8 weeks. Adult pets need annual boosters." },
+    { title: "Emergency Signs", tip: "Difficulty breathing, sudden collapse, or seizures require immediate emergency attention." },
+  ];
   return (
     <div className="min-h-screen bg-[#fffbf5] text-black font-sans selection:bg-orange-100">
       {/* ── Sticky Nav ── */}

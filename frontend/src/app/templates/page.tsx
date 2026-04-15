@@ -6,24 +6,6 @@ import { Scissors, Stethoscope, SprayCan, ArrowRight } from "lucide-react";
 
 const templates = [
   {
-    category: "Beauty & Wellness",
-    icon: <Scissors className="w-5 h-5" />,
-    color: "from-pink-500 to-rose-600",
-    bg: "bg-pink-50",
-    items: [
-      {
-        name: "Salon Luxe",
-        slug: "salon-luxe",
-        desc: "Elegant & image-forward. Perfect for high-end salons, spas, and nail studios.",
-      },
-      {
-        name: "Barber Bold",
-        slug: "barber-bold",
-        desc: "Dark, sharp, and confident. Built for barbershops and grooming lounges.",
-      },
-    ],
-  },
-  {
     category: "Medical & Healthcare",
     icon: <Stethoscope className="w-5 h-5" />,
     color: "from-blue-500 to-cyan-600",
@@ -38,24 +20,6 @@ const templates = [
         name: "Vet Warm",
         slug: "vet-warm",
         desc: "Friendly and approachable. Designed for veterinary clinics and pet care.",
-      },
-    ],
-  },
-  {
-    category: "Home & Utility Services",
-    icon: <SprayCan className="w-5 h-5" />,
-    color: "from-emerald-500 to-teal-600",
-    bg: "bg-emerald-50",
-    items: [
-      {
-        name: "Cleaning Fresh",
-        slug: "cleaning-fresh",
-        desc: "Bright and action-oriented. For cleaning companies and maid services.",
-      },
-      {
-        name: "Handyman Pro",
-        slug: "handyman-pro",
-        desc: "Industrial and practical. For repair, plumbing, and maintenance services.",
       },
     ],
   },
@@ -77,10 +41,10 @@ export default function TemplatesPage() {
       <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-              <Scissors className="w-4 h-4 text-white" />
+            <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
+              <Stethoscope className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-lg">FlexSlotCustom</span>
+            <span className="font-bold text-lg">FlexSlot Clinic</span>
           </Link>
           <Link
             href="/"
@@ -98,15 +62,15 @@ export default function TemplatesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h4 className="text-gray-400 font-bold text-xs tracking-widest uppercase mb-3">
-            Template Gallery
+          <h4 className="text-blue-600 font-bold text-xs tracking-widest uppercase mb-3 text-cyan-600">
+            Clinic Template Gallery
           </h4>
           <h1 className="text-5xl md:text-7xl font-serif tracking-tight mb-6">
-            Pick your look.
+            Build your medical presence.
           </h1>
           <p className="text-lg md:text-xl text-gray-500 font-medium max-w-xl mx-auto leading-relaxed">
-            Choose a template that matches your business. Every detail is fully
-            customizable — your name, your photos, your brand.
+            Choose a professional template tailored for private practices and veterinary clinics.
+            Customize everything in real-time.
           </p>
         </motion.div>
       </section>
