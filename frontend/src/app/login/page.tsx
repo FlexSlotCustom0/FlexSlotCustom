@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, ArrowRight, User, Store, Scissors, Code,
   Stethoscope, Briefcase, Check, ChevronLeft, Layout,
-  Sparkles, Lock, Mail
+  Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -134,10 +134,10 @@ export default function AuthFlow() {
                 </div>
                 <h1 className="text-4xl font-serif mb-8">What do you <br />offer?</h1>
                 <div className="grid grid-cols-2 gap-4">
-                  <ServiceTypeBtn icon={<Scissors />} label="Salon & Spa" value="salon" selected={service === 'salon'} onClick={() => { setService('salon'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<Code />} label="Web & Tech" value="tech" selected={service === 'tech'} onClick={() => { setService('tech'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<Stethoscope />} label="Healthcare" value="medical" selected={service === 'medical'} onClick={() => { setService('medical'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<Briefcase />} label="Consulting" value="business" selected={service === 'business'} onClick={() => { setService('business'); nextStep('template'); }} />
+                  <ServiceTypeBtn icon={<Stethoscope />} label="General Practice" value="gp" selected={service === 'gp'} onClick={() => { setService('gp'); nextStep('template'); }} />
+                  <ServiceTypeBtn icon={<HeartPulse />} label="Specialist Clinic" value="specialist" selected={service === 'specialist'} onClick={() => { setService('specialist'); nextStep('template'); }} />
+                  <ServiceTypeBtn icon={<PawPrint />} label="Vet & Pet Care" value="vet" selected={service === 'vet'} onClick={() => { setService('vet'); nextStep('template'); }} />
+                  <ServiceTypeBtn icon={<Syringe />} label="Dental & Lab" value="dental" selected={service === 'dental'} onClick={() => { setService('dental'); nextStep('template'); }} />
                 </div>
               </motion.div>
             )}

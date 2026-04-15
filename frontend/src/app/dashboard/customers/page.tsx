@@ -10,10 +10,10 @@ import Link from "next/link";
 import { useState } from "react";
 
 const CUSTOMERS = [
-  { id: "C-101", name: "Alexander Wright", email: "alex.w@example.com", bookings: 12, status: "Active", lastBooking: "2 days ago", tag: "VIP" },
-  { id: "C-102", name: "Sarah Chen", email: "sarahc@tech.io", bookings: 5, status: "New", lastBooking: "Just now", tag: "NEW" },
-  { id: "C-103", name: "Marcus Johnson", email: "mj@consulting.biz", bookings: 24, status: "Active", lastBooking: "1 week ago", tag: "ELITE" },
-  { id: "C-104", name: "Elena Rodriguez", email: "elena@artstudio.com", bookings: 2, status: "Active", lastBooking: "3 days ago", tag: "STUDENT" },
+  { id: "P-101", name: "Alexander Wright", email: "alex.w@example.com", bookings: 12, status: "Active", lastBooking: "2 days ago", tag: "REGULAR" },
+  { id: "P-102", name: "Max (Labrador)", email: "sarahc@tech.io", bookings: 5, status: "New", lastBooking: "Just now", tag: "VACCINE" },
+  { id: "P-103", name: "Marcus Johnson", email: "mj@consulting.biz", bookings: 24, status: "Active", lastBooking: "1 week ago", tag: "CHRONIC" },
+  { id: "P-104", name: "Elena Rodriguez", email: "elena@artstudio.com", bookings: 2, status: "Active", lastBooking: "3 days ago", tag: "FOLLOWUP" },
 ];
 
 export default function CustomersPage() {
@@ -35,8 +35,8 @@ export default function CustomersPage() {
         <header className="h-20 bg-white border-b border-gray-50 flex items-center justify-between px-10 sticky top-0 z-10">
           <div className="flex items-center gap-6">
             <div>
-              <h1 className="text-2xl font-serif">Relation Archive</h1>
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">Unified CRM & Directory</p>
+              <h1 className="text-2xl font-serif">Patient Registry</h1>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">Unified Clinical CRM</p>
             </div>
             
             <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">
@@ -44,7 +44,7 @@ export default function CustomersPage() {
                 onClick={() => setRole("owner")}
                 className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${role === "owner" ? "bg-white text-black shadow-sm" : "text-gray-400"}`}
               >
-                Clients
+                Patients
               </button>
               <button 
                 onClick={() => setRole("customer")}

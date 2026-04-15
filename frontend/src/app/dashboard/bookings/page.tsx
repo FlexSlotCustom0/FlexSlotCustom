@@ -45,8 +45,8 @@ export default function BookingsPage() {
         <header className="h-20 bg-white border-b border-gray-50 flex items-center justify-between px-10 sticky top-0 z-10">
           <div className="flex items-center gap-6">
             <div>
-              <h1 className="text-2xl font-serif">Schedule Hub</h1>
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">Real-time Concurrency Control</p>
+              <h1 className="text-2xl font-serif">Clinic Schedule</h1>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">Patient Flow & Capacity</p>
             </div>
             
             <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">
@@ -147,7 +147,7 @@ export default function BookingsPage() {
                     <h3 className="font-bold">Transaction History</h3>
                   </div>
                   <div className="space-y-4">
-                    <LogRow time="09:41 AM" msg="Exclusive lock acquired for Slot #4 [Owner: John]" type="system" />
+                    <LogRow time="09:41 AM" msg="Exclusive lock acquired for Slot #4 [Provider: Dr. Smith]" type="system" />
                     <LogRow time="09:40 AM" msg="New appointment confirmed: Alex Miller" type="booking" />
                     <LogRow time="09:38 AM" msg="RLS Partition isolation check: SUCCESS" type="security" />
                   </div>

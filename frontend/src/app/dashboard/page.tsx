@@ -43,13 +43,13 @@ export default function Dashboard() {
               onClick={() => setRole("owner")}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "owner" ? "text-black" : "text-gray-400"}`}
             >
-              <Store className="w-3.5 h-3.5" /> Owner
+              <Store className="w-3.5 h-3.5" /> Clinic
             </button>
             <button 
               onClick={() => setRole("customer")}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "customer" ? "text-black" : "text-gray-400"}`}
             >
-              <User className="w-3.5 h-3.5" /> User
+              <User className="w-3.5 h-3.5" /> Patient
             </button>
           </div>
         </div>
@@ -59,10 +59,10 @@ export default function Dashboard() {
           {role === "owner" ? (
             <>
               <SideNavItem icon={<BarChart3 />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
-              <SideNavItem icon={<Layout />} label="My Templates" active={activeTab === "templates"} onClick={() => setActiveTab("templates")} />
-              <SideNavItem icon={<BookOpen />} label="Services" active={activeTab === "services"} onClick={() => setActiveTab("services")} />
-              <SideNavItem icon={<Calendar />} label="Bookings" active={activeTab === "bookings"} onClick={() => setActiveTab("bookings")} />
-              <SideNavItem icon={<Users />} label="Customers" active={activeTab === "customers"} onClick={() => setActiveTab("customers")} />
+              <SideNavItem icon={<Layout />} label="Clinic Themes" active={activeTab === "templates"} onClick={() => setActiveTab("templates")} />
+              <SideNavItem icon={<BookOpen />} label="Treatments" active={activeTab === "services"} onClick={() => setActiveTab("services")} />
+              <SideNavItem icon={<Calendar />} label="Appointments" active={activeTab === "bookings"} onClick={() => setActiveTab("bookings")} />
+              <SideNavItem icon={<Users />} label="Patients" active={activeTab === "customers"} onClick={() => setActiveTab("customers")} />
             </>
           ) : (
             <>
@@ -83,9 +83,9 @@ export default function Dashboard() {
               {role === "owner" ? "JD" : "AM"}
             </div>
             <div className="flex-1 overflow-hidden">
-              <div className="text-sm font-bold truncate">{role === "owner" ? "John's Studio" : "Alex Miller"}</div>
+              <div className="text-sm font-bold truncate">{role === "owner" ? "Medical HQ" : "Alex Miller"}</div>
               <div className="text-[10px] text-gray-400 truncate uppercase tracking-widest font-bold font-mono">
-                {role === "owner" ? "PREMIUM TENANT" : "FREE PLAN"}
+                {role === "owner" ? "CLINIC ADMIN" : "PATIENT PORTAL"}
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function Dashboard() {
         {/* Header */}
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-10">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-serif text-black">{role === "owner" ? "Owner Studio" : "Discovery Hub"}</h2>
+            <h2 className="text-xl font-serif text-black">{role === "owner" ? "Clinic HQ" : "Patient Portal"}</h2>
             <div className="h-4 w-[1px] bg-gray-200" />
             <div className="text-xs font-medium text-gray-400 uppercase tracking-widest flex items-center gap-2">
               Status: <span className="flex items-center gap-1.5 text-black"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live</span>

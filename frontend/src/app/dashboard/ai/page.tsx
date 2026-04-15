@@ -23,10 +23,12 @@ export default function AIInsightsPage() {
     setTimeout(() => {
       setIsParsing(false);
       setJsonOutput(JSON.stringify({
-        intent: "EXTRACTION",
+        intent: "CLINICAL_EXTRACTION",
         entities: {
-          service: consoleInput.toLowerCase().includes("consult") ? "Strategy Review" : "General Inquiry",
-          time: "NEXT_WINDOW",
+          procedure: consoleInput.toLowerCase().includes("checkup") ? "General Wellness" : 
+                    consoleInput.toLowerCase().includes("vaccine") ? "Immunization" : "Observation",
+          patient: "Lilly (Golden Retriever)",
+          time: "NEXT_AVAILABLE",
           confidence: 0.99
         },
         model: "TinyLlama-v1.1"
@@ -50,8 +52,8 @@ export default function AIInsightsPage() {
         <header className="h-20 bg-white border-b border-gray-50 flex items-center justify-between px-10 sticky top-0 z-10">
           <div className="flex items-center gap-6">
             <div>
-              <h1 className="text-2xl font-serif">Intelligent Console</h1>
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">Self-Hosted Inference Engine</p>
+              <h1 className="text-2xl font-serif">Diagnostic Intelligence</h1>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">NLP Patient Intent Processing</p>
             </div>
             
             <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">

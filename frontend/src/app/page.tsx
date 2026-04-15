@@ -1,14 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  ArrowRight, Calendar, ChevronDown, Monitor, Clock,
-  MapPin, User, Check, Plus, Search, HelpCircle,
-  Laptop, Smartphone, Coffee, Music, Bike, Layout,
-  Share2, Globe, MessageSquare, Zap, Bot, Terminal, Code, Cpu, Shield, Layers, Database, Lock, ShieldCheck
+import { 
+  BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
+  TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
+  Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase, Check, ArrowRight,
+  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronDown, Share2, MessageSquare,
+  HeartPulse, Syringe, Cross, PawPrint, Bone, Laptop, Music, Bike, Coffee, User, MapPin, Terminal
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+
 
 export default function NotionCalendarClone() {
 
@@ -54,12 +56,12 @@ export default function NotionCalendarClone() {
       <section className="relative pt-32 pb-20 overflow-hidden">
         {/* Floating Icons Style */}
         <div className="absolute inset-0 pointer-events-none">
-          <FloatingIcon icon={<Laptop />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
-          <FloatingIcon icon={<Music />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
-          <FloatingIcon icon={<Bike />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
-          <FloatingIcon icon={<Coffee />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
-          <FloatingIcon icon={<User />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
-          <FloatingIcon icon={<MapPin />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
+          <FloatingIcon icon={<Stethoscope />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
+          <FloatingIcon icon={<HeartPulse />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
+          <FloatingIcon icon={<Syringe />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
+          <FloatingIcon icon={<Cross />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
+          <FloatingIcon icon={<PawPrint />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
+          <FloatingIcon icon={<Bone />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
         </div>
 
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
@@ -79,12 +81,12 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCustom AI</h4>
+            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlot Clinic Engine</h4>
             <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
-              It’s time.
+              Care simplified.
             </h1>
             <p className="text-xl md:text-2xl text-gray-500 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-              All of your commitments, now in one place. Meet the beautifully designed, fully integrated calendar for your work and life.
+              The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.
             </p>
             <div className="flex justify-center">
               <Link href="/login" className="bg-black text-white px-8 py-3.5 rounded-lg font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:scale-[1.02]">
@@ -384,7 +386,7 @@ function BookingDemo() {
   const [typed, setTyped] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
 
-  const fullText = "consult next Tuesday";
+  const fullText = "Vet checkup for Max next Tuesday";
   const slots = ["9:00 AM", "11:30 AM", "2:00 PM", "4:30 PM"];
 
   // Typewriter effect
