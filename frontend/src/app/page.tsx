@@ -141,9 +141,7 @@ export default function NotionCalendarClone() {
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">The AI Playground.</h2>
-            <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
-              Powered by our self-hosted TinyLlama model, eliminating third-party dependencies while preserving full intelligence capabilities.
-            </p>
+
             <div className="space-y-6">
               <div className="flex gap-4">
                 <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 border border-gray-100">
