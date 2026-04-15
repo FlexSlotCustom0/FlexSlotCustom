@@ -107,12 +107,6 @@ export default function NotionCalendarClone() {
             <Link href="/login" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
               Get Started
             </Link>
-            <div className="flex items-center gap-3 opacity-30">
-              <div className="h-[1px] w-12 bg-white" />
-              <span className="text-white text-[9px] font-black uppercase tracking-[0.4em] whitespace-nowrap">
-                FlexSlotCustom Identity
-              </span>
-            </div>
           </div>
         </div>
       </div>
