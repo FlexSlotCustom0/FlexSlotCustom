@@ -3,13 +3,16 @@
 import { TemplateProvider } from "@/components/TemplateContext";
 import { TemplateEditor } from "@/components/TemplateEditor";
 import { Edit3 } from "lucide-react";
-import { useState } from "react";
 import { useTemplateContext } from "@/components/TemplateContext";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 function EditButton() {
   const { setIsEditorOpen, isEditorOpen, shopData } = useTemplateContext();
+  const searchParams = useSearchParams();
+  const isManageMode = searchParams.get("manage") === "true";
   
-  if (isEditorOpen) return null;
+  if (!isManageMode || isEditorOpen) return null;
   
   return (
     <button
@@ -25,6 +28,19 @@ function EditButton() {
   );
 }
 
+function TemplateContent({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const isManageMode = searchParams.get("manage") === "true";
+
+  return (
+    <>
+      {children}
+      {isManageMode && <TemplateEditor />}
+      <EditButton />
+    </>
+  );
+}
+
 export default function TemplatesLayout({
   children,
 }: {
@@ -32,9 +48,11 @@ export default function TemplatesLayout({
 }) {
   return (
     <TemplateProvider>
-      {children}
-      <TemplateEditor />
-      <EditButton />
+      <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        <TemplateContent>
+          {children}
+        </TemplateContent>
+      </Suspense>
     </TemplateProvider>
   );
 }

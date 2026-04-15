@@ -241,8 +241,8 @@ function TemplateSelectionView() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" />
-        <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" />
+        <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" id="clinic-clean" manage={true} />
+        <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" id="vet-warm" manage={true} />
       </div>
     </div>
   );
@@ -274,8 +274,9 @@ function CustomerDashboardView({ tab }: { tab: string }) {
           category="Healthcare" 
           rating={5.0} 
           price="$120+" 
-          tag="BOOKED" 
+          tag="VIEW" 
           active
+          id="clinic-clean"
         />
         <ServiceCard 
           image="bg-purple-100" 
@@ -343,28 +344,35 @@ function ServiceCompactItem({ icon, name, bookings, color }: { icon: any, name: 
   );
 }
 
-function TemplateCard({ icon, title, category }: { icon: any, title: string, category: string }) {
+function TemplateCard({ icon, title, category, id, manage }: { icon: any, title: string, category: string, id: string, manage?: boolean }) {
+  const href = `/templates/${id}${manage ? "?manage=true" : ""}`;
+
   return (
-    <div className="group bg-white rounded-[2.5rem] p-8 border border-gray-50 shadow-sm hover:shadow-xl hover:border-black/5 transition-all duration-500 cursor-pointer overflow-hidden relative">
-      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition-colors">
+    <Link 
+      href={href}
+      className="group bg-white rounded-[2.5rem] p-8 border border-gray-50 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-500 cursor-pointer overflow-hidden relative block"
+    >
+      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
         {icon}
       </div>
       <h3 className="text-lg font-bold mb-1 leading-tight">{title}</h3>
       <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{category}</p>
       
       <div className="mt-8 pt-6 border-t border-gray-50 flex items-center justify-between">
-        <span className="text-[10px] font-black uppercase tracking-widest text-black">Preview Site</span>
-        <ExternalLink className="w-4 h-4 text-gray-300" />
+        <span className="text-[10px] font-black uppercase tracking-widest text-black">
+          {manage ? "Manage Template" : "Preview Site"}
+        </span>
+        <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-blue-600 transition-colors" />
       </div>
 
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gray-50 rounded-full translate-x-12 -translate-y-12 group-hover:bg-black/5 transition-colors" />
-    </div>
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gray-50 rounded-full translate-x-12 -translate-y-12 group-hover:bg-blue-600/5 transition-colors" />
+    </Link>
   );
 }
 
-function ServiceCard({ image, title, category, rating, price, tag, active }: { image: string, title: string, category: string, rating: number, price: string, tag: string, active?: boolean }) {
-  return (
-    <div className="bg-white rounded-[2.5rem] p-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden">
+function ServiceCard({ image, title, category, rating, price, tag, active, id }: { image: string, title: string, category: string, rating: number, price: string, tag: string, active?: boolean, id?: string }) {
+  const cardContent = (
+    <>
       <div className={`w-full aspect-video ${image} rounded-3xl mb-6 relative overflow-hidden`}>
         {active && (
           <div className="absolute top-4 left-4 bg-black text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded">ACTIVE NOW</div>
@@ -382,10 +390,24 @@ function ServiceCard({ image, title, category, rating, price, tag, active }: { i
       </div>
       <div className="flex items-center justify-between pt-6 border-t border-gray-50">
         <span className="text-sm font-black font-mono italic">{price}</span>
-        <button className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] transition-all ${active ? 'bg-black text-white' : 'bg-gray-100 text-gray-400 hover:bg-black hover:text-white'}`}>
+        <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] transition-all ${active ? 'bg-black text-white' : 'bg-gray-100 text-gray-400 hover:bg-black hover:text-white'}`}>
           {tag}
-        </button>
+        </div>
       </div>
+    </>
+  );
+
+  if (id) {
+    return (
+      <Link href={`/templates/${id}`} className="bg-white rounded-[2.5rem] p-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden block">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-[2.5rem] p-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden">
+      {cardContent}
     </div>
   );
 }
