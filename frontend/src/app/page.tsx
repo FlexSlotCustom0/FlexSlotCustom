@@ -136,11 +136,10 @@ export default function NotionCalendarClone() {
 
             {/* Middle Logo Anchor */}
             <div className="relative w-32 h-64 flex items-center justify-center">
-              <div className="absolute w-[1px] h-full bg-gray-100" />
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="absolute z-10 bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg shadow-xl"
+                className="absolute z-10 bg-black text-white text-[14px] font-black uppercase tracking-[0.25em] px-8 py-4 rounded-xl shadow-2xl whitespace-nowrap"
               >
                 FlexSlotCustom
               </motion.button>
