@@ -111,7 +111,6 @@ export default function NotionCalendarClone() {
       <section id="services" className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="text-center mb-16">
-            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-2">Our Reach</h2>
             <h3 className="text-4xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
           </div>
 
