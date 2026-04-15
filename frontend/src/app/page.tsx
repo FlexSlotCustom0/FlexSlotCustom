@@ -11,6 +11,15 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function NotionCalendarClone() {
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const offset = 72; // height of fixed navbar
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-blue-100">
       {/* Navigation */}
@@ -25,10 +34,10 @@ export default function NotionCalendarClone() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
-              <button className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
-              <button className="flex items-center gap-1 hover:text-black transition-colors">Download <ChevronDown className="w-3 h-3" /></button>
-              <Link href="#" className="hover:text-black transition-colors">Enterprise</Link>
-              <Link href="#" className="hover:text-black transition-colors">Pricing</Link>
+              <button onClick={() => scrollToSection('product')} className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
+              <button onClick={() => scrollToSection('ai-playground')} className="flex items-center gap-1 hover:text-black transition-colors">AI <ChevronDown className="w-3 h-3" /></button>
+              <button onClick={() => scrollToSection('enterprise')} className="hover:text-black transition-colors">Enterprise</button>
+              <button onClick={() => scrollToSection('pricing')} className="hover:text-black transition-colors">Pricing</button>
             </div>
           </div>
 
@@ -88,7 +97,7 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* 2. The Feature Grid (Technical Bento Box) */}
-      <section className="py-24 bg-gray-50 border-t border-gray-100">
+      <section id="product" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-[12px] font-black tracking-widest uppercase text-gray-400 mb-3">Core Competencies</h2>
@@ -127,7 +136,7 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* 3. The AI "Playground" Section */}
-      <section className="py-24 bg-white">
+      <section id="ai-playground" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">The AI Playground.</h2>
@@ -183,53 +192,8 @@ export default function NotionCalendarClone() {
         </div>
       </section>
 
-      {/* 4. Pricing Plans */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
-            <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
-              <h3 className="font-bold text-xl mb-2">Starter</h3>
-              <div className="text-4xl font-serif mb-6">$29<span className="text-lg text-gray-400 font-sans">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <FeaturePoint text="Basic slot booking orchestration" />
-                <FeaturePoint text="Isolated tenant identification" />
-                <FeaturePoint text="Standard email templates" />
-              </ul>
-              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-50 transition-colors">Start Trial</button>
-            </div>
-            
-            <div className="bg-black text-white rounded-[32px] p-10 border border-gray-800 flex flex-col shadow-2xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] tracking-widest font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
-              <h3 className="font-bold text-xl mb-2">Professional</h3>
-              <div className="text-4xl font-serif mb-6">$89<span className="text-lg text-gray-400 font-sans">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Automated background tasks</li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Google Calendar sync</li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Smart email dispatch queues</li>
-              </ul>
-              <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
-            </div>
-            
-            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
-              <h3 className="font-bold text-xl mb-2">Enterprise</h3>
-              <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <FeaturePoint text="Full AI predictive analytics" />
-                <FeaturePoint text="SEO-optimized content generation" />
-                <FeaturePoint text="Dedicated inference nodes" />
-              </ul>
-              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-50 transition-colors">Contact Sales</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. The System Integrity Section */}
-      <section className="py-24 bg-white">
+      {/* 4. The System Integrity Section */}
+      <section id="enterprise" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-16 items-center">
             <div className="flex-1">
@@ -265,7 +229,7 @@ export default function NotionCalendarClone() {
               </div>
             </div>
             
-            <div className="flex-1 w-full bg-gray-50 rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden">
+            <div className="flex-1 w-full bg-white rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden shadow-sm">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
                 
@@ -283,6 +247,51 @@ export default function NotionCalendarClone() {
                     <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">ACQUIRED</span>
                   </div>
                 </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Pricing Plans */}
+      <section id="pricing" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
+            <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <h3 className="font-bold text-xl mb-2">Starter</h3>
+              <div className="text-4xl font-serif mb-6">$29<span className="text-lg text-gray-400 font-sans">/mo</span></div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <FeaturePoint text="Basic slot booking orchestration" />
+                <FeaturePoint text="Isolated tenant identification" />
+                <FeaturePoint text="Standard email templates" />
+              </ul>
+              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-100 transition-colors">Start Trial</button>
+            </div>
+            
+            <div className="bg-black text-white rounded-[32px] p-10 border border-gray-800 flex flex-col shadow-2xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] tracking-widest font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
+              <h3 className="font-bold text-xl mb-2">Professional</h3>
+              <div className="text-4xl font-serif mb-6">$89<span className="text-lg text-gray-400 font-sans">/mo</span></div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Automated background tasks</li>
+                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Google Calendar sync</li>
+                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Smart email dispatch queues</li>
+              </ul>
+              <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
+            </div>
+            
+            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <h3 className="font-bold text-xl mb-2">Enterprise</h3>
+              <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <FeaturePoint text="Full AI predictive analytics" />
+                <FeaturePoint text="SEO-optimized content generation" />
+                <FeaturePoint text="Dedicated inference nodes" />
+              </ul>
+              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-100 transition-colors">Contact Sales</button>
             </div>
           </div>
         </div>
