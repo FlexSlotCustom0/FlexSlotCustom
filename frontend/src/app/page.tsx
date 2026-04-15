@@ -152,7 +152,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="flex-1 space-y-6 text-center md:text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 text-black border border-gray-100 rounded-3xl mb-4 group-hover:bg-black group-hover:text-white transition-all">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform">
                 <PawPrint className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
