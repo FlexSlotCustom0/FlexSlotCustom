@@ -7,7 +7,7 @@ import {
   Send, Sparkles, CheckCircle2, ChevronRight, Bell, 
   Settings, RefreshCw, Layers, ShieldCheck, Heart,
   Briefcase, Scissors, Stethoscope, BriefcaseIcon, ExternalLink,
-  Lock, RefreshCwIcon, HeartPulse, PawPrint, Syringe
+  Lock, RefreshCwIcon, HeartPulse, PawPrint, Syringe, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
 
@@ -34,7 +34,7 @@ export default function CustomerDashboard() {
         <div className="h-20 flex items-center px-8 border-b border-gray-50">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-white" />
+              <CalendarClock className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold tracking-tight text-lg text-black">FlexSlot <span className="text-gray-400 font-serif italic">Portal</span></span>
           </Link>

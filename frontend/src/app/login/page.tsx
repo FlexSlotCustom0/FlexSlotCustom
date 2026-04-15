@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, ArrowRight, User, Store, Scissors, Code,
   Stethoscope, Briefcase, Check, ChevronLeft, Layout,
-  Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe
+  Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ export default function AuthFlow() {
         <div className="flex flex-col items-center mb-12">
           <Link href="/" className="flex items-center gap-2 mb-4">
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
-              <Calendar className="w-6 h-6 text-white" />
+              <CalendarClock className="w-6 h-6 text-white" />
             </div>
             <span className="font-bold text-2xl tracking-tighter">FlexSlotCustom</span>
           </Link>
