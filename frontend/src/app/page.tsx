@@ -98,16 +98,21 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* Transitional Brand Bar */}
-      <div className="bg-black py-8 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 transition-all">
-          <h2 className="text-white text-2xl md:text-3xl font-serif tracking-tight text-center md:text-left">
+      <div className="bg-black py-14 overflow-hidden border-y border-white/10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10 transition-all">
+          <h2 className="text-white text-4xl md:text-5xl font-serif tracking-tight text-center md:text-left leading-tight max-w-xl">
             Ready to make time for what matters?
           </h2>
-          <div className="flex items-center gap-4">
-            <div className="h-[1px] w-24 bg-white/20 hidden lg:block" />
-            <span className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] whitespace-nowrap">
-              FlexSlotCustom Identity
-            </span>
+          <div className="flex flex-col items-center md:items-end gap-6">
+            <Link href="/login" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
+              Get Started
+            </Link>
+            <div className="flex items-center gap-3 opacity-30">
+              <div className="h-[1px] w-12 bg-white" />
+              <span className="text-white text-[9px] font-black uppercase tracking-[0.4em] whitespace-nowrap">
+                FlexSlotCustom Identity
+              </span>
+            </div>
           </div>
         </div>
       </div>
