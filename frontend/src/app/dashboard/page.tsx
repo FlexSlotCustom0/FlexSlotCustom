@@ -282,15 +282,6 @@ function CustomerDashboardView({ tab }: { tab: string }) {
           />
         ))}
 
-        {/* Featured / Default Clinics */}
-        <ServiceCard 
-          image="bg-orange-100" 
-          title="Nova Salon & Spa" 
-          category="Beauty" 
-          rating={4.9} 
-          price="$45+" 
-          tag="RESERVE" 
-        />
         {publishedClinics.length === 0 && (
           <ServiceCard 
             image="bg-blue-100" 
@@ -303,21 +294,12 @@ function CustomerDashboardView({ tab }: { tab: string }) {
             id="clinic-clean"
           />
         )}
-        <ServiceCard 
-          image="bg-purple-100" 
-          title="Elite Web Studio" 
-          category="Development" 
-          rating={4.8} 
-          price="$200+" 
-          tag="VIEW" 
-        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-10 border-t border-gray-100">
         <div className="lg:col-span-2 space-y-6">
           <h3 className="text-xl font-bold">Upcoming Appointments</h3>
           <AppointmentRow service="Dr. Emily's Clinic" date="Oct 24, 2026" time="10:00 AM" status="Confirmed" />
-          <AppointmentRow service="Nova Salon & Spa" date="Oct 28, 2026" time="2:30 PM" status="Pending" />
         </div>
         
         <div className="bg-black text-white rounded-[2.5rem] p-8 flex flex-col justify-between shadow-xl">
