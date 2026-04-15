@@ -5,7 +5,8 @@ import {
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Send, Layout, Store, User, BookOpen, Clock, ChevronRight, 
-  Plus, ExternalLink, Stethoscope, Briefcase, Activity, Heart, ShieldPlus, ShoppingBag
+  Plus, ExternalLink, Stethoscope, Briefcase, Activity, Heart, ShieldPlus, ShoppingBag,
+  Zap, Sparkles, PawPrint, Star
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -251,12 +252,20 @@ function TemplateSelectionView() {
         <p className="text-gray-400 font-medium italic">Select your professional medical or veterinary digital presence.</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {(!niche || niche === 'medical') && (
-          <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Medical Practice" id="clinic-clean" manage={true} />
+          <>
+            <TemplateCard icon={<Stethoscope />} title="Clinic Clean" category="Modern Medical" id="clinic-clean" manage={true} />
+            <TemplateCard icon={<Zap className="text-indigo-600" />} title="Pulse Modern" category="Imaging & Diagnostics" id="pulse-modern" manage={true} />
+            <TemplateCard icon={<Sparkles className="text-teal-600" />} title="Dental Bright" category="Cosmetic Dental" id="dental-bright" manage={true} />
+          </>
         )}
         {(!niche || niche === 'veterinary') && (
-          <TemplateCard icon={<Heart />} title="Vet Warm" category="Veterinary Care" id="vet-warm" manage={true} />
+          <>
+            <TemplateCard icon={<Heart />} title="Vet Warm" category="Neighborhood Vet" id="vet-warm" manage={true} />
+            <TemplateCard icon={<Star className="text-amber-500" />} title="Paw Luxe" category="Luxury Pet Care" id="paws-premium" manage={true} />
+            <TemplateCard icon={<PawPrint className="text-emerald-600" />} title="Wild Frontier" category="Wildlife & Exotics" id="wild-med" manage={true} />
+          </>
         )}
       </div>
     </div>

@@ -192,6 +192,110 @@ export const defaultTemplatesData: Record<string, {
       { name: "Dinesh P.", text: "Best vet clinic around. They treat our dog like family. The grooming service is amazing too!", rating: 5 },
     ]
   },
+  "pulse-modern": {
+    shop: {
+      name: "Pulse Diagnostic Hub",
+      tagline: "Precision imaging and advanced diagnostics",
+      logo: "⚡",
+      bannerGradient: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
+      primaryColor: "#4f46e5",
+      address: "42 Tech Plaza, Colombo 07",
+      phone: "+94 11 999 0000",
+      hours: "24/7 Diagnostic Services Available",
+      rating: 5.0,
+      reviewCount: 184,
+      instagram: "@pulse.dx",
+      announcement: "New MRI scanner installed. Zero wait time this week.",
+    },
+    staff: [
+      { name: "Dr. Victor", role: "Radiologist", credentials: "MD, FRCR", avatar: "👨‍🔬" },
+      { name: "Elena", role: "Lab Lead", specialty: "Biometric Screening", avatar: "👩‍🔬" },
+    ],
+    offerings: [
+      {
+        label: "Imaging",
+        services: [
+          { name: "Full Body MRI", price: "$450", duration: "2 hr", desc: "Advanced 3T imaging session" },
+          { name: "CT Scan", price: "$200", duration: "45 min", desc: "High-resolution cross-sectional imaging" },
+        ],
+      },
+    ],
+  },
+  "dental-bright": {
+    shop: {
+      name: "Bright Dental Studio",
+      tagline: "Your smile, engineered to perfection",
+      logo: "🦷",
+      bannerGradient: "linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 50%, #99f6e4 100%)",
+      primaryColor: "#0d9488",
+      address: "12 Marine Drive, Colombo 03",
+      phone: "+94 11 888 7777",
+      hours: "Mon–Sat · 9 AM – 8 PM",
+      rating: 4.8,
+      reviewCount: 256,
+      instagram: "@bright.smile",
+    },
+    staff: [
+      { name: "Dr. Aruni", role: "Orthodontist", credentials: "BDS, MS", avatar: "👩‍⚕️" },
+      { name: "Dr. Sameer", role: "Dental Surgeon", credentials: "BDS", avatar: "👨‍⚕️" },
+    ],
+    offerings: [
+      {
+        label: "Cosmetic",
+        services: [
+          { name: "Teeth Whitening", price: "$150", duration: "1 hr", desc: "Professional laser-assisted whitening" },
+          { name: "Invisalign Consult", price: "$50", duration: "30 min", desc: "Digital scan and treatment planning" },
+        ],
+      },
+    ],
+  },
+  "paws-premium": {
+    shop: {
+      name: "Paw Luxe Wellness",
+      tagline: "The gold standard in boutique pet care",
+      logo: "💎",
+      bannerGradient: "linear-gradient(135deg, #18181b 0%, #27272a 50%, #3f3f46 100%)",
+      primaryColor: "#f59e0b",
+      address: "07 Cinnamon Gardens, Colombo 07",
+      phone: "+94 11 777 5555",
+      hours: "By Appointment Only · 10 AM – 9 PM",
+      rating: 5.0,
+      reviewCount: 92,
+      instagram: "@pawluxe.premium",
+      announcement: "Now offering Hydrotherapy and Zen Pet Massages.",
+    },
+    staff: [
+      { name: "Dr. Julian", role: "Executive Veterinarian", avatar: "👨‍⚕️" },
+      { name: "Sophie", role: "Wellness Dir.", avatar: "👩‍⚕️" },
+    ],
+    offerings: [
+      { name: "VIP Wellness Check", price: "$120", duration: "1 hr", icon: "✨", desc: "Comprehensive luxury health audit" },
+      { name: "Hydrotherapy", price: "$85", duration: "45 min", icon: "🌊", desc: "Low-impact therapeutic water exercise" },
+    ],
+  },
+  "wild-med": {
+    shop: {
+      name: "Wild Frontier Med",
+      tagline: "Expert care for the extraordinary",
+      logo: "🦅",
+      bannerGradient: "linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)",
+      primaryColor: "#10b981",
+      address: "99 Green Belt Road, Ethul Kotte",
+      phone: "+94 11 333 4444",
+      hours: "Emergency Response 24/7",
+      rating: 4.9,
+      reviewCount: 145,
+      instagram: "@wildmed.sl",
+    },
+    staff: [
+      { name: "Dr. Ravi", role: "Exotics Specialist", avatar: "👨‍⚕️" },
+      { name: "Mara", role: "Wildlife Nurse", avatar: "👩‍⚕️" },
+    ],
+    offerings: [
+      { name: "Exotic Pet Consult", price: "$110", duration: "1 hr", icon: "🦜", desc: "Specialized care for birds, reptiles and mammals" },
+      { name: "Field Emergency", price: "$250", duration: "Varies", icon: "🚙", desc: "On-site emergency response for large animals" },
+    ],
+  },
 };
 
 export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
