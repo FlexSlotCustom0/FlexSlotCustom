@@ -72,7 +72,6 @@ export default function NotionCalendarClone() {
           >
             <div className="w-20 h-20 bg-white border-2 border-black rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden group">
                <CalendarClock className="w-10 h-10 text-black group-hover:scale-110 transition-transform" />
-               <div className="absolute top-0 left-0 w-full h-3 bg-black opacity-5" />
             </div>
           </motion.div>
 
