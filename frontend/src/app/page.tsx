@@ -175,9 +175,7 @@ export default function NotionCalendarClone() {
           <div className="flex flex-col md:flex-row gap-16 items-center">
             <div className="flex-1">
               <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">System Integrity.</h2>
-              <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
-                Engineered for maximum reliability, strictly validating robust system design requirements natively.
-              </p>
+
 
               <div className="space-y-8">
                 <div className="flex gap-4 items-start">
@@ -464,7 +462,7 @@ function BookingDemo() {
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
-            <span className="text-sm font-medium text-blue-700">TinyLlama parsing intent & temporal entity...</span>
+            <span className="text-sm font-medium text-blue-700">AI system parsing intent & temporal entity...</span>
           </motion.div>
         )}
 
