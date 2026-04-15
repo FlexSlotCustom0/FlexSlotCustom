@@ -8,7 +8,7 @@ import {
   Share2, Globe, MessageSquare, Zap, Bot, Terminal, Code, Cpu, Shield, Layers, Database, Lock, ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function NotionCalendarClone() {
 
@@ -165,32 +165,10 @@ export default function NotionCalendarClone() {
             </div>
           </div>
           
-          <div className="bg-[#0D0D12] text-white rounded-[32px] p-6 shadow-2xl overflow-hidden border border-gray-800">
-            <div className="flex items-center gap-2 mb-6 px-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="ml-4 text-[11px] font-mono font-bold tracking-widest uppercase text-gray-500">nlp_inference.py</span>
-            </div>
-            <div className="font-mono text-sm space-y-4">
-              <div className="text-gray-400">
-                <span className="text-blue-400">Input:</span> "Book a consult next Tuesday"
-              </div>
-              <div className="animate-pulse text-gray-500">Processing via TinyLlama...</div>
-              <div>
-                <span className="text-blue-400">Output:</span> {"{"}
-              </div>
-              <div className="pl-4 text-green-300">
-                "intent": "schedule_booking",<br/>
-                "service_type": "Consult",<br/>
-                "temporal_entity": "next Tuesday",<br/>
-                "action": "execute_node"
-              </div>
-              <div>{"}"}</div>
-            </div>
-          </div>
+          <BookingDemo />
         </div>
       </section>
+
 
       {/* 4. The System Integrity Section */}
       <section id="enterprise" className="py-24 bg-gray-50">
@@ -398,5 +376,141 @@ function FeaturePoint({ text }: { text: string }) {
       </div>
       {text}
     </li>
+  );
+}
+
+function BookingDemo() {
+  const [step, setStep] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+
+  const fullText = "consult next Tuesday";
+  const slots = ["9:00 AM", "11:30 AM", "2:00 PM", "4:30 PM"];
+
+  // Typewriter effect
+  useEffect(() => {
+    if (step !== 0) return;
+    setTyped("");
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setTyped(fullText.slice(0, i));
+      if (i === fullText.length) {
+        clearInterval(interval);
+        setTimeout(() => setStep(1), 600);
+      }
+    }, 60);
+    return () => clearInterval(interval);
+  }, [step]);
+
+  // AI processing → show slots
+  useEffect(() => {
+    if (step !== 1) return;
+    const t = setTimeout(() => setStep(2), 1800);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  // Auto-select a slot
+  useEffect(() => {
+    if (step !== 2) return;
+    const t = setTimeout(() => { setSelectedSlot(1); setStep(3); }, 1400);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  // Show confirmation then loop
+  useEffect(() => {
+    if (step !== 3) return;
+    const t = setTimeout(() => { setStep(0); setSelectedSlot(null); }, 2800);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  return (
+    <div className="relative">
+      <div className="space-y-4 min-h-[340px]">
+
+        {/* Step indicator */}
+        <div className="flex items-center gap-2 mb-2">
+          {["Type", "AI", "Slots", "Done"].map((label, i) => (
+            <div key={i} className="flex items-center gap-1">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= i ? "bg-black text-white" : "bg-gray-100 text-gray-400"}`}>
+                {step > i ? "✓" : i + 1}
+              </div>
+              <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${step >= i ? "text-black" : "text-gray-300"}`}>{label}</span>
+              {i < 3 && <div className={`w-6 h-[2px] rounded-full transition-all duration-500 ${step > i ? "bg-black" : "bg-gray-100"}`} />}
+            </div>
+          ))}
+        </div>
+
+        {/* AI prompt input */}
+        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+          <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">AI Booking Prompt</div>
+          <div className="flex items-center gap-3">
+            <Bot className="w-5 h-5 text-gray-400 shrink-0" />
+            <span className="font-medium text-gray-800">
+              {typed}
+              {step === 0 && <span className="inline-block w-0.5 h-4 bg-black ml-0.5 animate-pulse align-middle" />}
+            </span>
+          </div>
+        </div>
+
+        {/* AI Processing */}
+        {step === 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-blue-50 rounded-2xl p-4 border border-blue-100 flex items-center gap-3"
+          >
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+            </div>
+            <span className="text-sm font-medium text-blue-700">TinyLlama parsing intent & temporal entity...</span>
+          </motion.div>
+        )}
+
+        {/* Slot selection */}
+        {(step === 2 || step === 3) && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Available Tuesday Slots</div>
+            <div className="grid grid-cols-2 gap-2">
+              {slots.map((slot, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.08 }}
+                  className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${
+                    selectedSlot === i
+                      ? "border-black bg-black text-white shadow-lg scale-105"
+                      : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
+                  }`}
+                >
+                  <Clock className="w-3.5 h-3.5 inline mr-1 mb-0.5" />
+                  {slot}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Confirmation */}
+        {step === 3 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 flex items-center gap-3"
+          >
+            <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shrink-0">
+              <Check className="w-4 h-4 text-white" strokeWidth={3} />
+            </div>
+            <div>
+              <div className="font-bold text-emerald-800 text-sm">Booking Confirmed!</div>
+              <div className="text-emerald-600 text-xs mt-0.5">Tuesday, 11:30 AM · Business Consult · Calendar invite sent</div>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </div>
   );
 }
