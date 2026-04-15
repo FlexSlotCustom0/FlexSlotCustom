@@ -96,8 +96,101 @@ export default function NotionCalendarClone() {
         </div>
 
       </section>
+      
+      {/* 2. Our Services Section - Symmetrical Discovery */}
+      <section className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 w-full">
+          <div className="text-center mb-16">
+            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-2">Our Reach</h2>
+            <h3 className="text-4xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
+          </div>
 
-      {/* 2. The Feature Grid (Technical Bento Box) */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24 relative">
+            
+            {/* Split Background Effect */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+              <div className="w-[1px] h-full bg-black relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gray-400 rounded-full blur-[100px]" />
+              </div>
+            </div>
+
+            {/* Category 01: Medical Channeling */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 space-y-6 text-center md:text-right group"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform">
+                <Stethoscope className="w-7 h-7" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical Channeling</div>
+              <h4 className="text-3xl md:text-4xl font-serif">Expert Medical Care</h4>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm ml-auto">
+                Professional channeling for specialized doctor clinics and private practices.
+              </p>
+              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
+                Find a Specialist <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+
+            {/* Middle Animation: The Life Pulse */}
+            <div className="relative w-32 h-64 flex items-center justify-center">
+              <div className="absolute w-[1px] h-full bg-gray-100" />
+              {/* Pulsing Heartbeat / Wave */}
+              <motion.div 
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  opacity: [0.1, 0.4, 0.1]
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-24 h-24 rounded-full border border-black/10 flex items-center justify-center"
+              >
+                <motion.div 
+                  animate={{ 
+                    scale: [1, 1.4, 1],
+                    opacity: [0.2, 0.6, 0.2]
+                  }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-12 h-12 rounded-full border border-black/20"
+                />
+              </motion.div>
+              <motion.div 
+                animate={{ 
+                  y: [-20, 20, -20]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute z-10 w-8 h-8 bg-white flex items-center justify-center rounded-lg shadow-sm border border-gray-100"
+              >
+                <HeartPulse className="w-4 h-4 text-black animate-pulse" />
+              </motion.div>
+            </div>
+
+            {/* Category 02: Veterinary Care */}
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 space-y-6 text-center md:text-left group"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 text-black border border-gray-100 rounded-3xl mb-4 group-hover:bg-black group-hover:text-white transition-all">
+                <PawPrint className="w-7 h-7" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
+              <h4 className="text-3xl md:text-4xl font-serif">Compassionate Pet Care</h4>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm mr-auto">
+                Trusted clinic scheduling for veterinary specialists and animal wellness centers.
+              </p>
+              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
+                Book a Vet Visit <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 3. The Feature Grid (Technical Bento Box) */}
       <section id="product" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
