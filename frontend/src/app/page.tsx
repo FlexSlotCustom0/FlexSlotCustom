@@ -8,9 +8,18 @@ import {
   Share2, Globe, MessageSquare, Zap, Bot, Terminal, Code, Cpu, Shield, Layers, Database, Lock, ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function NotionCalendarClone() {
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const offset = 72; // height of fixed navbar
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-blue-100">
       {/* Navigation */}
@@ -25,10 +34,10 @@ export default function NotionCalendarClone() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
-              <button className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
-              <button className="flex items-center gap-1 hover:text-black transition-colors">Download <ChevronDown className="w-3 h-3" /></button>
-              <Link href="#" className="hover:text-black transition-colors">Enterprise</Link>
-              <Link href="#" className="hover:text-black transition-colors">Pricing</Link>
+              <button onClick={() => scrollToSection('product')} className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
+              <button onClick={() => scrollToSection('ai-playground')} className="flex items-center gap-1 hover:text-black transition-colors">AI <ChevronDown className="w-3 h-3" /></button>
+              <button onClick={() => scrollToSection('enterprise')} className="hover:text-black transition-colors">Enterprise</button>
+              <button onClick={() => scrollToSection('pricing')} className="hover:text-black transition-colors">Pricing</button>
             </div>
           </div>
 
@@ -88,7 +97,7 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* 2. The Feature Grid (Technical Bento Box) */}
-      <section className="py-24 bg-gray-50 border-t border-gray-100">
+      <section id="product" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-[12px] font-black tracking-widest uppercase text-gray-400 mb-3">Core Competencies</h2>
@@ -127,7 +136,7 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* 3. The AI "Playground" Section */}
-      <section className="py-24 bg-white">
+      <section id="ai-playground" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">The AI Playground.</h2>
@@ -156,80 +165,13 @@ export default function NotionCalendarClone() {
             </div>
           </div>
           
-          <div className="bg-[#0D0D12] text-white rounded-[32px] p-6 shadow-2xl overflow-hidden border border-gray-800">
-            <div className="flex items-center gap-2 mb-6 px-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="ml-4 text-[11px] font-mono font-bold tracking-widest uppercase text-gray-500">nlp_inference.py</span>
-            </div>
-            <div className="font-mono text-sm space-y-4">
-              <div className="text-gray-400">
-                <span className="text-blue-400">Input:</span> "Book a consult next Tuesday"
-              </div>
-              <div className="animate-pulse text-gray-500">Processing via TinyLlama...</div>
-              <div>
-                <span className="text-blue-400">Output:</span> {"{"}
-              </div>
-              <div className="pl-4 text-green-300">
-                "intent": "schedule_booking",<br/>
-                "service_type": "Consult",<br/>
-                "temporal_entity": "next Tuesday",<br/>
-                "action": "execute_node"
-              </div>
-              <div>{"}"}</div>
-            </div>
-          </div>
+          <BookingDemo />
         </div>
       </section>
 
-      {/* 4. Pricing Plans */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
-            <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
-              <h3 className="font-bold text-xl mb-2">Starter</h3>
-              <div className="text-4xl font-serif mb-6">$29<span className="text-lg text-gray-400 font-sans">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <FeaturePoint text="Basic slot booking orchestration" />
-                <FeaturePoint text="Isolated tenant identification" />
-                <FeaturePoint text="Standard email templates" />
-              </ul>
-              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-50 transition-colors">Start Trial</button>
-            </div>
-            
-            <div className="bg-black text-white rounded-[32px] p-10 border border-gray-800 flex flex-col shadow-2xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] tracking-widest font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
-              <h3 className="font-bold text-xl mb-2">Professional</h3>
-              <div className="text-4xl font-serif mb-6">$89<span className="text-lg text-gray-400 font-sans">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Automated background tasks</li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Google Calendar sync</li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Smart email dispatch queues</li>
-              </ul>
-              <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
-            </div>
-            
-            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
-              <h3 className="font-bold text-xl mb-2">Enterprise</h3>
-              <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <FeaturePoint text="Full AI predictive analytics" />
-                <FeaturePoint text="SEO-optimized content generation" />
-                <FeaturePoint text="Dedicated inference nodes" />
-              </ul>
-              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-50 transition-colors">Contact Sales</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* 5. The System Integrity Section */}
-      <section className="py-24 bg-white">
+      {/* 4. The System Integrity Section */}
+      <section id="enterprise" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-16 items-center">
             <div className="flex-1">
@@ -265,7 +207,7 @@ export default function NotionCalendarClone() {
               </div>
             </div>
             
-            <div className="flex-1 w-full bg-gray-50 rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden">
+            <div className="flex-1 w-full bg-white rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden shadow-sm">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
                 
@@ -283,6 +225,51 @@ export default function NotionCalendarClone() {
                     <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">ACQUIRED</span>
                   </div>
                 </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Pricing Plans */}
+      <section id="pricing" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
+            <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <h3 className="font-bold text-xl mb-2">Starter</h3>
+              <div className="text-4xl font-serif mb-6">$29<span className="text-lg text-gray-400 font-sans">/mo</span></div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <FeaturePoint text="Basic slot booking orchestration" />
+                <FeaturePoint text="Isolated tenant identification" />
+                <FeaturePoint text="Standard email templates" />
+              </ul>
+              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-100 transition-colors">Start Trial</button>
+            </div>
+            
+            <div className="bg-black text-white rounded-[32px] p-10 border border-gray-800 flex flex-col shadow-2xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] tracking-widest font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
+              <h3 className="font-bold text-xl mb-2">Professional</h3>
+              <div className="text-4xl font-serif mb-6">$89<span className="text-lg text-gray-400 font-sans">/mo</span></div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Automated background tasks</li>
+                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Google Calendar sync</li>
+                <li className="flex items-center gap-3 text-gray-300 font-medium"><div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center shrink-0"><Check className="w-3 h-3 text-white" strokeWidth={4} /></div> Smart email dispatch queues</li>
+              </ul>
+              <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
+            </div>
+            
+            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+              <h3 className="font-bold text-xl mb-2">Enterprise</h3>
+              <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
+              <ul className="space-y-4 mb-8 flex-1">
+                <FeaturePoint text="Full AI predictive analytics" />
+                <FeaturePoint text="SEO-optimized content generation" />
+                <FeaturePoint text="Dedicated inference nodes" />
+              </ul>
+              <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-100 transition-colors">Contact Sales</button>
             </div>
           </div>
         </div>
@@ -389,5 +376,141 @@ function FeaturePoint({ text }: { text: string }) {
       </div>
       {text}
     </li>
+  );
+}
+
+function BookingDemo() {
+  const [step, setStep] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
+
+  const fullText = "consult next Tuesday";
+  const slots = ["9:00 AM", "11:30 AM", "2:00 PM", "4:30 PM"];
+
+  // Typewriter effect
+  useEffect(() => {
+    if (step !== 0) return;
+    setTyped("");
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setTyped(fullText.slice(0, i));
+      if (i === fullText.length) {
+        clearInterval(interval);
+        setTimeout(() => setStep(1), 600);
+      }
+    }, 60);
+    return () => clearInterval(interval);
+  }, [step]);
+
+  // AI processing → show slots
+  useEffect(() => {
+    if (step !== 1) return;
+    const t = setTimeout(() => setStep(2), 1800);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  // Auto-select a slot
+  useEffect(() => {
+    if (step !== 2) return;
+    const t = setTimeout(() => { setSelectedSlot(1); setStep(3); }, 1400);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  // Show confirmation then loop
+  useEffect(() => {
+    if (step !== 3) return;
+    const t = setTimeout(() => { setStep(0); setSelectedSlot(null); }, 2800);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  return (
+    <div className="relative">
+      <div className="space-y-4 min-h-[340px]">
+
+        {/* Step indicator */}
+        <div className="flex items-center gap-2 mb-2">
+          {["Type", "AI", "Slots", "Done"].map((label, i) => (
+            <div key={i} className="flex items-center gap-1">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= i ? "bg-black text-white" : "bg-gray-100 text-gray-400"}`}>
+                {step > i ? "✓" : i + 1}
+              </div>
+              <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${step >= i ? "text-black" : "text-gray-300"}`}>{label}</span>
+              {i < 3 && <div className={`w-6 h-[2px] rounded-full transition-all duration-500 ${step > i ? "bg-black" : "bg-gray-100"}`} />}
+            </div>
+          ))}
+        </div>
+
+        {/* AI prompt input */}
+        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+          <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">AI Booking Prompt</div>
+          <div className="flex items-center gap-3">
+            <Bot className="w-5 h-5 text-gray-400 shrink-0" />
+            <span className="font-medium text-gray-800">
+              {typed}
+              {step === 0 && <span className="inline-block w-0.5 h-4 bg-black ml-0.5 animate-pulse align-middle" />}
+            </span>
+          </div>
+        </div>
+
+        {/* AI Processing */}
+        {step === 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-blue-50 rounded-2xl p-4 border border-blue-100 flex items-center gap-3"
+          >
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+            </div>
+            <span className="text-sm font-medium text-blue-700">TinyLlama parsing intent & temporal entity...</span>
+          </motion.div>
+        )}
+
+        {/* Slot selection */}
+        {(step === 2 || step === 3) && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Available Tuesday Slots</div>
+            <div className="grid grid-cols-2 gap-2">
+              {slots.map((slot, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.08 }}
+                  className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${
+                    selectedSlot === i
+                      ? "border-black bg-black text-white shadow-lg scale-105"
+                      : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
+                  }`}
+                >
+                  <Clock className="w-3.5 h-3.5 inline mr-1 mb-0.5" />
+                  {slot}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Confirmation */}
+        {step === 3 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 flex items-center gap-3"
+          >
+            <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shrink-0">
+              <Check className="w-4 h-4 text-white" strokeWidth={3} />
+            </div>
+            <div>
+              <div className="font-bold text-emerald-800 text-sm">Booking Confirmed!</div>
+              <div className="text-emerald-600 text-xs mt-0.5">Tuesday, 11:30 AM · Business Consult · Calendar invite sent</div>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </div>
   );
 }
