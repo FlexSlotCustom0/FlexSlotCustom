@@ -1,103 +1,121 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Settings, Palette, Shield, Database, Globe, Bot, Save, Bell } from "lucide-react";
+import {
+  Settings, Palette, Shield, Database, Globe, Bot, Save,
+  Bell, ChevronLeft, Lock, Cpu, Eye, User, Store
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function SettingsPage() {
-  const [theme, setTheme] = useState('discrete-monochrome');
+  const [role, setRole] = useState<"owner" | "customer">("owner");
   const [schema, setSchema] = useState(JSON.stringify({
-    "theme": "discrete-monochrome",
     "branding": {
-      "foreground": "#ffffff",
-      "font": "Geist Mono"
+      "theme": "monochrome-premium",
+      "font": "Instrument Serif",
+      "accent": "emerald-500"
     },
-    "layout": "high-density-grid",
-    "isolation": "UUID_CLUSTER_V4"
+    "security": {
+      "isolation": "RLS_ENFORCED",
+      "partition": "tenant_uuid_v4"
+    }
   }, null, 2));
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex">
-      <aside className="w-64 glass border-r border-border/10 flex flex-col h-screen sticky top-0 hidden lg:flex">
-        <div className="h-16 flex items-center px-6 border-b border-border/10">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-              <Settings className="w-4 h-4 text-black" />
-            </div>
-            <span className="font-bold tracking-tight">System Configuration</span>
-          </div>
-        </div>
-        <div className="flex-1 py-6 px-3 space-y-1">
-          <NavItem href="/dashboard" label="Overview" />
-          <NavItem href="/dashboard/services" label="Services" />
-          <NavItem href="/dashboard/bookings" label="Booking & Slots" />
-          <NavItem href="/dashboard/customers" label="Customers" />
-          <NavItem href="/dashboard/ai" label="AI Insights" />
-          <NavItem href="/dashboard/settings" label="Settings" active />
-        </div>
+    <div className="min-h-screen bg-[#FDFDFD] text-black font-sans flex">
+      {/* Navigation Rail */}
+      <aside className="w-20 border-r border-gray-100 flex flex-col h-screen sticky top-0 bg-white items-center py-8 gap-8">
+        <Link href="/dashboard" className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-white shadow-lg">
+          <ChevronLeft className="w-6 h-6" />
+        </Link>
+        <div className="flex-1" />
+        <div className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100" />
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="h-16 glass border-b border-border/10 flex items-center justify-between px-8 sticky top-0 z-10">
-          <h1 className="text-xl font-black">Tenant Control Plane</h1>
-          <button className="flex items-center gap-3 px-8 py-2.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-2xl">
-            <Save className="w-4 h-4" /> Save Configuration
-          </button>
+        {/* Header */}
+        <header className="h-20 bg-white border-b border-gray-50 flex items-center justify-between px-10 sticky top-0 z-10">
+          <div className="flex items-center gap-6">
+            <div>
+              <h1 className="text-2xl font-serif">System Console</h1>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] font-mono">Configuration & Governance</p>
+            </div>
+
+            <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">
+              <button
+                onClick={() => setRole("owner")}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${role === "owner" ? "bg-white text-black shadow-sm" : "text-gray-400"}`}
+              >
+                <Store className="w-3.5 h-3.5" /> Studio
+              </button>
+              <button
+                onClick={() => setRole("customer")}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${role === "customer" ? "bg-white text-black shadow-sm" : "text-gray-400"}`}
+              >
+                <User className="w-3.5 h-3.5" /> Profile
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-all shadow-md">
+              <Save className="w-4 h-4" /> Commit Changes
+            </button>
+          </div>
         </header>
 
         <div className="p-10 max-w-5xl mx-auto w-full">
           <div className="mb-12">
-            <h2 className="text-4xl font-black tracking-tighter mb-2">Global Parameters</h2>
-            <p className="text-foreground/30 font-light text-lg">Fine-tune your high-density environment and discrete AI behavior.</p>
+            <h2 className="text-5xl font-serif tracking-tight mb-2 italic">Global Parameters</h2>
+            <p className="text-gray-400 font-medium italic">Orchestrate your {role === 'owner' ? 'tenant environment' : 'personal experience'} with precision.</p>
           </div>
 
-          <div className="space-y-10">
-            {/* UI Schema Editor */}
-            <section className="glass-card rounded-[2.5rem] border border-white/10 overflow-hidden bg-white/[0.01]">
-              <div className="p-8 border-b border-white/5 flex items-center gap-4 bg-white/5">
-                <Palette className="w-6 h-6 text-white" />
-                <h3 className="text-xl font-black tracking-tight">Branding Schema</h3>
+          <div className="space-y-12">
+            {/* Branding section */}
+            <section className="bg-white rounded-[2.5rem] border border-gray-50 shadow-sm overflow-hidden group">
+              <div className="p-8 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm text-black transition-transform group-hover:scale-110"><Palette className="w-6 h-6" /></div>
+                  <h3 className="text-xl font-bold">Aesthetic Schema</h3>
+                </div>
+                <Eye className="w-5 h-5 text-gray-200" />
               </div>
+
               <div className="p-10">
-                <p className="text-[10px] text-white/20 mb-6 font-mono uppercase tracking-[0.3em]">
-                  // Update the JSON parameters to apply discrete branding instantly.
-                </p>
-                <textarea 
+                <div className="text-[10px] font-black uppercase tracking-widest text-gray-300 mb-6 font-mono">
+                    // Edit JSON parameters to override global styles
+                </div>
+                <textarea
                   value={schema}
                   onChange={(e) => setSchema(e.target.value)}
                   spellCheck={false}
-                  className="w-full h-56 bg-black border border-white/10 rounded-2xl p-6 font-mono text-[11px] text-white/50 focus:outline-none focus:border-white/30 resize-none scrollbar-hide"
+                  className="w-full h-48 bg-black text-white p-8 rounded-3xl font-mono text-xs leading-relaxed focus:outline-none focus:ring-2 focus:ring-gray-100 selection:bg-white/10"
                 />
               </div>
             </section>
 
-            {/* Security & RLS */}
-            <section className="glass-card rounded-[2.5rem] border border-white/10 overflow-hidden bg-white/[0.01]">
-              <div className="p-8 border-b border-white/5 flex items-center gap-4 bg-white/5">
-                <Shield className="w-6 h-6 text-white" />
-                <h3 className="text-xl font-black tracking-tight">Isolation Compliance</h3>
-              </div>
-              <div className="p-10">
-                <div className="mb-10">
-                   <div className="flex items-center gap-3 text-[10px] font-black text-white uppercase mb-4 tracking-widest">
-                     <span className="w-2 h-2 rounded-full bg-white animate-pulse" /> Active Partition Policy
-                   </div>
-                   <div className="p-6 rounded-2xl bg-black border border-white/5 font-mono text-[10px] leading-relaxed text-white/40">
-                     <span className="text-white">CREATE POLICY</span> isolation_control <span className="text-white">ON</span> persistence_grid<br/>
-                     <span className="text-white">FOR ALL</span><br/>
-                     <span className="text-white">USING</span> (tenant_id = current_setting(<span className="text-white/60">'scope.tenant_id'</span>)::uuid);
-                   </div>
+            {/* Governance section */}
+            <section className="bg-white rounded-[2.5rem] border border-gray-50 shadow-sm overflow-hidden group">
+              <div className="p-8 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm text-black transition-transform group-hover:scale-110"><Shield className="w-6 h-6" /></div>
+                  <h3 className="text-xl font-bold">Privacy Governance</h3>
                 </div>
-                
-                <div className="flex items-start gap-6 p-8 rounded-[1.5rem] bg-white text-black">
-                  <Database className="w-8 h-8 opacity-20 mt-1" />
-                  <div>
-                    <h4 className="font-black text-lg tracking-tight">PostgreSQL Row-Level Guard</h4>
-                    <p className="text-xs leading-relaxed mt-2 opacity-50 font-bold">
-                      Data is logically isolated at the database level. Each transaction is scoped to the authenticated tenant UUID before execution, ensuring absolute logical boundaries.
-                    </p>
-                  </div>
+                <Lock className="w-5 h-5 text-gray-200" />
+              </div>
+
+              <div className="p-10 space-y-8">
+                <div className="p-6 rounded-3xl bg-gray-50 border border-gray-100 font-mono text-[10px] leading-relaxed text-gray-400">
+                  <span className="text-black font-bold">ENFORCE POLICY</span> isolation_control <span className="text-black font-bold">ON</span> grid_v4<br />
+                  <span className="text-black font-bold">USING</span> (role_scope = '{role.toUpperCase()}');
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <SettingsToggle label="Data Anonymization" desc="Hide personal details in logs" active />
+                  <SettingsToggle label="Real-time Sync" desc="Propagate changes matching G-Cal" active />
+                  <SettingsToggle label="AI Assistance" desc="Allow LLM to parse private intents" active={false} />
+                  <SettingsToggle label="Global Discovery" desc="List my services in marketplace" active />
                 </div>
               </div>
             </section>
@@ -108,17 +126,16 @@ export default function SettingsPage() {
   );
 }
 
-function NavItem({ href, label, active }: { href: string, label: string, active?: boolean }) {
+function SettingsToggle({ label, desc, active }: { label: string, desc: string, active: boolean }) {
   return (
-    <Link 
-      href={href}
-      className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold tracking-tight transition-all ${
-        active 
-          ? 'bg-white text-black shadow-lg' 
-          : 'text-white/20 hover:bg-white/5 hover:text-white'
-      }`}
-    >
-      {label}
-    </Link>
+    <div className="flex items-center justify-between p-6 rounded-2xl border border-gray-50 hover:bg-gray-50/50 transition-all cursor-pointer">
+      <div className="flex-1">
+        <div className="text-sm font-bold text-black mb-0.5">{label}</div>
+        <div className="text-[10px] text-gray-400 font-medium italic">{desc}</div>
+      </div>
+      <div className={`w-10 h-5 rounded-full relative transition-colors ${active ? 'bg-black' : 'bg-gray-100'}`}>
+        <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${active ? 'left-6' : 'left-1'}`} />
+      </div>
+    </div>
   );
 }
