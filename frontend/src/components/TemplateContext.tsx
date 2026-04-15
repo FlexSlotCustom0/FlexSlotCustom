@@ -28,16 +28,35 @@ export interface Staff {
   name: string;
   role: string;
   avatar: string;
+  imageUrl?: string;
   accent?: string;
   specialty?: string;
   credentials?: string;
+}
+
+export interface Faq {
+  q: string;
+  a: string;
+}
+
+export interface Tip {
+  title: string;
+  tip: string;
+}
+
+export interface Review {
+  name: string;
+  text: string;
+  rating: number;
 }
 
 export interface ShopData {
   name: string;
   tagline: string;
   logo: string;
+  logoUrl?: string;
   bannerGradient: string;
+  bannerUrl?: string;
   primaryColor: string;
   address: string;
   phone: string;
@@ -57,6 +76,12 @@ interface TemplateContextType {
   setStaff: (data: Staff[]) => void;
   offerings: any[]; // Can be ServiceCategory[] or Package[]
   setOfferings: (data: any[]) => void;
+  faqs: Faq[];
+  setFaqs: (data: Faq[]) => void;
+  tips: Tip[];
+  setTips: (data: Tip[]) => void;
+  reviews: Review[];
+  setReviews: (data: Review[]) => void;
   isEditorOpen: boolean;
   setIsEditorOpen: (open: boolean) => void;
   resetToDefault: (templateId: string) => void;
@@ -73,7 +98,14 @@ export const useTemplateContext = () => {
 };
 
 // Default data maps for each template to allow resetting / initial load
-export const defaultTemplatesData: Record<string, { shop: ShopData, staff: Staff[], offerings: any[] }> = {
+export const defaultTemplatesData: Record<string, { 
+  shop: ShopData, 
+  staff: Staff[], 
+  offerings: any[],
+  faqs?: Faq[],
+  tips?: Tip[],
+  reviews?: Review[]
+}> = {
   "clinic-clean": {
     shop: {
       name: "Evergreen Medical Centre",
@@ -112,6 +144,15 @@ export const defaultTemplatesData: Record<string, { shop: ShopData, staff: Staff
         ],
       },
     ],
+    faqs: [
+      { q: "What should I bring to my first appointment?", a: "Please bring your national ID, insurance card, and any previous medical records or prescriptions." },
+      { q: "Do you accept insurance?", a: "Yes, we accept all major insurance providers. Please contact us for specific plan details." },
+      { q: "How do I prepare for a blood test?", a: "Fasting for 8-12 hours before the test is required. Water is allowed." },
+    ],
+    reviews: [
+      { name: "Alex G.", text: "The staff here is exceptional. Dr. Sarah was very thorough and patient with my questions.", rating: 5 },
+      { name: "Maria S.", text: "Modern facility and very short wait times. Highly recommend Evergreen.", rating: 5 },
+    ]
   },
   "vet-warm": {
     shop: {
@@ -140,6 +181,15 @@ export const defaultTemplatesData: Record<string, { shop: ShopData, staff: Staff
       { name: "Grooming & Bath", price: "$50", duration: "1 hr", icon: "🛁", desc: "Full bath, nail trim, and ear cleaning" },
       { name: "Emergency Visit", price: "$100+", duration: "Varies", icon: "🚨", desc: "24/7 emergency care available" },
     ],
+    tips: [
+      { title: "Before Your Visit", tip: "Bring your pet's medical records, vaccination history, and a favourite toy to keep them calm." },
+      { title: "Vaccination Schedule", tip: "Puppies should start vaccinations at 6-8 weeks. Adult pets need annual boosters." },
+      { title: "Emergency Signs", tip: "Difficulty breathing, sudden collapse, or seizures require immediate emergency attention." },
+    ],
+    reviews: [
+      { name: "Amanda K.", text: "Dr. Anjali saved my cat's life. The entire team was so caring and kept us informed every step of the way. 🐱", rating: 5 },
+      { name: "Dinesh P.", text: "Best vet clinic around. They treat our dog like family. The grooming service is amazing too!", rating: 5 },
+    ]
   },
 };
 
@@ -147,6 +197,9 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [shopData, setShopDataState] = useState<ShopData>(defaultTemplatesData["clinic-clean"].shop);
   const [staff, setStaff] = useState<Staff[]>(defaultTemplatesData["clinic-clean"].staff);
   const [offerings, setOfferings] = useState<any[]>(defaultTemplatesData["clinic-clean"].offerings);
+  const [faqs, setFaqs] = useState<Faq[]>(defaultTemplatesData["clinic-clean"].faqs || []);
+  const [tips, setTips] = useState<Tip[]>(defaultTemplatesData["clinic-clean"].tips || []);
+  const [reviews, setReviews] = useState<Review[]>(defaultTemplatesData["clinic-clean"].reviews || []);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [activeTemplate, setActiveTemplate] = useState<string | null>(null);
 
@@ -166,48 +219,67 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setShopDataState(parsed.shop);
         setStaff(parsed.staff);
         setOfferings(parsed.offerings);
+        setFaqs(parsed.faqs || []);
+        setTips(parsed.tips || []);
+        setReviews(parsed.reviews || []);
       } else {
-        setShopDataState(defaultTemplatesData[templateId].shop);
-        setStaff(defaultTemplatesData[templateId].staff);
-        setOfferings(defaultTemplatesData[templateId].offerings);
+        const defaults = defaultTemplatesData[templateId];
+        setShopDataState(defaults.shop);
+        setStaff(defaults.staff);
+        setOfferings(defaults.offerings);
+        setFaqs(defaults.faqs || []);
+        setTips(defaults.tips || []);
+        setReviews(defaults.reviews || []);
       }
     }
   }, []);
 
+  const saveToStorage = (updates: any) => {
+    if (activeTemplate) {
+      const current = {
+        shop: shopData,
+        staff,
+        offerings,
+        faqs,
+        tips,
+        reviews,
+        ...updates
+      };
+      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify(current));
+    }
+  };
+
   const setShopData = (data: Partial<ShopData>) => {
     setShopDataState((prev) => {
       const next = { ...prev, ...data };
-      if (activeTemplate) {
-        localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify({
-          shop: next,
-          staff,
-          offerings
-        }));
-      }
+      saveToStorage({ shop: next });
       return next;
     });
   };
 
   const updateStaff = (newStaff: Staff[]) => {
     setStaff(newStaff);
-    if (activeTemplate) {
-      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify({
-        shop: shopData,
-        staff: newStaff,
-        offerings
-      }));
-    }
+    saveToStorage({ staff: newStaff });
   };
 
   const updateOfferings = (newOfferings: any[]) => {
     setOfferings(newOfferings);
-    if (activeTemplate) {
-      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify({
-        shop: shopData,
-        staff,
-        offerings: newOfferings
-      }));
-    }
+    saveToStorage({ offerings: newOfferings });
+  };
+
+  const updateFaqs = (newFaqs: Faq[]) => {
+    setFaqs(newFaqs);
+    saveToStorage({ faqs: newFaqs });
+  };
+
+  const updateTips = (newTips: Tip[]) => {
+    setTips(newTips);
+    saveToStorage({ tips: newTips });
+  };
+
+  const updateReviews = (newReviews: Review[]) => {
+    setReviews(newReviews);
+    saveToStorage({ reviews: newReviews });
   };
 
   const resetToDefault = (templateId: string) => {
@@ -216,6 +288,9 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setShopDataState(data.shop);
       setStaff(data.staff);
       setOfferings(data.offerings);
+      setFaqs(data.faqs || []);
+      setTips(data.tips || []);
+      setReviews(data.reviews || []);
       localStorage.removeItem(`flexslot_template_${templateId}`);
     }
   };
@@ -229,6 +304,12 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setStaff: updateStaff,
         offerings,
         setOfferings: updateOfferings,
+        faqs,
+        setFaqs: updateFaqs,
+        tips,
+        setTips: updateTips,
+        reviews,
+        setReviews: updateReviews,
         isEditorOpen,
         setIsEditorOpen,
         resetToDefault,
