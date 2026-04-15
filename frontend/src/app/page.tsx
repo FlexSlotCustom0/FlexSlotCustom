@@ -258,14 +258,14 @@ export default function NotionCalendarClone() {
 
 
       {/* 5. Pricing Plans */}
-      <section id="pricing" className="py-24 bg-white">
+      <section id="pricing" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
             <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300 shadow-sm">
               <h3 className="font-bold text-xl mb-2">Starter</h3>
               <div className="text-4xl font-serif mb-6">$29<span className="text-lg text-gray-400 font-sans">/mo</span></div>
               <ul className="space-y-4 mb-8 flex-1">
@@ -288,7 +288,7 @@ export default function NotionCalendarClone() {
               <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
             </div>
 
-            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300 shadow-sm">
               <h3 className="font-bold text-xl mb-2">Enterprise</h3>
               <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
               <ul className="space-y-4 mb-8 flex-1">
