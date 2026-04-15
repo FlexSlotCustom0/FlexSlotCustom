@@ -2,13 +2,15 @@
 
 import { motion } from "framer-motion";
 import {
-  ArrowRight, Calendar, ChevronDown, Monitor, Clock,
-  MapPin, User, Check, Plus, Search, HelpCircle,
-  Laptop, Smartphone, Coffee, Music, Bike, Layout,
-  Share2, Globe, MessageSquare, Zap, Bot, Terminal, Code, Cpu, Shield, Layers, Database, Lock, ShieldCheck
+  BarChart3, Users, Calendar, Settings, Bot, Search, Bell,
+  TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText,
+  Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase, Check, ArrowRight,
+  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronDown, Share2, MessageSquare,
+  HeartPulse, Syringe, Cross, PawPrint, Bone, Laptop, Music, Bike, Coffee, User, MapPin, Terminal, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+
 
 export default function NotionCalendarClone() {
 
@@ -28,7 +30,7 @@ export default function NotionCalendarClone() {
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-white" />
+                <CalendarClock className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-lg">FlexSlotCustom</span>
             </Link>
@@ -54,12 +56,12 @@ export default function NotionCalendarClone() {
       <section className="relative pt-32 pb-20 overflow-hidden">
         {/* Floating Icons Style */}
         <div className="absolute inset-0 pointer-events-none">
-          <FloatingIcon icon={<Laptop />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
-          <FloatingIcon icon={<Music />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
-          <FloatingIcon icon={<Bike />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
-          <FloatingIcon icon={<Coffee />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
-          <FloatingIcon icon={<User />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
-          <FloatingIcon icon={<MapPin />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
+          <FloatingIcon icon={<Stethoscope />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
+          <FloatingIcon icon={<HeartPulse />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
+          <FloatingIcon icon={<Syringe />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
+          <FloatingIcon icon={<Cross />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
+          <FloatingIcon icon={<PawPrint />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
+          <FloatingIcon icon={<Bone />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
         </div>
 
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
@@ -68,9 +70,8 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, scale: 1 }}
             className="flex justify-center mb-6"
           >
-            <div className="w-16 h-16 bg-white border-2 border-black rounded-2xl flex items-center justify-center shadow-lg relative overflow-hidden">
-              <span className="font-bold text-2xl">14</span>
-              <div className="absolute top-0 left-0 w-full h-2 bg-black opacity-10" />
+            <div className="w-20 h-20 bg-white border-2 border-black rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden group">
+              <CalendarClock className="w-10 h-10 text-black group-hover:scale-110 transition-transform" />
             </div>
           </motion.div>
 
@@ -79,24 +80,106 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCustom AI</h4>
+            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCustom</h4>
             <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
-              It’s time.
+              Care simplified.
             </h1>
             <p className="text-xl md:text-2xl text-gray-500 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
-              All of your commitments, now in one place. Meet the beautifully designed, fully integrated calendar for your work and life.
+              The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.
             </p>
-            <div className="flex justify-center">
-              <Link href="/login" className="bg-black text-white px-8 py-3.5 rounded-lg font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:scale-[1.02]">
-                Get FlexSlotCustom free
-              </Link>
-            </div>
+
           </motion.div>
         </div>
 
       </section>
 
-      {/* 2. The Feature Grid (Technical Bento Box) */}
+      {/* Transitional Brand Bar */}
+      <div className="bg-black py-14 overflow-hidden border-y border-white/10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10 transition-all">
+          <h2 className="text-white text-4xl md:text-5xl font-serif tracking-tight text-center md:text-left leading-tight max-w-xl">
+            Ready to make time for what matters?
+          </h2>
+          <div className="flex flex-col items-center md:items-end gap-6">
+            <Link href="/login" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
+              Get Started
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Our Services Section - Symmetrical Discovery */}
+      <section className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 w-full">
+          <div className="text-center mb-16">
+            <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-2">Our Reach</h2>
+            <h3 className="text-4xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24 relative">
+
+            {/* Split Background Effect */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+              <div className="w-[1px] h-full bg-black relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gray-400 rounded-full blur-[100px]" />
+              </div>
+            </div>
+
+            {/* Category 01: Medical Channeling */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 space-y-6 text-center md:text-right group"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform">
+                <Stethoscope className="w-7 h-7" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical Channeling</div>
+              <h4 className="text-3xl md:text-4xl font-serif">Expert Medical Care</h4>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm ml-auto">
+                Professional channeling for specialized doctor clinics and private practices.
+              </p>
+              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
+                Find a Specialist <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+
+            {/* Middle Logo Anchor */}
+            <div className="relative w-32 h-64 flex items-center justify-center">
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="absolute z-10 bg-gray-50 text-gray-400 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl border border-gray-100 shadow-sm whitespace-nowrap"
+              >
+                FlexSlotCustom
+              </motion.button>
+            </div>
+
+            {/* Category 02: Veterinary Care */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex-1 space-y-6 text-center md:text-left group"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform">
+                <PawPrint className="w-7 h-7" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
+              <h4 className="text-3xl md:text-4xl font-serif">Compassionate Pet Care</h4>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm mr-auto">
+                Trusted clinic scheduling for veterinary specialists and animal wellness centers.
+              </p>
+              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
+                Book a Vet Visit <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 3. The Feature Grid (Technical Bento Box) */}
       <section id="product" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -139,106 +222,60 @@ export default function NotionCalendarClone() {
       <section id="ai-playground" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">The AI Playground.</h2>
-            <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
-              Powered by our self-hosted TinyLlama model, eliminating third-party dependencies while preserving full intelligence capabilities.
-            </p>
-            <div className="space-y-6">
+            <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">How it Works.</h2>
+            <div className="space-y-8">
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 border border-gray-100">
-                  <Terminal className="w-5 h-5 text-gray-600" />
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100">
+                  <Search className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">Natural Language Parsing</h4>
-                  <p className="text-gray-500 font-medium text-sm mt-1">Intelligently parses phrases like "consult next Tuesday" into strictly formatted, validated JSON payloads.</p>
+                  <h4 className="font-bold text-xl">Search (The Discovery Phase)</h4>
+                  <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
+                    This highlights the platform's versatility. It shows that both medical doctors and veterinarians are available in one unified marketplace.
+                  </p>
                 </div>
               </div>
+
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center shrink-0 border border-gray-100">
-                  <ShieldCheck className="w-5 h-5 text-gray-600" />
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100">
+                  <CalendarClock className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg">Privacy Focus</h4>
-                  <p className="text-gray-500 font-medium text-sm mt-1">All sensitive operations process entirely server-side, guaranteeing zero operational costs for the business owner.</p>
+                  <h4 className="font-bold text-xl">Select Slot (The Real-Time Phase)</h4>
+                  <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
+                    This builds trust. It proves the system is live and accurate, reassuring the user that the time they pick is reserved specifically for them.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-100">
+                  <CheckCircle2 className="w-6 h-6 text-black" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-xl">Confirm (The Outcome Phase)</h4>
+                  <p className="text-gray-500 font-medium text-[15px] mt-2 leading-relaxed">
+                    This provides closure. It emphasizes the speed of your FastAPI backend and the automation of your background workers (email/calendar sync).
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <BookingDemo />
         </div>
       </section>
 
 
-      {/* 4. The System Integrity Section */}
-      <section id="enterprise" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-16 items-center">
-            <div className="flex-1">
-              <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">System Integrity.</h2>
-              <p className="text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
-                Engineered for maximum reliability, strictly validating robust system design requirements natively.
-              </p>
-              
-              <div className="space-y-8">
-                <div className="flex gap-4 items-start">
-                  <div className="p-3 bg-red-50 rounded-2xl text-red-600 mt-1">
-                    <Lock className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold mb-2">Security Compliance</h4>
-                    <p className="text-gray-500 font-medium">
-                      Core implementation of PostgreSQL Row Level Security (RLS) entirely prevents data leakage and enforces strict structural compliance constraints.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex gap-4 items-start">
-                  <div className="p-3 bg-blue-50 rounded-2xl text-blue-600 mt-1">
-                    <Cpu className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold mb-2">Sustained Performance</h4>
-                    <p className="text-gray-500 font-medium">
-                      Redis functions heavily as a distributed lock engine mitigating race windows alongside massive concurrency facilitated by FastAPI.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex-1 w-full bg-white rounded-[40px] p-8 md:p-12 border border-gray-100 flex items-center justify-center relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-transparent rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
-                
-                <div className="relative z-10 w-full max-w-sm space-y-4">
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <span className="font-mono text-sm font-bold text-gray-600">GET /api/v1/availability</span>
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold">12ms</span>
-                  </div>
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-8">
-                    <span className="font-mono text-sm font-bold text-gray-600">Row Level Auth</span>
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">PASSED</span>
-                  </div>
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between ml-16">
-                    <span className="font-mono text-sm font-bold text-gray-600">Redis Lock: slot_24</span>
-                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">ACQUIRED</span>
-                  </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* 5. Pricing Plans */}
-      <section id="pricing" className="py-24 bg-white">
+      <section id="pricing" className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-[44px] leading-[1.1] font-serif tracking-tight mb-4">SaaS Tier Structure</h2>
             <p className="text-gray-500 font-medium text-lg max-w-xl mx-auto">Scalable tenant infrastructure designed to continuously expand with dynamic business requirements.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300 shadow-sm">
               <h3 className="font-bold text-xl mb-2">Starter</h3>
               <div className="text-4xl font-serif mb-6">$29<span className="text-lg text-gray-400 font-sans">/mo</span></div>
               <ul className="space-y-4 mb-8 flex-1">
@@ -248,7 +285,7 @@ export default function NotionCalendarClone() {
               </ul>
               <button className="w-full py-3 rounded-xl border-2 border-black font-bold hover:bg-gray-100 transition-colors">Start Trial</button>
             </div>
-            
+
             <div className="bg-black text-white rounded-[32px] p-10 border border-gray-800 flex flex-col shadow-2xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
               <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] tracking-widest font-bold px-4 py-1 rounded-bl-xl">POPULAR</div>
               <h3 className="font-bold text-xl mb-2">Professional</h3>
@@ -260,8 +297,8 @@ export default function NotionCalendarClone() {
               </ul>
               <button className="w-full py-3 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition-colors">Upgrade to Pro</button>
             </div>
-            
-            <div className="bg-gray-50 rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+
+            <div className="bg-white rounded-[32px] p-10 border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform duration-300 shadow-sm">
               <h3 className="font-bold text-xl mb-2">Enterprise</h3>
               <div className="text-4xl font-serif mb-6">$299<span className="text-lg text-gray-400 font-sans">/mo</span></div>
               <ul className="space-y-4 mb-8 flex-1">
@@ -275,20 +312,6 @@ export default function NotionCalendarClone() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-40 text-center bg-white border-t border-gray-100">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-6xl md:text-8xl font-serif mb-10 tracking-tight leading-[1.1]">Ready to <br />Master your time?</h2>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link href="/dashboard" className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-xl font-bold text-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-3">
-              Get FlexSlotCustom free <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="/dashboard" className="w-full sm:w-auto text-gray-400 hover:text-black font-bold text-lg transition-colors underline underline-offset-8">
-              Contact sales
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* 6. Technical Stack Footer */}
       <section className="py-16 bg-[#0B0B0F] text-white">
@@ -384,7 +407,7 @@ function BookingDemo() {
   const [typed, setTyped] = useState("");
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
 
-  const fullText = "consult next Tuesday";
+  const fullText = "Vet checkup for Max next Tuesday";
   const slots = ["9:00 AM", "11:30 AM", "2:00 PM", "4:30 PM"];
 
   // Typewriter effect
@@ -429,14 +452,14 @@ function BookingDemo() {
       <div className="space-y-4 min-h-[340px]">
 
         {/* Step indicator */}
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center justify-center gap-4 mb-10">
           {["Type", "AI", "Slots", "Done"].map((label, i) => (
-            <div key={i} className="flex items-center gap-1">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= i ? "bg-black text-white" : "bg-gray-100 text-gray-400"}`}>
+            <div key={i} className="flex items-center gap-2">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-black transition-all duration-500 ${step >= i ? "bg-black text-white" : "bg-gray-100 text-gray-400"}`}>
                 {step > i ? "✓" : i + 1}
               </div>
-              <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 ${step >= i ? "text-black" : "text-gray-300"}`}>{label}</span>
-              {i < 3 && <div className={`w-6 h-[2px] rounded-full transition-all duration-500 ${step > i ? "bg-black" : "bg-gray-100"}`} />}
+              <span className={`text-[12px] font-bold font-serif italic tracking-tight transition-colors duration-300 ${step >= i ? "text-black" : "text-gray-300"}`}>{label}</span>
+              {i < 3 && <div className={`w-8 h-[1px] bg-gray-200 ml-2 transition-all duration-1000 ${step > i ? "bg-black h-[2px]" : ""}`} />}
             </div>
           ))}
         </div>
@@ -465,7 +488,7 @@ function BookingDemo() {
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
-            <span className="text-sm font-medium text-blue-700">TinyLlama parsing intent & temporal entity...</span>
+            <span className="text-sm font-medium text-blue-700">AI system parsing intent & temporal entity...</span>
           </motion.div>
         )}
 
@@ -480,11 +503,10 @@ function BookingDemo() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.08 }}
-                  className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${
-                    selectedSlot === i
-                      ? "border-black bg-black text-white shadow-lg scale-105"
-                      : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
-                  }`}
+                  className={`p-3 rounded-xl border-2 text-center text-sm font-bold cursor-pointer transition-all duration-300 ${selectedSlot === i
+                    ? "border-black bg-black text-white shadow-lg scale-105"
+                    : "border-gray-100 bg-white text-gray-700 hover:border-gray-300"
+                    }`}
                 >
                   <Clock className="w-3.5 h-3.5 inline mr-1 mb-0.5" />
                   {slot}

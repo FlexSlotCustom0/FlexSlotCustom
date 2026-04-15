@@ -19,8 +19,8 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "FlexSlotCustom - It's time.",
-  description: "A beautifully designed, fully integrated calendar for your work and life.",
+  title: "FlexSlotCustom - Care simplified.",
+  description: "The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.",
 };
 
 export default function RootLayout({
