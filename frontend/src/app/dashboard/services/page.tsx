@@ -9,7 +9,7 @@ const SERVICES = [
   { id: 1, name: "Business Consultation", duration: "60 min", price: "$120", category: "Strategy", description: "Advanced strategic planning for growing businesses." },
   { id: 2, name: "SEO Audit", duration: "45 min", price: "$85", category: "Marketing", description: "Complete analysis of your website's search engine performance." },
   { id: 3, name: "Tax Planning", duration: "30 min", price: "$50", category: "Finance", description: "Personalized advice for year-end tax optimization." },
-  { id: 4, name: "Platform Training", duration: "90 min", price: "$150", category: "Support", description: "Onboarding for new team members on the FlexSlot platform." },
+  { id: 4, name: "Platform Training", duration: "90 min", price: "$150", category: "Support", description: "Onboarding for new team members on the FlexSlotCustom platform." },
 ];
 
 export default function ServicesPage() {

@@ -19,7 +19,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "FlexSlot - It's time.",
+  title: "FlexSlotCustom - It's time.",
   description: "A beautifully designed, fully integrated calendar for your work and life.",
 };
 

@@ -18,7 +18,7 @@ export default function Dashboard() {
             <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
               <Layers className="w-4 h-4 text-background" />
             </div>
-            <span className="font-semibold tracking-tight text-foreground">FlexSlot Command</span>
+            <span className="font-semibold tracking-tight text-foreground">FlexSlotCustom Command</span>
           </div>
         </div>
 
