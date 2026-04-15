@@ -36,9 +36,9 @@ export default function NotionCalendarClone() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
-              <button onClick={() => scrollToSection('product')} className="flex items-center gap-1 hover:text-black transition-colors">Product <ChevronDown className="w-3 h-3" /></button>
-              <button onClick={() => scrollToSection('ai-playground')} className="flex items-center gap-1 hover:text-black transition-colors">AI <ChevronDown className="w-3 h-3" /></button>
-              <button onClick={() => scrollToSection('enterprise')} className="hover:text-black transition-colors">Enterprise</button>
+              <button onClick={() => scrollToSection('services')} className="hover:text-black transition-colors">Services</button>
+              <button onClick={() => scrollToSection('product')} className="hover:text-black transition-colors">Features</button>
+              <button onClick={() => scrollToSection('workflow')} className="hover:text-black transition-colors">Workflow</button>
               <button onClick={() => scrollToSection('pricing')} className="hover:text-black transition-colors">Pricing</button>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function NotionCalendarClone() {
       </div>
 
       {/* 2. Our Services Section - Symmetrical Discovery */}
-      <section className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
+      <section id="services" className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="text-center mb-16">
             <h2 className="text-[12px] font-black tracking-[0.3em] uppercase text-gray-400 mb-2">Our Reach</h2>
@@ -219,7 +219,7 @@ export default function NotionCalendarClone() {
       </section>
 
       {/* 3. The AI "Playground" Section */}
-      <section id="ai-playground" className="py-24 bg-white">
+      <section id="workflow" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-[44px] leading-[1.1] font-serif mb-6 tracking-tight">How it Works.</h2>
