@@ -87,11 +87,7 @@ export default function NotionCalendarClone() {
             <p className="text-xl md:text-2xl text-gray-500 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
               The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.
             </p>
-            <div className="flex justify-center">
-              <Link href="/login" className="bg-black text-white px-8 py-3.5 rounded-lg font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:scale-[1.02]">
-                Get FlexSlotCustom free
-              </Link>
-            </div>
+
           </motion.div>
         </div>
 
