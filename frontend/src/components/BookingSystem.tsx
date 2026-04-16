@@ -36,6 +36,15 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
       const saved = localStorage.getItem("flexslot_available_slots");
       if (saved) {
         setSlots(JSON.parse(saved).filter((s: Slot) => s.available));
+      } else {
+        // Seed default slots if none exist
+        const initial = [
+          { id: 'S-901', time: '09:00 AM', date: '2026-04-20', available: true },
+          { id: 'S-903', time: '11:00 AM', date: '2026-04-20', available: true },
+          { id: 'S-904', time: '01:30 PM', date: '2026-04-20', available: true },
+        ];
+        setSlots(initial);
+        localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
       }
       setStep("slots");
       setSelectedSlot(null);

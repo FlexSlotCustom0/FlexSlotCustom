@@ -222,11 +222,14 @@ function SlotManagerSection() {
     if (saved) {
       setSlots(JSON.parse(saved));
     } else {
-      // Seed some data
+      // Rich Seed Data for Demonstration
       const initial = [
-        { id: 'S1', time: '09:00 AM', date: '2026-04-20', available: true },
-        { id: 'S2', time: '10:30 AM', date: '2026-04-20', available: true },
-        { id: 'S3', time: '02:15 PM', date: '2026-04-21', available: true },
+        { id: 'S-901', time: '09:00 AM', date: '2026-04-20', available: true },
+        { id: 'S-902', time: '10:30 AM', date: '2026-04-20', available: false },
+        { id: 'S-903', time: '11:00 AM', date: '2026-04-20', available: true },
+        { id: 'S-904', time: '01:30 PM', date: '2026-04-20', available: true },
+        { id: 'S-905', time: '02:00 PM', date: '2026-04-21', available: true },
+        { id: 'S-906', time: '04:15 PM', date: '2026-04-21', available: true },
       ];
       setSlots(initial);
       localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
@@ -310,6 +313,30 @@ function AuditTrailSection() {
     const saved = localStorage.getItem("flexslot_bookings");
     if (saved) {
       setBookings(JSON.parse(saved).reverse());
+    } else {
+      // Initial Dummy Bookings
+      const initialBookings = [
+        {
+          id: "B-1001",
+          clientName: "Alexander Wright",
+          clientEmail: "alex@example.com",
+          slotTime: "10:30 AM",
+          slotDate: "2026-04-20",
+          serviceName: "Dental Checkup",
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: "B-1002",
+          clientName: "Bella (Golden Retriever)",
+          clientEmail: "owner@pets.com",
+          slotTime: "02:00 PM",
+          slotDate: "2026-04-19",
+          serviceName: "Vaccination",
+          createdAt: new Date().toISOString()
+        }
+      ];
+      setBookings(initialBookings);
+      localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
     }
   }, []);
 
