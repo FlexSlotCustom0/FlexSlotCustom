@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Clock, Phone, Star, Calendar, ChevronRight,
-  Share2, Heart, Shield, Award, FileText, HelpCircle, Stethoscope,
+  Share2, Heart, Shield, Award, FileText, HelpCircle, Stethoscope, CheckCircle2
 } from "lucide-react";
 import Link from "next/link";
 
@@ -29,6 +30,18 @@ export default function ClinicCleanTemplate() {
     reviews
   } = useTemplateContext();
 
+  const [isBooking, setIsBooking] = React.useState(false);
+  const [booked, setBooked] = React.useState(false);
+
+  const handleBook = () => {
+    setIsBooking(true);
+    setTimeout(() => {
+      setIsBooking(false);
+      setBooked(true);
+      setTimeout(() => setBooked(false), 3000);
+    }, 1500);
+  };
+
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-blue-100">
       {/* ── Announcement Bar ── */}
@@ -53,7 +66,8 @@ export default function ClinicCleanTemplate() {
               <Phone className="w-3.5 h-3.5" /> {shop.phone}
             </button>
             <button
-              className="text-white text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-[1.03] shadow-lg"
+              onClick={handleBook}
+              className="text-white text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-[1.03] shadow-lg active:scale-95"
               style={{ backgroundColor: shop.primaryColor }}
             >
               Book Appointment
@@ -84,7 +98,8 @@ export default function ClinicCleanTemplate() {
             </p>
             <div className="flex items-center gap-4">
               <button
-                className="text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:scale-[1.02] transition-all"
+                onClick={handleBook}
+                className="text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:scale-[1.02] transition-all active:scale-95"
                 style={{ backgroundColor: shop.primaryColor }}
               >
                 <Calendar className="w-4 h-4" /> Schedule a Visit
@@ -311,6 +326,39 @@ export default function ClinicCleanTemplate() {
           Go to Dashboard
         </Link>
       </section>
+
+      <AnimatePresence>
+        {isBooking && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-10 text-center"
+          >
+            <div className="w-20 h-20 rounded-full border-4 border-gray-100 border-t-blue-500 animate-spin mb-8" style={{ borderTopColor: shop.primaryColor }} />
+            <h2 className="text-3xl font-serif mb-2 text-black">Booking...</h2>
+            <p className="text-gray-500 italic">Connecting to {shop.name}</p>
+          </motion.div>
+        )}
+
+        {booked && (
+          <motion.div 
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            className="fixed bottom-10 left-10 right-10 md:left-auto md:w-96 z-[100] text-white p-6 rounded-[2.5rem] shadow-2xl flex items-center gap-4 border border-white/20"
+            style={{ backgroundColor: shop.primaryColor }}
+          >
+            <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+              <CheckCircle2 className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="font-bold">Appointment Requested!</p>
+              <p className="text-xs text-white/80 text-black">Check your dashboard for updates.</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
    MapPin, Clock, Phone, Star, Calendar, ChevronRight,
-   Shield, PawPrint, Heart, Sparkles, Award, FileText
+   Shield, PawPrint, Heart, Sparkles, Award, FileText, CheckCircle2
 } from "lucide-react";
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
@@ -28,6 +29,18 @@ export default function PawsPremiumTemplate() {
       reviews
    } = useTemplateContext();
 
+   const [isBooking, setIsBooking] = React.useState(false);
+   const [booked, setBooked] = React.useState(false);
+
+   const handleBook = () => {
+      setIsBooking(true);
+      setTimeout(() => {
+         setIsBooking(false);
+         setBooked(true);
+         setTimeout(() => setBooked(false), 3000);
+      }, 1500);
+   };
+
    return (
       <div className="min-h-screen bg-[#fafaf9] text-[#1c1917] font-sans selection:bg-[#fde68a]">
          {/* ── Editorial Nav ── */}
@@ -49,7 +62,8 @@ export default function PawsPremiumTemplate() {
                      <a href="#" className="hover:text-black transition-colors">Pricing</a>
                   </div>
                   <button
-                     className="bg-black text-white text-[10px] font-black uppercase tracking-[0.3em] px-8 py-4 rounded-none hover:bg-amber-600 transition-colors shadow-2xl"
+                     onClick={handleBook}
+                     className="bg-black text-white text-[10px] font-black uppercase tracking-[0.3em] px-8 py-4 rounded-none hover:bg-amber-600 transition-colors shadow-2xl active:scale-95"
                   >
                      Book VIP Visit
                   </button>
@@ -76,7 +90,12 @@ export default function PawsPremiumTemplate() {
                         Approved by the Global Pet Wellness Board
                      </div>
                      <div className="flex gap-4">
-                        <button className="bg-amber-600 text-white px-10 py-5 font-black text-[10px] uppercase tracking-[0.3em] hover:bg-black transition-all">Start Your Membership</button>
+                        <button 
+                           onClick={handleBook}
+                           className="bg-amber-600 text-white px-10 py-5 font-black text-[10px] uppercase tracking-[0.3em] hover:bg-black transition-all active:scale-95"
+                        >
+                           Start Your Membership
+                        </button>
                      </div>
                   </div>
                </motion.div>
@@ -199,14 +218,46 @@ export default function PawsPremiumTemplate() {
       <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
         <h3 className="text-2xl font-serif mb-4">Ready to manage your practice?</h3>
         <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
-        <Link
-          href="/dashboard"
-          className="bg-black text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
-        >
-          <LayoutDashboard className="w-5 h-5" />
-          Go to Dashboard
-        </Link>
-      </section>
-    </div>
-  );
+            <Link
+               href="/dashboard"
+               className="bg-black text-white px-12 py-5 font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-4 hover:bg-amber-600 transition-all shadow-2xl"
+            >
+               <LayoutDashboard className="w-4 h-4" />
+               Go to Dashboard
+            </Link>
+         </section>
+
+         <AnimatePresence>
+            {isBooking && (
+               <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-10 text-center"
+               >
+                  <div className="w-20 h-20 rounded-none border-4 border-amber-100 border-t-amber-600 animate-spin mb-8" />
+                  <h2 className="text-4xl font-serif mb-2 uppercase tracking-tighter">Securing VIP Access...</h2>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Authenticating with {shop.name}</p>
+               </motion.div>
+            )}
+
+            {booked && (
+               <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="fixed top-10 right-10 z-[100] bg-black text-white p-8 rounded-none shadow-[20px_20px_0px_0px_#fef3c7] flex items-center gap-6 border border-white/10"
+               >
+                  <div className="w-12 h-12 bg-amber-600 flex items-center justify-center">
+                     <CheckCircle2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                     <p className="font-serif italic text-xl">Expect Excellence.</p>
+                     <p className="text-[9px] font-black uppercase tracking-[0.2em] opacity-60">VIP Concierge notified.</p>
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
+      </div>
+   );
 }
