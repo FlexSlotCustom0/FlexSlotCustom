@@ -80,7 +80,7 @@ export default function OwnerDashboard() {
   );
 }
 
-function SideNavItem({ icon, label, active, onClick }: { icon: any, label: string, active?: boolean, onClick: () => void }) {
+function SideNavItem({ icon, label, active, onClick }: { icon: React.ReactNode, label: string, active?: boolean, onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -96,7 +96,7 @@ function SideNavItem({ icon, label, active, onClick }: { icon: any, label: strin
   );
 }
 
-function MetricCard({ label, value, trend, icon }: { label: string, value: string, trend: string, icon: any }) {
+function MetricCard({ label, value, trend, icon }: { label: string, value: string, trend: string, icon: React.ReactNode }) {
   return (
     <div className="bg-white p-8 rounded-[2.5rem] border border-gray-50 shadow-sm group hover:scale-[1.02] transition-all">
       <div className="flex justify-between items-start mb-6">
@@ -191,7 +191,7 @@ function ServiceCatalogSection() {
   );
 }
 
-function CatalogRow({ name, dur, fee }: any) {
+function CatalogRow({ name, dur, fee }: { name: string, dur: string, fee: string }) {
   return (
     <tr className="hover:bg-gray-50/20 transition-all group">
        <td className="px-10 py-6 font-bold">{name}</td>
@@ -237,7 +237,7 @@ function AuditTrailSection() {
   );
 }
 
-function AuditRow({ id, name, time, status }: any) {
+function AuditRow({ id, name, time, status }: { id: string, name: string, time: string, status: string }) {
   return (
     <div className="p-8 flex items-center justify-between hover:bg-gray-50/50 transition-all">
        <div className="flex items-center gap-6">

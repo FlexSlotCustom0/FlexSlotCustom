@@ -214,7 +214,6 @@ export default function WildMedTemplate() {
                </div>
             </div>
          </footer>
-      </div>
       
       {/* ── Dashboard Navigation ── */}
       <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">

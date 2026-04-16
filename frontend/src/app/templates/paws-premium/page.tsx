@@ -194,7 +194,6 @@ export default function PawsPremiumTemplate() {
                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Curated by FlexSlot Clinic</span>
             </div>
          </footer>
-      </div>
       
       {/* ── Dashboard Navigation ── */}
       <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">

@@ -12,7 +12,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Dashboard() {
-  const [role, setRole] = useState<"owner" | "customer">("owner");
+  const [role, setRole] = useState<"owner" | "customer">(() => {
+    if (typeof window !== "undefined") {
+      const savedRole = localStorage.getItem("flexslot_role");
+      if (savedRole === "owner" || savedRole === "customer") return savedRole;
+    }
+    return "owner";
+  });
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
@@ -41,13 +47,13 @@ export default function Dashboard() {
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             />
             <button 
-              onClick={() => setRole("owner")}
+              onClick={() => { setRole("owner"); localStorage.setItem("flexslot_role", "owner"); }}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "owner" ? "text-blue-600" : "text-gray-400"}`}
             >
               <ShieldPlus className="w-3.5 h-3.5" /> Provider
             </button>
             <button 
-              onClick={() => setRole("customer")}
+              onClick={() => { setRole("customer"); localStorage.setItem("flexslot_role", "customer"); }}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-widest relative z-10 transition-colors ${role === "customer" ? "text-blue-600" : "text-gray-400"}`}
             >
               <User className="w-3.5 h-3.5" /> Patient
@@ -142,7 +148,7 @@ export default function Dashboard() {
   );
 }
 
-function SideNavItem({ icon, label, active, onClick }: { icon: any, label: string, active?: boolean, onClick: () => void }) {
+function SideNavItem({ icon, label, active, onClick }: { icon: React.ReactNode, label: string, active?: boolean, onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -239,11 +245,10 @@ function OwnerDashboardView({ tab }: { tab: string }) {
 }
 
 function TemplateSelectionView() {
-  const [niche, setNiche] = useState<string | null>(null);
-
-  useEffect(() => {
-    setNiche(localStorage.getItem("flexslot_clinic_niche"));
-  }, []);
+  const [niche, setNiche] = useState<string | null>(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("flexslot_clinic_niche");
+    return null;
+  });
 
   return (
     <div className="space-y-8">
@@ -274,14 +279,13 @@ function TemplateSelectionView() {
 // --- CUSTOMER VIEWS ---
 
 function CustomerDashboardView({ tab }: { tab: string }) {
-  const [publishedClinics, setPublishedClinics] = useState<any[]>([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("flexslot_public_clinics");
-    if (saved) {
-      setPublishedClinics(JSON.parse(saved));
+  const [publishedClinics, setPublishedClinics] = useState<Record<string, unknown>[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("flexslot_public_clinics");
+      if (saved) return JSON.parse(saved);
     }
-  }, []);
+    return [];
+  });
 
   if (tab === "bookings") return <AppointmentsView role="customer" />;
   if (tab === "history") return <PatientRecordsView isPatient />;
@@ -335,9 +339,7 @@ function CustomerDashboardView({ tab }: { tab: string }) {
           <div>
             <Bot className="w-10 h-10 mb-6 text-indigo-400" />
             <h3 className="text-2xl font-serif mb-4">Need Help Booking?</h3>
-            <p className="text-gray-400 text-sm leading-relaxed mb-8">
-              "Hi Alex! You have a Dentist appointment coming up. Should I find a parking spot nearby for you?"
-            </p>
+              &quot;Hi Alex! You have a Dentist appointment coming up. Should I find a parking spot nearby for you?&quot;
           </div>
           <button className="w-full py-4 rounded-3xl bg-white text-black font-bold text-sm tracking-tight hover:bg-gray-100 transition-colors">
             Ask AI Assistant
@@ -350,7 +352,7 @@ function CustomerDashboardView({ tab }: { tab: string }) {
 
 // --- COMPONENTS ---
 
-function MetricCard({ label, value, trend, icon }: { label: string, value: string, trend: string, icon: any }) {
+function MetricCard({ label, value, trend, icon }: { label: string, value: string, trend: string, icon: React.ReactNode }) {
   return (
     <div className="bg-white p-8 rounded-[2.5rem] border border-gray-50 shadow-sm group hover:scale-[1.02] transition-transform duration-300">
       <div className="flex justify-between items-start mb-6">
@@ -365,7 +367,7 @@ function MetricCard({ label, value, trend, icon }: { label: string, value: strin
   );
 }
 
-function ServiceCompactItem({ icon, name, bookings, color }: { icon: any, name: string, bookings: number, color: string }) {
+function ServiceCompactItem({ icon, name, bookings, color }: { icon: React.ReactNode, name: string, bookings: number, color: string }) {
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-3xl border border-gray-50 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${color}`}>
@@ -380,7 +382,7 @@ function ServiceCompactItem({ icon, name, bookings, color }: { icon: any, name: 
   );
 }
 
-function TemplateCard({ icon, title, category, id, manage }: { icon: any, title: string, category: string, id: string, manage?: boolean }) {
+function TemplateCard({ icon, title, category, id, manage }: { icon: React.ReactNode, title: string, category: string, id: string, manage?: boolean }) {
   const href = `/templates/${id}${manage ? "?manage=true" : ""}`;
 
   return (
@@ -484,7 +486,7 @@ function TreatmentsView() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-serif tracking-tight">Treatments & Services</h2>
-          <p className="text-gray-400 text-sm font-medium italic">Manage your clinic's offerings and pricing.</p>
+          <p className="text-gray-400 text-sm font-medium italic">Manage your clinic&apos;s offerings and pricing.</p>
         </div>
         <button className="bg-black text-white px-6 py-3 rounded-2xl text-xs font-bold flex items-center gap-2 shadow-xl hover:bg-gray-800 transition-all">
           <Plus className="w-4 h-4" /> Add Treatment
@@ -682,8 +684,8 @@ function MedicalAIView() {
             </div>
             <div className="p-6 bg-gray-50 rounded-2xl rounded-tl-none max-w-[80%]">
               <p className="text-sm leading-relaxed text-gray-600 font-medium">
-                Good afternoon, Dr. Elite. I've analyzed today's appointments. 
-                <span className="font-bold text-black px-1 underline cursor-pointer">Sarah Jennings</span>' current medication for Thyroid may interact with the upcoming treatment. 
+                Good afternoon, Dr. Elite. I&apos;ve analyzed today&apos;s appointments. 
+                <span className="font-bold text-black px-1 underline cursor-pointer">Sarah Jennings</span>&apos; current medication for Thyroid may interact with the upcoming treatment. 
                 Would you like me to flag this for your review?
               </p>
             </div>

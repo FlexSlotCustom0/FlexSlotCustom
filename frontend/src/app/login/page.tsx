@@ -117,13 +117,13 @@ export default function AuthFlow() {
                     icon={<Store className="w-8 h-8" />}
                     title="I&apos;m an Owner"
                     desc="I want to list services and manage slots."
-                    onClick={() => { setRole("owner"); nextStep("template"); }}
+                    onClick={() => { setRole("owner"); localStorage.setItem("flexslot_role", "owner"); nextStep("template"); }}
                   />
                   <RoleCard
                     icon={<User className="w-8 h-8" />}
                     title="I&apos;m a Customer"
                     desc="I want to book services and meet experts."
-                    onClick={() => { setRole("customer"); nextStep("finalize"); }}
+                    onClick={() => { setRole("customer"); localStorage.setItem("flexslot_role", "customer"); nextStep("finalize"); }}
                   />
                 </div>
               </motion.div>

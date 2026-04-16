@@ -49,7 +49,7 @@ export default function CustomerDashboard() {
              <div className="p-5 rounded-3xl bg-black text-white shadow-xl shadow-black/10">
                 <HeartPulse className="w-8 h-8 mb-4 text-emerald-500" />
                 <h4 className="font-bold text-sm mb-1 tracking-tight">Clinical Assistant</h4>
-                <p className="text-[10px] text-white/50 leading-relaxed italic mb-4">"I can triage your request and find the next specialist slot."</p>
+                <p className="text-[10px] text-white/50 leading-relaxed italic mb-4">&quot;I can triage your request and find the next specialist slot.&quot;</p>
                 <button className="w-full py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest">Start Triage</button>
              </div>
           </div>
@@ -89,7 +89,7 @@ export default function CustomerDashboard() {
   );
 }
 
-function SideNavItem({ icon, label, active, onClick }: { icon: any, label: string, active?: boolean, onClick: () => void }) {
+function SideNavItem({ icon, label, active, onClick }: { icon: React.ReactNode, label: string, active?: boolean, onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -123,7 +123,7 @@ function ExploreMarketSection() {
   );
 }
 
-function MarketCard({ name, cat, rating, image }: any) {
+function MarketCard({ name, cat, rating, image }: { name: string, cat: string, rating: number, image: string }) {
   return (
     <div className="bg-white border border-gray-100 p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group overflow-hidden">
        <div className={`w-full aspect-video ${image} rounded-3xl mb-6`} />
@@ -144,7 +144,7 @@ function MarketCard({ name, cat, rating, image }: any) {
   );
 }
 
-function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, handleBooking, lockingSlot, lockedSlots }: any) {
+function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, handleBooking, lockingSlot, lockedSlots }: { chatInput: string, setChatInput: (s: string) => void, isParsing: boolean, setIsParsing: (b: boolean) => void, handleBooking: () => void, lockingSlot: number | null, lockedSlots: number[] }) {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -205,7 +205,7 @@ function MyAppointmentsSection() {
   );
 }
 
-function AppointmentRow({ title, owner, time, status }: any) {
+function AppointmentRow({ title, owner, time, status }: { title: string, owner: string, time: string, status: string }) {
   return (
     <div className="bg-white border border-gray-100 p-8 rounded-[2.5rem] flex items-center justify-between shadow-sm hover:scale-[1.01] transition-all">
        <div className="flex items-center gap-8">
