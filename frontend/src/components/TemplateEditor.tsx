@@ -55,10 +55,10 @@ export const TemplateEditor: React.FC = () => {
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-10">
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
-              <Settings className="w-5 h-5 text-gray-400" />
+              <Settings className="w-5 h-5 text-black" />
               Clinic Builder
             </h2>
-            <p className="text-xs text-gray-400 font-medium">Customize your specialty clinic in real-time</p>
+            <p className="text-xs text-black font-medium">Customize your specialty clinic in real-time</p>
           </div>
           <button 
             onClick={() => setIsEditorOpen(false)}
@@ -130,7 +130,7 @@ export const TemplateEditor: React.FC = () => {
                       className="w-10 h-10 rounded-xl border border-gray-100 shadow-sm transition-transform hover:scale-110" 
                       style={{ backgroundColor: shopData.primaryColor }}
                     />
-                    <code className="text-xs font-bold text-gray-400 uppercase tracking-widest">{shopData.primaryColor}</code>
+                    <code className="text-xs font-bold text-black uppercase tracking-widest">{shopData.primaryColor}</code>
                   </div>
                   <div className="p-4 bg-gray-50 rounded-[2rem] flex justify-center border border-gray-100 shadow-inner">
                     <HexColorPicker color={shopData.primaryColor} onChange={(c) => setShopData({ primaryColor: c })} />
@@ -151,7 +151,7 @@ export const TemplateEditor: React.FC = () => {
                     onChange={(e) => setShopData({ bannerUrl: e.target.value })}
                     className="w-full p-3 rounded-xl border border-gray-100 focus:border-black outline-none transition-all font-medium text-xs shadow-sm"
                   />
-                  <p className="text-[10px] text-gray-400 italic px-1">Tip: Use high-quality landscape photos for the clinic background.</p>
+                  <p className="text-[10px] text-black italic px-1">Tip: Use high-quality landscape photos for the clinic background.</p>
                   {shopData.bannerUrl && (
                     <div className="aspect-video w-full rounded-xl overflow-hidden border border-gray-100 shadow-sm relative group">
                       <img src={shopData.bannerUrl} alt="Banner Preview" className="w-full h-full object-cover" />
@@ -166,7 +166,7 @@ export const TemplateEditor: React.FC = () => {
               <InputGroup label="Clinic Logo">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
-                    <span className="text-[10px] text-gray-400 font-bold uppercase px-1">Emoji Icon</span>
+                    <span className="text-[10px] text-black font-bold uppercase px-1">Emoji Icon</span>
                     <input 
                       type="text" 
                       value={shopData.logo} 
@@ -175,7 +175,7 @@ export const TemplateEditor: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[10px] text-gray-400 font-bold uppercase px-1">Logo URL</span>
+                    <span className="text-[10px] text-black font-bold uppercase px-1">Logo URL</span>
                      <input 
                       type="text" 
                       placeholder="PNG URL"
@@ -192,7 +192,7 @@ export const TemplateEditor: React.FC = () => {
           {activeTab === "team" && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Practitioners</h3>
+                <h3 className="text-sm font-black tracking-widest uppercase text-black">Practitioners</h3>
                 <button 
                   onClick={() => setStaff([...staff, { name: "Dr. New", role: "Specialist", avatar: "UserRound" }])}
                   className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
@@ -233,7 +233,7 @@ export const TemplateEditor: React.FC = () => {
                           }}
                         />
                         <input 
-                          className="w-full bg-transparent text-xs text-gray-400 font-medium outline-none border-b border-transparent focus:border-gray-300"
+                          className="w-full bg-transparent text-xs text-black font-medium outline-none border-b border-transparent focus:border-gray-300"
                           value={s.role}
                           onChange={(e) => {
                             const next = [...staff];
@@ -244,13 +244,13 @@ export const TemplateEditor: React.FC = () => {
                       </div>
                       <button 
                         onClick={() => setStaff(staff.filter((_, idx) => idx !== i))}
-                        className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                        className="p-2 text-black hover:text-red-500 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 px-1">Professional Photo URL</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-black px-1">Professional Photo URL</label>
                        <input 
                         className="w-full p-2 bg-white border border-gray-100 rounded-xl text-[10px] font-medium focus:border-black outline-none"
                         placeholder="https://..."
@@ -271,7 +271,7 @@ export const TemplateEditor: React.FC = () => {
           {activeTab === "offerings" && (
             <div className="space-y-6">
                <div className="flex items-center justify-between">
-                <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Treatment Registry</h3>
+                <h3 className="text-sm font-black tracking-widest uppercase text-black">Treatment Registry</h3>
                 <button 
                   onClick={() => setOfferings([...offerings, { label: "New Specialty", services: [] }])}
                   className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
@@ -295,7 +295,7 @@ export const TemplateEditor: React.FC = () => {
                     />
                     <button 
                       onClick={() => setOfferings(offerings.filter((_, i) => i !== catIdx))}
-                      className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+                      className="p-2 text-black hover:text-red-500 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -326,7 +326,7 @@ export const TemplateEditor: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between">
                         <input 
-                          className="text-[10px] text-gray-400 font-medium w-full bg-transparent border-b border-transparent focus:border-gray-100"
+                          className="text-[10px] text-black font-medium w-full bg-transparent border-b border-transparent focus:border-gray-100"
                           value={svc.duration}
                           onChange={(e) => {
                             const next = [...offerings];
@@ -355,7 +355,7 @@ export const TemplateEditor: React.FC = () => {
                       next[catIdx].services.push({ name: "New Procedure", price: "$0", duration: "30 min" });
                       setOfferings(next);
                     }}
-                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-gray-300 hover:border-black hover:text-black transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-black hover:border-black hover:text-black transition-all flex items-center justify-center gap-2"
                   >
                     <Plus className="w-3 h-3" /> Add Procedure
                   </button>
@@ -369,7 +369,7 @@ export const TemplateEditor: React.FC = () => {
                {/* FAQs or Tips based on template */}
                <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">
+                    <h3 className="text-sm font-black tracking-widest uppercase text-black">
                       {currentTemplateId === 'vet-warm' ? 'Pet Care Tips' : 'Clinical FAQs'}
                     </h3>
                     <button 
@@ -399,12 +399,12 @@ export const TemplateEditor: React.FC = () => {
                               setTips(next);
                             }}
                           />
-                          <button onClick={() => setTips(tips.filter((_, idx) => idx !== i))} className="text-gray-300 hover:text-red-500 transition-colors">
+                          <button onClick={() => setTips(tips.filter((_, idx) => idx !== i))} className="text-black hover:text-red-500 transition-colors">
                             <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
                         <textarea 
-                          className="w-full bg-transparent text-[10px] text-gray-500 font-medium outline-none h-12 resize-none"
+                          className="w-full bg-transparent text-[10px] text-black font-medium outline-none h-12 resize-none"
                           value={t.tip}
                           onChange={(e) => {
                             const next = [...tips];
@@ -425,12 +425,12 @@ export const TemplateEditor: React.FC = () => {
                               setFaqs(next);
                             }}
                           />
-                          <button onClick={() => setFaqs(faqs.filter((_, idx) => idx !== i))} className="text-gray-300 hover:text-red-500 transition-colors">
+                          <button onClick={() => setFaqs(faqs.filter((_, idx) => idx !== i))} className="text-black hover:text-red-500 transition-colors">
                             <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
                         <textarea 
-                          className="w-full bg-transparent text-[10px] text-gray-500 font-medium outline-none h-12 resize-none"
+                          className="w-full bg-transparent text-[10px] text-black font-medium outline-none h-12 resize-none"
                           value={f.a}
                           onChange={(e) => {
                             const next = [...faqs];
@@ -446,7 +446,7 @@ export const TemplateEditor: React.FC = () => {
                {/* Reviews */}
                <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Patient Reviews</h3>
+                    <h3 className="text-sm font-black tracking-widest uppercase text-black">Patient Reviews</h3>
                     <button 
                       onClick={() => setReviews([...reviews, { name: "Client Name", text: "Great experience!", rating: 5 }])}
                       className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
@@ -473,7 +473,7 @@ export const TemplateEditor: React.FC = () => {
                             </div>
                          </div>
                          <textarea 
-                            className="w-full bg-transparent text-[10px] text-gray-400 font-medium outline-none italic h-12"
+                            className="w-full bg-transparent text-[10px] text-black font-medium outline-none italic h-12"
                             value={r.text}
                              onChange={(e) => {
                               const next = [...reviews];
@@ -523,7 +523,7 @@ export const TemplateEditor: React.FC = () => {
                   resetToDefault(currentTemplateId);
                 }
               }}
-              className="flex-1 py-3 px-4 rounded-xl border border-gray-100 font-bold text-xs text-gray-400 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+              className="flex-1 py-3 px-4 rounded-xl border border-gray-100 font-bold text-xs text-black hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
             >
               <RotateCcw className="w-3 h-3" /> Reset
             </button>
@@ -543,7 +543,7 @@ export const TemplateEditor: React.FC = () => {
 const TabButton: React.FC<{ active: boolean; onClick: () => void; icon: React.ReactNode; label: string }> = ({ active, onClick, icon, label }) => (
   <button 
     onClick={onClick}
-    className={`flex-none px-6 py-4 flex flex-col items-center gap-1 transition-all relative ${active ? "text-black" : "text-gray-400 hover:text-gray-600"}`}
+    className={`flex-none px-6 py-4 flex flex-col items-center gap-1 transition-all relative ${active ? "text-black" : "text-black hover:text-black"}`}
   >
     {icon}
     <span className="text-[9px] font-black uppercase tracking-widest">{label}</span>
@@ -558,7 +558,7 @@ const TabButton: React.FC<{ active: boolean; onClick: () => void; icon: React.Re
 
 const InputGroup: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <div className="space-y-2">
-    <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 px-1">{label}</label>
+    <label className="text-[10px] font-black uppercase tracking-widest text-black px-1">{label}</label>
     {children}
   </div>
 );
