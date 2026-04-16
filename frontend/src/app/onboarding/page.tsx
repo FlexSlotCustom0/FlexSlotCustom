@@ -17,7 +17,7 @@ const specialties = [
     color: "bg-blue-600",
     lightColor: "bg-blue-50",
     border: "border-blue-100",
-    preview: "MD",
+    preview: null,
     bgImage: "/medical_clinic_background.jpg"
   },
   {
@@ -104,9 +104,11 @@ export default function OnboardingPage() {
               </div>
 
               {/* Preview Bubble */}
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-5xl grayscale opacity-30 group-hover:opacity-100 transition-all z-0">
-                {spec.preview}
-              </div>
+              {spec.preview && (
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-5xl grayscale opacity-30 group-hover:opacity-100 transition-all z-0">
+                  {spec.preview}
+                </div>
+              )}
 
               {selected === spec.id && (
                 <motion.div
