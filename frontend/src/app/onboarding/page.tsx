@@ -28,8 +28,8 @@ const specialties = [
     color: "bg-orange-500",
     lightColor: "bg-orange-50",
     border: "border-orange-100",
-    preview: "VET",
-    bgImage: undefined
+    preview: null,
+    bgImage: "/vet_pet_clinic.jpg"
   }
 ];
 
