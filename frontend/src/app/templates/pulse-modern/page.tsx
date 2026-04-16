@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
 import { IconRenderer } from "@/components/IconRenderer";
 import { LayoutDashboard } from "lucide-react";
+import { BookingSystem } from "@/components/BookingSystem";
+import { useState } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -28,6 +30,15 @@ export default function PulseModernTemplate() {
     reviews
   } = useTemplateContext();
 
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>();
+
+  const handleBook = (svcName?: string) => {
+    if (typeof svcName === 'string') setSelectedService(svcName);
+    else setSelectedService(undefined);
+    setIsBookingOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-indigo-100">
       {/* ── Sticky Nav ── */}
@@ -43,6 +54,7 @@ export default function PulseModernTemplate() {
             </div>
           </div>
           <button
+            onClick={() => handleBook()}
             className="text-white text-xs font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all hover:scale-[1.03] shadow-xl shadow-indigo-100"
             style={{ backgroundColor: shop.primaryColor }}
           >
@@ -67,6 +79,7 @@ export default function PulseModernTemplate() {
               </p>
               <div className="flex items-center gap-6">
                 <button
+                  onClick={() => handleBook()}
                   className="text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-2xl shadow-2xl hover:translate-y-[-2px] transition-all"
                   style={{ backgroundColor: shop.primaryColor }}
                 >
@@ -128,6 +141,7 @@ export default function PulseModernTemplate() {
                 {cat && Array.isArray(cat.services) && cat.services.map((svc: any, i: number) => (
                   <motion.div
                     key={i}
+                    onClick={() => handleBook(svc.name)}
                     className="p-8 rounded-[2rem] bg-gray-50 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all border border-transparent hover:border-indigo-100 flex items-center justify-between group cursor-pointer"
                   >
                     <div className="flex items-center gap-6">
@@ -185,6 +199,13 @@ export default function PulseModernTemplate() {
           Go to Dashboard
         </Link>
       </section>
+      <BookingSystem 
+        clinicId={shop.name}
+        primaryColor={shop.primaryColor}
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        serviceName={selectedService}
+      />
     </div>
   );
 }

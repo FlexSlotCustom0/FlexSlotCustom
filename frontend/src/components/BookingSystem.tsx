@@ -62,6 +62,7 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
         s.id === selectedSlot.id ? { ...s, available: false } : s
       );
       localStorage.setItem("flexslot_available_slots", JSON.stringify(updatedSlots));
+      window.dispatchEvent(new Event('storage'));
 
       // 2. Save booking
       const bookings = JSON.parse(localStorage.getItem("flexslot_bookings") || "[]");
@@ -79,6 +80,7 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
       };
       bookings.push(newBooking);
       localStorage.setItem("flexslot_bookings", JSON.stringify(bookings));
+      window.dispatchEvent(new Event('storage'));
 
       setIsSubmitting(false);
       setStep("confirm");

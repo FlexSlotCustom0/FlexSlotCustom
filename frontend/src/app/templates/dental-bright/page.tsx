@@ -9,6 +9,8 @@ import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
 import { IconRenderer } from "@/components/IconRenderer";
 import { LayoutDashboard } from "lucide-react";
+import { BookingSystem } from "@/components/BookingSystem";
+import { useState } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -27,6 +29,15 @@ export default function DentalBrightTemplate() {
     faqs,
     reviews
   } = useTemplateContext();
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>();
+
+  const handleBook = (svcName?: string) => {
+    if (typeof svcName === 'string') setSelectedService(svcName);
+    else setSelectedService(undefined);
+    setIsBookingOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-teal-100">
@@ -47,6 +58,7 @@ export default function DentalBrightTemplate() {
             <span className="font-black text-lg tracking-tight italic text-teal-900">{shop.name}</span>
           </div>
           <button
+            onClick={() => handleBook()}
             className="text-white text-[10px] font-black uppercase tracking-widest px-6 py-3 rounded-full transition-all hover:scale-[1.03] shadow-lg shadow-teal-100"
             style={{ backgroundColor: shop.primaryColor }}
           >
@@ -70,6 +82,7 @@ export default function DentalBrightTemplate() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <button
+                onClick={() => handleBook()}
                 className="w-full sm:w-64 text-white font-black text-xs uppercase tracking-widest px-10 py-5 rounded-full shadow-2xl hover:translate-y-[-2px] transition-all"
                 style={{ backgroundColor: shop.primaryColor }}
               >
@@ -157,7 +170,11 @@ export default function DentalBrightTemplate() {
               {Array.isArray(serviceCategories) && serviceCategories.map((cat: any, ci) => (
                 <div key={ci} className="space-y-3">
                   {cat && Array.isArray(cat.services) && cat.services.map((svc: any, si: number) => (
-                    <div key={si} className="flex items-center justify-between pb-4 border-b border-white/10 hover:border-white/40 transition-colors cursor-pointer group">
+                    <div 
+                      key={si} 
+                      onClick={() => handleBook(svc.name)}
+                      className="flex items-center justify-between pb-4 border-b border-white/10 hover:border-white/40 transition-colors cursor-pointer group"
+                    >
                       <div>
                         <h4 className="font-black text-lg group-hover:text-teal-400 transition-colors">{svc.name}</h4>
                         <p className="text-xs text-white/50 font-medium">{svc.desc}</p>
@@ -179,7 +196,10 @@ export default function DentalBrightTemplate() {
       <footer className="py-24 px-6 border-t border-slate-50">
         <div className="max-w-5xl mx-auto text-center">
           <h3 className="text-4xl font-black tracking-tighter mb-8 leading-none">Ready to transform your <span className="text-teal-600 italic">smile?</span></h3>
-          <button className="px-12 py-5 bg-slate-900 text-white rounded-full font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+          <button 
+            onClick={() => handleBook()}
+            className="px-12 py-5 bg-slate-900 text-white rounded-full font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-105 transition-all"
+          >
             Start Your Journey
           </button>
           <div className="mt-20 pt-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">
@@ -196,6 +216,13 @@ export default function DentalBrightTemplate() {
         </div>
       </footer>
       <AdminExit colorClass="bg-teal-600" />
+      <BookingSystem 
+        clinicId={shop.name}
+        primaryColor={shop.primaryColor}
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        serviceName={selectedService}
+      />
     </div>
   );
 }

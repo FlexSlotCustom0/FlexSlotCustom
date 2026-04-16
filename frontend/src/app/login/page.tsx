@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-type Step = "choice" | "role" | "service" | "template" | "finalize";
+type Step = "choice" | "role" | "service" | "template" | "finalize" | "login";
 
 function AuthFlowContent() {
   const router = useRouter();
@@ -19,6 +19,7 @@ function AuthFlowContent() {
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
@@ -35,17 +36,28 @@ function AuthFlowContent() {
     if (step === "service") setStep("role");
     if (step === "template") setStep("service");
     if (step === "finalize") setStep(role === 'owner' ? "template" : "role");
+    if (step === "login") setStep("choice");
   };
 
   const handleFinish = () => {
+    // Basic validation
+    if (!email) return;
+
     if (email === "owner@clinic.com") {
       localStorage.setItem("flexslot_role", "owner");
+      localStorage.setItem("flexslot_user_email", email);
+      if (username) localStorage.setItem("flexslot_username", username);
       router.push("/dashboard/owner");
     } else if (email === "client@test.com") {
       localStorage.setItem("flexslot_role", "customer");
-      router.push("/templates");
+      localStorage.setItem("flexslot_user_email", email);
+      if (username) localStorage.setItem("flexslot_username", username);
+      router.push("/dashboard/customer");
     } else {
-      router.push("/onboarding");
+      // Default fallback
+      localStorage.setItem("flexslot_user_email", email);
+      if (username) localStorage.setItem("flexslot_username", username);
+      router.push("/dashboard");
     }
   };
 
@@ -97,7 +109,7 @@ function AuthFlowContent() {
                     Get Started <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => router.push("/dashboard")}
+                    onClick={() => nextStep("login")}
                     className="w-full py-5 border border-gray-100 rounded-2xl font-bold hover:bg-gray-50 transition-all"
                   >
                     Log in
@@ -197,6 +209,16 @@ function AuthFlowContent() {
                 <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
                 <div className="space-y-4">
                   <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="text" 
+                      placeholder="Username" 
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input 
                       type="email" 
@@ -223,9 +245,61 @@ function AuthFlowContent() {
                   </div>
                   <button
                     onClick={handleFinish}
-                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                    disabled={!email || !username || !password}
+                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
                     Complete Registration <Sparkles className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP: LOGIN */}
+            {step === "login" && (
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-8"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Returning User</span>
+                </div>
+                <h1 className="text-4xl font-serif mb-2">Welcome back.</h1>
+                <p className="text-gray-500 text-sm font-medium italic mb-2">Enter the username and email you used to register.</p>
+                <div className="space-y-4">
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="text" 
+                      placeholder="Username" 
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="email" 
+                      placeholder="Email address" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+                    <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest text-center">
+                      Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleFinish}
+                    disabled={!email || !username}
+                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
+                  >
+                    Log In <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
