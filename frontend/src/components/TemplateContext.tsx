@@ -317,6 +317,10 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (defaultTemplatesData[templateId]) {
       setActiveTemplate(templateId);
       
+      if (window.location.search.includes("manage=true")) {
+        setIsEditorOpen(true);
+      }
+      
       // Load from local storage or defaults
       const saved = localStorage.getItem(`flexslot_template_${templateId}`);
       if (saved) {

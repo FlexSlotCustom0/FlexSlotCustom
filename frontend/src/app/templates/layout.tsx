@@ -31,13 +31,14 @@ function EditButton() {
 function TemplateContent({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const isManageMode = searchParams.get("manage") === "true";
+  const { isEditorOpen } = useTemplateContext();
 
   return (
-    <>
+    <div className={`transition-all duration-500 ease-in-out ${isEditorOpen ? "md:pr-[450px]" : ""}`}>
       {children}
       {isManageMode && <TemplateEditor />}
       <EditButton />
-    </>
+    </div>
   );
 }
 
