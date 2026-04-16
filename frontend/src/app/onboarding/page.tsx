@@ -70,21 +70,32 @@ export default function OnboardingPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={`p-10 rounded-[2.5rem] border-2 text-left transition-all relative overflow-hidden group ${selected === spec.id
-                  ? `${spec.border} ${spec.lightColor} ring-4 ring-black/5`
-                  : "bg-white border-gray-100 hover:border-gray-300"
+                ? `${spec.border} ${spec.lightColor} ring-4 ring-black/5`
+                : "bg-white border-gray-100 hover:border-gray-300"
                 }`}
             >
               {spec.bgImage && (
-                <div 
-                  className={`absolute inset-0 z-0 bg-cover bg-center transition-all duration-500 ease-out ${selected === spec.id ? 'opacity-20 scale-105' : 'opacity-[0.03] group-hover:opacity-30 group-hover:scale-105'}`} 
-                  style={{ backgroundImage: `url(${spec.bgImage})` }} 
+                <div
+                  className={`absolute inset-0 z-0 bg-cover bg-center transition-all duration-500 ease-out ${selected === spec.id ? 'opacity-20 scale-105' : 'opacity-[0.03] group-hover:opacity-30 group-hover:scale-105'}`}
+                  style={{ backgroundImage: `url(${spec.bgImage})` }}
                 />
               )}
-              
+
               <div className="relative z-10">
                 <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-colors ${selected === spec.id ? spec.color : "bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white"
                   } ${spec.bgImage ? 'bg-white shadow-xl' : ''}`}>
-                  {spec.icon}
+                  {typeof spec.icon === 'string' ? (
+                    <img 
+                      src={spec.icon} 
+                      className={`w-12 h-12 object-contain transition-all duration-300 ${
+                        selected === spec.id 
+                          ? 'invert mix-blend-screen brightness-200' 
+                          : 'mix-blend-multiply group-hover:invert group-hover:mix-blend-screen group-hover:brightness-200'
+                      }`} 
+                    />
+                  ) : (
+                    spec.icon
+                  )}
                 </div>
 
                 <h3 className={`text-2xl font-bold mb-3 tracking-tight ${selected === spec.id || !spec.bgImage ? '' : 'group-hover:text-black'}`}>{spec.title}</h3>
