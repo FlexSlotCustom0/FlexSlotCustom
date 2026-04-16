@@ -279,7 +279,7 @@ function TemplateSelectionView() {
 // --- CUSTOMER VIEWS ---
 
 function CustomerDashboardView({ tab }: { tab: string }) {
-  const [publishedClinics, setPublishedClinics] = useState<Record<string, unknown>[]>(() => {
+  const [publishedClinics, setPublishedClinics] = useState<any[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("flexslot_public_clinics");
       if (saved) return JSON.parse(saved);

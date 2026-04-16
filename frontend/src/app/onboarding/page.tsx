@@ -16,6 +16,7 @@ const specialties = [
     icon: <Stethoscope className="w-8 h-8" />,
     color: "bg-blue-600",
     lightColor: "bg-blue-50",
+    accent: "text-blue-600",
     border: "border-blue-100",
     preview: null,
     bgImage: "/medical_clinic_background.jpg"
@@ -27,6 +28,7 @@ const specialties = [
     icon: <img src="/vet_logo.png" className="w-12 h-12 object-contain mix-blend-multiply group-hover:invert group-hover:mix-blend-screen transition-all" />,
     color: "bg-orange-500",
     lightColor: "bg-orange-50",
+    accent: "text-orange-500",
     border: "border-orange-100",
     preview: null,
     bgImage: "/vet_pet_clinic.jpg"

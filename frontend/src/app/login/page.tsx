@@ -9,11 +9,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense } from "react";
 
-type Step = "choice" | "role" | "service" | "template" | "finalize";
-
-export default function AuthFlow() {
+function AuthFlowContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("choice");
@@ -215,6 +213,18 @@ export default function AuthFlow() {
         </p>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthFlow() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-gray-100 border-t-black rounded-full animate-spin" />
+      </div>
+    }>
+      <AuthFlowContent />
+    </Suspense>
   );
 }
 

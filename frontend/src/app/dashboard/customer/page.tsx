@@ -144,7 +144,7 @@ function MarketCard({ name, cat, rating, image }: { name: string, cat: string, r
   );
 }
 
-function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, handleBooking, lockingSlot, lockedSlots }: { chatInput: string, setChatInput: (s: string) => void, isParsing: boolean, setIsParsing: (b: boolean) => void, handleBooking: () => void, lockingSlot: number | null, lockedSlots: number[] }) {
+function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, handleBooking, lockingSlot, lockedSlots }: { chatInput: string, setChatInput: (s: string) => void, isParsing: boolean, setIsParsing: (b: boolean) => void, handleBooking: (id: number) => void, lockingSlot: number | null, lockedSlots: number[] }) {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
