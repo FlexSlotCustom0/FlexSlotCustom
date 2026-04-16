@@ -24,7 +24,7 @@ const specialties = [
     id: "vet-warm",
     title: "Veterinary Practice",
     desc: "Warm and inviting theme designed specifically for pet care professionals.",
-    icon: <Heart className="w-8 h-8" />,
+    icon: <img src="/vet_logo.png" className="w-12 h-12 object-contain mix-blend-multiply group-hover:invert group-hover:mix-blend-screen transition-all" />,
     color: "bg-orange-500",
     lightColor: "bg-orange-50",
     border: "border-orange-100",
@@ -151,12 +151,7 @@ export default function OnboardingPage() {
         </motion.div>
       </main>
 
-      {/* Footer Branding */}
-      <footer className="py-12 px-10 border-t border-gray-100 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 items-center justify-center flex gap-2">
-          Securely managed by <span className="text-black">FlexSlotCustom Engine</span>
-        </p>
-      </footer>
+
     </div>
   );
 }
