@@ -19,9 +19,9 @@ const fadeUp = {
 };
 
 export default function DentalBrightTemplate() {
-  const { 
-    shopData: shop, 
-    staff: doctors, 
+  const {
+    shopData: shop,
+    staff: doctors,
     offerings: serviceCategories,
     faqs,
     reviews
@@ -68,131 +68,131 @@ export default function DentalBrightTemplate() {
               {shop.tagline}. Discover a dental experience that prioritizes your comfort and delivers exceptional results.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-               <button
-                 className="w-full sm:w-64 text-white font-black text-xs uppercase tracking-widest px-10 py-5 rounded-full shadow-2xl hover:translate-y-[-2px] transition-all"
-                 style={{ backgroundColor: shop.primaryColor }}
-               >
-                 Reserve Your Spot
-               </button>
-               <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-0.5 text-yellow-400">
-                     {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
-                  </div>
-                  <span className="text-xs font-bold text-slate-400">Rated {shop.rating}/5 by patients</span>
-               </div>
+              <button
+                className="w-full sm:w-64 text-white font-black text-xs uppercase tracking-widest px-10 py-5 rounded-full shadow-2xl hover:translate-y-[-2px] transition-all"
+                style={{ backgroundColor: shop.primaryColor }}
+              >
+                Reserve Your Spot
+              </button>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-0.5 text-yellow-400">
+                  {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
+                </div>
+                <span className="text-xs font-bold text-slate-400">Rated {shop.rating}/5 by patients</span>
+              </div>
             </div>
           </motion.div>
         </section>
 
         {/* ── Image Feature ── */}
-        <motion.div 
-           initial={{ opacity: 0, y: 40 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           className="w-full aspect-[21/9] rounded-[4rem] overflow-hidden relative shadow-2xl border-4 border-white mb-24"
-           style={{ background: shop.bannerGradient }}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="w-full aspect-[21/9] rounded-[4rem] overflow-hidden relative shadow-2xl border-4 border-white mb-24"
+          style={{ background: shop.bannerGradient }}
         >
-           {!shop.bannerUrl && (
-             <div className="w-full h-full flex items-center justify-center text-[180px] grayscale opacity-10">
-               <IconRenderer name={shop.logo} />
-             </div>
-           )}
-           <div className="absolute inset-x-0 bottom-0 p-12 bg-black/5" />
+          {!shop.bannerUrl && (
+            <div className="w-full h-full flex items-center justify-center text-[180px] grayscale opacity-10">
+              <IconRenderer name={shop.logo} />
+            </div>
+          )}
+          <div className="absolute inset-x-0 bottom-0 p-12 bg-black/5" />
         </motion.div>
 
         {/* ── Benefits ── */}
         <section className="py-20 bg-teal-50/-10 grid md:grid-cols-3 gap-12 mb-24">
-           {[
-             { t: 'Modern Tech', d: 'Intraoral scanners and 3D digital impressions.' },
-             { t: 'Painless Care', d: 'Advanced sedation options for a stress-free visit.' },
-             { t: 'Family First', d: 'Complete care for toddlers to seniors.' },
-           ].map((b, i) => (
-             <div key={i} className="text-center">
-                <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-6">
-                   <Check className="w-6 h-6 text-teal-600" />
-                </div>
-                <h4 className="font-black text-lg mb-2 tracking-tight">{b.t}</h4>
-                <p className="text-slate-500 text-sm font-medium leading-relaxed">{b.d}</p>
-             </div>
-           ))}
+          {[
+            { t: 'Modern Tech', d: 'Intraoral scanners and 3D digital impressions.' },
+            { t: 'Painless Care', d: 'Advanced sedation options for a stress-free visit.' },
+            { t: 'Family First', d: 'Complete care for toddlers to seniors.' },
+          ].map((b, i) => (
+            <div key={i} className="text-center">
+              <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-6">
+                <Check className="w-6 h-6 text-teal-600" />
+              </div>
+              <h4 className="font-black text-lg mb-2 tracking-tight">{b.t}</h4>
+              <p className="text-slate-500 text-sm font-medium leading-relaxed">{b.d}</p>
+            </div>
+          ))}
         </section>
 
         {/* ── Specialists ── */}
         <section className="mb-24">
-           <div className="flex justify-between items-end mb-12">
-              <div>
-                 <h2 className="text-[10px] font-black uppercase tracking-widest text-teal-600 mb-2">The Studio Team</h2>
-                 <h3 className="text-4xl font-black tracking-tight text-slate-900">Expert Clinicians.</h3>
-              </div>
-              <button className="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-teal-600 transition-colors">
-                 Meet Everyone <ChevronRight className="w-4 h-4" />
-              </button>
-           </div>
-           
-           <div className="grid md:grid-cols-2 gap-8">
-              {doctors.map((d, i) => (
-                <div key={i} className="flex gap-8 p-8 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl transition-all group">
-                    <div className="w-32 h-32 rounded-[2.5rem] bg-teal-100 overflow-hidden shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
-                      {d.imageUrl ? <img src={d.imageUrl} className="w-full h-full object-cover" /> : <IconRenderer name={d.avatar} className="w-12 h-12 text-teal-200" />}
-                    </div>
-                   <div className="flex flex-col justify-center">
-                      <h4 className="font-black text-xl mb-1">{d.name}</h4>
-                      <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mb-3">{d.role}</p>
-                      <p className="text-xs text-slate-500 line-clamp-2 italic">“Providing results that make my patients truly happy to smile.”</p>
-                   </div>
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h2 className="text-[10px] font-black uppercase tracking-widest text-teal-600 mb-2">The Studio Team</h2>
+              <h3 className="text-4xl font-black tracking-tight text-slate-900">Expert Clinicians.</h3>
+            </div>
+            <button className="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-teal-600 transition-colors">
+              Meet Everyone <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {doctors.map((d, i) => (
+              <div key={i} className="flex gap-8 p-8 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl transition-all group">
+                <div className="w-32 h-32 rounded-[2.5rem] bg-teal-100 overflow-hidden shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                  {d.imageUrl ? <img src={d.imageUrl} className="w-full h-full object-cover" /> : <IconRenderer name={d.avatar} className="w-12 h-12 text-teal-200" />}
                 </div>
-              ))}
-           </div>
+                <div className="flex flex-col justify-center">
+                  <h4 className="font-black text-xl mb-1">{d.name}</h4>
+                  <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mb-3">{d.role}</p>
+                  <p className="text-xs text-slate-500 line-clamp-2 italic">“Providing results that make my patients truly happy to smile.”</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ── Services (Table) ── */}
         <section className="mb-24">
-           <div className="p-10 rounded-[3rem] bg-teal-900 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-10 opacity-10 text-[200px] leading-none">
-                <IconRenderer name={shop.logo} />
-              </div>
-              <h3 className="text-4xl font-black mb-12 relative z-10">Signature Treatments</h3>
-              <div className="space-y-6 relative z-10">
-                 {serviceCategories.map((cat, ci) => (
-                    <div key={ci} className="space-y-3">
-                       {cat.services.map((svc: any, si: number) => (
-                          <div key={si} className="flex items-center justify-between pb-4 border-b border-white/10 hover:border-white/40 transition-colors cursor-pointer group">
-                             <div>
-                                <h4 className="font-black text-lg group-hover:text-teal-400 transition-colors">{svc.name}</h4>
-                                <p className="text-xs text-white/50 font-medium">{svc.desc}</p>
-                             </div>
-                             <div className="text-right">
-                                <span className="font-black text-xl block">{svc.price}</span>
-                                <span className="text-[10px] font-black uppercase opacity-40">{svc.duration}</span>
-                             </div>
-                          </div>
-                       ))}
+          <div className="p-10 rounded-[3rem] bg-teal-900 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-10 opacity-10 text-[200px] leading-none">
+              <IconRenderer name={shop.logo} />
+            </div>
+            <h3 className="text-4xl font-black mb-12 relative z-10">Signature Treatments</h3>
+            <div className="space-y-6 relative z-10">
+              {serviceCategories.map((cat, ci) => (
+                <div key={ci} className="space-y-3">
+                  {cat.services.map((svc: any, si: number) => (
+                    <div key={si} className="flex items-center justify-between pb-4 border-b border-white/10 hover:border-white/40 transition-colors cursor-pointer group">
+                      <div>
+                        <h4 className="font-black text-lg group-hover:text-teal-400 transition-colors">{svc.name}</h4>
+                        <p className="text-xs text-white/50 font-medium">{svc.desc}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="font-black text-xl block">{svc.price}</span>
+                        <span className="text-[10px] font-black uppercase opacity-40">{svc.duration}</span>
+                      </div>
                     </div>
-                 ))}
-              </div>
-           </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
       </main>
 
       {/* ── Quick CTA ── */}
       <footer className="py-24 px-6 border-t border-slate-50">
-         <div className="max-w-5xl mx-auto text-center">
-            <h3 className="text-4xl font-black tracking-tighter mb-8 leading-none">Ready to transform your <span className="text-teal-600 italic">smile?</span></h3>
-            <button className="px-12 py-5 bg-slate-900 text-white rounded-full font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
-               Start Your Journey
-            </button>
-            <div className="mt-20 pt-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">
-               <div className="flex items-center gap-2">
-                 <IconRenderer name={shop.logo} className="w-4 h-4 opacity-30" />
-                 <span>© 2026 {shop.name}</span>
-               </div>
-               <div className="flex gap-8">
-                  <span>HIPAA Compliant</span>
-                  <span>Board Certified</span>
-                  <span>Dental Ledger v4.0</span>
-               </div>
+        <div className="max-w-5xl mx-auto text-center">
+          <h3 className="text-4xl font-black tracking-tighter mb-8 leading-none">Ready to transform your <span className="text-teal-600 italic">smile?</span></h3>
+          <button className="px-12 py-5 bg-slate-900 text-white rounded-full font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+            Start Your Journey
+          </button>
+          <div className="mt-20 pt-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">
+            <div className="flex items-center gap-2">
+              <IconRenderer name={shop.logo} className="w-4 h-4 opacity-30" />
+              <span>© 2026 {shop.name}</span>
             </div>
-         </div>
+            <div className="flex gap-8">
+              <span>HIPAA Compliant</span>
+              <span>Board Certified</span>
+              <span>Dental Ledger v4.0</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );

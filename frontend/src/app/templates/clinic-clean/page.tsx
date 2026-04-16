@@ -20,9 +20,9 @@ const fadeUp = {
 };
 
 export default function ClinicCleanTemplate() {
-  const { 
-    shopData: shop, 
-    staff: doctors, 
+  const {
+    shopData: shop,
+    staff: doctors,
     offerings: serviceCategories,
     faqs,
     reviews
@@ -101,10 +101,10 @@ export default function ClinicCleanTemplate() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="rounded-3xl overflow-hidden aspect-[4/3] relative shadow-2xl shadow-blue-500/10 border border-gray-100"
-            style={{ 
-              background: shop.bannerUrl 
-                ? `url(${shop.bannerUrl}) center/cover no-repeat` 
-                : shop.bannerGradient 
+            style={{
+              background: shop.bannerUrl
+                ? `url(${shop.bannerUrl}) center/cover no-repeat`
+                : shop.bannerGradient
             }}
           >
             {!shop.bannerUrl && (
@@ -289,10 +289,10 @@ export default function ClinicCleanTemplate() {
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>
           <div className="flex items-center gap-6">
-             <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
-             <p className="text-[10px] text-gray-400">
-                Crafted with <span className="font-bold text-black">FlexSlotCustom</span>
-             </p>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
+            <p className="text-[10px] text-gray-400">
+              Crafted with <span className="font-bold text-black">FlexSlotCustom</span>
+            </p>
           </div>
         </div>
       </footer>

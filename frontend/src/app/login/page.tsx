@@ -8,16 +8,25 @@ import {
   Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 type Step = "choice" | "role" | "service" | "template" | "finalize";
 
 export default function AuthFlow() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("choice");
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+
+  useEffect(() => {
+    const initialStep = searchParams.get("step") as Step;
+    if (initialStep && ["role", "service", "template", "finalize"].includes(initialStep)) {
+      setStep(initialStep);
+    }
+  }, [searchParams]);
 
   const nextStep = (s: Step) => setStep(s);
   const prevStep = () => {
@@ -108,7 +117,7 @@ export default function AuthFlow() {
                     icon={<Store className="w-8 h-8" />}
                     title="I'm an Owner"
                     desc="I want to list services and manage slots."
-                    onClick={() => { setRole("owner"); nextStep("service"); }}
+                    onClick={() => { setRole("owner"); nextStep("template"); }}
                   />
                   <RoleCard
                     icon={<User className="w-8 h-8" />}

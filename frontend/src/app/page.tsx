@@ -45,7 +45,7 @@ export default function NotionCalendarClone() {
 
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
-            <Link href="/dashboard" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
+            <Link href="/login?step=role" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
               Get FlexSlotCustom free
             </Link>
           </div>
@@ -100,7 +100,7 @@ export default function NotionCalendarClone() {
             Ready to make time for what matters?
           </h2>
           <div className="flex flex-col items-center md:items-end gap-6">
-            <Link href="/dashboard" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
+            <Link href="/login?step=role" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
               Get Started
             </Link>
           </div>

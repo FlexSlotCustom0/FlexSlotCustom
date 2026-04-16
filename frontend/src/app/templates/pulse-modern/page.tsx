@@ -19,9 +19,9 @@ const fadeUp = {
 };
 
 export default function PulseModernTemplate() {
-  const { 
-    shopData: shop, 
-    staff: doctors, 
+  const {
+    shopData: shop,
+    staff: doctors,
     offerings: serviceCategories,
     faqs,
     reviews
@@ -80,13 +80,13 @@ export default function PulseModernTemplate() {
               </div>
             </motion.div>
 
-            <motion.div 
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               className="relative"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative"
             >
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-100 rounded-full blur-3xl opacity-50" />
-              <div 
+              <div
                 className="w-full aspect-square rounded-[3rem] overflow-hidden relative shadow-2xl border border-gray-100"
                 style={{ background: shop.bannerGradient }}
               >
@@ -120,7 +120,7 @@ export default function PulseModernTemplate() {
         <section className="mb-24">
           <h2 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Our Diagnostic Capabilities</h2>
           <h3 className="text-4xl font-black tracking-tight mb-12 italic">Precision Results.</h3>
-          
+
           <div className="grid md:grid-cols-1 gap-4">
             {serviceCategories.map((cat, catIdx) => (
               <div key={catIdx} className="space-y-4">
@@ -152,24 +152,24 @@ export default function PulseModernTemplate() {
 
       {/* ── Footer ── */}
       <footer className="bg-black text-white py-20 px-6 mt-20">
-         <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-50">
-                <div className="flex items-center gap-3">
-                  <IconRenderer name={shop.logo} className="w-6 h-6 text-white" />
-                  <span className="font-black text-lg tracking-tight">{shop.name}</span>
-               </div>
-               <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.2em]">
-                  <a href="#">Security</a>
-                  <a href="#">Privacy</a>
-                  <a href="#">EMR Login</a>
-               </div>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-50">
+            <div className="flex items-center gap-3">
+              <IconRenderer name={shop.logo} className="w-6 h-6 text-white" />
+              <span className="font-black text-lg tracking-tight">{shop.name}</span>
             </div>
-            <div className="mt-16 pt-10 border-t border-white/10 text-center">
-               <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                  System Status: <span className="text-green-500 animate-pulse">Operational</span> · Powered by FlexSlot Custom
-               </p>
+            <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.2em]">
+              <a href="#">Security</a>
+              <a href="#">Privacy</a>
+              <a href="#">EMR Login</a>
             </div>
-         </div>
+          </div>
+          <div className="mt-16 pt-10 border-t border-white/10 text-center">
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+              System Status: <span className="text-green-500 animate-pulse">Operational</span> · Powered by FlexSlot Custom
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );

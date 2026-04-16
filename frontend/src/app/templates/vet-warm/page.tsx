@@ -20,9 +20,9 @@ const fadeUp = {
 };
 
 export default function VetWarmTemplate() {
-  const { 
-    shopData: shop, 
-    staff: vets, 
+  const {
+    shopData: shop,
+    staff: vets,
     offerings: services,
     tips,
     reviews
@@ -97,10 +97,10 @@ export default function VetWarmTemplate() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="rounded-[2.5rem] overflow-hidden aspect-square flex items-center justify-center relative shadow-2xl shadow-orange-500/10 border border-orange-100"
-            style={{ 
-              background: shop.bannerUrl 
-                ? `url(${shop.bannerUrl}) center/cover no-repeat` 
-                : "linear-gradient(135deg, #ffedd5 0%, #fff7ed 50%, #fef3c7 100%)" 
+            style={{
+              background: shop.bannerUrl
+                ? `url(${shop.bannerUrl}) center/cover no-repeat`
+                : "linear-gradient(135deg, #ffedd5 0%, #fff7ed 50%, #fef3c7 100%)"
             }}
           >
             {!shop.bannerUrl && (
@@ -295,10 +295,10 @@ export default function VetWarmTemplate() {
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>
           <div className="flex items-center gap-6">
-             <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
-             <p className="text-[10px] text-gray-400">
-                Managed via <span className="font-bold text-black">FlexSlot Clinic</span>
-             </p>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
+            <p className="text-[10px] text-gray-400">
+              Managed via <span className="font-bold text-black">FlexSlot Clinic</span>
+            </p>
           </div>
         </div>
       </footer>
