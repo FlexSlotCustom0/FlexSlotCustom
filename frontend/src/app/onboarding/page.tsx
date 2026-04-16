@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Stethoscope, Heart, ChevronRight, Check, 
-  ArrowRight, ShieldPlus, Sparkles 
+import {
+  Stethoscope, Heart, ChevronRight, Check,
+  ArrowRight, ShieldPlus, Sparkles
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,9 +16,9 @@ const specialties = [
     icon: <Stethoscope className="w-8 h-8" />,
     color: "bg-blue-600",
     lightColor: "bg-blue-50",
-    accent: "text-blue-600",
     border: "border-blue-100",
-    preview: "MD"
+    preview: "MD",
+    bgImage: "/medical_clinic_background.jpg"
   },
   {
     id: "vet-warm",
@@ -27,9 +27,9 @@ const specialties = [
     icon: <Heart className="w-8 h-8" />,
     color: "bg-orange-500",
     lightColor: "bg-orange-50",
-    accent: "text-orange-500",
     border: "border-orange-100",
-    preview: "VET"
+    preview: "VET",
+    bgImage: undefined
   }
 ];
 
@@ -50,7 +50,7 @@ export default function OnboardingPage() {
       </nav>
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-20 flex flex-col items-center justify-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
@@ -72,39 +72,44 @@ export default function OnboardingPage() {
               onClick={() => setSelected(spec.id)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`p-10 rounded-[2.5rem] border-2 text-left transition-all relative overflow-hidden group ${
-                selected === spec.id 
-                  ? `${spec.border} ${spec.lightColor} ring-4 ring-black/5` 
+              className={`p-10 rounded-[2.5rem] border-2 text-left transition-all relative overflow-hidden group ${selected === spec.id
+                  ? `${spec.border} ${spec.lightColor} ring-4 ring-black/5`
                   : "bg-white border-gray-100 hover:border-gray-300"
-              }`}
+                }`}
             >
-              <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-colors ${
-                selected === spec.id ? spec.color : "bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white"
-              }`}>
-                {spec.icon}
-              </div>
+              {spec.bgImage && (
+                <div 
+                  className={`absolute inset-0 z-0 bg-cover bg-center transition-all duration-500 ease-out ${selected === spec.id ? 'opacity-20 scale-105' : 'opacity-[0.03] group-hover:opacity-30 group-hover:scale-105'}`} 
+                  style={{ backgroundImage: `url(${spec.bgImage})` }} 
+                />
+              )}
               
-              <h3 className="text-2xl font-bold mb-3 tracking-tight">{spec.title}</h3>
-              <p className="text-gray-500 font-medium leading-relaxed mb-8">{spec.desc}</p>
-              
-              <div className="flex items-center gap-2">
-                <span className={`text-[10px] font-black uppercase tracking-widest ${
-                  selected === spec.id ? spec.accent : "text-gray-300"
-                }`}>
-                  Select Template
-                </span>
-                <ChevronRight className={`w-4 h-4 transition-transform ${
-                  selected === spec.id ? `${spec.accent} translate-x-1` : "text-gray-200"
-                }`} />
+              <div className="relative z-10">
+                <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-colors ${selected === spec.id ? spec.color : "bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white"
+                  } ${spec.bgImage ? 'bg-white shadow-xl' : ''}`}>
+                  {spec.icon}
+                </div>
+
+                <h3 className={`text-2xl font-bold mb-3 tracking-tight ${selected === spec.id || !spec.bgImage ? '' : 'group-hover:text-black'}`}>{spec.title}</h3>
+                <p className={`font-medium leading-relaxed mb-8 ${selected === spec.id || !spec.bgImage ? 'text-gray-500' : 'text-gray-500 group-hover:text-gray-800'}`}>{spec.desc}</p>
+
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${selected === spec.id ? spec.accent : spec.bgImage ? "text-gray-600 group-hover:text-black" : "text-gray-300 group-hover:text-black"
+                    }`}>
+                    Select Template
+                  </span>
+                  <ChevronRight className={`w-4 h-4 transition-transform ${selected === spec.id ? `${spec.accent} translate-x-1` : spec.bgImage ? "text-gray-800 group-hover:text-black" : "text-gray-200 group-hover:text-black"
+                    }`} />
+                </div>
               </div>
 
               {/* Preview Bubble */}
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-5xl grayscale opacity-30 group-hover:opacity-100 transition-all">
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-5xl grayscale opacity-30 group-hover:opacity-100 transition-all z-0">
                 {spec.preview}
               </div>
 
               {selected === spec.id && (
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="absolute top-6 right-6 w-8 h-8 bg-black rounded-full flex items-center justify-center shadow-lg"
@@ -116,13 +121,13 @@ export default function OnboardingPage() {
           ))}
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: selected ? 1 : 0.5 }}
           className="mt-20 w-full max-w-4xl"
         >
           {selected ? (
-            <button 
+            <button
               onClick={() => {
                 const niche = selected === 'clinic-clean' ? 'medical' : 'veterinary';
                 localStorage.setItem('flexslot_clinic_niche', niche);
@@ -133,14 +138,14 @@ export default function OnboardingPage() {
               Start Personalizing <ArrowRight className="w-5 h-5" />
             </button>
           ) : (
-            <button 
+            <button
               disabled
               className="w-full bg-gray-100 text-gray-400 py-6 rounded-3xl font-bold text-xl flex items-center justify-center gap-3 cursor-not-allowed"
             >
               Select your specialty to continue
             </button>
           )}
-          
+
           <p className="text-center mt-6 text-xs text-gray-400 font-bold uppercase tracking-widest">
             You will be redirected to the clinical editor instantly.
           </p>
