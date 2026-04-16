@@ -154,9 +154,9 @@ export default function DentalBrightTemplate() {
             </div>
             <h3 className="text-4xl font-black mb-12 relative z-10">Signature Treatments</h3>
             <div className="space-y-6 relative z-10">
-              {serviceCategories.map((cat, ci) => (
+              {Array.isArray(serviceCategories) && serviceCategories.map((cat: any, ci) => (
                 <div key={ci} className="space-y-3">
-                  {cat.services.map((svc: any, si: number) => (
+                  {cat && Array.isArray(cat.services) && cat.services.map((svc: any, si: number) => (
                     <div key={si} className="flex items-center justify-between pb-4 border-b border-white/10 hover:border-white/40 transition-colors cursor-pointer group">
                       <div>
                         <h4 className="font-black text-lg group-hover:text-teal-400 transition-colors">{svc.name}</h4>

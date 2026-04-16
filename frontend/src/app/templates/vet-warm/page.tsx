@@ -199,31 +199,61 @@ export default function VetWarmTemplate() {
               Comprehensive pet healthcare
             </motion.h3>
             <div className="grid md:grid-cols-2 gap-4">
-              {services.map((svc: any, i: number) => (
-                <motion.div
-                  key={svc.name}
-                  custom={i + 1}
-                  variants={fadeUp}
-                  onClick={handleBook}
-                  className="flex items-center justify-between p-5 rounded-[2rem] border border-orange-50 bg-white hover:border-orange-200 hover:shadow-sm transition-all group cursor-pointer active:scale-[0.99]"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
-                      <IconRenderer name={svc.icon} className="w-6 h-6" style={{ color: shop.primaryColor }} />
+              {Array.isArray(services) && services.map((svc: any, i: number) => (
+                svc.name ? (
+                  <motion.div
+                    key={svc.name || i}
+                    custom={i + 1}
+                    variants={fadeUp}
+                    onClick={handleBook}
+                    className="flex items-center justify-between p-5 rounded-[2rem] border border-orange-50 bg-white hover:border-orange-200 hover:shadow-sm transition-all group cursor-pointer active:scale-[0.99]"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
+                        <IconRenderer name={svc.icon} className="w-6 h-6" style={{ color: shop.primaryColor }} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm tracking-tight">{svc.name}</h4>
+                        <p className="text-xs text-gray-400 font-medium">{svc.desc || "Professional pet care service"}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-sm tracking-tight">{svc.name}</h4>
-                      <p className="text-xs text-gray-400 font-medium">{svc.desc || "Professional pet care service"}</p>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="text-right">
+                        <span className="font-black text-sm block tracking-tight">{svc.price}</span>
+                        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{svc.duration}</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-200 group-hover:text-black group-hover:translate-x-0.5 transition-all" />
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <div className="text-right">
-                      <span className="font-black text-sm block tracking-tight">{svc.price}</span>
-                      <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{svc.duration}</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-gray-200 group-hover:text-black group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                </motion.div>
+                  </motion.div>
+                ) : svc.services ? (
+                  // Fallback for nested categories (Medical data in Vet template)
+                  Array.isArray(svc.services) && svc.services.map((subSvc: any, j: number) => (
+                    <motion.div
+                      key={subSvc.name || `${i}-${j}`}
+                      custom={i + j + 1}
+                      variants={fadeUp}
+                      onClick={handleBook}
+                      className="flex items-center justify-between p-5 rounded-[2rem] border border-orange-50 bg-white hover:border-orange-200 hover:shadow-sm transition-all group cursor-pointer active:scale-[0.99]"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
+                          <IconRenderer name={subSvc.icon || 'Scissors'} className="w-6 h-6" style={{ color: shop.primaryColor }} />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-sm tracking-tight">{subSvc.name}</h4>
+                          <p className="text-xs text-gray-400 font-medium">{subSvc.desc || "Clinical specialty"}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="text-right">
+                          <span className="font-black text-sm block tracking-tight">{subSvc.price}</span>
+                          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{subSvc.duration}</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-gray-200 group-hover:text-black group-hover:translate-x-0.5 transition-all" />
+                      </div>
+                    </motion.div>
+                  ))
+                ) : null
               ))}
             </div>
           </motion.div>
