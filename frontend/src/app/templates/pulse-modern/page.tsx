@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -33,7 +34,7 @@ export default function PulseModernTemplate() {
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg" style={{ backgroundColor: shop.primaryColor }}>
-              <Zap className="w-5 h-5 fill-white" />
+              <IconRenderer name={shop.logo} className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <span className="font-black text-sm tracking-tight leading-none mb-0.5">{shop.name}</span>
@@ -90,7 +91,9 @@ export default function PulseModernTemplate() {
                 style={{ background: shop.bannerGradient }}
               >
                 {!shop.bannerUrl && (
-                  <div className="w-full h-full flex items-center justify-center text-[120px] mix-blend-overlay opacity-20">⚡</div>
+                  <div className="w-full h-full flex items-center justify-center text-[120px] mix-blend-overlay opacity-20">
+                    <IconRenderer name={shop.logo} />
+                  </div>
                 )}
                 <div className="absolute inset-0 bg-black/5" />
               </div>
@@ -151,8 +154,8 @@ export default function PulseModernTemplate() {
       <footer className="bg-black text-white py-20 px-6 mt-20">
          <div className="max-w-5xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-50">
-               <div className="flex items-center gap-3">
-                  <span className="text-xl">{shop.logo}</span>
+                <div className="flex items-center gap-3">
+                  <IconRenderer name={shop.logo} className="w-6 h-6 text-white" />
                   <span className="font-black text-lg tracking-tight">{shop.name}</span>
                </div>
                <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.2em]">

@@ -18,7 +18,7 @@ const specialties = [
     lightColor: "bg-blue-50",
     accent: "text-blue-600",
     border: "border-blue-100",
-    preview: "🏥"
+    preview: "MD"
   },
   {
     id: "vet-warm",
@@ -29,7 +29,7 @@ const specialties = [
     lightColor: "bg-orange-50",
     accent: "text-orange-500",
     border: "border-orange-100",
-    preview: "🐕"
+    preview: "VET"
   }
 ];
 

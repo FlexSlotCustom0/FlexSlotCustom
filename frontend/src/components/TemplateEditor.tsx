@@ -194,7 +194,7 @@ export const TemplateEditor: React.FC = () => {
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Practitioners</h3>
                 <button 
-                  onClick={() => setStaff([...staff, { name: "Dr. New", role: "Specialist", avatar: "👨‍⚕️" }])}
+                  onClick={() => setStaff([...staff, { name: "Dr. New", role: "Specialist", avatar: "UserRound" }])}
                   className="p-2 bg-blue-600 text-white rounded-xl hover:scale-105 transition-all shadow-lg"
                 >
                   <Plus className="w-4 h-4" />

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -32,9 +33,9 @@ export default function WildMedTemplate() {
       <nav className="fixed top-0 w-full z-50 bg-[#022c22]/90 backdrop-blur-md border-b border-[#064e3b]">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-             <div className="w-8 h-8 rounded-lg bg-[#10b981] flex items-center justify-center text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                <PawPrint className="w-5 h-5 fill-white" />
-             </div>
+              <div className="w-8 h-8 rounded-lg bg-[#10b981] flex items-center justify-center text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <IconRenderer name={shop.logo} className="w-5 h-5" />
+              </div>
              <div className="flex flex-col">
                 <span className="font-black text-sm tracking-widest leading-none mb-0.5 uppercase italic">{shop.name}</span>
                 <span className="text-[8px] font-black tracking-[0.4em] text-[#10b981] uppercase">Exotic & Wildlife</span>
@@ -92,7 +93,9 @@ export default function WildMedTemplate() {
                style={{ background: shop.bannerGradient }}
             >
                {!shop.bannerUrl && (
-                  <div className="w-full h-full flex items-center justify-center text-[200px] opacity-10 grayscale mix-blend-overlay">🦅</div>
+                  <div className="w-full h-full flex items-center justify-center text-[200px] opacity-10 grayscale mix-blend-overlay">
+                    <IconRenderer name={shop.logo} />
+                  </div>
                )}
                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
                <div className="absolute bottom-10 left-10">
@@ -156,8 +159,10 @@ export default function WildMedTemplate() {
                    className="p-10 border border-[#064e3b] flex flex-col md:flex-row justify-between items-center transition-all bg-[#022c22] cursor-pointer group"
                  >
                     <div className="flex items-center gap-10 w-full">
-                       <span className="text-xs font-black text-[#10b981] opacity-40">0{i+1}</span>
-                       <div className="text-4xl group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all">{svc.icon || "🐾"}</div>
+                        <span className="text-xs font-black text-[#10b981] opacity-40">0{i+1}</span>
+                        <div className="text-4xl group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all flex items-center justify-center">
+                          <IconRenderer name={svc.icon} className="w-10 h-10" />
+                        </div>
                        <div>
                           <h4 className="text-2xl font-black italic uppercase group-hover:text-[#10b981] transition-colors">{svc.name}</h4>
                           <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mt-1">{svc.desc}</p>
@@ -178,8 +183,10 @@ export default function WildMedTemplate() {
 
       {/* ── Footer ── */}
       <footer className="py-32 px-6">
-         <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
-            <PawPrint className="w-12 h-12 text-[#10b981] mb-10 opacity-30" />
+          <div className="max-w-6xl mx-auto flex flex-col items-center text-center">
+            <div className="mb-10 opacity-30">
+              <IconRenderer name={shop.logo} className="w-12 h-12 text-[#10b981]" />
+            </div>
             <h3 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter mb-12">No species is <br/> <span className="text-[#10b981]">too exordinary.</span></h3>
             
             <div className="grid md:grid-cols-3 gap-16 w-full pt-20 border-t border-[#064e3b]">

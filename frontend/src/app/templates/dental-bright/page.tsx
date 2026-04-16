@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -41,7 +42,7 @@ export default function DentalBrightTemplate() {
       <nav className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-teal-50">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">{shop.logo}</span>
+            <IconRenderer name={shop.logo} className="w-6 h-6 text-teal-600" />
             <span className="font-black text-lg tracking-tight italic text-teal-900">{shop.name}</span>
           </div>
           <button
@@ -92,7 +93,9 @@ export default function DentalBrightTemplate() {
            style={{ background: shop.bannerGradient }}
         >
            {!shop.bannerUrl && (
-             <div className="w-full h-full flex items-center justify-center text-[180px] grayscale opacity-10">🦷</div>
+             <div className="w-full h-full flex items-center justify-center text-[180px] grayscale opacity-10">
+               <IconRenderer name={shop.logo} />
+             </div>
            )}
            <div className="absolute inset-x-0 bottom-0 p-12 bg-black/5" />
         </motion.div>
@@ -129,9 +132,9 @@ export default function DentalBrightTemplate() {
            <div className="grid md:grid-cols-2 gap-8">
               {doctors.map((d, i) => (
                 <div key={i} className="flex gap-8 p-8 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl transition-all group">
-                   <div className="w-32 h-32 rounded-[2.5rem] bg-teal-100 overflow-hidden shrink-0 group-hover:scale-105 transition-transform">
-                      {d.imageUrl ? <img src={d.imageUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-4xl">{d.avatar}</div>}
-                   </div>
+                    <div className="w-32 h-32 rounded-[2.5rem] bg-teal-100 overflow-hidden shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                      {d.imageUrl ? <img src={d.imageUrl} className="w-full h-full object-cover" /> : <IconRenderer name={d.avatar} className="w-12 h-12 text-teal-200" />}
+                    </div>
                    <div className="flex flex-col justify-center">
                       <h4 className="font-black text-xl mb-1">{d.name}</h4>
                       <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mb-3">{d.role}</p>
@@ -145,7 +148,9 @@ export default function DentalBrightTemplate() {
         {/* ── Services (Table) ── */}
         <section className="mb-24">
            <div className="p-10 rounded-[3rem] bg-teal-900 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-10 opacity-10 text-[200px] leading-none">🦷</div>
+              <div className="absolute top-0 right-0 p-10 opacity-10 text-[200px] leading-none">
+                <IconRenderer name={shop.logo} />
+              </div>
               <h3 className="text-4xl font-black mb-12 relative z-10">Signature Treatments</h3>
               <div className="space-y-6 relative z-10">
                  {serviceCategories.map((cat, ci) => (
@@ -177,7 +182,10 @@ export default function DentalBrightTemplate() {
                Start Your Journey
             </button>
             <div className="mt-20 pt-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">
-               <span>© 2026 {shop.name}</span>
+               <div className="flex items-center gap-2">
+                 <IconRenderer name={shop.logo} className="w-4 h-4 opacity-30" />
+                 <span>© 2026 {shop.name}</span>
+               </div>
                <div className="flex gap-8">
                   <span>HIPAA Compliant</span>
                   <span>Board Certified</span>

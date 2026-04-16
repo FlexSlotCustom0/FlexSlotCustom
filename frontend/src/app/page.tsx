@@ -44,8 +44,8 @@ export default function NotionCalendarClone() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/login" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
-            <Link href="/login" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
+            <Link href="/dashboard" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
+            <Link href="/dashboard" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
               Get FlexSlotCustom free
             </Link>
           </div>
@@ -100,7 +100,7 @@ export default function NotionCalendarClone() {
             Ready to make time for what matters?
           </h2>
           <div className="flex flex-col items-center md:items-end gap-6">
-            <Link href="/login" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
+            <Link href="/dashboard" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
               Get Started
             </Link>
           </div>
@@ -442,7 +442,7 @@ function BookingDemo() {
           {["Type", "AI", "Slots", "Done"].map((label, i) => (
             <div key={i} className="flex items-center gap-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-black transition-all duration-500 ${step >= i ? "bg-black text-white" : "bg-gray-100 text-gray-400"}`}>
-                {step > i ? "✓" : i + 1}
+                {step > i ? <Check className="w-4 h-4" /> : i + 1}
               </div>
               <span className={`text-[12px] font-bold font-serif italic tracking-tight transition-colors duration-300 ${step >= i ? "text-black" : "text-gray-300"}`}>{label}</span>
               {i < 3 && <div className={`w-8 h-[1px] bg-gray-200 ml-2 transition-all duration-1000 ${step > i ? "bg-black h-[2px]" : ""}`} />}

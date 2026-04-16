@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -32,7 +33,9 @@ export default function PawsPremiumTemplate() {
       <nav className="fixed top-0 w-full z-50 bg-[#fafaf9]/80 backdrop-blur-xl border-b border-black/5">
         <div className="max-w-6xl mx-auto px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
-             <div className="text-3xl filter hover:drop-shadow-lg transition-all">{shop.logo}</div>
+             <div className="text-3xl filter hover:drop-shadow-lg transition-all">
+                <IconRenderer name={shop.logo} />
+             </div>
              <div className="flex flex-col">
                 <span className="font-serif text-xl tracking-tight leading-none mb-1 uppercase font-bold text-[#1c1917]">{shop.name}</span>
                 <span className="text-[10px] font-black tracking-[0.4em] text-amber-600 uppercase">Premium Wellness</span>
@@ -83,7 +86,9 @@ export default function PawsPremiumTemplate() {
                style={{ background: shop.bannerGradient }}
              >
                 {!shop.bannerUrl && (
-                  <div className="w-full h-full flex items-center justify-center text-[200px] mix-blend-overlay opacity-30 grayscale leading-none">🐩</div>
+                  <div className="w-full h-full flex items-center justify-center text-[200px] mix-blend-overlay opacity-30 grayscale leading-none">
+                    <IconRenderer name={shop.logo} />
+                  </div>
                 )}
              </div>
           </motion.div>
@@ -111,7 +116,9 @@ export default function PawsPremiumTemplate() {
                    whileHover={{ backgroundColor: '#fafaf9' }}
                    className="bg-white p-12 flex flex-col justify-between group h-[400px] transition-colors cursor-pointer"
                  >
-                    <div className="text-4xl mb-10 group-hover:scale-110 transition-transform origin-left">{svc.icon || "💎"}</div>
+                    <div className="text-4xl mb-10 group-hover:scale-110 transition-transform origin-left">
+                      <IconRenderer name={svc.icon} />
+                    </div>
                     <div>
                        <h4 className="font-serif text-3xl mb-4 italic group-hover:text-amber-600 transition-colors">{svc.name}</h4>
                        <p className="text-gray-400 font-medium text-sm leading-relaxed mb-10 max-w-sm">{svc.desc}</p>
@@ -153,7 +160,7 @@ export default function PawsPremiumTemplate() {
          <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start gap-20">
             <div className="max-w-sm">
                <div className="flex items-center gap-4 mb-8">
-                  <span className="text-3xl">{shop.logo}</span>
+                  <IconRenderer name={shop.logo} className="w-8 h-8 text-white" />
                   <span className="font-serif text-2xl uppercase font-bold tracking-tight">{shop.name}</span>
                </div>
                <p className="text-gray-500 text-sm leading-relaxed mb-8">

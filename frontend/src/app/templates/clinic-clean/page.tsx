@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -42,7 +43,7 @@ export default function ClinicCleanTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
             ) : (
-              <span className="text-xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-5 h-5" />
             )}
             <span className="font-bold text-base">{shop.name}</span>
           </div>
@@ -107,7 +108,9 @@ export default function ClinicCleanTemplate() {
             }}
           >
             {!shop.bannerUrl && (
-              <div className="w-full h-full flex items-center justify-center text-8xl grayscale opacity-50">🏥</div>
+              <div className="w-full h-full flex items-center justify-center text-8xl grayscale opacity-50">
+                <IconRenderer name={shop.logo} />
+              </div>
             )}
           </motion.div>
         </div>
@@ -147,7 +150,9 @@ export default function ClinicCleanTemplate() {
                     {d.imageUrl ? (
                       <img src={d.imageUrl} alt={d.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-white flex items-center justify-center text-4xl">{d.avatar}</div>
+                      <div className="w-full h-full bg-white flex items-center justify-center text-4xl">
+                        <IconRenderer name={d.avatar} className="w-10 h-10 text-gray-400" />
+                      </div>
                     )}
                   </div>
                   <h4 className="font-bold text-sm">{d.name}</h4>
@@ -279,7 +284,7 @@ export default function ClinicCleanTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} className="h-6 w-auto" />
             ) : (
-              <span className="text-2xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-6 h-6" />
             )}
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>

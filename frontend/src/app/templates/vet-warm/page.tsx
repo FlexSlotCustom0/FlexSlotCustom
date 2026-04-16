@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -36,7 +37,7 @@ export default function VetWarmTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
             ) : (
-              <span className="text-xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-5 h-5" />
             )}
             <span className="font-bold text-base">{shop.name}</span>
           </div>
@@ -102,7 +103,11 @@ export default function VetWarmTemplate() {
                 : "linear-gradient(135deg, #ffedd5 0%, #fff7ed 50%, #fef3c7 100%)" 
             }}
           >
-            {!shop.bannerUrl && <div className="text-[120px]">🐕</div>}
+            {!shop.bannerUrl && (
+              <div className="text-[120px]">
+                <IconRenderer name={shop.logo} />
+              </div>
+            )}
             <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-md rounded-2xl p-3 shadow-lg border border-orange-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
@@ -152,7 +157,9 @@ export default function VetWarmTemplate() {
                     {v.imageUrl ? (
                       <img src={v.imageUrl} alt={v.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-orange-50 flex items-center justify-center text-4xl">{v.avatar}</div>
+                      <div className="w-full h-full bg-orange-50 flex items-center justify-center text-4xl">
+                        <IconRenderer name={v.avatar} className="w-12 h-12 text-orange-200" />
+                      </div>
                     )}
                   </div>
                   <h4 className="font-bold text-sm tracking-tight">{v.name}</h4>
@@ -185,7 +192,7 @@ export default function VetWarmTemplate() {
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
-                      {svc.icon || "🐾"}
+                      <IconRenderer name={svc.icon} className="w-6 h-6" style={{ color: shop.primaryColor }} />
                     </div>
                     <div>
                       <h4 className="font-bold text-sm tracking-tight">{svc.name}</h4>
@@ -283,7 +290,7 @@ export default function VetWarmTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} className="h-6 w-auto" />
             ) : (
-              <span className="text-2xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-6 h-6" />
             )}
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>

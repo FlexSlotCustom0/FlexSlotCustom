@@ -80,7 +80,7 @@ export default function AuthFlow() {
                     Get Started <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => router.push("/onboarding")}
+                    onClick={() => router.push("/dashboard")}
                     className="w-full py-5 border border-gray-100 rounded-2xl font-bold hover:bg-gray-50 transition-all"
                   >
                     Log in
