@@ -343,56 +343,21 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, []);
 
-  const saveToStorage = (updates: any) => {
+  // Persistence Effect: Saves only on the client when any data changes
+  useEffect(() => {
     if (activeTemplate) {
-      const current = {
-        shop: shopData,
-        staff,
-        offerings,
-        faqs,
-        tips,
-        reviews,
-        ...updates
-      };
-      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify(current));
+      const data = { shop: shopData, staff, offerings, faqs, tips, reviews };
+      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify(data));
     }
-  };
+  }, [activeTemplate, shopData, staff, offerings, faqs, tips, reviews]);
 
   const setShopData = (data: Partial<ShopData>) => {
-    setShopDataState((prev) => {
-      const next = { ...prev, ...data };
-      saveToStorage({ shop: next });
-      return next;
-    });
-  };
-
-  const updateStaff = (newStaff: Staff[]) => {
-    setStaff(newStaff);
-    saveToStorage({ staff: newStaff });
-  };
-
-  const updateOfferings = (newOfferings: any[]) => {
-    setOfferings(newOfferings);
-    saveToStorage({ offerings: newOfferings });
-  };
-
-  const updateFaqs = (newFaqs: Faq[]) => {
-    setFaqs(newFaqs);
-    saveToStorage({ faqs: newFaqs });
-  };
-
-  const updateTips = (newTips: Tip[]) => {
-    setTips(newTips);
-    saveToStorage({ tips: newTips });
-  };
-
-  const updateReviews = (newReviews: Review[]) => {
-    setReviews(newReviews);
-    saveToStorage({ reviews: newReviews });
+    setShopDataState((prev) => ({ ...prev, ...data }));
   };
 
   const resetToDefault = (templateId: string) => {
     if (defaultTemplatesData[templateId]) {
+      localStorage.removeItem(`flexslot_template_${templateId}`);
       const data = defaultTemplatesData[templateId];
       setShopDataState(data.shop);
       setStaff(data.staff);
@@ -400,7 +365,6 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setFaqs(data.faqs || []);
       setTips(data.tips || []);
       setReviews(data.reviews || []);
-      localStorage.removeItem(`flexslot_template_${templateId}`);
     }
   };
 
@@ -439,15 +403,15 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         shopData,
         setShopData,
         staff,
-        setStaff: updateStaff,
+        setStaff,
         offerings,
-        setOfferings: updateOfferings,
+        setOfferings,
         faqs,
-        setFaqs: updateFaqs,
+        setFaqs,
         tips,
-        setTips: updateTips,
+        setTips,
         reviews,
-        setReviews: updateReviews,
+        setReviews,
         isEditorOpen,
         setIsEditorOpen,
         resetToDefault,

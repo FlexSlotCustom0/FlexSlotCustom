@@ -185,13 +185,13 @@ export default function ClinicCleanTemplate() {
         {/* ── Services ── */}
         <section className="py-14 border-t border-gray-100">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            {serviceCategories.map((cat, catIdx) => (
-              <div key={cat.label || cat.name} className={catIdx > 0 ? "mt-10" : ""}>
+            {Array.isArray(serviceCategories) && serviceCategories.map((cat, catIdx) => (
+              <div key={cat.label || catIdx} className={catIdx > 0 ? "mt-10" : ""}>
                 <motion.h2 custom={catIdx} variants={fadeUp} className="text-xs font-black tracking-widest uppercase text-gray-400 mb-2">
                   {cat.label || cat.name}
                 </motion.h2>
                 <div className="space-y-2 mt-4">
-                  {cat.services.map((svc: any, i: number) => (
+                  {cat && Array.isArray(cat.services) && cat.services.map((svc: any, i: number) => (
                     <motion.div
                       key={svc.name}
                       custom={i + catIdx + 1}

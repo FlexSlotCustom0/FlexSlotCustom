@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import {
   Stethoscope, Heart, ChevronRight, Check,
-  ArrowRight, ShieldPlus, Sparkles
+  ArrowRight, ShieldPlus, Sparkles, Briefcase, Layout, Filter, Search
 } from "lucide-react";
-import Link from "next/link";
+import { IconRenderer } from "@/components/IconRenderer";
 import { useState } from "react";
 
 const specialties = [
@@ -13,7 +13,7 @@ const specialties = [
     id: "clinic-clean",
     title: "Private Medical Clinic",
     desc: "Clean, professional layout for GPs, specialists, and dental practices.",
-    icon: <Stethoscope className="w-8 h-8" />,
+    icon: "Stethoscope",
     color: "bg-blue-600",
     lightColor: "bg-blue-50",
     accent: "text-blue-600",
@@ -25,7 +25,7 @@ const specialties = [
     id: "vet-warm",
     title: "Veterinary Practice",
     desc: "Warm and inviting theme designed specifically for pet care professionals.",
-    icon: <img src="/vet_logo.png" className="w-12 h-12 object-contain mix-blend-multiply group-hover:invert group-hover:mix-blend-screen transition-all" />,
+    icon: "/vet_logo.png",
     color: "bg-orange-500",
     lightColor: "bg-orange-50",
     accent: "text-orange-500",
@@ -87,14 +87,23 @@ export default function OnboardingPage() {
                 <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-colors ${selected === spec.id ? spec.color : "bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white"
                   } ${spec.bgImage ? 'bg-white shadow-xl' : ''}`}>
                   {typeof spec.icon === 'string' ? (
-                    <img 
-                      src={spec.icon} 
-                      className={`w-12 h-12 object-contain transition-all duration-300 ${
-                        selected === spec.id 
-                          ? 'invert mix-blend-screen brightness-200' 
-                          : 'mix-blend-multiply group-hover:invert group-hover:mix-blend-screen group-hover:brightness-200'
-                      }`} 
-                    />
+                    spec.icon.startsWith('/') ? (
+                      <img 
+                        src={spec.icon} 
+                        className={`w-12 h-12 object-contain transition-all duration-300 ${
+                          selected === spec.id 
+                            ? 'invert brightness-200' 
+                            : 'mix-blend-multiply group-hover:invert group-hover:brightness-200'
+                        }`} 
+                      />
+                    ) : (
+                      <IconRenderer 
+                        name={spec.icon} 
+                        className={`w-8 h-8 transition-colors ${
+                          selected === spec.id ? 'text-white' : 'text-gray-400 group-hover:text-white'
+                        }`} 
+                      />
+                    )
                   ) : (
                     spec.icon
                   )}

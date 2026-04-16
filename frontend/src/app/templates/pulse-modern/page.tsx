@@ -123,9 +123,9 @@ export default function PulseModernTemplate() {
           <h3 className="text-4xl font-black tracking-tight mb-12 italic">Precision Results.</h3>
 
           <div className="grid md:grid-cols-1 gap-4">
-            {serviceCategories.map((cat, catIdx) => (
+            {Array.isArray(serviceCategories) && serviceCategories.map((cat: any, catIdx) => (
               <div key={catIdx} className="space-y-4">
-                {cat.services.map((svc: any, i: number) => (
+                {cat && Array.isArray(cat.services) && cat.services.map((svc: any, i: number) => (
                   <motion.div
                     key={i}
                     className="p-8 rounded-[2rem] bg-gray-50 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all border border-transparent hover:border-indigo-100 flex items-center justify-between group cursor-pointer"
