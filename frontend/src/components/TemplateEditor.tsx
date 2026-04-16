@@ -224,7 +224,7 @@ export const TemplateEditor: React.FC = () => {
                       </div>
                       <div className="flex-1">
                         <input 
-                          className="w-full bg-transparent font-bold text-sm outline-none border-b border-transparent focus:border-gray-300"
+                          className="w-full bg-transparent font-bold text-sm text-black outline-none border-b border-transparent focus:border-gray-300"
                           value={s.name}
                           onChange={(e) => {
                             const next = [...staff];
@@ -284,7 +284,7 @@ export const TemplateEditor: React.FC = () => {
                 <div key={catIdx} className="space-y-3 p-5 bg-gray-50 border border-gray-100 rounded-[2.5rem] shadow-sm">
                   <div className="flex items-center justify-between mb-2">
                     <input 
-                      className="font-bold text-base bg-transparent border-b border-transparent focus:border-gray-300 outline-none"
+                      className="font-bold text-base text-black bg-transparent border-b border-transparent focus:border-gray-300 outline-none"
                       value={cat.label || cat.name || "Category"}
                       onChange={(e) => {
                         const next = [...offerings];
@@ -305,7 +305,7 @@ export const TemplateEditor: React.FC = () => {
                     <div key={svcIdx} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-2 group">
                       <div className="flex items-center gap-2">
                          <input 
-                          className="flex-1 font-bold text-xs outline-none"
+                          className="flex-1 font-bold text-xs text-black outline-none"
                           value={svc.name}
                           onChange={(e) => {
                             const next = [...offerings];
@@ -391,7 +391,7 @@ export const TemplateEditor: React.FC = () => {
                       <div key={i} className="p-4 bg-gray-50 border border-gray-100 rounded-2xl space-y-2">
                         <div className="flex items-center justify-between">
                           <input 
-                            className="font-bold text-xs bg-transparent border-b border-transparent focus:border-gray-300 outline-none w-full"
+                            className="font-bold text-xs text-black bg-transparent border-b border-transparent focus:border-gray-300 outline-none w-full"
                             value={t.title}
                             onChange={(e) => {
                               const next = [...tips];
@@ -417,7 +417,7 @@ export const TemplateEditor: React.FC = () => {
                       <div key={i} className="p-4 bg-gray-50 border border-gray-100 rounded-2xl space-y-2">
                         <div className="flex items-center justify-between">
                           <input 
-                            className="font-bold text-xs bg-transparent border-b border-transparent focus:border-gray-300 outline-none w-full"
+                            className="font-bold text-xs text-black bg-transparent border-b border-transparent focus:border-gray-300 outline-none w-full"
                             value={f.q}
                             onChange={(e) => {
                               const next = [...faqs];
@@ -459,7 +459,7 @@ export const TemplateEditor: React.FC = () => {
                       <div key={i} className="p-4 bg-gray-50/50 border border-gray-100 rounded-2xl space-y-2">
                          <div className="flex items-center justify-between">
                             <input 
-                              className="font-bold text-xs bg-transparent outline-none"
+                              className="font-bold text-xs text-black bg-transparent outline-none"
                               value={r.name}
                               onChange={(e) => {
                                 const next = [...reviews];
