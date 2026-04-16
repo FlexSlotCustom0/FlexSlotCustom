@@ -6,12 +6,20 @@ import {
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
-  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock
+  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [clinicName, setClinicName] = useState("Happy Paws Clinic"); // Default for demo
+
+  useEffect(() => {
+    const role = localStorage.getItem("flexslot_role");
+    const savedName = localStorage.getItem("flexslot_active_clinic_name") || "Happy Paws Clinic";
+    setClinicName(savedName);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-black font-sans flex overflow-hidden">
@@ -205,46 +213,155 @@ function CatalogRow({ name, dur, fee }: { name: string, dur: string, fee: string
 }
 
 function SlotManagerSection() {
+  const [slots, setSlots] = useState<{ id: string, time: string, date: string, available: boolean }[]>([]);
+  const [newTime, setNewTime] = useState("09:00");
+  const [newDate, setNewDate] = useState(new Date().toISOString().split('T')[0]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("flexslot_available_slots");
+    if (saved) {
+      setSlots(JSON.parse(saved));
+    } else {
+      // Seed some data
+      const initial = [
+        { id: 'S1', time: '09:00 AM', date: '2026-04-20', available: true },
+        { id: 'S2', time: '10:30 AM', date: '2026-04-20', available: true },
+        { id: 'S3', time: '02:15 PM', date: '2026-04-21', available: true },
+      ];
+      setSlots(initial);
+      localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
+    }
+  }, []);
+
+  const addSlot = () => {
+    const newSlot = {
+      id: `S${Date.now()}`,
+      time: newTime,
+      date: newDate,
+      available: true
+    };
+    const next = [...slots, newSlot];
+    setSlots(next);
+    localStorage.setItem("flexslot_available_slots", JSON.stringify(next));
+  };
+
+  const removeSlot = (id: string) => {
+    const next = slots.filter(s => s.id !== id);
+    setSlots(next);
+    localStorage.setItem("flexslot_available_slots", JSON.stringify(next));
+  };
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-      {Array.from({ length: 12 }).map((_, i) => (
-        <div key={i} className="bg-white border border-gray-100 p-6 rounded-[2rem] shadow-sm hover:border-black/5 transition-all">
-           <div className="text-[10px] font-black text-gray-300 uppercase mb-4 tracking-widest">SLOT_{i+100}</div>
-           <div className="text-xl font-serif mb-1">09:{i % 2 === 0 ? '00' : '30'} AM</div>
-           <div className="text-[9px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3" /> AVAILABLE
-           </div>
+    <div className="space-y-8">
+      <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 flex flex-wrap gap-4 items-end">
+        <div>
+          <label className="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Select Date</label>
+          <input 
+            type="date" 
+            value={newDate} 
+            onChange={(e) => setNewDate(e.target.value)}
+            className="px-4 py-3 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/5"
+          />
         </div>
-      ))}
+        <div>
+          <label className="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Select Time</label>
+          <input 
+            type="time" 
+            value={newTime} 
+            onChange={(e) => setNewTime(e.target.value)}
+            className="px-4 py-3 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/5"
+          />
+        </div>
+        <button 
+          onClick={addSlot}
+          className="bg-black text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 hover:bg-gray-800 transition-all"
+        >
+          <Plus className="w-4 h-4" /> Add Slot
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {slots.map((slot) => (
+          <div key={slot.id} className="bg-white border border-gray-100 p-6 rounded-[2rem] shadow-sm hover:border-red-100 transition-all group relative">
+            <div className="text-[10px] font-black text-gray-300 uppercase mb-4 tracking-widest">{slot.id}</div>
+            <div className="text-xl font-bold mb-1">{slot.time}</div>
+            <div className="text-[10px] text-gray-400 font-medium mb-4 italic">{slot.date}</div>
+            <div className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1 ${slot.available ? 'text-emerald-500' : 'text-orange-500'}`}>
+               <CheckCircle2 className="w-3 h-3" /> {slot.available ? 'AVAILABLE' : 'BOOKED'}
+            </div>
+            
+            <button 
+              onClick={() => removeSlot(slot.id)}
+              className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function AuditTrailSection() {
+  const [bookings, setBookings] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("flexslot_bookings");
+    if (saved) {
+      setBookings(JSON.parse(saved).reverse());
+    }
+  }, []);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-black">
        <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
-          <div className="p-8 text-[10px] font-black uppercase tracking-widest text-gray-300">Recent Patient Records</div>
-          <AuditRow id="P-101" name="Alexander Wright" time="2h ago" status="CHECKED_IN" />
-          <AuditRow id="P-102" name="Max (Labrador)" time="4h ago" status="COMPLETED" />
+          <div className="p-8 flex justify-between items-center">
+            <div className="text-[10px] font-black uppercase tracking-widest text-gray-300">Live Appointment Stream</div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Real-time sync</span>
+            </div>
+          </div>
+          {bookings.length > 0 ? bookings.map((b, i) => (
+            <AuditRow 
+              key={i}
+              id={`B-${1000 + i}`} 
+              name={b.clientName} 
+              time={`${b.slotTime} (${b.slotDate})`} 
+              status="RESERVED" 
+              service={b.serviceName}
+            />
+          )) : (
+            <div className="p-20 text-center text-gray-300 italic">No bookings yet.</div>
+          )}
        </div>
        <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center">
           <ShieldCheck className="w-12 h-12 text-emerald-500 mb-6" />
           <div className="font-bold text-lg mb-2">HIPAA_SECURED</div>
           <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-mono">Row-Level Security Active</p>
+          <div className="mt-10 pt-8 border-t border-white/10 w-full">
+            <div className="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-4">Encryption Keys</div>
+            <div className="flex gap-1 justify-center">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="w-1 h-3 bg-emerald-500/20 rounded-full" />
+              ))}
+            </div>
+          </div>
        </div>
     </div>
   );
 }
 
-function AuditRow({ id, name, time, status }: { id: string, name: string, time: string, status: string }) {
+function AuditRow({ id, name, time, status, service }: { id: string, name: string, time: string, status: string, service?: string }) {
   return (
     <div className="p-8 flex items-center justify-between hover:bg-gray-50/50 transition-all">
        <div className="flex items-center gap-6">
           <div className="text-[10px] font-black font-mono text-gray-300">{id}</div>
           <div>
              <div className="font-bold">{name}</div>
-             <div className="text-xs text-gray-400 italic">{time}</div>
+             <div className="text-xs text-gray-400 italic mb-1">{time}</div>
+             {service && <div className="text-[9px] font-black uppercase tracking-widest text-emerald-500">{service}</div>}
           </div>
        </div>
        <div className="px-4 py-1.5 rounded-lg bg-black text-white text-[10px] font-black uppercase tracking-widest">
