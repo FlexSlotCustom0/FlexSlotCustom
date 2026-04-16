@@ -111,7 +111,7 @@ export const TemplateEditor: React.FC = () => {
                   type="text" 
                   value={shopData.name} 
                   onChange={(e) => setShopData({ name: e.target.value })}
-                  className="w-full p-3 rounded-xl border border-gray-100 focus:border-blue-600 outline-none transition-all font-medium text-sm shadow-sm"
+                  className="w-full p-3 rounded-xl border border-gray-100 focus:border-black outline-none transition-all font-medium text-sm shadow-sm"
                 />
               </InputGroup>
               
@@ -119,7 +119,7 @@ export const TemplateEditor: React.FC = () => {
                 <textarea 
                   value={shopData.tagline} 
                   onChange={(e) => setShopData({ tagline: e.target.value })}
-                  className="w-full p-3 rounded-xl border border-gray-100 focus:border-blue-600 outline-none transition-all font-medium text-sm h-20 resize-none shadow-sm"
+                  className="w-full p-3 rounded-xl border border-gray-100 focus:border-black outline-none transition-all font-medium text-sm h-20 resize-none shadow-sm"
                 />
               </InputGroup>
 
@@ -149,7 +149,7 @@ export const TemplateEditor: React.FC = () => {
                     placeholder="https://images.unsplash.com/..."
                     value={shopData.bannerUrl || ""} 
                     onChange={(e) => setShopData({ bannerUrl: e.target.value })}
-                    className="w-full p-3 rounded-xl border border-gray-100 focus:border-blue-600 outline-none transition-all font-medium text-xs shadow-sm"
+                    className="w-full p-3 rounded-xl border border-gray-100 focus:border-black outline-none transition-all font-medium text-xs shadow-sm"
                   />
                   <p className="text-[10px] text-gray-400 italic px-1">Tip: Use high-quality landscape photos for the clinic background.</p>
                   {shopData.bannerUrl && (
@@ -171,7 +171,7 @@ export const TemplateEditor: React.FC = () => {
                       type="text" 
                       value={shopData.logo} 
                       onChange={(e) => setShopData({ logo: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-gray-100 focus:border-blue-600 outline-none transition-all font-medium text-2xl text-center shadow-sm"
+                      className="w-full p-3 rounded-xl border border-gray-100 focus:border-black outline-none transition-all font-medium text-2xl text-center shadow-sm"
                     />
                   </div>
                   <div className="space-y-2">
@@ -181,7 +181,7 @@ export const TemplateEditor: React.FC = () => {
                       placeholder="PNG URL"
                       value={shopData.logoUrl || ""} 
                       onChange={(e) => setShopData({ logoUrl: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-gray-100 focus:border-blue-600 outline-none transition-all font-medium text-xs h-[54px] shadow-sm"
+                  className="w-full p-3 rounded-xl border border-gray-100 focus:border-black outline-none transition-all font-medium text-xs h-[54px] shadow-sm"
                     />
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export const TemplateEditor: React.FC = () => {
                 <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Practitioners</h3>
                 <button 
                   onClick={() => setStaff([...staff, { name: "Dr. New", role: "Specialist", avatar: "UserRound" }])}
-                  className="p-2 bg-blue-600 text-white rounded-xl hover:scale-105 transition-all shadow-lg"
+                  className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -203,7 +203,7 @@ export const TemplateEditor: React.FC = () => {
               
               <div className="space-y-4">
                 {staff.map((s, i) => (
-                  <div key={i} className="p-4 bg-gray-50 border border-gray-100 rounded-[2rem] space-y-4 shadow-sm hover:border-blue-200 transition-colors">
+                  <div key={i} className="p-4 bg-gray-50 border border-gray-100 rounded-[2rem] space-y-4 shadow-sm hover:border-black transition-colors">
                     <div className="flex items-center gap-3">
                        <div className="relative group">
                         {s.imageUrl ? (
@@ -224,7 +224,7 @@ export const TemplateEditor: React.FC = () => {
                       </div>
                       <div className="flex-1">
                         <input 
-                          className="w-full bg-transparent font-bold text-sm outline-none border-b border-transparent focus:border-blue-200"
+                          className="w-full bg-transparent font-bold text-sm outline-none border-b border-transparent focus:border-gray-300"
                           value={s.name}
                           onChange={(e) => {
                             const next = [...staff];
@@ -233,7 +233,7 @@ export const TemplateEditor: React.FC = () => {
                           }}
                         />
                         <input 
-                          className="w-full bg-transparent text-xs text-blue-600/60 font-medium outline-none border-b border-transparent focus:border-blue-200"
+                          className="w-full bg-transparent text-xs text-gray-400 font-medium outline-none border-b border-transparent focus:border-gray-300"
                           value={s.role}
                           onChange={(e) => {
                             const next = [...staff];
@@ -252,7 +252,7 @@ export const TemplateEditor: React.FC = () => {
                     <div className="space-y-2">
                        <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 px-1">Professional Photo URL</label>
                        <input 
-                        className="w-full p-2 bg-white border border-gray-100 rounded-xl text-[10px] font-medium focus:border-blue-600 outline-none"
+                        className="w-full p-2 bg-white border border-gray-100 rounded-xl text-[10px] font-medium focus:border-black outline-none"
                         placeholder="https://..."
                         value={s.imageUrl || ""}
                         onChange={(e) => {
@@ -274,7 +274,7 @@ export const TemplateEditor: React.FC = () => {
                 <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Treatment Registry</h3>
                 <button 
                   onClick={() => setOfferings([...offerings, { label: "New Specialty", services: [] }])}
-                  className="p-2 bg-blue-600 text-white rounded-xl hover:scale-105 transition-all shadow-lg"
+                  className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -284,7 +284,7 @@ export const TemplateEditor: React.FC = () => {
                 <div key={catIdx} className="space-y-3 p-5 bg-gray-50 border border-gray-100 rounded-[2.5rem] shadow-sm">
                   <div className="flex items-center justify-between mb-2">
                     <input 
-                      className="font-bold text-base bg-transparent border-b border-transparent focus:border-blue-200 outline-none"
+                      className="font-bold text-base bg-transparent border-b border-transparent focus:border-gray-300 outline-none"
                       value={cat.label || cat.name || "Category"}
                       onChange={(e) => {
                         const next = [...offerings];
@@ -314,7 +314,7 @@ export const TemplateEditor: React.FC = () => {
                           }}
                         />
                         <input 
-                          className="w-16 text-right font-black text-xs text-blue-600"
+                          className="w-16 text-right font-black text-xs text-black"
                           style={{ color: shopData.primaryColor }}
                           value={svc.price}
                           onChange={(e) => {
@@ -355,7 +355,7 @@ export const TemplateEditor: React.FC = () => {
                       next[catIdx].services.push({ name: "New Procedure", price: "$0", duration: "30 min" });
                       setOfferings(next);
                     }}
-                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-gray-300 hover:border-blue-200 hover:text-blue-400 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3 border-2 border-dashed border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-gray-300 hover:border-black hover:text-black transition-all flex items-center justify-center gap-2"
                   >
                     <Plus className="w-3 h-3" /> Add Procedure
                   </button>
@@ -380,7 +380,7 @@ export const TemplateEditor: React.FC = () => {
                            setFaqs([...faqs, { q: "New Question", a: "New Answer" }]);
                         }
                       }}
-                      className="p-2 bg-blue-600 text-white rounded-xl hover:scale-105 transition-all shadow-lg"
+                      className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -391,7 +391,7 @@ export const TemplateEditor: React.FC = () => {
                       <div key={i} className="p-4 bg-gray-50 border border-gray-100 rounded-2xl space-y-2">
                         <div className="flex items-center justify-between">
                           <input 
-                            className="font-bold text-xs bg-transparent border-b border-transparent focus:border-blue-200 outline-none w-full"
+                            className="font-bold text-xs bg-transparent border-b border-transparent focus:border-gray-300 outline-none w-full"
                             value={t.title}
                             onChange={(e) => {
                               const next = [...tips];
@@ -417,7 +417,7 @@ export const TemplateEditor: React.FC = () => {
                       <div key={i} className="p-4 bg-gray-50 border border-gray-100 rounded-2xl space-y-2">
                         <div className="flex items-center justify-between">
                           <input 
-                            className="font-bold text-xs bg-transparent border-b border-transparent focus:border-blue-200 outline-none w-full"
+                            className="font-bold text-xs bg-transparent border-b border-transparent focus:border-gray-300 outline-none w-full"
                             value={f.q}
                             onChange={(e) => {
                               const next = [...faqs];
@@ -449,7 +449,7 @@ export const TemplateEditor: React.FC = () => {
                     <h3 className="text-sm font-black tracking-widest uppercase text-gray-400">Patient Reviews</h3>
                     <button 
                       onClick={() => setReviews([...reviews, { name: "Client Name", text: "Great experience!", rating: 5 }])}
-                      className="p-2 bg-blue-600 text-white rounded-xl hover:scale-105 transition-all shadow-lg"
+                      className="p-2 bg-black text-white rounded-xl hover:scale-105 transition-all shadow-lg"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -529,8 +529,7 @@ export const TemplateEditor: React.FC = () => {
             </button>
             <button 
               onClick={() => setIsEditorOpen(false)}
-              className="flex-1 py-3 px-4 rounded-xl text-white font-bold text-xs shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-              style={{ backgroundColor: shopData.primaryColor }}
+              className="flex-1 py-3 px-4 rounded-xl text-white bg-black font-bold text-xs shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
               <Check className="w-3 h-3" /> Apply Styles
             </button>
@@ -544,14 +543,14 @@ export const TemplateEditor: React.FC = () => {
 const TabButton: React.FC<{ active: boolean; onClick: () => void; icon: React.ReactNode; label: string }> = ({ active, onClick, icon, label }) => (
   <button 
     onClick={onClick}
-    className={`flex-none px-6 py-4 flex flex-col items-center gap-1 transition-all relative ${active ? "text-blue-600" : "text-gray-400 hover:text-gray-600"}`}
+    className={`flex-none px-6 py-4 flex flex-col items-center gap-1 transition-all relative ${active ? "text-black" : "text-gray-400 hover:text-gray-600"}`}
   >
     {icon}
     <span className="text-[9px] font-black uppercase tracking-widest">{label}</span>
     {active && (
       <motion.div 
         layoutId="activeTab"
-        className="absolute bottom-0 left-4 right-4 h-1 bg-blue-600 rounded-t-full"
+        className="absolute bottom-0 left-4 right-4 h-1 bg-black rounded-t-full"
       />
     )}
   </button>
