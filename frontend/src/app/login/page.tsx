@@ -17,6 +17,8 @@ function AuthFlowContent() {
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("choice");
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
 
@@ -36,8 +38,15 @@ function AuthFlowContent() {
   };
 
   const handleFinish = () => {
-    // In a real app, save to DB here
-    router.push("/onboarding");
+    if (email === "owner@clinic.com") {
+      localStorage.setItem("flexslot_role", "owner");
+      router.push("/dashboard/owner");
+    } else if (email === "client@test.com") {
+      localStorage.setItem("flexslot_role", "customer");
+      router.push("/templates");
+    } else {
+      router.push("/onboarding");
+    }
   };
 
   return (
@@ -189,11 +198,28 @@ function AuthFlowContent() {
                 <div className="space-y-4">
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input type="email" placeholder="Email address" className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" />
+                    <input 
+                      type="email" 
+                      placeholder="Email address" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input type="password" placeholder="Password" className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" />
+                    <input 
+                      type="password" 
+                      placeholder="Password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="p-4 bg-orange-50/50 rounded-2xl border border-orange-100/50">
+                    <p className="text-[10px] text-orange-600 font-bold uppercase tracking-widest text-center">
+                      Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
+                    </p>
                   </div>
                   <button
                     onClick={handleFinish}

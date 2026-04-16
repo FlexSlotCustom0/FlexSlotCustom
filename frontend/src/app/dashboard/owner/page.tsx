@@ -6,7 +6,7 @@ import {
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
-  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2
+  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -39,6 +39,10 @@ export default function OwnerDashboard() {
           <SideNavItem icon={<Layout />} label="Clinic Themes" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
           <SideNavItem icon={<Briefcase />} label="Treatments" active={activeTab === "services"} onClick={() => setActiveTab("services")} />
           <SideNavItem icon={<Calendar />} label="Clinic Schedule" active={activeTab === "slots"} onClick={() => setActiveTab("slots")} />
+          <Link href="/provider/appointment/upcoming" className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl text-sm font-bold tracking-tight text-gray-400 hover:bg-gray-50 hover:text-black transition-all">
+            <LayoutDashboard className="w-5 h-5 text-emerald-500" />
+            Upcoming Feed
+          </Link>
           <SideNavItem icon={<Users />} label="Patient Registry" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
           
           <div className="pt-10 px-4">
@@ -218,22 +222,28 @@ function SlotManagerSection() {
   const [newDate, setNewDate] = useState(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("flexslot_available_slots");
-    if (saved) {
-      setSlots(JSON.parse(saved));
-    } else {
-      // Rich Seed Data for Demonstration
-      const initial = [
-        { id: 'S-901', time: '09:00 AM', date: '2026-04-20', available: true },
-        { id: 'S-902', time: '10:30 AM', date: '2026-04-20', available: false },
-        { id: 'S-903', time: '11:00 AM', date: '2026-04-20', available: true },
-        { id: 'S-904', time: '01:30 PM', date: '2026-04-20', available: true },
-        { id: 'S-905', time: '02:00 PM', date: '2026-04-21', available: true },
-        { id: 'S-906', time: '04:15 PM', date: '2026-04-21', available: true },
-      ];
-      setSlots(initial);
-      localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
-    }
+    const fetchSlots = () => {
+      const saved = localStorage.getItem("flexslot_available_slots");
+      if (saved) {
+        setSlots(JSON.parse(saved));
+      } else {
+        // Rich Seed Data for Demonstration
+        const initial = [
+          { id: 'S-901', time: '09:00 AM', date: '2026-04-20', available: true },
+          { id: 'S-902', time: '10:30 AM', date: '2026-04-20', available: false },
+          { id: 'S-903', time: '11:00 AM', date: '2026-04-20', available: true },
+          { id: 'S-904', time: '01:30 PM', date: '2026-04-20', available: true },
+          { id: 'S-905', time: '02:00 PM', date: '2026-04-21', available: true },
+          { id: 'S-906', time: '04:15 PM', date: '2026-04-21', available: true },
+        ];
+        setSlots(initial);
+        localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
+      }
+    };
+
+    fetchSlots();
+    window.addEventListener('storage', fetchSlots);
+    return () => window.removeEventListener('storage', fetchSlots);
   }, []);
 
   const addSlot = () => {
@@ -310,34 +320,40 @@ function AuditTrailSection() {
   const [bookings, setBookings] = useState<any[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("flexslot_bookings");
-    if (saved) {
-      setBookings(JSON.parse(saved).reverse());
-    } else {
-      // Initial Dummy Bookings
-      const initialBookings = [
-        {
-          id: "B-1001",
-          clientName: "Alexander Wright",
-          clientEmail: "alex@example.com",
-          slotTime: "10:30 AM",
-          slotDate: "2026-04-20",
-          serviceName: "Dental Checkup",
-          createdAt: new Date().toISOString()
-        },
-        {
-          id: "B-1002",
-          clientName: "Bella (Golden Retriever)",
-          clientEmail: "owner@pets.com",
-          slotTime: "02:00 PM",
-          slotDate: "2026-04-19",
-          serviceName: "Vaccination",
-          createdAt: new Date().toISOString()
-        }
-      ];
-      setBookings(initialBookings);
-      localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
-    }
+    const fetchBookings = () => {
+      const saved = localStorage.getItem("flexslot_bookings");
+      if (saved) {
+        setBookings(JSON.parse(saved).reverse());
+      } else {
+        // Initial Dummy Bookings
+        const initialBookings = [
+          {
+            id: "B-1001",
+            clientName: "Alexander Wright",
+            clientEmail: "alex@example.com",
+            slotTime: "10:30 AM",
+            slotDate: "2026-04-20",
+            serviceName: "Dental Checkup",
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: "B-1002",
+            clientName: "Bella (Golden Retriever)",
+            clientEmail: "owner@pets.com",
+            slotTime: "02:00 PM",
+            slotDate: "2026-04-19",
+            serviceName: "Vaccination",
+            createdAt: new Date().toISOString()
+          }
+        ];
+        setBookings(initialBookings);
+        localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
+      }
+    };
+
+    fetchBookings();
+    window.addEventListener('storage', fetchBookings);
+    return () => window.removeEventListener('storage', fetchBookings);
   }, []);
 
   return (
@@ -345,9 +361,14 @@ function AuditTrailSection() {
        <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
           <div className="p-8 flex justify-between items-center">
             <div className="text-[10px] font-black uppercase tracking-widest text-gray-300">Live Appointment Stream</div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Real-time sync</span>
+            <div className="flex items-center gap-4">
+              <Link href="/provider/appointment/upcoming" className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 hover:opacity-60 transition-all">
+                Open Portal <ExternalLink className="w-3 h-3" />
+              </Link>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Real-time sync</span>
+              </div>
             </div>
           </div>
           {bookings.length > 0 ? bookings.map((b, i) => (
