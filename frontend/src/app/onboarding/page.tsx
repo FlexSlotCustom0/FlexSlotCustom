@@ -55,10 +55,7 @@ export default function OnboardingPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-widest mb-6">
-            <Sparkles className="w-3 h-3" />
-            New Account Setup
-          </div>
+
           <h1 className="text-5xl md:text-6xl font-serif tracking-tight mb-6">What is your niche?</h1>
           <p className="text-xl text-gray-500 font-medium max-w-xl mx-auto">
             Choose your specialty to start with a tailored clinical template. You can fully customize everything later.
