@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, Filter, Calendar, MapPin, Star, Bot, Clock, 
@@ -106,6 +106,13 @@ function SideNavItem({ icon, label, active, onClick }: { icon: React.ReactNode, 
 }
 
 function ExploreMarketSection() {
+  const [publishedClinics, setPublishedClinics] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("flexslot_public_clinics");
+    if (saved) setPublishedClinics(JSON.parse(saved));
+  }, []);
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
       <div className="flex justify-between items-end">
@@ -115,18 +122,33 @@ function ExploreMarketSection() {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-         <MarketCard name="City Medical Group" cat="Healthcare" rating={4.9} image="bg-blue-50" />
-         <MarketCard name="Paw & Tail Veterinary" cat="Vet Care" rating={5.0} image="bg-emerald-50" />
-         <MarketCard name="Dental Associates" cat="Specialist" rating={4.7} image="bg-gray-50" />
+         {publishedClinics.length > 0 ? publishedClinics.map((clinic, i) => (
+           <MarketCard 
+             key={i}
+             id={clinic.id}
+             name={clinic.name} 
+             cat={clinic.category} 
+             rating={clinic.rating} 
+             image={clinic.id === 'clinic-clean' ? 'bg-blue-50' : 'bg-orange-50'} 
+           />
+         )) : (
+           <>
+            <MarketCard name="City Medical Group" cat="Healthcare" rating={4.9} image="bg-blue-50" />
+            <MarketCard name="Paw & Tail Veterinary" cat="Vet Care" rating={5.0} image="bg-emerald-50" />
+            <MarketCard name="Dental Associates" cat="Specialist" rating={4.7} image="bg-gray-50" />
+           </>
+         )}
       </div>
     </motion.div>
   );
 }
 
-function MarketCard({ name, cat, rating, image }: { name: string, cat: string, rating: number, image: string }) {
+function MarketCard({ name, cat, rating, image, id }: { name: string, cat: string, rating: number, image: string, id?: string }) {
   return (
     <div className="bg-white border border-gray-100 p-6 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-       <div className={`w-full aspect-video ${image} rounded-3xl mb-6`} />
+       <div className={`w-full aspect-video ${image} rounded-3xl mb-6 flex items-center justify-center`}>
+          {id && <div className="text-[10px] font-black uppercase tracking-widest text-[#000000a0]">Previewing {id}</div>}
+       </div>
        <div className="flex justify-between items-start mb-6">
           <div>
              <h3 className="text-xl font-bold mb-1 tracking-tight text-black">{name}</h3>
@@ -137,9 +159,12 @@ function MarketCard({ name, cat, rating, image }: { name: string, cat: string, r
              <span className="text-xs font-bold">{rating}</span>
           </div>
        </div>
-       <button className="w-full py-4 bg-gray-50 rounded-2xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all shadow-sm">
-          Book Consultation <ExternalLink className="w-3.5 h-3.5" />
-       </button>
+       <Link 
+          href={id ? `/templates/${id}` : "#"}
+          className="w-full py-4 bg-gray-50 rounded-2xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all shadow-sm"
+       >
+          View Clinic <ExternalLink className="w-3.5 h-3.5" />
+       </Link>
     </div>
   );
 }
