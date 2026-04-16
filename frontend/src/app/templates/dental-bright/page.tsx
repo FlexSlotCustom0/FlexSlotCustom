@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
 import { IconRenderer } from "@/components/IconRenderer";
+import { LayoutDashboard } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -194,6 +195,23 @@ export default function DentalBrightTemplate() {
           </div>
         </div>
       </footer>
+      <AdminExit colorClass="bg-teal-600" />
     </div>
+  );
+}
+
+function AdminExit({ colorClass = "bg-black" }: { colorClass?: string }) {
+  return (
+    <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+      <h3 className="text-2xl font-serif mb-4">Ready to manage your clinic?</h3>
+      <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
+      <Link
+        href="/dashboard"
+        className={`${colorClass} text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl`}
+      >
+        <LayoutDashboard className="w-5 h-5" />
+        Go to Dashboard
+      </Link>
+    </section>
   );
 }

@@ -8,13 +8,14 @@ import {
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
 import { IconRenderer } from "@/components/IconRenderer";
+import { LayoutDashboard } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as any },
+    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
@@ -171,6 +172,19 @@ export default function PulseModernTemplate() {
           </div>
         </div>
       </footer>
+      
+      {/* ── Dashboard Navigation ── */}
+      <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+        <h3 className="text-2xl font-serif mb-4 text-blue-600">Ready to manage your practice?</h3>
+        <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
+        <Link
+          href="/dashboard"
+          className="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          Go to Dashboard
+        </Link>
+      </section>
     </div>
   );
 }

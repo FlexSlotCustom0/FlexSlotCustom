@@ -115,13 +115,13 @@ export default function AuthFlow() {
                 <div className="grid grid-cols-2 gap-6">
                   <RoleCard
                     icon={<Store className="w-8 h-8" />}
-                    title="I'm an Owner"
+                    title="I&apos;m an Owner"
                     desc="I want to list services and manage slots."
                     onClick={() => { setRole("owner"); nextStep("template"); }}
                   />
                   <RoleCard
                     icon={<User className="w-8 h-8" />}
-                    title="I'm a Customer"
+                    title="I&apos;m a Customer"
                     desc="I want to book services and meet experts."
                     onClick={() => { setRole("customer"); nextStep("finalize"); }}
                   />

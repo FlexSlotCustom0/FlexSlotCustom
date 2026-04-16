@@ -9,13 +9,14 @@ import Link from "next/link";
 
 import { useTemplateContext } from "@/components/TemplateContext";
 import { IconRenderer } from "@/components/IconRenderer";
+import { LayoutDashboard } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as any },
+    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
@@ -255,7 +256,7 @@ export default function ClinicCleanTemplate() {
                       <Star key={j} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600 font-medium mb-4 italic leading-relaxed">"{r.text}"</p>
+                  <p className="text-sm text-gray-600 font-medium mb-4 italic leading-relaxed">&quot;{r.text}&quot;</p>
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px] text-gray-400">{r.name.charAt(0)}</div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{r.name}</span>
@@ -289,7 +290,7 @@ export default function ClinicCleanTemplate() {
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>
           <div className="flex items-center gap-6">
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
+            <span>© 2026 {shop.name}</span>
             <p className="text-[10px] text-gray-400">
               Crafted with <span className="font-bold text-black">FlexSlotCustom</span>
             </p>
@@ -297,6 +298,19 @@ export default function ClinicCleanTemplate() {
         </div>
       </footer>
       <div className="h-24 md:hidden" />
+
+      {/* ── Dashboard Navigation ── */}
+      <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+        <h3 className="text-2xl font-serif mb-4">Ready to manage your clinic?</h3>
+        <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
+        <Link
+          href="/dashboard"
+          className="bg-black text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          Go to Dashboard
+        </Link>
+      </section>
     </div>
   );
 }

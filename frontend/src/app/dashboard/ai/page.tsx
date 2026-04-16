@@ -182,7 +182,7 @@ export default function AIInsightsPage() {
                  latency="112ms" 
                />
                <HistoryItem 
-                 input="What's the peak time for MRI scans today?" 
+                 input="What&apos;s the peak time for MRI scans today?" 
                  output="query: CAPACITY_ANALYSIS, context: RADIOLOGY" 
                  latency="14ms" 
                />
