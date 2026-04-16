@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, ArrowRight, User, Store, Scissors, Code,
@@ -8,7 +9,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, Suspense } from "react";
 
 type Step = "choice" | "role" | "service" | "template" | "finalize";
 
