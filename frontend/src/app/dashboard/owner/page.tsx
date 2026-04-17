@@ -134,7 +134,15 @@ export default function OwnerDashboard() {
 
         <div className="p-10 max-w-7xl mx-auto w-full space-y-12">
           {activeTab === "overview" && <OverviewSection activeTemplate={activeTemplate} />}
-          {activeTab === "ui" && <UIConfiguratorSection activeTemplate={activeTemplate} />}
+          {activeTab === "ui" && (
+            <UIConfiguratorSection 
+              activeTemplate={activeTemplate} 
+              onSelectTemplate={(t) => {
+                setActiveTemplate(t);
+                localStorage.setItem("flexslot_active_template", t);
+              }} 
+            />
+          )}
           {activeTab === "services" && <ServiceCatalogSection />}
           {activeTab === "slots" && <SlotManagerSection />}
           {activeTab === "audit" && <AuditTrailSection />}
@@ -277,67 +285,72 @@ function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
   );
 }
 
-function UIConfiguratorSection({ activeTemplate }: { activeTemplate: string }) {
-  const [schema, setSchema] = useState(JSON.stringify({
-    "practice_type": "Specialist",
-    "theme": "monochrome-pro",
-    "patient_portal": "active"
-  }, null, 2));
+function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTemplate: string, onSelectTemplate: (t: string) => void }) {
+  const templates = [
+    { id: 'clinic-clean', name: 'Clinical Pure', color: 'blue', desc: 'Minimalist medical aesthetic with high trust indicators.' },
+    { id: 'paws-premium', name: 'Elite Haven', color: 'emerald', desc: 'High-end veterinary luxury with serif elegance.' },
+    { id: 'pulse-modern', name: 'Neo Pulse', color: 'indigo', desc: 'Cutting-edge digital interface for modern practices.' },
+    { id: 'vet-warm', name: 'Gentle Care', color: 'orange', desc: 'Warm, approachable design for boutique specialty clinics.' },
+    { id: 'wild-med', name: 'Safari Health', color: 'green', desc: 'Clean, professional medical template for broad outreach.' }
+  ];
 
   return (
-    <div className="space-y-10">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-12">
+      <div className="flex justify-between items-end mb-6">
         <div>
-          <h1 className="text-4xl font-serif text-black">Clinic Identity</h1>
-          <p className="text-gray-400 font-medium italic">Manage how your clinic appears to patients.</p>
+          <h1 className="text-4xl font-serif text-black italic">Creative Studio</h1>
+          <p className="text-sm text-gray-400 font-medium italic mt-2">Personalize your patient portal with curated clinical themes.</p>
         </div>
         <Link 
-          href={`/templates/${activeTemplate}?manage=true`}
-          className="px-8 py-4 bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-3 hover:scale-105 transition-all"
+           href={`/templates/${activeTemplate}?manage=true`}
+           className="px-8 py-4 bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-3 hover:scale-[1.02] transition-all"
         >
-          <Layout className="w-4 h-4" /> Open Visual Builder
+          <Sparkles className="w-4 h-4" /> Finalize Global Styles
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-10 space-y-8">
-           <h3 className="font-bold text-xl">Branding Assets</h3>
-           <div className="grid grid-cols-2 gap-4">
-              <div className="p-8 rounded-[2rem] bg-gray-50 border border-gray-100 flex flex-col items-center justify-center gap-4 group cursor-pointer hover:bg-white hover:border-black transition-all">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-black group-hover:text-white transition-all">
-                   <ExternalLink className="w-5 h-5" />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest">Public Site</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {templates.map((theme) => (
+          <div 
+            key={theme.id}
+            onClick={() => onSelectTemplate(theme.id)}
+            className={`group rounded-[2.5rem] p-1 border transition-all cursor-pointer relative overflow-hidden ${activeTemplate === theme.id ? 'border-black' : 'border-black/5 hover:border-black/20'}`}
+          >
+            <div className="aspect-[4/3] rounded-[2.2rem] bg-gray-50 flex items-center justify-center relative overflow-hidden border border-black/5">
+              <div className={`absolute inset-0 bg-gradient-to-br transition-opacity duration-500 ${theme.id === 'clinic-clean' ? 'from-blue-50 to-white' : theme.id === 'paws-premium' ? 'from-emerald-50 to-white' : 'from-gray-100 to-white'} opacity-0 group-hover:opacity-100`} />
+              <div className="relative z-10 flex flex-col items-center gap-4">
+                <Palette className={`w-10 h-10 transition-transform duration-500 group-hover:scale-110 ${activeTemplate === theme.id ? 'text-black' : 'text-gray-300'}`} />
+                {activeTemplate === theme.id && (
+                  <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="px-3 py-1 bg-black text-white text-[8px] font-black uppercase tracking-widest rounded-full">Active Concept</motion.div>
+                )}
               </div>
-              <div className="p-8 rounded-[2rem] bg-black text-white flex flex-col items-center justify-center gap-4 shadow-2xl">
-                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-white/10">
-                   <Palette className="w-5 h-5 text-emerald-400" />
-                </div>
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Theme Config</span>
+            </div>
+            
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-bold text-lg">{theme.name}</h3>
+                <div className="text-[10px] font-black font-mono text-gray-400">ID_{theme.id.split('-')[0].toUpperCase()}</div>
               </div>
-           </div>
-           
-           <div className="p-8 rounded-[2.5rem] bg-orange-50/30 border border-orange-100/50 space-y-4">
-              <div className="flex items-center gap-2 text-orange-600">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Active Template</span>
+              <p className="text-[10px] text-gray-400 font-medium leading-relaxed italic mb-6">{theme.desc}</p>
+              
+              <div className="flex gap-2">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); onSelectTemplate(theme.id); }}
+                  className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTemplate === theme.id ? 'bg-black text-white' : 'bg-gray-50 text-gray-400 hover:bg-black hover:text-white'}`}
+                >
+                  {activeTemplate === theme.id ? 'Selected' : 'Use Theme'}
+                </button>
+                <Link 
+                  href={`/templates/${theme.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="p-4 rounded-2xl bg-gray-50 border border-black/5 hover:bg-white hover:shadow-xl transition-all"
+                >
+                  <ExternalLink className="w-4 h-4 text-black" />
+                </Link>
               </div>
-              <div className="flex justify-between items-center">
-                <div className="text-2xl font-serif italic text-black capitalize">{activeTemplate.replace('-', ' ')}</div>
-                <Link href={`/templates/${activeTemplate}?manage=true`} className="text-xs font-bold underline underline-offset-4 hover:text-orange-600 transition-colors">Switch Template</Link>
-              </div>
-           </div>
-        </div>
-        <div className="bg-black text-white/40 rounded-[2.5rem] p-10 font-mono text-xs overflow-hidden h-[400px]">
-           <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-white">Advanced_Schema_v1.0</span>
-              </div>
-              <Code className="w-4 h-4" />
-           </div>
-           <textarea value={schema} onChange={(e) => setSchema(e.target.value)} className="w-full h-full bg-transparent outline-none focus:text-white transition-colors resize-none leading-relaxed" />
-        </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
