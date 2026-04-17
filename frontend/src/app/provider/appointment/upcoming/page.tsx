@@ -84,11 +84,7 @@ export default function UpcomingAppointments() {
           <div className="space-y-1">
              <div className="flex items-center gap-3">
                <h1 className="text-4xl font-serif font-black italic tracking-tight">Live Clinical Feed</h1>
-               <div className="h-6 w-px bg-black/10 mx-2" />
-               <div className="flex items-center gap-2">
-                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black italic">Active Signal Stream</span>
-               </div>
+
              </div>
              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic flex items-center gap-2">
                <Sparkles className="w-3 h-3" /> Kindred Data Orchestration v4.0
@@ -160,7 +156,7 @@ export default function UpcomingAppointments() {
                             <div className="space-y-3">
                               <div className="flex items-center gap-4">
                                 <h4 className="text-4xl font-serif font-black italic text-black group-hover:tracking-wider transition-all duration-700">{booking.clientName}</h4>
-                                <div className={`h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]`} />
+
                               </div>
                               <div className="flex flex-wrap items-center gap-6">
                                 <div className="flex items-center gap-2 group/info">
