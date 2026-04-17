@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Clock, Phone, Star, Calendar, ChevronRight,
-  Share2, Heart, PawPrint, Shield, HelpCircle, CheckCircle2
+  Share2, Heart, PawPrint, Shield, HelpCircle, CheckCircle2, Edit3
 } from "lucide-react";
 import Link from "next/link";
 
@@ -51,7 +51,10 @@ export default function VetWarmTemplate() {
             ) : (
               <IconRenderer name={shop.logo} className="w-5 h-5" />
             )}
-            <span className="font-bold text-base">{shop.name}</span>
+            <span className="font-bold text-base flex items-center gap-1.5">
+              {shop.name}
+              {window.location.search.includes("manage=true") && <Edit3 className="w-3 h-3 text-black/20" />}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <a href={`tel:${shop.phone}`} className="p-2 rounded-xl hover:bg-orange-50 transition-colors">

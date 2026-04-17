@@ -39,22 +39,24 @@ function AuthFlowContent() {
     if (step === "login") setStep("choice");
   };
 
-  const handleFinish = () => {
+  const handleFinish = (templateOverride?: string) => {
     // Basic validation
     if (!email) return;
+
+    const finalTemplate = templateOverride || selectedTemplate;
 
     if (email === "owner@clinic.com") {
       localStorage.setItem("flexslot_role", "owner");
       localStorage.setItem("flexslot_user_email", email);
       if (username) localStorage.setItem("flexslot_username", username);
       
-      if (selectedTemplate) {
-        localStorage.setItem("flexslot_active_template", selectedTemplate);
+      if (finalTemplate) {
+        localStorage.setItem("flexslot_active_template", finalTemplate);
         if (service === 'vet') localStorage.setItem("flexslot_clinic_niche", "veterinary");
         else localStorage.setItem("flexslot_clinic_niche", "medical");
         
         // Redirect directly to the template customization page
-        router.push(`/templates/${selectedTemplate}?manage=true`);
+        router.push(`/templates/${finalTemplate}?manage=true`);
       } else {
         router.push("/dashboard/owner");
       }
@@ -200,17 +202,17 @@ function AuthFlowContent() {
                 <div className="grid grid-cols-2 gap-4">
                   {service === 'vet' ? (
                     <>
-                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => { setSelectedTemplate('vet-warm'); handleFinish(); }} />
-                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => { setSelectedTemplate('paws-premium'); handleFinish(); }} />
+                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => handleFinish('vet-warm')} />
+                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => handleFinish('paws-premium')} />
                     </>
                   ) : service === 'dental' ? (
                     <>
-                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => { setSelectedTemplate('dental-bright'); handleFinish(); }} />
+                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => handleFinish('dental-bright')} />
                     </>
                   ) : (
                     <>
-                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => { setSelectedTemplate('clinic-clean'); handleFinish(); }} />
-                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => { setSelectedTemplate('pulse-modern'); handleFinish(); }} />
+                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => handleFinish('clinic-clean')} />
+                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => handleFinish('pulse-modern')} />
                     </>
                   )}
                 </div>

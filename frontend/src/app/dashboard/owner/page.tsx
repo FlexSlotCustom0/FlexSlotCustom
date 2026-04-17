@@ -6,7 +6,8 @@ import {
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
-  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard
+  Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard,
+  Palette, Sparkles
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -14,11 +15,14 @@ import { useEffect } from "react";
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [clinicName, setClinicName] = useState("Happy Paws Clinic"); // Default for demo
+  const [activeTemplate, setActiveTemplate] = useState("clinic-clean");
 
   useEffect(() => {
     const role = localStorage.getItem("flexslot_role");
     const savedName = localStorage.getItem("flexslot_active_clinic_name") || "Happy Paws Clinic";
+    const savedTemplate = localStorage.getItem("flexslot_active_template") || "clinic-clean";
     setClinicName(savedName);
+    setActiveTemplate(savedTemplate);
   }, []);
 
   return (
@@ -81,8 +85,8 @@ export default function OwnerDashboard() {
         </header>
 
         <div className="p-10 max-w-7xl mx-auto w-full space-y-12">
-          {activeTab === "overview" && <OverviewSection />}
-          {activeTab === "ui" && <UIConfiguratorSection />}
+          {activeTab === "overview" && <OverviewSection activeTemplate={activeTemplate} />}
+          {activeTab === "ui" && <UIConfiguratorSection activeTemplate={activeTemplate} />}
           {activeTab === "services" && <ServiceCatalogSection />}
           {activeTab === "slots" && <SlotManagerSection />}
           {activeTab === "audit" && <AuditTrailSection />}
@@ -123,7 +127,7 @@ function MetricCard({ label, value, trend, icon }: { label: string, value: strin
   );
 }
 
-function OverviewSection() {
+function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
   return (
     <div className="space-y-10">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -131,50 +135,110 @@ function OverviewSection() {
         <MetricCard label="Pharmacy Rev" value="$8,240" trend="+5%" icon={<TrendingUp />} />
         <MetricCard label="Diagnostic Load" value="High" trend="AI_GEN" icon={<Bot />} />
       </div>
-      <div className="bg-white rounded-[2.5rem] p-10 border border-gray-50 shadow-sm relative group overflow-hidden">
-         <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-lg">Patient Flow Index</h3>
-            <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest font-mono italic">Clinical Prediction Engine</div>
-         </div>
-         <div className="h-40 flex items-end gap-2 px-2 border-b border-gray-50 mb-4 pb-2">
-            {[30, 45, 60, 40, 70, 90, 85, 50, 65, 80, 55, 75].map((h, i) => (
-              <div key={i} className="flex-1 bg-gray-50 rounded-full relative overflow-hidden">
-                <motion.div className="absolute bottom-0 w-full bg-black rounded-full" initial={{ height: 0 }} animate={{ height: `${h}%` }} transition={{ duration: 1.5, delay: i * 0.05 }} />
-              </div>
-            ))}
-         </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="bg-white rounded-[2.5rem] p-10 border border-gray-50 shadow-sm relative group overflow-hidden">
+           <div className="flex items-center justify-between mb-8">
+              <h3 className="font-bold text-lg">Patient Flow Index</h3>
+              <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest font-mono italic">Clinical Prediction Engine</div>
+           </div>
+           <div className="h-40 flex items-end gap-2 px-2 border-b border-gray-50 mb-4 pb-2">
+              {[30, 45, 60, 40, 70, 90, 85, 50, 65, 80, 55, 75].map((h, i) => (
+                <div key={i} className="flex-1 bg-gray-50 rounded-full relative overflow-hidden">
+                  <motion.div className="absolute bottom-0 w-full bg-black rounded-full" initial={{ height: 0 }} animate={{ height: `${h}%` }} transition={{ duration: 1.5, delay: i * 0.05 }} />
+                </div>
+              ))}
+           </div>
+        </div>
+
+        <div className="bg-emerald-500 rounded-[2.5rem] p-10 shadow-2xl shadow-emerald-500/20 relative group overflow-hidden flex flex-col justify-between">
+           <div className="relative z-10">
+              <h3 className="text-white font-bold text-2xl mb-2 tracking-tight">Your clinic is live.</h3>
+              <p className="text-white/70 text-sm font-medium italic">Your customized template is now visible to patients.</p>
+           </div>
+           <div className="relative z-10 flex gap-4 mt-8">
+              <Link 
+                href={`/templates/${activeTemplate}?manage=true`}
+                className="px-6 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl"
+              >
+                 <Layout className="w-4 h-4" /> Customize Site
+              </Link>
+              <Link 
+                href={`/templates/${activeTemplate}`}
+                className="px-6 py-4 bg-black/10 text-white border border-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-black/20 transition-all"
+              >
+                 <ExternalLink className="w-4 h-4" /> View Public
+              </Link>
+           </div>
+           {/* Decoration */}
+           <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-[80px]" />
+           <Sparkles className="absolute bottom-6 right-6 w-12 h-12 text-white/10" />
+        </div>
       </div>
     </div>
   );
 }
 
-function UIConfiguratorSection() {
+function UIConfiguratorSection({ activeTemplate }: { activeTemplate: string }) {
   const [schema, setSchema] = useState(JSON.stringify({
     "practice_type": "Specialist",
     "theme": "monochrome-pro",
     "patient_portal": "active"
   }, null, 2));
+
   return (
     <div className="space-y-10">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-4xl font-serif text-black">Clinic Identity</h1>
+          <p className="text-gray-400 font-medium italic">Manage how your clinic appears to patients.</p>
+        </div>
+        <Link 
+          href={`/templates/${activeTemplate}?manage=true`}
+          className="px-8 py-4 bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl flex items-center gap-3 hover:scale-105 transition-all"
+        >
+          <Layout className="w-4 h-4" /> Open Visual Builder
+        </Link>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-10">
-           <h3 className="font-bold text-xl mb-6">Visual Identity</h3>
-           <div className="space-y-4">
-              <div className="p-6 rounded-3xl bg-black text-white flex justify-between items-center group cursor-pointer hover:scale-105 transition-all">
-                 <div>
-                    <div className="font-bold">Monospace Pro</div>
-                    <div className="text-[10px] opacity-40 uppercase tracking-widest font-black">Active Theme</div>
-                 </div>
-                 <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+        <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-10 space-y-8">
+           <h3 className="font-bold text-xl">Branding Assets</h3>
+           <div className="grid grid-cols-2 gap-4">
+              <div className="p-8 rounded-[2rem] bg-gray-50 border border-gray-100 flex flex-col items-center justify-center gap-4 group cursor-pointer hover:bg-white hover:border-black transition-all">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-black group-hover:text-white transition-all">
+                   <ExternalLink className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest">Public Site</span>
               </div>
-              <div className="p-6 rounded-3xl bg-gray-50 border border-gray-100 flex justify-between items-center group cursor-pointer hover:bg-white hover:border-black/10 transition-all">
-                 <div className="font-bold text-gray-400">Emerald Medical</div>
-                 <ChevronRight className="w-5 h-5 text-gray-200" />
+              <div className="p-8 rounded-[2rem] bg-black text-white flex flex-col items-center justify-center gap-4 shadow-2xl">
+                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-white/10">
+                   <Palette className="w-5 h-5 text-emerald-400" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Theme Config</span>
+              </div>
+           </div>
+           
+           <div className="p-8 rounded-[2.5rem] bg-orange-50/30 border border-orange-100/50 space-y-4">
+              <div className="flex items-center gap-2 text-orange-600">
+                <Sparkles className="w-4 h-4" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Active Template</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="text-2xl font-serif italic text-black capitalize">{activeTemplate.replace('-', ' ')}</div>
+                <Link href={`/templates/${activeTemplate}?manage=true`} className="text-xs font-bold underline underline-offset-4 hover:text-orange-600 transition-colors">Switch Template</Link>
               </div>
            </div>
         </div>
-        <div className="bg-black text-white/40 rounded-[2.5rem] p-10 font-mono text-xs overflow-hidden h-[300px]">
-           <textarea value={schema} onChange={(e) => setSchema(e.target.value)} className="w-full h-full bg-transparent outline-none focus:text-white transition-colors resize-none" />
+        <div className="bg-black text-white/40 rounded-[2.5rem] p-10 font-mono text-xs overflow-hidden h-[400px]">
+           <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-white">Advanced_Schema_v1.0</span>
+              </div>
+              <Code className="w-4 h-4" />
+           </div>
+           <textarea value={schema} onChange={(e) => setSchema(e.target.value)} className="w-full h-full bg-transparent outline-none focus:text-white transition-colors resize-none leading-relaxed" />
         </div>
       </div>
     </div>

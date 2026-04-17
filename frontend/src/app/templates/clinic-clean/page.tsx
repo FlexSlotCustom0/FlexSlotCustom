@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Clock, Phone, Star, Calendar, ChevronRight,
-  Share2, Heart, Shield, Award, FileText, HelpCircle, Stethoscope, CheckCircle2
+  Share2, Heart, Shield, Award, FileText, HelpCircle, Stethoscope, CheckCircle2, Edit3
 } from "lucide-react";
 import Link from "next/link";
 
@@ -57,7 +57,10 @@ export default function ClinicCleanTemplate() {
             ) : (
               <IconRenderer name={shop.logo} className="w-5 h-5" />
             )}
-            <span className="font-bold text-base">{shop.name}</span>
+            <span className="font-bold text-base flex items-center gap-1.5">
+              {shop.name}
+              {window.location.search.includes("manage=true") && <Edit3 className="w-3 h-3 text-black/20" />}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <button className="hidden md:flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-black transition-colors">
