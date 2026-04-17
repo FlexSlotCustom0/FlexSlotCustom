@@ -68,6 +68,12 @@ export default function UpcomingAppointments() {
 
   const sortedDates = Object.keys(groupedBookings).sort();
 
+  const cancelBooking = (id: string) => {
+    const next = bookings.filter(b => b.id !== id);
+    setBookings(next);
+    localStorage.setItem("flexslot_bookings", JSON.stringify(next.reverse()));
+  };
+
   return (
     <div className={`min-h-screen bg-[#FDFDFD] text-black font-sans flex flex-col transition-colors duration-1000`}>
       {/* Mesh Background */}
@@ -84,7 +90,6 @@ export default function UpcomingAppointments() {
           <div className="space-y-1">
              <div className="flex items-center gap-3">
                <h1 className="text-4xl font-serif font-black italic tracking-tight">Live Clinical Feed</h1>
-
              </div>
              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic flex items-center gap-2">
                <Sparkles className="w-3 h-3" /> Kindred Data Orchestration v4.0
@@ -103,9 +108,6 @@ export default function UpcomingAppointments() {
               className="pl-14 pr-8 py-5 bg-white border border-black/5 rounded-[2rem] text-[13px] font-bold w-96 shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all"
             />
           </div>
-          <button className="p-5 bg-black text-white rounded-[1.8rem] shadow-2xl shadow-black/20 hover:scale-[1.05] active:scale-95 transition-all">
-            <Filter className="w-5 h-5" />
-          </button>
         </div>
       </header>
 
@@ -150,13 +152,11 @@ export default function UpcomingAppointments() {
                                   <div className="text-lg font-black tracking-tight">{booking.slotTime.split(' ')[0]}</div>
                                   <div className="text-[9px] font-black uppercase tracking-widest opacity-40">{booking.slotTime.split(' ')[1]}</div>
                                </div>
-
                             </div>
                             
                             <div className="space-y-3">
                               <div className="flex items-center gap-4">
                                 <h4 className="text-4xl font-serif font-black italic text-black group-hover:tracking-wider transition-all duration-700">{booking.clientName}</h4>
-
                               </div>
                               <div className="flex flex-wrap items-center gap-6">
                                 <div className="flex items-center gap-2 group/info">
@@ -176,20 +176,23 @@ export default function UpcomingAppointments() {
 
                           <div className="flex lg:flex-col items-end gap-6 h-full justify-between">
                              <div className="flex gap-3">
-                                <button className="p-5 bg-gray-50 hover:bg-black hover:text-white rounded-[1.5rem] transition-all duration-300 shadow-sm border border-black/5">
+                                <a href={`tel:${booking.clientPhone}`} className="p-5 bg-gray-50 hover:bg-black hover:text-white rounded-[1.5rem] transition-all duration-300 shadow-sm border border-black/5">
                                   <Phone className="w-4 h-4" />
-                                </button>
-                                <button className="p-5 bg-gray-50 hover:bg-black hover:text-white rounded-[1.5rem] transition-all duration-300 shadow-sm border border-black/5">
+                                </a>
+                                <a href={`mailto:${booking.clientEmail}`} className="p-5 bg-gray-50 hover:bg-black hover:text-white rounded-[1.5rem] transition-all duration-300 shadow-sm border border-black/5">
                                   <Mail className="w-4 h-4" />
-                                </button>
-                                <button className="p-5 bg-gray-50 hover:bg-black hover:text-white rounded-[1.5rem] transition-all duration-300 shadow-sm border border-black/5">
-                                  <MoreHorizontal className="w-4 h-4" />
+                                </a>
+                                <button 
+                                  onClick={() => cancelBooking(booking.id)}
+                                  className="p-5 bg-gray-50 hover:bg-red-500 hover:text-white rounded-[1.5rem] transition-all duration-300 shadow-sm border border-black/5"
+                                >
+                                  <CheckCircle2 className="w-4 h-4" />
                                 </button>
                              </div>
                              <div className="flex items-center gap-3">
                                 <span className="text-[9px] font-black text-black/20 uppercase tracking-[0.3em] font-mono">ID_{booking.id.split('-').pop()}</span>
                                 <div className="w-12 h-[2px] bg-black/5" />
-                                <span className="text-[10px] font-black text-black font-serif italic">Pending Review</span>
+                                <span className="text-[10px] font-black text-black font-serif italic">Active Consultation</span>
                              </div>
                           </div>
                         </div>
