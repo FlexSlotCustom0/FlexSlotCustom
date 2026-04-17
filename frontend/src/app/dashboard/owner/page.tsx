@@ -319,6 +319,16 @@ function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTem
 
 function ServiceCatalogSection() {
   const [services, setServices] = useState<any[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  
+  // Form State
+  const [formData, setFormData] = useState({
+    name: '',
+    type: 'diagnostic',
+    dur: '30m',
+    fee: '$100',
+    desc: ''
+  });
 
   const fetchServices = () => {
     const saved = localStorage.getItem("flexslot_clinical_services");
@@ -341,18 +351,17 @@ function ServiceCatalogSection() {
     return () => window.removeEventListener('storage', fetchServices);
   }, []);
 
-  const addService = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     const newS = {
       id: `T-${100 + services.length + 1}`,
-      name: 'New Clinical Protocol',
-      dur: '30m',
-      fee: '$100',
-      desc: 'Standardized clinical procedure for boutique healthcare.',
-      type: 'diagnostic'
+      ...formData
     };
     const next = [...services, newS];
     setServices(next);
     localStorage.setItem("flexslot_clinical_services", JSON.stringify(next));
+    setIsAdding(false);
+    setFormData({ name: '', type: 'diagnostic', dur: '30m', fee: '$100', desc: '' });
   };
 
   const deleteService = (id: string) => {
@@ -362,7 +371,104 @@ function ServiceCatalogSection() {
   };
 
   return (
-    <div className="space-y-12 pb-24">
+    <div className="space-y-12 pb-24 relative">
+      <AnimatePresence>
+        {isAdding && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              onClick={() => setIsAdding(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100]" 
+            />
+            <motion.div 
+              initial={{ x: '100%' }} 
+              animate={{ x: 0 }} 
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-white shadow-2xl z-[110] p-12 overflow-y-auto"
+            >
+               <div className="flex justify-between items-center mb-12">
+                  <div>
+                    <h2 className="text-4xl font-serif italic text-black">Protocol Designer</h2>
+                    <p className="text-sm text-gray-400 font-medium italic mt-2">Architect a new clinical service entry.</p>
+                  </div>
+                  <button onClick={() => setIsAdding(false)} className="p-4 hover:bg-gray-50 rounded-full transition-all group">
+                    <Trash2 className="w-6 h-6 text-gray-300 group-hover:text-black" />
+                  </button>
+               </div>
+
+               <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Protocol Designation</label>
+                    <input 
+                      required
+                      value={formData.name}
+                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      placeholder="e.g. Advanced Orthopedic Review"
+                      className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Clinical Type</label>
+                      <select 
+                        value={formData.type}
+                        onChange={e => setFormData({...formData, type: e.target.value})}
+                        className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none font-bold"
+                      >
+                        <option value="diagnostic">Diagnostic</option>
+                        <option value="specialist">Specialist</option>
+                        <option value="followup">Follow-up</option>
+                      </select>
+                    </div>
+                    <div className="space-y-3">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Duration Allocation</label>
+                       <input 
+                        value={formData.dur}
+                        onChange={e => setFormData({...formData, dur: e.target.value})}
+                        placeholder="e.g. 45m"
+                        className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Consultation Fee</label>
+                    <div className="relative">
+                      <input 
+                        value={formData.fee}
+                        onChange={e => setFormData({...formData, fee: e.target.value})}
+                        placeholder="$120"
+                        className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Protocol Summary</label>
+                    <textarea 
+                      value={formData.desc}
+                      onChange={e => setFormData({...formData, desc: e.target.value})}
+                      rows={4}
+                      placeholder="Provide architectural detail of the clinical procedure..."
+                      className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black font-medium italic"
+                    />
+                  </div>
+
+                  <div className="pt-12">
+                     <button type="submit" className="w-full py-6 bg-black text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all">
+                        Commit Protocol to Live Registry
+                     </button>
+                  </div>
+               </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       <div className="flex justify-between items-end mb-4">
         <div>
           <h1 className="text-5xl font-serif italic text-black">Treatment Protocols</h1>
@@ -370,7 +476,7 @@ function ServiceCatalogSection() {
         </div>
         <div className="flex gap-4">
            <button 
-             onClick={addService}
+             onClick={() => setIsAdding(true)}
              className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3"
            >
               <Plus className="w-4 h-4" /> Register New Protocol
