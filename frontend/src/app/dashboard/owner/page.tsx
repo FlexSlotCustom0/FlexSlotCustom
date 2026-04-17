@@ -782,6 +782,14 @@ interface Booking {
 
 function AuditTrailSection() {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredBookings = bookings.filter(b => 
+    b.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    b.clientEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    b.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    b.serviceName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchBookings = () => {
     const saved = localStorage.getItem("flexslot_bookings");
@@ -856,19 +864,44 @@ function AuditTrailSection() {
              </div>
           </div>
 
+          {/* Smart Command Bar */}
+          <div className="relative group">
+            <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
+            <div className="relative bg-white/50 backdrop-blur-xl border border-black/5 rounded-[3rem] p-4 flex items-center gap-6 shadow-2xl shadow-black/[0.02]">
+               <div className="w-16 h-16 bg-black rounded-[2.2rem] flex items-center justify-center text-white shadow-xl shadow-black/20">
+                  <Search className="w-6 h-6" />
+               </div>
+               <input 
+                 type="text"
+                 placeholder="Search Patient ID, Clinical Name, or Identification Metadata..."
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="flex-1 bg-transparent border-none outline-none text-xl font-bold placeholder:text-gray-300 text-black placeholder:italic"
+               />
+               <div className="flex items-center gap-3 pr-6 border-l border-black/5 pl-8">
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 font-mono">Filter_Mode</span>
+                  <div className="flex items-center gap-1.5 p-1 bg-gray-50 rounded-full border border-black/5">
+                     <button className="px-4 py-2 bg-white text-black text-[9px] font-black uppercase tracking-widest rounded-full shadow-sm">All</button>
+                     <button className="px-4 py-2 text-gray-400 text-[9px] font-black uppercase tracking-widest rounded-full hover:text-black transition-colors border border-transparent hover:bg-white">Verified</button>
+                  </div>
+               </div>
+            </div>
+            <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
+          </div>
+
           <div className="bg-white rounded-[2.5rem] border border-black/5 shadow-2xl shadow-black/[0.02] overflow-hidden">
-             <div className="p-10 border-b border-black/5 flex justify-between items-center">
+             <div className="p-10 border-b border-black/5 flex justify-between items-center bg-gray-50/20">
                 <div className="flex items-center gap-4">
-                   <Users className="w-5 h-5 text-gray-300" />
-                   <span className="text-xs font-black uppercase tracking-widest">Entry Logs</span>
+                   <Users className="w-5 h-5 text-gray-400" />
+                   <span className="text-xs font-black uppercase tracking-widest text-[#222]">Entry Logs</span>
                 </div>
-                <div className="flex items-center gap-2">
-                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                   <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] italic">Stream Synchronization Active</span>
+                <div className="flex items-center gap-3">
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] italic">Real-Time Sync Protocol active</span>
                 </div>
              </div>
              <div className="divide-y divide-black/5">
-                {bookings.length > 0 ? bookings.map((b, i) => (
+                {filteredBookings.length > 0 ? filteredBookings.map((b, i) => (
                   <AuditRow 
                     key={b.id}
                     id={b.id} 
