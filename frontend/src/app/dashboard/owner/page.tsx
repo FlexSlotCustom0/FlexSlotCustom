@@ -318,43 +318,104 @@ function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTem
 }
 
 function ServiceCatalogSection() {
+  const services = [
+    { id: 'T-101', name: 'General Wellness Check', dur: '45m', fee: '$85', desc: 'Comprehensive diagnostic screening and health report.', type: 'diagnostic' },
+    { id: 'T-102', name: 'Specialist Consultation', dur: '30m', fee: '$150', desc: 'Expert clinical review for specific physiological concerns.', type: 'specialist' },
+    { id: 'T-103', name: 'Clinical Follow-up', dur: '15m', fee: '$60', desc: 'Post-treatment validation and medical roadmap update.', type: 'followup' },
+    { id: 'T-104', name: 'Advanced Diagnostics', dur: '60m', fee: '$220', desc: 'High-precision imaging and deep laboratory analysis.', type: 'diagnostic' }
+  ];
+
   return (
-    <div className="space-y-12">
-      <div className="mb-12">
-        <h1 className="text-5xl font-serif italic text-black">Treatment Protocols</h1>
-        <p className="text-sm text-gray-400 font-medium italic mt-4">Managed healthcare services and specialized medical procedures.</p>
+    <div className="space-y-12 pb-24">
+      <div className="flex justify-between items-end mb-4">
+        <div>
+          <h1 className="text-5xl font-serif italic text-black">Treatment Protocols</h1>
+          <p className="text-sm text-gray-400 font-medium italic mt-4">Managed healthcare services and specialized medical procedures.</p>
+        </div>
+        <div className="flex gap-4">
+           <button className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3">
+              <Plus className="w-4 h-4" /> Register New Protocol
+           </button>
+        </div>
       </div>
-      <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
-       <table className="w-full text-left">
-          <thead className="bg-gray-50/50 text-[10px] font-black uppercase text-gray-400 tracking-widest border-b border-gray-50">
-             <tr>
-                <th className="px-10 py-5">Treatment</th>
-                <th className="px-10 py-5">Duration</th>
-                <th className="px-10 py-5">Consultation Fee</th>
-                <th className="px-10 py-5 text-right">Actions</th>
-             </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-50">
-             <CatalogRow name="General Wellness Check" dur="45m" fee="$85" />
-             <CatalogRow name="Specialist Consult" dur="30m" fee="$150" />
-             <CatalogRow name="Clinical Follow-up" dur="15m" fee="$60" />
-          </tbody>
-       </table>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
+            {services.map((s) => (
+              <ServiceCard key={s.id} {...s} />
+            ))}
+         </div>
+
+         <div className="space-y-8">
+            <div className="bg-white border border-black/5 rounded-[2.5rem] p-8 shadow-sm">
+               <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mb-6 font-sans">Protocol Intelligence</div>
+               <div className="space-y-6">
+                  <div className="flex justify-between items-center pb-6 border-b border-black/5">
+                     <span className="text-[11px] font-medium text-gray-500 italic">Median Fee</span>
+                     <span className="text-xl font-serif font-black italic">$92.50</span>
+                  </div>
+                  <div className="flex justify-between items-center pb-6 border-b border-black/5">
+                     <span className="text-[11px] font-medium text-gray-500 italic">Popular Service</span>
+                     <span className="text-xs font-black uppercase text-black tracking-widest">Wellness</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                     <span className="text-[11px] font-medium text-gray-500 italic">Service Density</span>
+                     <span className="text-xs font-black uppercase text-emerald-500 tracking-widest">High_Load</span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden group shadow-2xl shadow-black/20">
+              <Zap className="w-16 h-16 text-yellow-400 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-700" />
+              <div className="font-serif italic text-2xl mb-2 relative z-10">Instant Sync</div>
+              <p className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-mono relative z-10">Global Clinical Pipeline</p>
+              <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-yellow-400/10 rounded-full blur-[80px]" />
+           </div>
+         </div>
       </div>
     </div>
   );
 }
 
-function CatalogRow({ name, dur, fee }: { name: string, dur: string, fee: string }) {
+function ServiceCard({ id, name, dur, fee, desc, type }: { id: string, name: string, dur: string, fee: string, desc: string, type: string }) {
+  const getIcon = () => {
+    switch(type) {
+      case 'specialist': return <Stethoscope className="w-6 h-6" />;
+      case 'diagnostic': return <Scissors className="w-6 h-6" />;
+      default: return <Briefcase className="w-6 h-6" />;
+    }
+  };
+
   return (
-    <tr className="hover:bg-gray-50/20 transition-all group">
-       <td className="px-10 py-6 font-bold">{name}</td>
-       <td className="px-10 py-6 text-sm text-gray-400 italic">{dur}</td>
-       <td className="px-10 py-6 text-sm font-black italic">{fee}</td>
-       <td className="px-10 py-6 text-right">
-          <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors"><FileText className="w-4 h-4 text-gray-300" /></button>
-       </td>
-    </tr>
+    <div className="bg-white rounded-[2.5rem] border border-black/5 p-10 hover:border-black/20 hover:shadow-2xl hover:shadow-black/[0.02] transition-all group flex flex-col justify-between">
+       <div>
+          <div className="flex justify-between items-start mb-10">
+             <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-300 group-hover:bg-black group-hover:text-white transition-all duration-500">
+                {getIcon()}
+             </div>
+             <div className="text-[10px] font-black font-mono text-gray-300 uppercase tracking-widest p-2 border border-black/5 rounded-xl">{id}</div>
+          </div>
+          <h3 className="text-2xl font-serif italic text-black mb-3 group-hover:tracking-tight transition-all duration-700 leading-tight">{name}</h3>
+          <p className="text-[11px] text-gray-400 font-medium italic leading-relaxed mb-8">{desc}</p>
+       </div>
+
+       <div className="pt-8 border-t border-black/5 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+             <div className="flex flex-col">
+                <span className="text-[8px] font-black uppercase text-gray-300 tracking-widest mb-1">Time</span>
+                <span className="text-sm font-black italic text-black">{dur}</span>
+             </div>
+             <div className="w-px h-8 bg-black/5" />
+             <div className="flex flex-col">
+                <span className="text-[8px] font-black uppercase text-gray-300 tracking-widest mb-1">Fee</span>
+                <span className="text-sm font-black italic text-emerald-500">{fee}</span>
+             </div>
+          </div>
+          <button className="p-3 bg-gray-50 hover:bg-black hover:text-white rounded-xl transition-all duration-300 opacity-60 group-hover:opacity-100">
+             <Settings className="w-4 h-4" />
+          </button>
+       </div>
+    </div>
   );
 }
 
