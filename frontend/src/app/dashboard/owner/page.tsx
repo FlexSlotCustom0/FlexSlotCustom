@@ -431,29 +431,31 @@ function SlotManagerSection() {
       if (saved) {
         setSlots(JSON.parse(saved));
       } else {
-        // Rich Seed Data for Demonstration
         const initial = [
           { id: 'S-901', time: '09:00 AM', date: '2026-04-20', available: true },
           { id: 'S-902', time: '10:30 AM', date: '2026-04-20', available: false },
-          { id: 'S-903', time: '11:00 AM', date: '2026-04-20', available: true },
-          { id: 'S-904', time: '01:30 PM', date: '2026-04-20', available: true },
-          { id: 'S-905', time: '02:00 PM', date: '2026-04-21', available: true },
-          { id: 'S-906', time: '04:15 PM', date: '2026-04-21', available: true },
+          { id: 'S-903', time: '11:00 AM', date: '2026-04-21', available: true },
+          { id: 'S-904', time: '01:30 PM', date: '2026-04-21', available: true },
         ];
         setSlots(initial);
         localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
       }
     };
-
     fetchSlots();
     window.addEventListener('storage', fetchSlots);
     return () => window.removeEventListener('storage', fetchSlots);
   }, []);
 
   const addSlot = () => {
+    const t = newTime;
+    const [h, m] = t.split(':');
+    const ampm = parseInt(h) >= 12 ? 'PM' : 'AM';
+    const formattedHour = parseInt(h) % 12 || 12;
+    const timeStr = `${formattedHour}:${m} ${ampm}`;
+
     const newSlot = {
       id: `S${Date.now()}`,
-      time: newTime,
+      time: timeStr,
       date: newDate,
       available: true
     };
@@ -468,53 +470,106 @@ function SlotManagerSection() {
     localStorage.setItem("flexslot_available_slots", JSON.stringify(next));
   };
 
+  const groupedSlots = slots.reduce((acc: any, slot) => {
+    if (!acc[slot.date]) acc[slot.date] = [];
+    acc[slot.date].push(slot);
+    return acc;
+  }, {});
+
+  const sortedDates = Object.keys(groupedSlots).sort();
+
   return (
-    <div className="space-y-8">
-      <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 flex flex-wrap gap-4 items-end">
+    <div className="space-y-12">
+      <div className="flex justify-between items-end">
         <div>
-          <label className="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Select Date</label>
-          <input 
-            type="date" 
-            value={newDate} 
-            onChange={(e) => setNewDate(e.target.value)}
-            className="px-4 py-3 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/5"
-          />
+          <h2 className="text-4xl font-serif italic text-black">Master Schedule</h2>
+          <p className="text-sm text-gray-400 font-medium italic mt-2">Precision management of clinic availability and slot locks.</p>
         </div>
-        <div>
-          <label className="text-[10px] font-black uppercase text-gray-400 mb-2 block tracking-widest">Select Time</label>
-          <input 
-            type="time" 
-            value={newTime} 
-            onChange={(e) => setNewTime(e.target.value)}
-            className="px-4 py-3 rounded-xl border border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/5"
-          />
+        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-xl border border-emerald-100">
+           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+           <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Global Sync Active</span>
+        </div>
+      </div>
+
+      <div className="bg-white p-10 rounded-[2.5rem] border border-black/5 shadow-2xl shadow-black/[0.02] flex flex-wrap gap-10 items-end relative overflow-hidden">
+        <div className="flex-1 min-w-[200px]">
+          <label className="text-[10px] font-black uppercase text-black/40 mb-3 block tracking-widest italic">Clinical Target Date</label>
+          <div className="relative">
+            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+            <input 
+              type="date" 
+              value={newDate} 
+              onChange={(e) => setNewDate(e.target.value)}
+              className="w-full pl-12 pr-6 py-4 rounded-2xl border border-black/5 bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+            />
+          </div>
+        </div>
+        <div className="flex-1 min-w-[200px]">
+          <label className="text-[10px] font-black uppercase text-black/40 mb-3 block tracking-widest italic">Precision Time Slot</label>
+          <div className="relative">
+            <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+            <input 
+              type="time" 
+              value={newTime} 
+              onChange={(e) => setNewTime(e.target.value)}
+              className="w-full pl-12 pr-6 py-4 rounded-2xl border border-black/5 bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+            />
+          </div>
         </div>
         <button 
           onClick={addSlot}
-          className="bg-black text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 hover:bg-gray-800 transition-all"
+          className="px-10 py-5 bg-black text-white rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-black/10"
         >
-          <Plus className="w-4 h-4" /> Add Slot
+          <Plus className="w-4 h-4" /> Finalize Slot Allocation
         </button>
+        <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-gray-50 rounded-full blur-3xl opacity-50" />
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {slots.map((slot) => (
-          <div key={slot.id} className="bg-white border border-gray-100 p-6 rounded-[2rem] shadow-sm hover:border-red-100 transition-all group relative">
-            <div className="text-[10px] font-black text-gray-300 uppercase mb-4 tracking-widest">{slot.id}</div>
-            <div className="text-xl font-bold mb-1">{slot.time}</div>
-            <div className="text-[10px] text-gray-400 font-medium mb-4 italic">{slot.date}</div>
-            <div className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1 ${slot.available ? 'text-emerald-500' : 'text-orange-500'}`}>
-               <CheckCircle2 className="w-3 h-3" /> {slot.available ? 'AVAILABLE' : 'BOOKED'}
-            </div>
+      <div className="space-y-10">
+        {sortedDates.length > 0 ? sortedDates.map(date => (
+          <div key={date} className="relative pl-10">
+            <div className="absolute left-0 top-0 bottom-0 w-px bg-black/5" />
+            <div className="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-black ring-4 ring-white" />
             
-            <button 
-              onClick={() => removeSlot(slot.id)}
-              className="absolute top-4 right-4 p-2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            <h3 className="text-xl font-serif font-black italic text-black mb-6 flex items-center gap-4">
+              {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              <span className="text-[10px] font-black px-3 py-1 bg-gray-100 rounded-full italic text-gray-400 border border-black/5">Active Block</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {groupedSlots[date].map((slot: any) => (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  key={slot.id} 
+                  className={`p-6 rounded-[2rem] border transition-all group relative ${slot.available ? 'bg-white border-black/5 hover:border-black' : 'bg-gray-50 border-transparent opacity-60'}`}
+                >
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">{slot.id}</div>
+                    {slot.available && (
+                      <button 
+                        onClick={() => removeSlot(slot.id)}
+                        className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl opacity-0 group-hover:opacity-100 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  <div className="text-2xl font-bold text-black mb-1">{slot.time}</div>
+                  <div className={`text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5 ${slot.available ? 'text-emerald-500' : 'text-orange-500'}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${slot.available ? 'bg-emerald-500' : 'bg-orange-500'}`} />
+                    {slot.available ? 'Available for booking' : 'Reserved / Booked'}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        ))}
+        )) : (
+          <div className="py-32 flex flex-col items-center justify-center text-center opacity-30">
+             <CalendarClock className="w-16 h-16 mb-4" />
+             <div className="text-sm font-black uppercase tracking-widest">No active clinical blocks found.</div>
+          </div>
+        )}
       </div>
     </div>
   );
