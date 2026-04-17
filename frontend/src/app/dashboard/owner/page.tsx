@@ -18,6 +18,7 @@ export default function OwnerDashboard() {
   const [activeTemplate, setActiveTemplate] = useState("clinic-clean");
 
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const role = localStorage.getItem("flexslot_role");
@@ -27,8 +28,39 @@ export default function OwnerDashboard() {
     setActiveTemplate(savedTemplate);
   }, []);
 
+  const handleTemplateSelect = (t: string) => {
+    setIsUpdating(true);
+    setActiveTemplate(t);
+    localStorage.setItem("flexslot_active_template", t);
+    setTimeout(() => setIsUpdating(false), 1200);
+  };
+
+  const getThemeColor = () => {
+    switch(activeTemplate) {
+      case 'clinic-clean': return 'from-blue-50/50';
+      case 'paws-premium': return 'from-emerald-50/50';
+      case 'pulse-modern': return 'from-indigo-50/50';
+      case 'vet-warm': return 'from-orange-50/50';
+      case 'wild-med': return 'from-green-50/50';
+      default: return 'from-gray-50/50';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#FDFDFD] text-black font-sans flex overflow-hidden">
+    <div className={`min-h-screen bg-[#FDFDFD] text-black font-sans flex overflow-hidden transition-colors duration-1000`}>
+      <AnimatePresence>
+        {isUpdating && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed bottom-10 right-10 z-[100] bg-black text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl flex items-center gap-3 border border-white/10"
+          >
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            Syncing Brand Assets: {activeTemplate}
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Sidebar Navigation */}
       <aside className="w-72 border-r border-gray-100 flex flex-col h-screen sticky top-0 bg-white z-20">
         <div className="h-20 flex items-center px-8 border-b border-gray-50">
@@ -61,7 +93,7 @@ export default function OwnerDashboard() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col overflow-y-auto">
+      <main className={`flex-1 flex flex-col overflow-y-auto bg-gradient-to-br ${getThemeColor()} to-transparent transition-all duration-1000`}>
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-[60]">
           <h2 className="text-xl font-serif text-black italic">Clinic HQ</h2>
           <div className="flex items-center gap-6">
@@ -137,10 +169,7 @@ export default function OwnerDashboard() {
           {activeTab === "ui" && (
             <UIConfiguratorSection 
               activeTemplate={activeTemplate} 
-              onSelectTemplate={(t) => {
-                setActiveTemplate(t);
-                localStorage.setItem("flexslot_active_template", t);
-              }} 
+              onSelectTemplate={handleTemplateSelect} 
             />
           )}
           {activeTab === "services" && <ServiceCatalogSection />}
