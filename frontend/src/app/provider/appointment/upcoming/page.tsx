@@ -24,6 +24,7 @@ interface Booking {
 export default function UpcomingAppointments() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchBookings = () => {
@@ -38,6 +39,11 @@ export default function UpcomingAppointments() {
     window.addEventListener('storage', fetchBookings);
     return () => window.removeEventListener('storage', fetchBookings);
   }, []);
+
+  const filteredBookings = bookings.filter(b => 
+    b.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    b.serviceName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-black font-sans flex flex-col">
@@ -62,7 +68,9 @@ export default function UpcomingAppointments() {
             <input 
               type="text" 
               placeholder="Search patients..." 
-              className="pl-12 pr-6 py-3 bg-gray-50 border border-gray-100 rounded-2xl text-xs w-64 focus:outline-none focus:ring-2 focus:ring-black/5"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 pr-6 py-3 bg-gray-50 border border-gray-100 rounded-2xl text-[13px] font-bold w-64 focus:outline-none focus:ring-2 focus:ring-black/5"
             />
           </div>
           <button className="p-3 bg-black text-white rounded-2xl shadow-xl hover:scale-105 transition-all">
@@ -77,12 +85,13 @@ export default function UpcomingAppointments() {
             <div className="w-12 h-12 border-4 border-gray-100 border-t-black rounded-full animate-spin" />
             <span className="text-xs font-black uppercase tracking-widest text-gray-300 font-mono italic">Fetching Secure Records...</span>
           </div>
-        ) : bookings.length > 0 ? (
+        ) : filteredBookings.length > 0 ? (
           <div className="space-y-6">
             <AnimatePresence mode="popLayout">
-              {bookings.map((booking, idx) => (
+              {filteredBookings.map((booking, idx) => (
                 <motion.div
                   key={booking.id}
+                  layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
@@ -138,10 +147,14 @@ export default function UpcomingAppointments() {
         ) : (
           <div className="py-24 text-center">
             <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Calendar className="w-10 h-10 text-gray-200" />
+              {searchQuery ? <AlertCircle className="w-10 h-10 text-gray-200" /> : <Calendar className="w-10 h-10 text-gray-200" />}
             </div>
-            <h3 className="text-xl font-bold mb-2">No upcoming appointments</h3>
-            <p className="text-gray-400 italic">When clients book slots, they will appear here in real-time.</p>
+            <h3 className="text-xl font-bold mb-2">
+              {searchQuery ? `No results for "${searchQuery}"` : "No upcoming appointments"}
+            </h3>
+            <p className="text-gray-400 italic">
+              {searchQuery ? "Try a different patient name or treatment type." : "When clients book slots, they will appear here in real-time."}
+            </p>
           </div>
         )}
       </main>
