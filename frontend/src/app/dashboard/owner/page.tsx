@@ -94,14 +94,7 @@ export default function OwnerDashboard() {
       </aside>
 
       <main className={`flex-1 flex flex-col overflow-y-auto bg-gradient-to-br ${getThemeColor()} to-transparent transition-all duration-1000`}>
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-[60]">
 
-          <div className="flex items-center gap-6">
-
-            
-
-          </div>
-        </header>
 
         <div className="p-10 max-w-7xl mx-auto w-full space-y-12">
           {activeTab === "overview" && <OverviewSection activeTemplate={activeTemplate} />}
