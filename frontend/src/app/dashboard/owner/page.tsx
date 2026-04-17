@@ -839,8 +839,8 @@ function AuditTrailSection() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div className="lg:col-span-3 space-y-8">
+      <div className="space-y-8">
+        <div className="space-y-8">
           <div className="grid grid-cols-3 gap-6">
              <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm font-sans">
                 <div className="text-[9px] font-black uppercase text-gray-400 tracking-[0.2em] mb-4">Registry Density</div>
@@ -887,44 +887,11 @@ function AuditTrailSection() {
              </div>
           </div>
         </div>
-
-        <div className="space-y-8">
-           <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden group shadow-2xl shadow-black/20">
-              <ShieldCheck className="w-16 h-16 text-emerald-500 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-700" />
-              <div className="font-serif italic text-2xl mb-2 relative z-10">Kindred Shield</div>
-              <p className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-mono relative z-10">Advanced HIPAA Safeguard</p>
-              <div className="mt-12 pt-10 border-t border-white/10 w-full relative z-10">
-                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 mb-6 italic">Active Encryption Matrix</div>
-                <div className="grid grid-cols-6 gap-2">
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <motion.div 
-                      key={i} 
-                      animate={{ height: [8, 16, 8] }}
-                      transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-                      className="w-full bg-emerald-500/20 rounded-full" 
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />
-           </div>
-
-           <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 space-y-8">
-              <div className="space-y-2">
-                 <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Registry Governance</div>
-                 <h4 className="text-xl font-serif italic text-black">Immutable Chain</h4>
-              </div>
-              <p className="text-[11px] text-gray-500 font-medium italic leading-relaxed">System logs are cryptographically linked to individual provider keys and cannot be altered once verified.</p>
-              <div className="pt-6 border-t border-black/5 flex items-center justify-between">
-                 <div className="text-[9px] font-black uppercase tracking-widest text-[#999]">Security Level</div>
-                 <div className="px-3 py-1 bg-black text-white rounded-lg text-[9px] font-black tracking-widest">TIER_4</div>
-              </div>
-           </div>
-        </div>
       </div>
     </div>
   );
 }
+
 
 function AuditRow({ id, name, time, status, service, onDelete }: { id: string, name: string, time: string, status: string, service?: string, onDelete: () => void }) {
   return (
