@@ -49,16 +49,7 @@ export default function OwnerDashboard() {
           </Link>
           <SideNavItem icon={<Users />} label="Patient Registry" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
           
-          <div className="pt-10 px-4">
-             <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
-               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 italic">Clinic Partition</div>
-               <div className="flex items-center gap-2 mb-2">
-                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                 <span className="text-[10px] font-mono font-bold truncate text-black">UUID: 550e8400-e29b</span>
-               </div>
-               <p className="text-[9px] text-gray-400 italic">RLS Policy: ENFORCED</p>
-             </div>
-          </div>
+
         </div>
 
         <div className="p-6 border-t border-gray-50">
