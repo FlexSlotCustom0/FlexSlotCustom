@@ -45,14 +45,7 @@ export default function CustomerDashboard() {
           <SideNavItem icon={<Bot />} label="Diagnostic AI" active={activeTab === "ai"} onClick={() => setActiveTab("ai")} />
           <SideNavItem icon={<Calendar />} label="Patient History" active={activeTab === "bookings"} onClick={() => setActiveTab("bookings")} />
           
-          <div className="pt-10 px-4 space-y-4">
-             <div className="p-5 rounded-3xl bg-black text-white shadow-xl shadow-black/10">
-                <HeartPulse className="w-8 h-8 mb-4 text-emerald-500" />
-                <h4 className="font-bold text-sm mb-1 tracking-tight">Clinical Assistant</h4>
-                <p className="text-[10px] text-white/50 leading-relaxed italic mb-4">&quot;I can triage your request and find the next specialist slot.&quot;</p>
-                <button className="w-full py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest">Start Triage</button>
-             </div>
-          </div>
+
         </div>
 
         <div className="p-6 border-t border-gray-50">
