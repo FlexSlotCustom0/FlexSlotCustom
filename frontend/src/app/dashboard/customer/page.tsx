@@ -278,17 +278,61 @@ function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, ha
 }
 
 function MyAppointmentsSection() {
+  const [records, setRecords] = useState<any[]>([]);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const syncRecords = () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      const saved = localStorage.getItem("flexslot_bookings");
+      if (saved) {
+        setRecords(JSON.parse(saved).reverse());
+      } else {
+        setRecords([
+          { id: 'B-Demo1', clientName: 'Alexander Wright', serviceName: 'General Wellness', slotDate: '2026-04-20', slotTime: '10:30 AM' },
+          { id: 'B-Demo2', clientName: 'Alexander Wright', serviceName: 'Specialist Consultation', slotDate: '2026-04-24', slotTime: '02:00 PM' }
+        ]);
+      }
+      setIsSyncing(false);
+    }, 1500);
+  };
+
+  useEffect(() => {
+    syncRecords();
+  }, []);
+
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-16">
        <div className="flex justify-between items-end">
-          <h1 className="text-4xl font-serif text-black italic">Patient Itinerary</h1>
-          <button className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-100 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-50 shadow-sm text-black">
-             <RefreshCw className="w-4 h-4 text-black" /> Re-sync Records
+          <div className="space-y-4">
+             <h1 className="text-5xl font-serif text-black italic leading-tight">Patient Itinerary</h1>
+             <p className="text-sm text-gray-400 font-medium italic">Validated history of clinical engagements and future medical appointments.</p>
+          </div>
+          <button 
+            onClick={syncRecords}
+            disabled={isSyncing}
+            className="flex items-center gap-3 px-8 py-4 bg-white border border-black/5 rounded-[2rem] text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white shadow-xl transition-all disabled:opacity-50 group"
+          >
+             <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-700'}`} />
+             {isSyncing ? 'Synchronizing Clinical Stream...' : 'Re-sync Records'}
           </button>
        </div>
-       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AppointmentRow title="Checkup (Max)" owner="Paw & Tail" time="Tuesday, 10:30 AM" status="CONFIRMED" />
-          <AppointmentRow title="Dental Cleaning" owner="Dental Assoc." time="Friday, 02:00 PM" status="FOLLOWUP" />
+
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {records.length > 0 ? records.map((r) => (
+            <AppointmentRow 
+               key={r.id} 
+               title={r.serviceName} 
+               owner="Kindred Medical" 
+               time={`${r.slotDate} | ${r.slotTime}`} 
+               status={new Date(r.slotDate) > new Date() ? "UPCOMING" : "ARCHIVED"} 
+            />
+          )) : (
+            <div className="col-span-2 p-24 bg-gray-50/50 rounded-[3rem] border border-black/5 flex flex-col items-center justify-center text-center">
+               <Layers className="w-12 h-12 text-gray-200 mb-6" />
+               <div className="text-[10px] font-black uppercase tracking-widest text-gray-300 italic">No clinical records found in the current stream.</div>
+            </div>
+          )}
        </div>
     </motion.div>
   );
@@ -296,18 +340,20 @@ function MyAppointmentsSection() {
 
 function AppointmentRow({ title, owner, time, status }: { title: string, owner: string, time: string, status: string }) {
   return (
-    <div className="bg-white border border-gray-100 p-8 rounded-[2.5rem] flex items-center justify-between shadow-sm hover:scale-[1.01] transition-all">
-       <div className="flex items-center gap-8">
-          <div className="w-16 h-16 bg-gray-50 rounded-2xl flex flex-col items-center justify-center font-bold text-black group-hover:bg-black group-hover:text-white transition-colors duration-500">
-             <div className="text-[8px] uppercase opacity-40">OCT</div>
-             <div className="text-xl font-serif leading-none mt-1">24</div>
+    <div className="bg-white border border-black/5 p-10 rounded-[3rem] flex items-center justify-between shadow-2xl shadow-black/[0.01] hover:shadow-black/[0.04] hover:border-black/20 hover:scale-[1.02] transition-all group">
+       <div className="flex items-center gap-10">
+          <div className="w-20 h-20 bg-gray-50 rounded-[2rem] flex flex-col items-center justify-center font-bold text-black group-hover:bg-black group-hover:text-white transition-all duration-700 shadow-inner">
+             <div className="text-[9px] uppercase tracking-widest opacity-30 group-hover:opacity-100">APR</div>
+             <div className="text-2xl font-serif leading-none mt-1">{time.split('-')[2]?.split(' ')[0] || '20'}</div>
           </div>
-          <div>
-             <h4 className="text-lg font-bold mb-1 text-black">{title}</h4>
-             <p className="text-xs text-gray-400 italic">{owner} · {time}</p>
+          <div className="space-y-1">
+             <h4 className="text-2xl font-serif italic mb-1 text-black group-hover:tracking-tight transition-all duration-700 leading-tight">{title}</h4>
+             <p className="text-[11px] text-gray-400 font-medium italic">{owner} · {time}</p>
           </div>
        </div>
-       <div className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest ${status === 'CONFIRMED' ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-400'}`}>
+       <div className={`px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-sm ${
+         status === 'UPCOMING' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-gray-100 text-gray-400 border border-gray-200'
+       }`}>
           {status}
        </div>
     </div>
