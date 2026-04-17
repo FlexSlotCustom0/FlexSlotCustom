@@ -65,10 +65,7 @@ export default function OwnerDashboard() {
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-[60]">
           <h2 className="text-xl font-serif text-black italic">Clinic HQ</h2>
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
-              <Zap className="w-4 h-4 text-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-black">Postgres RLS: ACTIVE</span>
-            </div>
+
             
             <div className="relative">
               <button 
@@ -176,62 +173,99 @@ function SideNavItem({ icon, label, active, onClick }: { icon: React.ReactNode, 
   );
 }
 
-function MetricCard({ label, value, trend, icon }: { label: string, value: string, trend: string, icon: React.ReactNode }) {
+function MetricCard({ label, value, trend, icon, desc }: { label: string, value: string, trend: string, icon: React.ReactNode, desc: string }) {
   return (
-    <div className="bg-white p-8 rounded-[2.5rem] border border-gray-50 shadow-sm group hover:scale-[1.02] transition-all">
-      <div className="flex justify-between items-start mb-6">
-        <div className="p-3 bg-gray-50 rounded-2xl group-hover:bg-black group-hover:text-white transition-colors">
-          {icon}
+    <div className="bg-white p-8 rounded-[2.5rem] border border-black/5 shadow-sm group hover:scale-[1.02] hover:border-black/20 transition-all flex flex-col justify-between h-full">
+      <div>
+        <div className="flex justify-between items-start mb-6">
+          <div className="p-3 bg-gray-50 rounded-2xl group-hover:bg-black group-hover:text-white transition-colors">
+            {icon}
+          </div>
+          <span className="text-[10px] font-black font-mono px-3 py-1.5 rounded-lg bg-black text-white">{trend}</span>
         </div>
-        <span className="text-[10px] font-black font-mono px-3 py-1.5 rounded-lg bg-black text-white">{trend}</span>
+        <div className="text-3xl font-serif font-black mb-1 text-black">{value}</div>
+        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-black/80">{label}</div>
       </div>
-      <div className="text-3xl font-serif font-black mb-1">{value}</div>
-      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">{label}</div>
+      <p className="mt-4 text-[10px] text-gray-400 font-medium italic leading-relaxed">{desc}</p>
     </div>
   );
 }
 
 function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-3xl font-serif italic text-black">Performance Analytics</h2>
+        <p className="text-sm text-gray-400 font-medium italic">Comprehensive overview of clinical throughput and financial signals.</p>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <MetricCard label="Patient Visits" value="842" trend="+12%" icon={<Calendar />} />
-        <MetricCard label="Pharmacy Rev" value="$8,240" trend="+5%" icon={<TrendingUp />} />
-        <MetricCard label="Diagnostic Load" value="High" trend="AI_GEN" icon={<Bot />} />
+        <MetricCard 
+          label="Patient Visits" 
+          value="842" 
+          trend="+12%" 
+          icon={<Calendar />} 
+          desc="Total unique clinical consultations recorded in the current billing cycle."
+        />
+        <MetricCard 
+          label="Clinical Revenue" 
+          value="$8,240" 
+          trend="+5%" 
+          icon={<TrendingUp />} 
+          desc="Net therapeutic and consultation profit before secondary operational costs."
+        />
+        <MetricCard 
+          label="Diagnostic Load" 
+          value="High" 
+          trend="AI_OPT" 
+          icon={<Bot />} 
+          desc="Real-time computational load for Smart-Triage parsing and patient intents."
+        />
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white rounded-[2.5rem] p-10 border border-gray-50 shadow-sm relative group overflow-hidden">
+        <div className="bg-white rounded-[2.5rem] p-10 border border-black/5 shadow-sm relative group overflow-hidden">
            <div className="flex items-center justify-between mb-8">
-              <h3 className="font-bold text-lg">Patient Flow Index</h3>
-              <div className="text-[10px] font-black text-gray-300 uppercase tracking-widest font-mono italic">Clinical Prediction Engine</div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Patient Flow Index</h3>
+                <p className="text-[10px] text-gray-400 font-medium italic">Temporal distribution of clinical arrivals.</p>
+              </div>
+              <div className="text-[10px] font-black text-black/40 uppercase tracking-widest font-mono italic">Clinical Prediction Engine</div>
            </div>
-           <div className="h-40 flex items-end gap-2 px-2 border-b border-gray-50 mb-4 pb-2">
+           <div className="h-40 flex items-end gap-2 px-2 border-b border-gray-100 mb-6 pb-2">
               {[30, 45, 60, 40, 70, 90, 85, 50, 65, 80, 55, 75].map((h, i) => (
                 <div key={i} className="flex-1 bg-gray-50 rounded-full relative overflow-hidden">
                   <motion.div className="absolute bottom-0 w-full bg-black rounded-full" initial={{ height: 0 }} animate={{ height: `${h}%` }} transition={{ duration: 1.5, delay: i * 0.05 }} />
                 </div>
               ))}
            </div>
+           <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-black/30">
+              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-black" /> AM PEAK</span>
+              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-gray-200" /> PM STABLE</span>
+           </div>
         </div>
 
-        <div className="bg-emerald-500 rounded-[2.5rem] p-10 shadow-2xl shadow-emerald-500/20 relative group overflow-hidden flex flex-col justify-between">
+        <div className="bg-emerald-500 rounded-[2.5rem] p-10 shadow-2xl shadow-emerald-500/20 border border-black/10 relative group overflow-hidden flex flex-col justify-between">
            <div className="relative z-10">
-              <h3 className="text-white font-bold text-2xl mb-2 tracking-tight">Your clinic is live.</h3>
-              <p className="text-white/70 text-sm font-medium italic">Your customized template is now visible to patients.</p>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="px-3 py-1 bg-white/20 rounded-full text-[9px] font-black text-white uppercase tracking-widest">Live Status</div>
+                <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+              </div>
+              <h3 className="text-white font-bold text-3xl mb-3 tracking-tight">Your clinic is live.</h3>
+              <p className="text-white/80 text-sm font-medium italic max-w-sm leading-relaxed">Your professional site is broadcasting to patients. Any changes here sync in sub-100ms across the Kindred Network.</p>
            </div>
-           <div className="relative z-10 flex gap-4 mt-8">
+           <div className="relative z-10 flex gap-4 mt-10">
               <Link 
                 href={`/templates/${activeTemplate}?manage=true`}
-                className="px-6 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl"
+                className="px-8 py-5 bg-white text-black rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
               >
-                 <Layout className="w-4 h-4" /> Customize Site
+                 <Layout className="w-4 h-4" /> Visual Builder
               </Link>
               <Link 
                 href={`/templates/${activeTemplate}`}
-                className="px-6 py-4 bg-black/10 text-white border border-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:bg-black/20 transition-all"
+                className="px-8 py-5 bg-black/10 text-white border border-white/20 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-black/20 transition-all"
               >
-                 <ExternalLink className="w-4 h-4" /> View Public
+                 <ExternalLink className="w-4 h-4" /> Live Preview
               </Link>
            </div>
            {/* Decoration */}
