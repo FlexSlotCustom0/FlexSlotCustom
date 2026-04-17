@@ -159,38 +159,99 @@ function MarketCard({ name, cat, rating, image, id }: { name: string, cat: strin
 
 function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, handleBooking, lockingSlot, lockedSlots }: { chatInput: string, setChatInput: (s: string) => void, isParsing: boolean, setIsParsing: (b: boolean) => void, handleBooking: (id: number) => void, lockingSlot: number | null, lockedSlots: number[] }) {
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-         <div className="space-y-8">
-            <h2 className="text-4xl font-serif text-black">AI Diagnosis Proxy</h2>
-            <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm space-y-6">
-               <div className="relative">
-                  <textarea value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Triage request: E.g. Need a checkup for my cat..." className="w-full h-32 bg-gray-50 border border-gray-100 rounded-3xl p-6 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black/5 resize-none italic" />
-                  <button onClick={() => { setIsParsing(true); setTimeout(() => setIsParsing(false), 2000); }} className="absolute right-4 bottom-4 p-4 bg-black text-white rounded-2xl shadow-xl hover:scale-105 transition-all">
-                     {isParsing ? <Sparkles className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                  </button>
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-16">
+      <div className="flex flex-col gap-4">
+         <h2 className="text-5xl font-serif italic text-black leading-tight">AI Diagnosis Proxy</h2>
+         <p className="text-sm text-gray-400 font-medium italic">Intelligent clinical triage and high-priority resource allocation.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+         <div className="space-y-12">
+            <div className="bg-white rounded-[3rem] border border-black/5 p-12 shadow-2xl shadow-black/[0.02] space-y-10 relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-bl-[4rem] flex items-center justify-center -mr-10 -mt-10 group-hover:bg-black group-hover:text-white transition-all duration-700">
+                  <Bot className="w-8 h-8 mr-8 mt-8 opacity-20 group-hover:opacity-100" />
                </div>
-               <div className="p-6 rounded-3xl bg-black font-mono text-[10px] text-white/40 overflow-hidden relative min-h-[140px]">
-                  {isParsing ? "...TRIAGE_IN_PROGRESS..." : chatInput ? <span className="text-emerald-500">INTENT: CLINICAL_BOOKING</span> : "// Waiting for triage signal..."}
+               
+               <div className="space-y-6">
+                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">Triage Input Terminal</div>
+                  <div className="relative">
+                     <textarea 
+                       value={chatInput} 
+                       onChange={(e) => setChatInput(e.target.value)} 
+                       placeholder="Describe your physiological condition or clinical requirement..." 
+                       className="w-full h-48 bg-gray-50 border border-black/5 rounded-[2.5rem] p-10 text-lg font-medium focus:outline-none focus:ring-4 focus:ring-black/5 resize-none italic placeholder:text-gray-200 transition-all font-serif" 
+                     />
+                     <button 
+                       onClick={() => { setIsParsing(true); setTimeout(() => setIsParsing(false), 2000); }} 
+                       className="absolute right-6 bottom-6 p-6 bg-black text-white rounded-[2rem] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                     >
+                        <span className="text-[10px] font-black uppercase tracking-widest pl-2">Initialize Pulse</span>
+                        {isParsing ? <Sparkles className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                     </button>
+                  </div>
+               </div>
+
+               <div className="p-10 rounded-[2.5rem] bg-black text-white relative overflow-hidden group">
+                  <div className="flex justify-between items-center mb-6 relative z-10">
+                    <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 font-mono">Signal_Analysis</div>
+                    <div className={`text-[9px] font-black uppercase tracking-widest ${isParsing ? 'text-yellow-400' : 'text-emerald-500'}`}>
+                       {isParsing ? 'Parsing...' : 'Ready'}
+                    </div>
+                  </div>
+                  <div className="font-mono text-[11px] leading-relaxed relative z-10">
+                     {isParsing ? (
+                        <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                           [STREAMS_ACTIVE] — Triaging clinical vectors...
+                        </motion.div>
+                     ) : chatInput ? (
+                        <div className="space-y-2">
+                           <div className="text-emerald-500">INTENT: CLINICAL_LOCK_PRIORITY</div>
+                           <div className="text-white/40">VECTOR_MATCH: ACUTE_CONSULTATION</div>
+                        </div>
+                     ) : (
+                        <span className="text-white/20">// Listening for patient signal proxy...</span>
+                     )}
+                  </div>
+                  <div className="absolute bottom-[-20%] right-[-20%] w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />
                </div>
             </div>
          </div>
-         <div className="space-y-8">
-            <h3 className="font-bold flex items-center gap-2 text-black"><Layers className="w-5 h-5 text-gray-300" /> Resource locking</h3>
-            <div className="grid grid-cols-2 gap-4">
+
+         <div className="space-y-12">
+            <div className="flex items-center justify-between">
+               <h3 className="text-2xl font-serif italic text-black">Resource Allocation</h3>
+               <div className="px-5 py-2 bg-gray-50 border border-black/5 rounded-full text-[9px] font-black uppercase tracking-widest text-[#999]">Locked_Matrix</div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-6">
                {["09:00 AM", "10:30 AM", "12:00 PM", "02:30 PM", "04:00 PM", "05:30 PM"].map((time, i) => {
                   const id = i+1;
                   const isLocked = lockedSlots.includes(id);
                   const isLocking = lockingSlot === id;
                   return (
-                    <button key={id} onClick={() => handleBooking(id)} disabled={isLocked || isLocking} className={`p-6 rounded-3xl border text-left transition-all ${isLocked ? 'bg-gray-100 border-gray-100 opacity-50 grayscale' : isLocking ? 'border-black bg-white scale-95 shadow-lg' : 'bg-white border-gray-100 hover:border-black/20 hover:shadow-xl'}`}>
-                       <div className="flex justify-between items-center mb-6">
-                          <Clock className={`w-4 h-4 ${isLocked ? 'text-gray-200' : 'text-gray-400'}`} />
-                          {isLocking && <RefreshCw className="w-4 h-4 animate-spin text-black" />}
-                          {isLocked && <Lock className="w-4 h-4 text-gray-300" />}
+                    <button 
+                      key={id} 
+                      onClick={() => handleBooking(id)} 
+                      disabled={isLocked || isLocking} 
+                      className={`group p-10 rounded-[3rem] border text-left transition-all relative overflow-hidden ${
+                        isLocked 
+                        ? 'bg-gray-50 border-transparent opacity-40' 
+                        : isLocking 
+                          ? 'border-gray-200 bg-white scale-95 shadow-lg' 
+                          : 'bg-white border-black/5 hover:border-black/20 hover:shadow-2xl hover:shadow-black/[0.04]'
+                      }`}
+                    >
+                       <div className="flex justify-between items-center mb-8">
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isLocked ? 'bg-gray-100 text-gray-300' : 'bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white'}`}>
+                             <Clock className="w-5 h-5" />
+                          </div>
+                          {isLocking && <RefreshCw className="w-5 h-5 animate-spin text-black" />}
+                          {isLocked && <Lock className="w-5 h-5 text-gray-300" />}
                        </div>
-                       <div className={`font-bold text-lg ${isLocked ? 'text-gray-300' : 'text-black'}`}>{time}</div>
-                       <div className="text-[9px] font-black uppercase tracking-widest text-gray-300 mt-1">{isLocked ? 'LOCKED_IO' : 'AVAILABLE'}</div>
+                       <div className={`font-serif italic text-2xl ${isLocked ? 'text-gray-300 line-through' : 'text-black'}`}>{time}</div>
+                       <div className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-300 mt-2">
+                          {isLocked ? 'LOCKED_IO' : isLocking ? 'Securing...' : 'Secure_Slot'}
+                       </div>
                     </button>
                   );
                })}
