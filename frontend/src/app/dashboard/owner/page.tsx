@@ -163,9 +163,9 @@ function MetricCard({ label, value, trend, icon, desc }: { label: string, value:
 function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
   return (
     <div className="space-y-12">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-serif italic text-black">Performance Analytics</h2>
-        <p className="text-sm text-gray-400 font-medium italic">Comprehensive overview of clinical throughput and financial signals.</p>
+      <div className="mb-12">
+        <h1 className="text-5xl font-serif italic text-black">Clinical Command</h1>
+        <p className="text-sm text-gray-400 font-medium italic mt-4">Real-time performance metrics and diagnostic insights for your practice.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -257,10 +257,10 @@ function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTem
 
   return (
     <div className="space-y-12">
-      <div className="flex justify-between items-end mb-6">
+      <div className="flex justify-between items-end mb-12">
         <div>
-          <h1 className="text-4xl font-serif text-black italic">Creative Studio</h1>
-          <p className="text-sm text-gray-400 font-medium italic mt-2">Personalize your patient portal with curated clinical themes.</p>
+          <h1 className="text-5xl font-serif text-black italic">Creative Studio</h1>
+          <p className="text-sm text-gray-400 font-medium italic mt-4">Personalize your patient portal with curated clinical themes.</p>
         </div>
         <Link 
            href={`/templates/${activeTemplate}?manage=true`}
@@ -319,7 +319,12 @@ function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTem
 
 function ServiceCatalogSection() {
   return (
-    <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+    <div className="space-y-12">
+      <div className="mb-12">
+        <h1 className="text-5xl font-serif italic text-black">Treatment Protocols</h1>
+        <p className="text-sm text-gray-400 font-medium italic mt-4">Managed healthcare services and specialized medical procedures.</p>
+      </div>
+      <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
        <table className="w-full text-left">
           <thead className="bg-gray-50/50 text-[10px] font-black uppercase text-gray-400 tracking-widest border-b border-gray-50">
              <tr>
@@ -335,6 +340,7 @@ function ServiceCatalogSection() {
              <CatalogRow name="Clinical Follow-up" dur="15m" fee="$60" />
           </tbody>
        </table>
+      </div>
     </div>
   );
 }
@@ -614,8 +620,8 @@ function AuditTrailSection() {
     <div className="space-y-12">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-4xl font-serif italic text-black">Patient Registry</h2>
-          <p className="text-sm text-gray-400 font-medium italic mt-2">Comprehensive archives of clinical engagements and patient history.</p>
+          <h2 className="text-5xl font-serif italic text-black">Patient Registry</h2>
+          <p className="text-sm text-gray-400 font-medium italic mt-4">Comprehensive archives of clinical engagements and patient history.</p>
         </div>
         <div className="flex gap-4">
            <Link href="/provider/appointment/upcoming" className="px-6 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg">

@@ -89,7 +89,7 @@ export default function UpcomingAppointments() {
           </Link>
           <div className="space-y-1">
              <div className="flex items-center gap-3">
-               <h1 className="text-4xl font-serif font-black italic tracking-tight">Live Clinical Feed</h1>
+               <h1 className="text-5xl font-serif font-black italic tracking-tight text-black">Live Clinical Feed</h1>
              </div>
 
           </div>
