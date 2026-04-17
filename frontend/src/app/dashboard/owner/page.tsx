@@ -510,12 +510,7 @@ function ServiceCatalogSection() {
                </div>
             </div>
 
-            <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden group shadow-2xl shadow-black/20">
-              <Zap className="w-16 h-16 text-yellow-400 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-700" />
-              <div className="font-serif italic text-2xl mb-2 relative z-10">Instant Sync</div>
-              <p className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-mono relative z-10">Global Clinical Pipeline</p>
-              <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-yellow-400/10 rounded-full blur-[80px]" />
-           </div>
+
          </div>
       </div>
     </div>
