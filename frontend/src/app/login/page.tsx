@@ -92,7 +92,7 @@ function AuthFlowContent() {
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
               <CalendarClock className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-2xl tracking-tighter">Kindred Calendar</span>
+            <span className="font-bold text-2xl tracking-tighter text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
           </Link>
           <div className="h-1 w-12 bg-gray-100 rounded-full" />
         </div>
@@ -143,7 +143,7 @@ function AuthFlowContent() {
                   <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Identity Selection</span>
                 </div>
-                <h1 className="text-4xl font-serif mb-8">How will you use <br />FlexSlot?</h1>
+                <h1 className="text-4xl font-serif mb-8 leading-tight">How will you use <br />Kindred Calendar?</h1>
                 <div className="grid grid-cols-2 gap-6">
                   <RoleCard
                     icon={<Store className="w-8 h-8" />}
@@ -335,7 +335,7 @@ function AuthFlowContent() {
 
         {/* Info label */}
         <p className="mt-8 text-center text-gray-400 text-xs font-medium">
-          © 2026 FlexSlotCustom Ecosystem. Secure & Private.
+          © 2026 Kindred Calendar Ecosystem. Secure & Private.
         </p>
       </motion.div>
     </div>

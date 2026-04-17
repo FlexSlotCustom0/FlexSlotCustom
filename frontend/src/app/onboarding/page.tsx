@@ -46,7 +46,7 @@ export default function OnboardingPage() {
           <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
             <ShieldPlus className="w-5 h-5 text-white" />
           </div>
-          <span className="font-bold tracking-tight text-lg">FlexSlot Clinic</span>
+          <span className="font-bold tracking-tight text-lg text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
         </div>
         <div className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">Step 1 of 2: Specialty</div>
       </nav>

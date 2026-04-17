@@ -346,7 +346,7 @@ export default function VetWarmTemplate() {
           <div className="flex items-center gap-6">
             <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
             <p className="text-[10px] text-gray-400">
-              Managed via <span className="font-bold text-black">FlexSlot Clinic</span>
+              Managed via <span className="font-bold text-black">Kindred Calendar</span>
             </p>
           </div>
         </div>

@@ -310,7 +310,7 @@ export default function ClinicCleanTemplate() {
           <div className="flex items-center gap-6">
             <span>© 2026 {shop.name}</span>
             <p className="text-[10px] text-gray-400">
-              Crafted with <span className="font-bold text-black">FlexSlotCustom</span>
+              Crafted with <span className="font-bold text-black">Kindred <span className="text-gray-400 font-serif italic font-normal">Calendar</span></span>
             </p>
           </div>
         </div>

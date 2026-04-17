@@ -19,7 +19,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "FlexSlotCustom - Care simplified.",
+  title: "Kindred Calendar - Care simplified.",
   description: "The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.",
 };
 
