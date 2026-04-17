@@ -498,7 +498,7 @@ function SlotManagerSection({ activeTemplate }: { activeTemplate: string }) {
             <div className={`px-3 py-1 bg-${accent}-500/10 text-${accent}-500 rounded-full text-[9px] font-black uppercase tracking-widest border border-${accent}-500/20`}>Operations Mode</div>
           </div>
           <h2 className="text-5xl font-serif italic text-black">Master Schedule</h2>
-          <p className="text-sm text-gray-400 font-medium italic max-w-lg">Advanced allocation engine for clinic availability. Managed via the Kindred Global Sync protocol.</p>
+
         </div>
         <div className="p-4 bg-white/50 backdrop-blur-xl rounded-[2rem] border border-black/5 flex items-center gap-6 shadow-2xl shadow-black/[0.02]">
            <div className="flex -space-x-2">
