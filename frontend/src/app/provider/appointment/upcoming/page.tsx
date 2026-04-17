@@ -91,9 +91,7 @@ export default function UpcomingAppointments() {
              <div className="flex items-center gap-3">
                <h1 className="text-4xl font-serif font-black italic tracking-tight">Live Clinical Feed</h1>
              </div>
-             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic flex items-center gap-2">
-               <Sparkles className="w-3 h-3" /> Kindred Data Orchestration v4.0
-             </p>
+
           </div>
         </div>
 
