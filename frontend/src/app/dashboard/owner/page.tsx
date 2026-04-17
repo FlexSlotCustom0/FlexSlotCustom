@@ -95,72 +95,11 @@ export default function OwnerDashboard() {
 
       <main className={`flex-1 flex flex-col overflow-y-auto bg-gradient-to-br ${getThemeColor()} to-transparent transition-all duration-1000`}>
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-[60]">
-          <h2 className="text-xl font-serif text-black italic">Clinic HQ</h2>
+
           <div className="flex items-center gap-6">
 
             
-            <div className="relative">
-              <button 
-                onClick={() => setShowNotifications(!showNotifications)}
-                className={`p-2 rounded-xl transition-all relative ${showNotifications ? 'bg-black text-white' : 'hover:bg-gray-50 text-gray-400'}`}
-              >
-                 <Bell className="w-5 h-5" />
-                 {!showNotifications && <span className="absolute top-2 right-2.5 w-2 h-2 bg-black rounded-full ring-2 ring-white" />}
-              </button>
 
-              <AnimatePresence>
-                {showNotifications && (
-                  <>
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      onClick={() => setShowNotifications(false)}
-                      className="fixed inset-0 z-[-1]"
-                    />
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 mt-4 w-96 bg-white border border-gray-100 rounded-[2rem] shadow-2xl z-[70] p-4 overflow-hidden"
-                    >
-                      <div className="p-4 border-b border-gray-50 flex items-center justify-between mb-4">
-                        <span className="text-xs font-black uppercase tracking-widest text-black">Cloud Signals</span>
-                        <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">3 New</span>
-                      </div>
-                      <div className="space-y-2">
-                        <NotificationItem 
-                          title="New Appointment Request" 
-                          time="2 mins ago" 
-                          desc="Sarah Chen requested a Dental Checkup"
-                          isNew
-                        />
-                        <NotificationItem 
-                          title="Payment Finalized" 
-                          time="14 mins ago" 
-                          desc="Invoice #4928 successfully processed"
-                          isNew
-                        />
-                        <NotificationItem 
-                          title="Slot Lock Trigger" 
-                          time="1h ago" 
-                          desc="Auto-lock engaged for Tuesday AM slots"
-                        />
-                      </div>
-                      <Link 
-                        href="/provider/appointment/upcoming"
-                        onClick={() => setShowNotifications(false)}
-                        className="mt-6 block w-full py-4 bg-gray-50 hover:bg-black hover:text-white transition-all text-center rounded-2xl text-[10px] font-black uppercase tracking-widest"
-                      >
-                        Navigate to Live Feed
-                      </Link>
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-bold text-sm shadow-xl">DR</div>
           </div>
         </header>
 
