@@ -154,11 +154,7 @@ export default function UpcomingAppointments() {
                                   <div className="text-lg font-black tracking-tight">{booking.slotTime.split(' ')[0]}</div>
                                   <div className="text-[9px] font-black uppercase tracking-widest opacity-40">{booking.slotTime.split(' ')[1]}</div>
                                </div>
-                               {idx === 0 && dIdx === 0 && (
-                                 <div className="absolute -top-3 -right-3 bg-emerald-500 text-white p-2 rounded-full shadow-lg animate-bounce border-4 border-white">
-                                    <Sparkles className="w-3 h-3" />
-                                 </div>
-                               )}
+
                             </div>
                             
                             <div className="space-y-3">
