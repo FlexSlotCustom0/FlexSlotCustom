@@ -179,11 +179,11 @@ function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, ha
                        value={chatInput} 
                        onChange={(e) => setChatInput(e.target.value)} 
                        placeholder="Describe your physiological condition or clinical requirement..." 
-                       className="w-full h-48 bg-gray-50 border border-black/5 rounded-[2.5rem] p-10 text-lg font-medium focus:outline-none focus:ring-4 focus:ring-black/5 resize-none italic placeholder:text-gray-200 transition-all font-serif" 
+                       className="w-full h-48 bg-black text-white border border-white/10 rounded-[2.5rem] p-10 text-lg font-medium focus:outline-none focus:ring-4 focus:ring-black/5 resize-none italic placeholder:text-white/20 transition-all font-serif" 
                      />
                      <button 
                        onClick={() => { setIsParsing(true); setTimeout(() => setIsParsing(false), 2000); }} 
-                       className="absolute right-6 bottom-6 p-6 bg-black text-white rounded-[2rem] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
+                       className="absolute right-6 bottom-6 p-6 bg-white text-black rounded-[2rem] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3"
                      >
                         <span className="text-[10px] font-black uppercase tracking-widest pl-2">Initialize Pulse</span>
                         {isParsing ? <Sparkles className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
