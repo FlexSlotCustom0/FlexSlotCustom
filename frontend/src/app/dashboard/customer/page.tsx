@@ -242,15 +242,30 @@ function AIBookingSection({ chatInput, setChatInput, isParsing, setIsParsing, ha
                       }`}
                     >
                        <div className="flex justify-between items-center mb-8">
-                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isLocked ? 'bg-gray-100 text-gray-300' : 'bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white'}`}>
-                             <Clock className="w-5 h-5" />
+                          <div className={`w-14 h-14 rounded-[1.8rem] flex items-center justify-center transition-all duration-500 ${
+                             isLocked 
+                             ? 'bg-gray-100 text-gray-300' 
+                             : 'bg-gray-50 text-gray-400 group-hover:bg-black group-hover:text-white group-hover:shadow-2xl group-hover:shadow-black/20'
+                          }`}>
+                             <Clock className="w-6 h-6" />
                           </div>
-                          {isLocking && <RefreshCw className="w-5 h-5 animate-spin text-black" />}
-                          {isLocked && <Lock className="w-5 h-5 text-gray-300" />}
+                          {isLocking ? (
+                             <div className="relative">
+                                <RefreshCw className="w-5 h-5 animate-spin text-black" />
+                                <div className="absolute inset-0 bg-black/5 rounded-full animate-ping scale-150" />
+                             </div>
+                          ) : isLocked ? (
+                             <Lock className="w-5 h-5 text-gray-300" />
+                          ) : (
+                             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50" />
+                          )}
                        </div>
-                       <div className={`font-serif italic text-2xl ${isLocked ? 'text-gray-300 line-through' : 'text-black'}`}>{time}</div>
-                       <div className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-300 mt-2">
-                          {isLocked ? 'LOCKED_IO' : isLocking ? 'Securing...' : 'Secure_Slot'}
+                       <div className={`font-serif italic text-3xl transition-all duration-700 ${isLocked ? 'text-gray-300 line-through' : 'text-black group-hover:tracking-tight'}`}>{time}</div>
+                       <div className="flex items-center gap-2 mt-3">
+                          <div className={`text-[8px] font-black uppercase tracking-[0.4em] ${isLocked ? 'text-gray-300' : 'text-gray-400 group-hover:text-black'}`}>
+                             {isLocked ? 'LOCKED_IO' : isLocking ? 'SECURING_TUNNEL' : 'SLOT_AVAILABLE'}
+                          </div>
+                          {!isLocked && !isLocking && <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />}
                        </div>
                     </button>
                   );
