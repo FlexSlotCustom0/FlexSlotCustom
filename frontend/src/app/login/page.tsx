@@ -320,7 +320,7 @@ function AuthFlowContent() {
                     </p>
                   </div>
                   <button
-                    onClick={handleFinish}
+                    onClick={() => handleFinish()}
                     disabled={!email || !username}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >

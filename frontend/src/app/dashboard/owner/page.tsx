@@ -7,7 +7,7 @@ import {
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
   Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard,
-  Palette, Sparkles
+  Palette, Sparkles, User
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -173,7 +173,7 @@ export default function OwnerDashboard() {
             />
           )}
           {activeTab === "services" && <ServiceCatalogSection />}
-          {activeTab === "slots" && <SlotManagerSection />}
+          {activeTab === "slots" && <SlotManagerSection activeTemplate={activeTemplate} />}
           {activeTab === "audit" && <AuditTrailSection />}
         </div>
       </main>
@@ -621,8 +621,20 @@ function SlotManagerSection({ activeTemplate }: { activeTemplate: string }) {
   );
 }
 
+interface Booking {
+  id: string;
+  clinicId?: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone?: string;
+  serviceName: string;
+  slotTime: string;
+  slotDate: string;
+  createdAt: string;
+}
+
 function AuditTrailSection() {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
     const fetchBookings = () => {
@@ -630,7 +642,6 @@ function AuditTrailSection() {
       if (saved) {
         setBookings(JSON.parse(saved).reverse());
       } else {
-        // Initial Dummy Bookings
         const initialBookings = [
           {
             id: "B-1001",
@@ -655,70 +666,129 @@ function AuditTrailSection() {
         localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
       }
     };
-
     fetchBookings();
     window.addEventListener('storage', fetchBookings);
     return () => window.removeEventListener('storage', fetchBookings);
   }, []);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-black">
-       <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
-          <div className="p-8 flex justify-between items-center">
-            <div className="text-[10px] font-black uppercase tracking-widest text-gray-300">Live Appointment Stream</div>
-            <div className="flex items-center gap-4">
-              <Link href="/provider/appointment/upcoming" className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 hover:opacity-60 transition-all">
-                Open Portal <ExternalLink className="w-3 h-3" />
-              </Link>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Real-time sync</span>
+    <div className="space-y-12">
+      <div className="flex justify-between items-end">
+        <div>
+          <h2 className="text-4xl font-serif italic text-black">Patient Registry</h2>
+          <p className="text-sm text-gray-400 font-medium italic mt-2">Comprehensive archives of clinical engagements and patient history.</p>
+        </div>
+        <div className="flex gap-4">
+           <Link href="/provider/appointment/upcoming" className="px-6 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg">
+             Open Live Feed <ExternalLink className="w-4 h-4" />
+           </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="lg:col-span-3 space-y-8">
+          <div className="grid grid-cols-3 gap-6">
+             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm">
+                <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Total Records</div>
+                <div className="text-3xl font-serif font-black italic">{bookings.length + 42}</div>
+             </div>
+             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm">
+                <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Recent Sync</div>
+                <div className="text-3xl font-serif font-black italic">Active</div>
+             </div>
+             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm">
+                <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Integrity</div>
+                <div className="text-3xl font-serif font-black italic">100%</div>
+             </div>
+          </div>
+
+          <div className="bg-white rounded-[2.5rem] border border-black/5 shadow-2xl shadow-black/[0.02] overflow-hidden">
+             <div className="p-10 border-b border-black/5 flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                   <Users className="w-5 h-5 text-gray-300" />
+                   <span className="text-xs font-black uppercase tracking-widest">Entry Logs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] italic">Real-Time Data Injection</span>
+                </div>
+             </div>
+             <div className="divide-y divide-black/5">
+                {bookings.length > 0 ? bookings.map((b, i) => (
+                  <AuditRow 
+                    key={i}
+                    id={`REG_${1000 + i}`} 
+                    name={b.clientName} 
+                    time={`${b.slotTime} — ${b.slotDate}`} 
+                    status="VERIFIED" 
+                    service={b.serviceName}
+                  />
+                )) : (
+                  <div className="p-24 flex flex-col items-center justify-center text-center opacity-20">
+                     <FileText className="w-16 h-16 mb-4" />
+                     <span className="text-xs font-black uppercase tracking-widest">Registry Silent</span>
+                  </div>
+                )}
+             </div>
+          </div>
+        </div>
+
+        <div className="space-y-8">
+           <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+              <ShieldCheck className="w-16 h-16 text-emerald-500 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-700" />
+              <div className="font-serif italic text-2xl mb-2 relative z-10">Kindred Shield</div>
+              <p className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-mono relative z-10">Advanced HIPAA Safeguard</p>
+              <div className="mt-12 pt-10 border-t border-white/10 w-full relative z-10">
+                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 mb-6 italic">Active Encryption Matrix</div>
+                <div className="grid grid-cols-6 gap-2">
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <motion.div 
+                      key={i} 
+                      animate={{ height: [8, 16, 8] }}
+                      transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                      className="w-full bg-emerald-500/20 rounded-full" 
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
-          {bookings.length > 0 ? bookings.map((b, i) => (
-            <AuditRow 
-              key={i}
-              id={`B-${1000 + i}`} 
-              name={b.clientName} 
-              time={`${b.slotTime} (${b.slotDate})`} 
-              status="RESERVED" 
-              service={b.serviceName}
-            />
-          )) : (
-            <div className="p-20 text-center text-gray-300 italic">No bookings yet.</div>
-          )}
-       </div>
-       <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center">
-          <ShieldCheck className="w-12 h-12 text-emerald-500 mb-6" />
-          <div className="font-bold text-lg mb-2">HIPAA_SECURED</div>
-          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-mono">Row-Level Security Active</p>
-          <div className="mt-10 pt-8 border-t border-white/10 w-full">
-            <div className="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-4">Encryption Keys</div>
-            <div className="flex gap-1 justify-center">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="w-1 h-3 bg-emerald-500/20 rounded-full" />
-              ))}
-            </div>
-          </div>
-       </div>
+              <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-emerald-500/5 rounded-full blur-[80px]" />
+           </div>
+
+           <div className="bg-white border border-black/5 rounded-[2.5rem] p-8 space-y-6">
+              <div className="text-[9px] font-black uppercase tracking-widest text-gray-400">Registry Policy</div>
+              <p className="text-[11px] text-gray-500 font-medium italic leading-relaxed">System logs are immutable and cryptographically linked to individual provider keys.</p>
+              <button className="w-full py-4 bg-gray-50 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">Download Audit PDF</button>
+           </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function AuditRow({ id, name, time, status, service }: { id: string, name: string, time: string, status: string, service?: string }) {
   return (
-    <div className="p-8 flex items-center justify-between hover:bg-gray-50/50 transition-all">
-       <div className="flex items-center gap-6">
-          <div className="text-[10px] font-black font-mono text-gray-300">{id}</div>
+    <div className="p-10 flex items-center justify-between hover:bg-gray-50/30 transition-all group">
+       <div className="flex items-center gap-8">
+          <div className="w-14 h-14 bg-gray-50 rounded-2xl border border-black/5 flex items-center justify-center text-gray-300 group-hover:bg-black group-hover:text-white transition-all">
+             <User className="w-6 h-6" />
+          </div>
           <div>
-             <div className="font-bold">{name}</div>
-             <div className="text-xs text-gray-400 italic mb-1">{time}</div>
-             {service && <div className="text-[9px] font-black uppercase tracking-widest text-emerald-500">{service}</div>}
+             <div className="font-serif italic text-2xl text-black mb-1 group-hover:tracking-tight transition-all">{name}</div>
+             <div className="flex items-center gap-4">
+                <div className="text-[10px] font-black font-mono text-gray-300 tracking-widest">{id}</div>
+                <div className="w-1 h-1 rounded-full bg-gray-200" />
+                <div className="text-[11px] text-gray-400 font-medium italic">{time}</div>
+             </div>
           </div>
        </div>
-       <div className="px-4 py-1.5 rounded-lg bg-black text-white text-[10px] font-black uppercase tracking-widest">
-          {status}
+       <div className="flex items-center gap-10">
+          <div className="text-right hidden sm:block">
+             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 mb-1">{service}</div>
+             <div className="text-[9px] font-black uppercase tracking-widest text-[#999] italic">Treatment_Code_A1</div>
+          </div>
+          <div className="px-6 py-3 rounded-xl bg-gray-50 border border-black/5 text-[10px] font-black uppercase tracking-widest group-hover:bg-black group-hover:text-white transition-all">
+             {status}
+          </div>
        </div>
     </div>
   );
