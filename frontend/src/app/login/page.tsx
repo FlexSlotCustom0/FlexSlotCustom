@@ -34,8 +34,8 @@ function AuthFlowContent() {
   const prevStep = () => {
     if (step === "role") setStep("choice");
     if (step === "service") setStep("role");
-    if (step === "template") setStep("service");
-    if (step === "finalize") setStep(role === 'owner' ? "template" : "role");
+    if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
+    if (step === "template") setStep("finalize");
     if (step === "login") setStep("choice");
   };
 
@@ -47,7 +47,17 @@ function AuthFlowContent() {
       localStorage.setItem("flexslot_role", "owner");
       localStorage.setItem("flexslot_user_email", email);
       if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard/owner");
+      
+      if (selectedTemplate) {
+        localStorage.setItem("flexslot_active_template", selectedTemplate);
+        if (service === 'vet') localStorage.setItem("flexslot_clinic_niche", "veterinary");
+        else localStorage.setItem("flexslot_clinic_niche", "medical");
+        
+        // Redirect directly to the template customization page
+        router.push(`/templates/${selectedTemplate}?manage=true`);
+      } else {
+        router.push("/dashboard/owner");
+      }
     } else if (email === "client@test.com") {
       localStorage.setItem("flexslot_role", "customer");
       localStorage.setItem("flexslot_user_email", email);
@@ -137,7 +147,7 @@ function AuthFlowContent() {
                     icon={<Store className="w-8 h-8" />}
                     title="I&apos;m an Owner"
                     desc="I want to list services and manage slots."
-                    onClick={() => { setRole("owner"); localStorage.setItem("flexslot_role", "owner"); nextStep("template"); }}
+                    onClick={() => { setRole("owner"); localStorage.setItem("flexslot_role", "owner"); nextStep("service"); }}
                   />
                   <RoleCard
                     icon={<User className="w-8 h-8" />}
@@ -163,10 +173,10 @@ function AuthFlowContent() {
                 </div>
                 <h1 className="text-4xl font-serif mb-8">What do you <br />offer?</h1>
                 <div className="grid grid-cols-2 gap-4">
-                  <ServiceTypeBtn icon={<Stethoscope />} label="General Practice" value="gp" selected={service === 'gp'} onClick={() => { setService('gp'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<HeartPulse />} label="Specialist Clinic" value="specialist" selected={service === 'specialist'} onClick={() => { setService('specialist'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<PawPrint />} label="Vet & Pet Care" value="vet" selected={service === 'vet'} onClick={() => { setService('vet'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<Syringe />} label="Dental & Lab" value="dental" selected={service === 'dental'} onClick={() => { setService('dental'); nextStep('template'); }} />
+                  <ServiceTypeBtn icon={<Stethoscope />} label="General Practice" value="gp" selected={service === 'gp'} onClick={() => { setService('gp'); nextStep('finalize'); }} />
+                  <ServiceTypeBtn icon={<HeartPulse />} label="Specialist Clinic" value="specialist" selected={service === 'specialist'} onClick={() => { setService('specialist'); nextStep('finalize'); }} />
+                  <ServiceTypeBtn icon={<PawPrint />} label="Vet & Pet Care" value="vet" selected={service === 'vet'} onClick={() => { setService('vet'); nextStep('finalize'); }} />
+                  <ServiceTypeBtn icon={<Syringe />} label="Dental & Lab" value="dental" selected={service === 'dental'} onClick={() => { setService('dental'); nextStep('finalize'); }} />
                 </div>
               </motion.div>
             )}
@@ -188,8 +198,21 @@ function AuthFlowContent() {
                   <p className="text-gray-400 font-medium italic">Pick a template optimized for {service} businesses.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <TemplatePreview name="The Discrete" type="Minimalist" onClick={() => { setSelectedTemplate('discrete'); nextStep('finalize'); }} />
-                  <TemplatePreview name="The Elite" type="Modern/Dark" onClick={() => { setSelectedTemplate('elite'); nextStep('finalize'); }} />
+                  {service === 'vet' ? (
+                    <>
+                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => { setSelectedTemplate('vet-warm'); handleFinish(); }} />
+                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => { setSelectedTemplate('paws-premium'); handleFinish(); }} />
+                    </>
+                  ) : service === 'dental' ? (
+                    <>
+                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => { setSelectedTemplate('dental-bright'); handleFinish(); }} />
+                    </>
+                  ) : (
+                    <>
+                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => { setSelectedTemplate('clinic-clean'); handleFinish(); }} />
+                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => { setSelectedTemplate('pulse-modern'); handleFinish(); }} />
+                    </>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -244,11 +267,11 @@ function AuthFlowContent() {
                     </p>
                   </div>
                   <button
-                    onClick={handleFinish}
+                    onClick={() => role === 'owner' ? nextStep('template') : handleFinish()}
                     disabled={!email || !username || !password}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
-                    Complete Registration <Sparkles className="w-4 h-4" />
+                    {role === 'owner' ? 'Continue to Templates' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
