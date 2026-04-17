@@ -318,12 +318,48 @@ function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTem
 }
 
 function ServiceCatalogSection() {
-  const services = [
-    { id: 'T-101', name: 'General Wellness Check', dur: '45m', fee: '$85', desc: 'Comprehensive diagnostic screening and health report.', type: 'diagnostic' },
-    { id: 'T-102', name: 'Specialist Consultation', dur: '30m', fee: '$150', desc: 'Expert clinical review for specific physiological concerns.', type: 'specialist' },
-    { id: 'T-103', name: 'Clinical Follow-up', dur: '15m', fee: '$60', desc: 'Post-treatment validation and medical roadmap update.', type: 'followup' },
-    { id: 'T-104', name: 'Advanced Diagnostics', dur: '60m', fee: '$220', desc: 'High-precision imaging and deep laboratory analysis.', type: 'diagnostic' }
-  ];
+  const [services, setServices] = useState<any[]>([]);
+
+  const fetchServices = () => {
+    const saved = localStorage.getItem("flexslot_clinical_services");
+    if (saved) {
+      setServices(JSON.parse(saved));
+    } else {
+      const initial = [
+        { id: 'T-101', name: 'General Wellness Check', dur: '45m', fee: '$85', desc: 'Comprehensive diagnostic screening and health report.', type: 'diagnostic' },
+        { id: 'T-102', name: 'Specialist Consultation', dur: '30m', fee: '$150', desc: 'Expert clinical review for specific physiological concerns.', type: 'specialist' },
+        { id: 'T-103', name: 'Clinical Follow-up', dur: '15m', fee: '$60', desc: 'Post-treatment validation and medical roadmap update.', type: 'followup' }
+      ];
+      setServices(initial);
+      localStorage.setItem("flexslot_clinical_services", JSON.stringify(initial));
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+    window.addEventListener('storage', fetchServices);
+    return () => window.removeEventListener('storage', fetchServices);
+  }, []);
+
+  const addService = () => {
+    const newS = {
+      id: `T-${100 + services.length + 1}`,
+      name: 'New Clinical Protocol',
+      dur: '30m',
+      fee: '$100',
+      desc: 'Standardized clinical procedure for boutique healthcare.',
+      type: 'diagnostic'
+    };
+    const next = [...services, newS];
+    setServices(next);
+    localStorage.setItem("flexslot_clinical_services", JSON.stringify(next));
+  };
+
+  const deleteService = (id: string) => {
+    const next = services.filter(s => s.id !== id);
+    setServices(next);
+    localStorage.setItem("flexslot_clinical_services", JSON.stringify(next));
+  };
 
   return (
     <div className="space-y-12 pb-24">
@@ -333,7 +369,10 @@ function ServiceCatalogSection() {
           <p className="text-sm text-gray-400 font-medium italic mt-4">Managed healthcare services and specialized medical procedures.</p>
         </div>
         <div className="flex gap-4">
-           <button className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3">
+           <button 
+             onClick={addService}
+             className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3"
+           >
               <Plus className="w-4 h-4" /> Register New Protocol
            </button>
         </div>
@@ -342,7 +381,7 @@ function ServiceCatalogSection() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
          <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((s) => (
-              <ServiceCard key={s.id} {...s} />
+              <ServiceCard key={s.id} {...s} onDelete={() => deleteService(s.id)} />
             ))}
          </div>
 
@@ -377,7 +416,7 @@ function ServiceCatalogSection() {
   );
 }
 
-function ServiceCard({ id, name, dur, fee, desc, type }: { id: string, name: string, dur: string, fee: string, desc: string, type: string }) {
+function ServiceCard({ id, name, dur, fee, desc, type, onDelete }: { id: string, name: string, dur: string, fee: string, desc: string, type: string, onDelete: () => void }) {
   const getIcon = () => {
     switch(type) {
       case 'specialist': return <Stethoscope className="w-6 h-6" />;
@@ -393,7 +432,15 @@ function ServiceCard({ id, name, dur, fee, desc, type }: { id: string, name: str
              <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-300 group-hover:bg-black group-hover:text-white transition-all duration-500">
                 {getIcon()}
              </div>
-             <div className="text-[10px] font-black font-mono text-gray-300 uppercase tracking-widest p-2 border border-black/5 rounded-xl">{id}</div>
+             <div className="flex items-center gap-2">
+                <div className="text-[10px] font-black font-mono text-gray-300 uppercase tracking-widest p-2 border border-black/5 rounded-xl">{id}</div>
+                <button 
+                  onClick={onDelete}
+                  className="p-2 text-gray-200 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+             </div>
           </div>
           <h3 className="text-2xl font-serif italic text-black mb-3 group-hover:tracking-tight transition-all duration-700 leading-tight">{name}</h3>
           <p className="text-[11px] text-gray-400 font-medium italic leading-relaxed mb-8">{desc}</p>
