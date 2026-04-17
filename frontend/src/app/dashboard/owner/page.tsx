@@ -420,7 +420,7 @@ function CatalogRow({ name, dur, fee }: { name: string, dur: string, fee: string
   );
 }
 
-function SlotManagerSection() {
+function SlotManagerSection({ activeTemplate }: { activeTemplate: string }) {
   const [slots, setSlots] = useState<{ id: string, time: string, date: string, available: boolean }[]>([]);
   const [newTime, setNewTime] = useState("09:00");
   const [newDate, setNewDate] = useState(new Date().toISOString().split('T')[0]);
@@ -478,96 +478,144 @@ function SlotManagerSection() {
 
   const sortedDates = Object.keys(groupedSlots).sort();
 
+  const getAccentColor = () => {
+    switch(activeTemplate) {
+      case 'paws-premium': return 'emerald';
+      case 'pulse-modern': return 'indigo';
+      case 'vet-warm': return 'orange';
+      case 'wild-med': return 'green';
+      default: return 'black';
+    }
+  };
+
+  const accent = getAccentColor();
+
   return (
-    <div className="space-y-12">
-      <div className="flex justify-between items-end">
-        <div>
-          <h2 className="text-4xl font-serif italic text-black">Master Schedule</h2>
-          <p className="text-sm text-gray-400 font-medium italic mt-2">Precision management of clinic availability and slot locks.</p>
+    <div className="space-y-16">
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`px-3 py-1 bg-${accent}-500/10 text-${accent}-500 rounded-full text-[9px] font-black uppercase tracking-widest border border-${accent}-500/20`}>Operations Mode</div>
+          </div>
+          <h2 className="text-5xl font-serif italic text-black">Master Schedule</h2>
+          <p className="text-sm text-gray-400 font-medium italic max-w-lg">Advanced allocation engine for clinic availability. Managed via the Kindred Global Sync protocol.</p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-xl border border-emerald-100">
-           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-           <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Global Sync Active</span>
+        <div className="p-4 bg-white/50 backdrop-blur-xl rounded-[2rem] border border-black/5 flex items-center gap-6 shadow-2xl shadow-black/[0.02]">
+           <div className="flex -space-x-2">
+              {[1, 2, 3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-black">DR</div>)}
+           </div>
+           <div className="text-[10px] font-black uppercase tracking-widest text-black/40">3 Active Providers</div>
         </div>
       </div>
 
-      <div className="bg-white p-10 rounded-[2.5rem] border border-black/5 shadow-2xl shadow-black/[0.02] flex flex-wrap gap-10 items-end relative overflow-hidden">
-        <div className="flex-1 min-w-[200px]">
-          <label className="text-[10px] font-black uppercase text-black/40 mb-3 block tracking-widest italic">Clinical Target Date</label>
-          <div className="relative">
-            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+      <div className="bg-white/40 backdrop-blur-3xl p-1 rounded-[3rem] border border-black/5 shadow-2xl shadow-black/[0.05] relative group">
+        <div className="bg-white rounded-[2.8rem] p-10 flex flex-wrap gap-8 items-end relative z-10">
+          <div className="flex-1 min-w-[240px]">
+            <label className="flex items-center gap-2 text-[10px] font-black uppercase text-black/30 mb-4 tracking-[0.2em] italic">
+              <Calendar className="w-3 h-3" /> Target Date Range
+            </label>
             <input 
               type="date" 
               value={newDate} 
               onChange={(e) => setNewDate(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 rounded-2xl border border-black/5 bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+              className="w-full px-8 py-5 rounded-2xl border border-black/5 bg-gray-50/30 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold text-lg"
             />
           </div>
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <label className="text-[10px] font-black uppercase text-black/40 mb-3 block tracking-widest italic">Precision Time Slot</label>
-          <div className="relative">
-            <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
+          <div className="flex-1 min-w-[240px]">
+             <label className="flex items-center gap-2 text-[10px] font-black uppercase text-black/30 mb-4 tracking-[0.2em] italic">
+              <Clock className="w-3 h-3" /> Specific Time Entry
+            </label>
             <input 
               type="time" 
               value={newTime} 
               onChange={(e) => setNewTime(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 rounded-2xl border border-black/5 bg-gray-50/50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+              className="w-full px-8 py-5 rounded-2xl border border-black/5 bg-gray-50/30 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold text-lg"
             />
           </div>
+          <button 
+            onClick={addSlot}
+            className="px-12 py-6 bg-black text-white rounded-[1.8rem] font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-4 hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-black/20 group-hover:bg-gradient-to-r group-hover:from-black group-hover:to-gray-800"
+          >
+            <Plus className="w-5 h-5" /> Push to Live
+          </button>
         </div>
-        <button 
-          onClick={addSlot}
-          className="px-10 py-5 bg-black text-white rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-black/10"
-        >
-          <Plus className="w-4 h-4" /> Finalize Slot Allocation
-        </button>
-        <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-gray-50 rounded-full blur-3xl opacity-50" />
+        {/* Decorative elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none -z-10" />
       </div>
 
-      <div className="space-y-10">
-        {sortedDates.length > 0 ? sortedDates.map(date => (
-          <div key={date} className="relative pl-10">
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-black/5" />
-            <div className="absolute left-[-4px] top-2 w-2 h-2 rounded-full bg-black ring-4 ring-white" />
-            
-            <h3 className="text-xl font-serif font-black italic text-black mb-6 flex items-center gap-4">
-              {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-              <span className="text-[10px] font-black px-3 py-1 bg-gray-100 rounded-full italic text-gray-400 border border-black/5">Active Block</span>
-            </h3>
+      <div className="space-y-24">
+        {sortedDates.length > 0 ? sortedDates.map((date, idx) => (
+          <div key={date} className="relative">
+            <div className="flex items-center gap-8 mb-12">
+               <div className="flex flex-col">
+                  <span className="text-6xl font-serif font-black italic opacity-5 mb-[-1.5rem] tracking-tighter capitalize">{new Date(date).toLocaleDateString('en-US', { weekday: 'long' })}</span>
+                  <h3 className="text-3xl font-serif font-black italic text-black relative z-10 pl-4 border-l-4 border-black">
+                    {new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                  </h3>
+               </div>
+               <div className="flex-1 h-px bg-gradient-to-r from-black/20 to-transparent" />
+               <div className="text-[10px] font-black uppercase tracking-widest text-black/20 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-black/10" /> Block_{idx + 1}
+               </div>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {groupedSlots[date].map((slot: any) => (
                 <motion.div 
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   key={slot.id} 
-                  className={`p-6 rounded-[2rem] border transition-all group relative ${slot.available ? 'bg-white border-black/5 hover:border-black' : 'bg-gray-50 border-transparent opacity-60'}`}
+                  className={`p-1 rounded-[2.5rem] transition-all group overflow-hidden ${slot.available ? 'hover:scale-[1.05]' : 'grayscale opacity-40'}`}
                 >
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="text-[9px] font-black text-gray-300 uppercase tracking-widest">{slot.id}</div>
-                    {slot.available && (
-                      <button 
-                        onClick={() => removeSlot(slot.id)}
-                        className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl opacity-0 group-hover:opacity-100 transition-all"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                  <div className="text-2xl font-bold text-black mb-1">{slot.time}</div>
-                  <div className={`text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5 ${slot.available ? 'text-emerald-500' : 'text-orange-500'}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${slot.available ? 'bg-emerald-500' : 'bg-orange-500'}`} />
-                    {slot.available ? 'Available for booking' : 'Reserved / Booked'}
+                  <div className={`bg-white p-8 rounded-[2.4rem] border transition-all h-full flex flex-col justify-between ${slot.available ? 'border-black/5 hover:border-black/20' : 'border-dashed border-gray-200'}`}>
+                    <div>
+                      <div className="flex justify-between items-center mb-10">
+                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-${accent === 'black' ? 'gray-50' : accent + '-50'} group-hover:bg-black group-hover:text-white transition-all`}>
+                            <Clock className="w-4 h-4" />
+                         </div>
+                         {slot.available && (
+                           <button 
+                             onClick={() => removeSlot(slot.id)}
+                             className="p-3 text-gray-200 hover:text-red-500 hover:bg-red-50 rounded-2xl opacity-0 group-hover:opacity-100 transition-all active:scale-90"
+                           >
+                             <Trash2 className="w-4 h-4" />
+                           </button>
+                         )}
+                      </div>
+                      <div className="text-3xl font-black text-black mb-2 tracking-tighter">{slot.time}</div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-8 border-t border-gray-50 mt-8">
+                       <span className={`text-[10px] font-black uppercase tracking-widest ${slot.available ? 'text-black' : 'text-gray-400'}`}>
+                         {slot.available ? 'Confirmed Live' : 'Reservation Locked'}
+                       </span>
+                       <div className={`w-3 h-3 rounded-full ${slot.available ? 'bg-emerald-500 animate-pulse' : 'bg-gray-200'}`} />
+                    </div>
                   </div>
                 </motion.div>
               ))}
+              
+              {/* Add Quick Slot UI */}
+              <div 
+                onClick={() => { setNewDate(date); addSlot(); }}
+                className="p-1 rounded-[2.5rem] border-2 border-dashed border-gray-100 flex items-center justify-center group cursor-pointer hover:border-black/20 hover:bg-gray-50/30 transition-all h-[240px]"
+              >
+                 <div className="flex flex-col items-center gap-4 text-gray-300 group-hover:text-black transition-all">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center border-2 border-current">
+                       <Plus className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest">Append Quick Slot</span>
+                 </div>
+              </div>
             </div>
           </div>
         )) : (
-          <div className="py-32 flex flex-col items-center justify-center text-center opacity-30">
-             <CalendarClock className="w-16 h-16 mb-4" />
-             <div className="text-sm font-black uppercase tracking-widest">No active clinical blocks found.</div>
+          <div className="py-48 flex flex-col items-center justify-center text-center">
+             <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-8 border border-black/5">
+                <CalendarClock className="w-10 h-10 text-gray-200" />
+             </div>
+             <h4 className="text-2xl font-serif italic text-black mb-2">No Active Clinical Pipeline</h4>
+             <p className="text-sm text-gray-400 font-medium italic">Push a new allocation from the command center above.</p>
           </div>
         )}
       </div>
