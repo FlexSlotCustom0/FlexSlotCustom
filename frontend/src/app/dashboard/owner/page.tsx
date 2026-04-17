@@ -636,40 +636,47 @@ interface Booking {
 function AuditTrailSection() {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
+  const fetchBookings = () => {
+    const saved = localStorage.getItem("flexslot_bookings");
+    if (saved) {
+      setBookings(JSON.parse(saved).reverse());
+    } else {
+      const initialBookings = [
+        {
+          id: "B-1001",
+          clientName: "Alexander Wright",
+          clientEmail: "alex@example.com",
+          slotTime: "10:30 AM",
+          slotDate: "2026-04-20",
+          serviceName: "Dental Checkup",
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: "B-1002",
+          clientName: "Bella (Golden Retriever)",
+          clientEmail: "owner@pets.com",
+          slotTime: "02:00 PM",
+          slotDate: "2026-04-19",
+          serviceName: "Vaccination",
+          createdAt: new Date().toISOString()
+        }
+      ];
+      setBookings(initialBookings);
+      localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
+    }
+  };
+
   useEffect(() => {
-    const fetchBookings = () => {
-      const saved = localStorage.getItem("flexslot_bookings");
-      if (saved) {
-        setBookings(JSON.parse(saved).reverse());
-      } else {
-        const initialBookings = [
-          {
-            id: "B-1001",
-            clientName: "Alexander Wright",
-            clientEmail: "alex@example.com",
-            slotTime: "10:30 AM",
-            slotDate: "2026-04-20",
-            serviceName: "Dental Checkup",
-            createdAt: new Date().toISOString()
-          },
-          {
-            id: "B-1002",
-            clientName: "Bella (Golden Retriever)",
-            clientEmail: "owner@pets.com",
-            slotTime: "02:00 PM",
-            slotDate: "2026-04-19",
-            serviceName: "Vaccination",
-            createdAt: new Date().toISOString()
-          }
-        ];
-        setBookings(initialBookings);
-        localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
-      }
-    };
     fetchBookings();
     window.addEventListener('storage', fetchBookings);
     return () => window.removeEventListener('storage', fetchBookings);
   }, []);
+
+  const deleteEntry = (id: string) => {
+    const next = bookings.filter(b => b.id !== id);
+    setBookings(next);
+    localStorage.setItem("flexslot_bookings", JSON.stringify(next.reverse()));
+  };
 
   return (
     <div className="space-y-12">
@@ -688,17 +695,17 @@ function AuditTrailSection() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-8">
           <div className="grid grid-cols-3 gap-6">
-             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm">
-                <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Total Records</div>
-                <div className="text-3xl font-serif font-black italic">{bookings.length + 42}</div>
+             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm font-sans">
+                <div className="text-[9px] font-black uppercase text-gray-400 tracking-[0.2em] mb-4">Registry Density</div>
+                <div className="text-3xl font-serif font-black italic">{bookings.length + 142} <span className="text-[10px] font-sans font-black text-emerald-500 ml-1">↑ 12%</span></div>
              </div>
-             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm">
-                <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Recent Sync</div>
-                <div className="text-3xl font-serif font-black italic">Active</div>
+             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm font-sans">
+                <div className="text-[9px] font-black uppercase text-gray-400 tracking-[0.2em] mb-4">Consultation Velocity</div>
+                <div className="text-3xl font-serif font-black italic">14.2<span className="text-xs font-sans font-black text-gray-300 ml-1">u/hr</span></div>
              </div>
-             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm">
-                <div className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Integrity</div>
-                <div className="text-3xl font-serif font-black italic">100%</div>
+             <div className="p-8 bg-white border border-black/5 rounded-[2.5rem] shadow-sm font-sans">
+                <div className="text-[9px] font-black uppercase text-gray-400 tracking-[0.2em] mb-4">Patient Retention</div>
+                <div className="text-3xl font-serif font-black italic">98.4%</div>
              </div>
           </div>
 
@@ -710,18 +717,19 @@ function AuditTrailSection() {
                 </div>
                 <div className="flex items-center gap-2">
                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                   <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] italic">Real-Time Data Injection</span>
+                   <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] italic">Stream Synchronization Active</span>
                 </div>
              </div>
              <div className="divide-y divide-black/5">
                 {bookings.length > 0 ? bookings.map((b, i) => (
                   <AuditRow 
-                    key={i}
-                    id={`REG_${1000 + i}`} 
+                    key={b.id}
+                    id={b.id} 
                     name={b.clientName} 
                     time={`${b.slotTime} — ${b.slotDate}`} 
                     status="VERIFIED" 
                     service={b.serviceName}
+                    onDelete={() => deleteEntry(b.id)}
                   />
                 )) : (
                   <div className="p-24 flex flex-col items-center justify-center text-center opacity-20">
@@ -734,7 +742,7 @@ function AuditTrailSection() {
         </div>
 
         <div className="space-y-8">
-           <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+           <div className="bg-black text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center relative overflow-hidden group shadow-2xl shadow-black/20">
               <ShieldCheck className="w-16 h-16 text-emerald-500 mb-8 relative z-10 group-hover:scale-110 transition-transform duration-700" />
               <div className="font-serif italic text-2xl mb-2 relative z-10">Kindred Shield</div>
               <p className="text-[10px] text-white/40 uppercase tracking-[0.3em] font-mono relative z-10">Advanced HIPAA Safeguard</p>
@@ -751,13 +759,19 @@ function AuditTrailSection() {
                   ))}
                 </div>
               </div>
-              <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-emerald-500/5 rounded-full blur-[80px]" />
+              <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]" />
            </div>
 
-           <div className="bg-white border border-black/5 rounded-[2.5rem] p-8 space-y-6">
-              <div className="text-[9px] font-black uppercase tracking-widest text-gray-400">Registry Policy</div>
-              <p className="text-[11px] text-gray-500 font-medium italic leading-relaxed">System logs are immutable and cryptographically linked to individual provider keys.</p>
-              <button className="w-full py-4 bg-gray-50 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">Download Audit PDF</button>
+           <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 space-y-8">
+              <div className="space-y-2">
+                 <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Registry Governance</div>
+                 <h4 className="text-xl font-serif italic text-black">Immutable Chain</h4>
+              </div>
+              <p className="text-[11px] text-gray-500 font-medium italic leading-relaxed">System logs are cryptographically linked to individual provider keys and cannot be altered once verified.</p>
+              <div className="pt-6 border-t border-black/5 flex items-center justify-between">
+                 <div className="text-[9px] font-black uppercase tracking-widest text-[#999]">Security Level</div>
+                 <div className="px-3 py-1 bg-black text-white rounded-lg text-[9px] font-black tracking-widest">TIER_4</div>
+              </div>
            </div>
         </div>
       </div>
@@ -765,29 +779,37 @@ function AuditTrailSection() {
   );
 }
 
-function AuditRow({ id, name, time, status, service }: { id: string, name: string, time: string, status: string, service?: string }) {
+function AuditRow({ id, name, time, status, service, onDelete }: { id: string, name: string, time: string, status: string, service?: string, onDelete: () => void }) {
   return (
     <div className="p-10 flex items-center justify-between hover:bg-gray-50/30 transition-all group">
        <div className="flex items-center gap-8">
-          <div className="w-14 h-14 bg-gray-50 rounded-2xl border border-black/5 flex items-center justify-center text-gray-300 group-hover:bg-black group-hover:text-white transition-all">
-             <User className="w-6 h-6" />
+          <div className="w-16 h-16 bg-gray-50 rounded-[1.5rem] border border-black/5 flex items-center justify-center text-gray-300 group-hover:bg-black group-hover:text-white transition-all duration-500 shadow-inner">
+             <User className="w-7 h-7" />
           </div>
-          <div>
-             <div className="font-serif italic text-2xl text-black mb-1 group-hover:tracking-tight transition-all">{name}</div>
+          <div className="space-y-1">
+             <div className="font-serif italic text-2xl text-black group-hover:tracking-tight transition-all duration-700">{name}</div>
              <div className="flex items-center gap-4">
-                <div className="text-[10px] font-black font-mono text-gray-300 tracking-widest">{id}</div>
-                <div className="w-1 h-1 rounded-full bg-gray-200" />
+                <div className="text-[10px] font-black font-mono text-gray-300 tracking-[0.2em] uppercase">{id.split('-').pop()}</div>
+                <div className="w-1 h-1 rounded-full bg-black/10" />
                 <div className="text-[11px] text-gray-400 font-medium italic">{time}</div>
              </div>
           </div>
        </div>
-       <div className="flex items-center gap-10">
-          <div className="text-right hidden sm:block">
+       <div className="flex items-center gap-12">
+          <div className="text-right hidden md:block">
              <div className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 mb-1">{service}</div>
-             <div className="text-[9px] font-black uppercase tracking-widest text-[#999] italic">Treatment_Code_A1</div>
+             <div className="text-[9px] font-black uppercase tracking-widest text-black/20 italic font-mono">Verified_Record</div>
           </div>
-          <div className="px-6 py-3 rounded-xl bg-gray-50 border border-black/5 text-[10px] font-black uppercase tracking-widest group-hover:bg-black group-hover:text-white transition-all">
-             {status}
+          <div className="flex items-center gap-3">
+             <div className="px-6 py-3 rounded-xl bg-white border border-black/5 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                {status}
+             </div>
+             <button 
+               onClick={onDelete}
+               className="p-3 bg-gray-50 hover:bg-red-500 hover:text-white rounded-xl transition-all duration-300 text-gray-300 opacity-0 group-hover:opacity-100 border border-black/5"
+             >
+                <Trash2 className="w-4 h-4" />
+             </button>
           </div>
        </div>
     </div>
