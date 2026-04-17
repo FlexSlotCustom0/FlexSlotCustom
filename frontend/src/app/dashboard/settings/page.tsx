@@ -49,29 +49,32 @@ export default function AccountSettingsPage() {
   const initials = username?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || "U";
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans flex flex-col md:flex-row">
+    <div className="min-h-screen bg-white text-black font-sans flex flex-col md:flex-row overflow-hidden">
       {/* Sidebar / Navigation Rail */}
-      <aside className="w-full md:w-80 border-r border-gray-100 flex flex-col h-auto md:h-screen sticky top-0 bg-[#FDFDFD] z-20">
-        <div className="p-8 border-b border-gray-50 flex items-center justify-between">
-          <Link href={role === "owner" ? "/dashboard/owner" : "/dashboard/customer"} className="flex items-center gap-3 hover:opacity-70 transition-opacity">
-            <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-white shadow-lg">
-              <ChevronLeft className="w-6 h-6" />
+      <aside className="w-full md:w-[360px] border-r border-gray-100 flex flex-col h-auto md:h-screen sticky top-0 bg-white z-20">
+        <div className="p-10">
+          <Link 
+            href={role === "owner" ? "/dashboard/owner" : "/dashboard/customer"} 
+            className="flex items-center gap-5 group"
+          >
+            <div className="w-14 h-14 rounded-[1.2rem] bg-black flex items-center justify-center text-white shadow-xl transition-all group-hover:scale-105 active:scale-95">
+              <ChevronLeft className="w-7 h-7" strokeWidth={3} />
             </div>
-            <span className="font-bold text-sm tracking-tight">Dashboard</span>
+            <span className="font-bold text-2xl tracking-tight text-black">Dashboard</span>
           </Link>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-8 space-y-1">
-          <SideNavItem icon={<UserCircle />} label="Personal Profile" active />
-          <SideNavItem icon={<Shield />} label="Security & Access" />
-          <SideNavItem icon={<Bell />} label="Notification Engine" />
-          <SideNavItem icon={<Globe />} label="Interface Language" />
+        <div className="flex-1 px-8 space-y-2 mt-10">
+          <SideNavItem icon={<UserCircle className="w-6 h-6" />} label="Personal Profile" active />
+          <SideNavItem icon={<Shield className="w-6 h-6" />} label="Security & Access" />
+          <SideNavItem icon={<Bell className="w-6 h-6" />} label="Notification Engine" />
+          <SideNavItem icon={<Globe className="w-6 h-6" />} label="Interface Language" />
         </div>
 
-        <div className="p-8 border-t border-gray-50">
+        <div className="p-10">
            <button 
              onClick={handleLogout}
-             className="w-full flex items-center justify-center gap-2 py-4 bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-800 transition-all shadow-xl active:scale-95"
+             className="w-full flex items-center justify-center gap-2 py-5 bg-gray-50 text-gray-400 rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all active:scale-95 border border-gray-100"
            >
              <LogOut className="w-4 h-4" /> End Session
            </button>
@@ -79,8 +82,8 @@ export default function AccountSettingsPage() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto">
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-10">
+      <main className="flex-1 overflow-y-auto bg-[#FDFDFD]">
+        <header className="h-24 bg-white/80 backdrop-blur-md border-b border-gray-50 flex items-center justify-between px-12 sticky top-0 z-10">
           <h2 className="text-xl font-serif text-black italic">Account Matrix</h2>
           <div className="flex items-center gap-6">
             <AnimatePresence>
@@ -233,10 +236,13 @@ export default function AccountSettingsPage() {
 
 function SideNavItem({ icon, label, active = false }: { icon: any, label: string, active?: boolean }) {
   return (
-    <div className={`flex items-center gap-3 px-6 py-4 rounded-2xl text-sm font-bold tracking-tight transition-all relative group cursor-pointer ${active ? 'bg-black text-white shadow-xl shadow-black/10' : 'text-gray-400 hover:bg-gray-50 hover:text-black'}`}>
-      <div className="w-5 h-5">{icon}</div>
-      {label}
-      {active && <div className="absolute right-3 w-1.5 h-1.5 bg-white rounded-full animate-pulse" />}
+    <div className={`flex items-center gap-4 px-6 py-5 rounded-[1.8rem] text-[15px] font-bold tracking-tight transition-all relative group cursor-pointer ${active 
+        ? 'bg-black text-white shadow-2xl shadow-black/20 scale-[1.02]' 
+        : 'text-[#AEB4C1] hover:text-black hover:bg-gray-50'
+      }`}>
+      <div className={`${active ? 'text-white' : 'text-[#AEB4C1]'} transition-colors`}>{icon}</div>
+      <span className="flex-1">{label}</span>
+      {active && <div className="w-1.5 h-1.5 bg-[#D1D5DB] rounded-full" />}
     </div>
   );
 }
