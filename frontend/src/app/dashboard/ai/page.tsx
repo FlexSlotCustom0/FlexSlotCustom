@@ -97,7 +97,7 @@ export default function AIInsightsPage() {
                       type="text" 
                       value={consoleInput}
                       onChange={(e) => setConsoleInput(e.target.value)}
-                      placeholder={role === 'owner' ? "Input prompt for entity extraction..." : "Ask me anything about your schedule..."}
+                      placeholder={role === 'owner' ? "Input prompt for entity extraction..." : "Ask me about your symptoms or medical history..."}
                       className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-5 text-sm focus:outline-none focus:border-black/10 transition-all font-medium italic"
                     />
                     <button 
@@ -172,18 +172,18 @@ export default function AIInsightsPage() {
             </div>
             <div className="divide-y divide-gray-50">
                <HistoryItem 
-                 input="Book a styling session for next Friday at noon" 
-                 output="intent: BOOKING, time: 12:00, date: 2026-04-18" 
+                 input="Book a surgery consultation for next Friday at noon" 
+                 output="intent: CLINICAL_BOOKING, time: 12:00, date: 2026-04-18" 
                  latency="88ms" 
                />
                <HistoryItem 
-                 input="My website template needs dynamic slot updates" 
-                 output="intent: CONFIG_UPDATE, entity: TEMPLATE_SLOT" 
+                 input="Update my immunization record for the upcoming travel" 
+                 output="intent: EMR_UPDATE, entity: VACCINATION_LOG" 
                  latency="112ms" 
                />
                <HistoryItem 
-                 input="What's the peak time for hair appointments?" 
-                 output="query: TRENDS, context: PEAK_HOURS" 
+                 input="What&apos;s the peak time for MRI scans today?" 
+                 output="query: CAPACITY_ANALYSIS, context: RADIOLOGY" 
                  latency="14ms" 
                />
             </div>

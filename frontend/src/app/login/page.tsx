@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, ArrowRight, User, Store, Scissors, Code,
@@ -8,28 +8,69 @@ import {
   Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-type Step = "choice" | "role" | "service" | "template" | "finalize";
+type Step = "choice" | "role" | "service" | "template" | "finalize" | "login";
 
-export default function AuthFlow() {
+function AuthFlowContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("choice");
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+
+  useEffect(() => {
+    const initialStep = searchParams.get("step") as Step;
+    if (initialStep && ["role", "service", "template", "finalize"].includes(initialStep)) {
+      setStep(initialStep);
+    }
+  }, [searchParams]);
 
   const nextStep = (s: Step) => setStep(s);
   const prevStep = () => {
     if (step === "role") setStep("choice");
     if (step === "service") setStep("role");
-    if (step === "template") setStep("service");
-    if (step === "finalize") setStep(role === 'owner' ? "template" : "role");
+    if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
+    if (step === "template") setStep("finalize");
+    if (step === "login") setStep("choice");
   };
 
-  const handleFinish = () => {
-    // In a real app, save to DB here
-    router.push("/onboarding");
+  const handleFinish = (templateOverride?: string) => {
+    // Basic validation
+    if (!email) return;
+
+    const finalTemplate = templateOverride || selectedTemplate;
+
+    if (email === "owner@clinic.com") {
+      localStorage.setItem("flexslot_role", "owner");
+      localStorage.setItem("flexslot_user_email", email);
+      if (username) localStorage.setItem("flexslot_username", username);
+      
+      if (finalTemplate) {
+        localStorage.setItem("flexslot_active_template", finalTemplate);
+        if (service === 'vet') localStorage.setItem("flexslot_clinic_niche", "veterinary");
+        else localStorage.setItem("flexslot_clinic_niche", "medical");
+        
+        // Redirect directly to the template customization page
+        router.push(`/templates/${finalTemplate}?manage=true`);
+      } else {
+        router.push("/dashboard/owner");
+      }
+    } else if (email === "client@test.com") {
+      localStorage.setItem("flexslot_role", "customer");
+      localStorage.setItem("flexslot_user_email", email);
+      if (username) localStorage.setItem("flexslot_username", username);
+      router.push("/dashboard/customer");
+    } else {
+      // Default fallback
+      localStorage.setItem("flexslot_user_email", email);
+      if (username) localStorage.setItem("flexslot_username", username);
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -51,7 +92,7 @@ export default function AuthFlow() {
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
               <CalendarClock className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-2xl tracking-tighter">Kindred Calendar</span>
+            <span className="font-bold text-2xl tracking-tighter text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
           </Link>
           <div className="h-1 w-12 bg-gray-100 rounded-full" />
         </div>
@@ -80,7 +121,7 @@ export default function AuthFlow() {
                     Get Started <ArrowRight className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => router.push("/onboarding")}
+                    onClick={() => nextStep("login")}
                     className="w-full py-5 border border-gray-100 rounded-2xl font-bold hover:bg-gray-50 transition-all"
                   >
                     Log in
@@ -102,19 +143,19 @@ export default function AuthFlow() {
                   <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Identity Selection</span>
                 </div>
-                <h1 className="text-4xl font-serif mb-8">How will you use <br />FlexSlot?</h1>
+                <h1 className="text-4xl font-serif mb-8 leading-tight">How will you use <br />Kindred Calendar?</h1>
                 <div className="grid grid-cols-2 gap-6">
                   <RoleCard
                     icon={<Store className="w-8 h-8" />}
-                    title="I'm an Owner"
+                    title="I&apos;m an Owner"
                     desc="I want to list services and manage slots."
-                    onClick={() => { setRole("owner"); nextStep("service"); }}
+                    onClick={() => { setRole("owner"); localStorage.setItem("flexslot_role", "owner"); nextStep("service"); }}
                   />
                   <RoleCard
                     icon={<User className="w-8 h-8" />}
-                    title="I'm a Customer"
+                    title="I&apos;m a Customer"
                     desc="I want to book services and meet experts."
-                    onClick={() => { setRole("customer"); nextStep("finalize"); }}
+                    onClick={() => { setRole("customer"); localStorage.setItem("flexslot_role", "customer"); nextStep("finalize"); }}
                   />
                 </div>
               </motion.div>
@@ -134,10 +175,10 @@ export default function AuthFlow() {
                 </div>
                 <h1 className="text-4xl font-serif mb-8">What do you <br />offer?</h1>
                 <div className="grid grid-cols-2 gap-4">
-                  <ServiceTypeBtn icon={<Stethoscope />} label="General Practice" value="gp" selected={service === 'gp'} onClick={() => { setService('gp'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<HeartPulse />} label="Specialist Clinic" value="specialist" selected={service === 'specialist'} onClick={() => { setService('specialist'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<PawPrint />} label="Vet & Pet Care" value="vet" selected={service === 'vet'} onClick={() => { setService('vet'); nextStep('template'); }} />
-                  <ServiceTypeBtn icon={<Syringe />} label="Dental & Lab" value="dental" selected={service === 'dental'} onClick={() => { setService('dental'); nextStep('template'); }} />
+                  <ServiceTypeBtn icon={<Stethoscope />} label="General Practice" value="gp" selected={service === 'gp'} onClick={() => { setService('gp'); nextStep('finalize'); }} />
+                  <ServiceTypeBtn icon={<HeartPulse />} label="Specialist Clinic" value="specialist" selected={service === 'specialist'} onClick={() => { setService('specialist'); nextStep('finalize'); }} />
+                  <ServiceTypeBtn icon={<PawPrint />} label="Vet & Pet Care" value="vet" selected={service === 'vet'} onClick={() => { setService('vet'); nextStep('finalize'); }} />
+                  <ServiceTypeBtn icon={<Syringe />} label="Dental & Lab" value="dental" selected={service === 'dental'} onClick={() => { setService('dental'); nextStep('finalize'); }} />
                 </div>
               </motion.div>
             )}
@@ -159,8 +200,21 @@ export default function AuthFlow() {
                   <p className="text-gray-400 font-medium italic">Pick a template optimized for {service} businesses.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <TemplatePreview name="The Discrete" type="Minimalist" onClick={() => { setSelectedTemplate('discrete'); nextStep('finalize'); }} />
-                  <TemplatePreview name="The Elite" type="Modern/Dark" onClick={() => { setSelectedTemplate('elite'); nextStep('finalize'); }} />
+                  {service === 'vet' ? (
+                    <>
+                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => handleFinish('vet-warm')} />
+                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => handleFinish('paws-premium')} />
+                    </>
+                  ) : service === 'dental' ? (
+                    <>
+                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => handleFinish('dental-bright')} />
+                    </>
+                  ) : (
+                    <>
+                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => handleFinish('clinic-clean')} />
+                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => handleFinish('pulse-modern')} />
+                    </>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -180,18 +234,97 @@ export default function AuthFlow() {
                 <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
                 <div className="space-y-4">
                   <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="text" 
+                      placeholder="Username" 
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input type="email" placeholder="Email address" className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" />
+                    <input 
+                      type="email" 
+                      placeholder="Email address" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input type="password" placeholder="Password" className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" />
+                    <input 
+                      type="password" 
+                      placeholder="Password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="p-4 bg-orange-50/50 rounded-2xl border border-orange-100/50">
+                    <p className="text-[10px] text-orange-600 font-bold uppercase tracking-widest text-center">
+                      Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
+                    </p>
                   </div>
                   <button
-                    onClick={handleFinish}
-                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                    onClick={() => role === 'owner' ? nextStep('template') : handleFinish()}
+                    disabled={!email || !username || !password}
+                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
-                    Complete Registration <Sparkles className="w-4 h-4" />
+                    {role === 'owner' ? 'Continue to Templates' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP: LOGIN */}
+            {step === "login" && (
+              <motion.div
+                key="login"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-8"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Returning User</span>
+                </div>
+                <h1 className="text-4xl font-serif mb-2">Welcome back.</h1>
+                <p className="text-gray-500 text-sm font-medium italic mb-2">Enter the username and email you used to register.</p>
+                <div className="space-y-4">
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="text" 
+                      placeholder="Username" 
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="email" 
+                      placeholder="Email address" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
+                  <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
+                    <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest text-center">
+                      Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleFinish()}
+                    disabled={!email || !username}
+                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
+                  >
+                    Log In <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </motion.div>
@@ -202,10 +335,22 @@ export default function AuthFlow() {
 
         {/* Info label */}
         <p className="mt-8 text-center text-gray-400 text-xs font-medium">
-          © 2026 FlexSlotCustom Ecosystem. Secure & Private.
+          © 2026 Kindred Calendar Ecosystem. Secure & Private.
         </p>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthFlow() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-gray-100 border-t-black rounded-full animate-spin" />
+      </div>
+    }>
+      <AuthFlowContent />
+    </Suspense>
   );
 }
 

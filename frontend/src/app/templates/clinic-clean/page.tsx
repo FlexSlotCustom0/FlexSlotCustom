@@ -1,31 +1,44 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Clock, Phone, Star, Calendar, ChevronRight,
-  Share2, Heart, Shield, Award, FileText, HelpCircle, Stethoscope,
+  Share2, Heart, Shield, Award, FileText, HelpCircle, Stethoscope, CheckCircle2, Edit3
 } from "lucide-react";
 import Link from "next/link";
 
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
+import { LayoutDashboard } from "lucide-react";
+import { BookingSystem } from "@/components/BookingSystem";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as any },
+    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export default function ClinicCleanTemplate() {
-  const { 
-    shopData: shop, 
-    staff: doctors, 
+  const {
+    shopData: shop,
+    staff: doctors,
     offerings: serviceCategories,
     faqs,
     reviews
   } = useTemplateContext();
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>();
+
+  const handleBook = (svcName?: string) => {
+    if (typeof svcName === 'string') setSelectedService(svcName);
+    else setSelectedService(undefined);
+    setIsBookingOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-blue-100">
@@ -42,16 +55,20 @@ export default function ClinicCleanTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
             ) : (
-              <span className="text-xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-5 h-5" />
             )}
-            <span className="font-bold text-base">{shop.name}</span>
+            <span className="font-bold text-base flex items-center gap-1.5">
+              {shop.name}
+              {window.location.search.includes("manage=true") && <Edit3 className="w-3 h-3 text-black/20" />}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <button className="hidden md:flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-black transition-colors">
               <Phone className="w-3.5 h-3.5" /> {shop.phone}
             </button>
             <button
-              className="text-white text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-[1.03] shadow-lg"
+              onClick={() => handleBook()}
+              className="text-white text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-[1.03] shadow-lg active:scale-95"
               style={{ backgroundColor: shop.primaryColor }}
             >
               Book Appointment
@@ -82,7 +99,8 @@ export default function ClinicCleanTemplate() {
             </p>
             <div className="flex items-center gap-4">
               <button
-                className="text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:scale-[1.02] transition-all"
+                onClick={() => handleBook()}
+                className="text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:scale-[1.02] transition-all active:scale-95"
                 style={{ backgroundColor: shop.primaryColor }}
               >
                 <Calendar className="w-4 h-4" /> Schedule a Visit
@@ -100,14 +118,16 @@ export default function ClinicCleanTemplate() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="rounded-3xl overflow-hidden aspect-[4/3] relative shadow-2xl shadow-blue-500/10 border border-gray-100"
-            style={{ 
-              background: shop.bannerUrl 
-                ? `url(${shop.bannerUrl}) center/cover no-repeat` 
-                : shop.bannerGradient 
+            style={{
+              background: shop.bannerUrl
+                ? `url(${shop.bannerUrl}) center/cover no-repeat`
+                : shop.bannerGradient
             }}
           >
             {!shop.bannerUrl && (
-              <div className="w-full h-full flex items-center justify-center text-8xl grayscale opacity-50">🏥</div>
+              <div className="w-full h-full flex items-center justify-center text-8xl grayscale opacity-50">
+                <IconRenderer name={shop.logo} />
+              </div>
             )}
           </motion.div>
         </div>
@@ -147,7 +167,9 @@ export default function ClinicCleanTemplate() {
                     {d.imageUrl ? (
                       <img src={d.imageUrl} alt={d.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-white flex items-center justify-center text-4xl">{d.avatar}</div>
+                      <div className="w-full h-full bg-white flex items-center justify-center text-4xl">
+                        <IconRenderer name={d.avatar} className="w-10 h-10 text-gray-400" />
+                      </div>
                     )}
                   </div>
                   <h4 className="font-bold text-sm">{d.name}</h4>
@@ -164,17 +186,18 @@ export default function ClinicCleanTemplate() {
         {/* ── Services ── */}
         <section className="py-14 border-t border-gray-100">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            {serviceCategories.map((cat, catIdx) => (
-              <div key={cat.label || cat.name} className={catIdx > 0 ? "mt-10" : ""}>
+            {Array.isArray(serviceCategories) && serviceCategories.map((cat, catIdx) => (
+              <div key={cat.label || catIdx} className={catIdx > 0 ? "mt-10" : ""}>
                 <motion.h2 custom={catIdx} variants={fadeUp} className="text-xs font-black tracking-widest uppercase text-gray-400 mb-2">
                   {cat.label || cat.name}
                 </motion.h2>
                 <div className="space-y-2 mt-4">
-                  {cat.services.map((svc: any, i: number) => (
+                  {cat && Array.isArray(cat.services) && cat.services.map((svc: any, i: number) => (
                     <motion.div
                       key={svc.name}
                       custom={i + catIdx + 1}
                       variants={fadeUp}
+                      onClick={() => handleBook(svc.name)}
                       className="flex items-center justify-between p-5 rounded-3xl border border-gray-50 hover:border-gray-200 hover:shadow-sm transition-all group cursor-pointer bg-white"
                     >
                       <div className="flex items-center gap-4">
@@ -250,7 +273,7 @@ export default function ClinicCleanTemplate() {
                       <Star key={j} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600 font-medium mb-4 italic leading-relaxed">"{r.text}"</p>
+                  <p className="text-sm text-gray-600 font-medium mb-4 italic leading-relaxed">&quot;{r.text}&quot;</p>
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px] text-gray-400">{r.name.charAt(0)}</div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{r.name}</span>
@@ -265,6 +288,7 @@ export default function ClinicCleanTemplate() {
       {/* ── Sticky Mobile CTA ── */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden z-[90] p-4 bg-white/80 backdrop-blur-md border-t border-gray-100">
         <button
+          onClick={() => handleBook()}
           className="w-full text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-2xl transition-transform active:scale-95"
           style={{ backgroundColor: shop.primaryColor }}
         >
@@ -279,19 +303,40 @@ export default function ClinicCleanTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} className="h-6 w-auto" />
             ) : (
-              <span className="text-2xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-6 h-6" />
             )}
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>
           <div className="flex items-center gap-6">
-             <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
-             <p className="text-[10px] text-gray-400">
-                Crafted with <span className="font-bold text-black">FlexSlotCustom</span>
-             </p>
+            <span>© 2026 {shop.name}</span>
+            <p className="text-[10px] text-gray-400">
+              Crafted with <span className="font-bold text-black">Kindred <span className="text-gray-400 font-serif italic font-normal">Calendar</span></span>
+            </p>
           </div>
         </div>
       </footer>
       <div className="h-24 md:hidden" />
+
+      {/* ── Dashboard Navigation ── */}
+      <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+        <h3 className="text-2xl font-serif mb-4">Ready to manage your clinic?</h3>
+        <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
+        <Link
+          href="/dashboard"
+          className="bg-black text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          Go to Dashboard
+        </Link>
+      </section>
+
+      <BookingSystem 
+        clinicId={shop.name}
+        primaryColor={shop.primaryColor}
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        serviceName={selectedService}
+      />
     </div>
   );
 }

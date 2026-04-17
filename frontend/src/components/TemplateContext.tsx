@@ -111,7 +111,7 @@ export const defaultTemplatesData: Record<string, {
     shop: {
       name: "Evergreen Medical Centre",
       tagline: "Your health, our priority",
-      logo: "🏥",
+      logo: "Stethoscope",
       bannerGradient: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%)",
       primaryColor: "#2563eb",
       address: "155 Hospital Road, Colombo 03",
@@ -123,9 +123,9 @@ export const defaultTemplatesData: Record<string, {
       announcement: "Now accepting online consultations. Book a virtual appointment today.",
     },
     staff: [
-      { name: "Dr. Sarah Perera", role: "General Practitioner", credentials: "MBBS, MD", avatar: "👩‍⚕️" },
-      { name: "Dr. Kamal Silva", role: "Cardiologist", credentials: "MBBS, MRCP (UK)", avatar: "👨‍⚕️" },
-      { name: "Dr. Nisha Fernando", role: "Dermatologist", credentials: "MBBS, DDV", avatar: "👩‍⚕️" },
+      { name: "Dr. Sarah Perera", role: "General Practitioner", credentials: "MBBS, MD", avatar: "UserRound" },
+      { name: "Dr. Kamal Silva", role: "Cardiologist", credentials: "MBBS, MRCP (UK)", avatar: "UserRound" },
+      { name: "Dr. Nisha Fernando", role: "Dermatologist", credentials: "MBBS, DDV", avatar: "UserRound" },
     ],
     offerings: [
       {
@@ -159,7 +159,7 @@ export const defaultTemplatesData: Record<string, {
     shop: {
       name: "Happy Paws Clinic",
       tagline: "Compassionate care for your furry family",
-      logo: "🐾",
+      logo: "PawPrint",
       bannerGradient: "linear-gradient(135deg, #orange-100 0%, #amber-50 50%, #yellow-100 100%)",
       primaryColor: "#ea580c",
       address: "28 Pet Lane, Nugegoda",
@@ -170,17 +170,17 @@ export const defaultTemplatesData: Record<string, {
       instagram: "@happypaws.vet",
     },
     staff: [
-      { name: "Dr. Anjali", role: "Lead Veterinarian", specialty: "Surgery & Internal Medicine", avatar: "👩‍⚕️" },
-      { name: "Dr. Ruwan", role: "Veterinarian", specialty: "Dermatology & Allergies", avatar: "👨‍⚕️" },
-      { name: "Priya", role: "Vet Nurse", specialty: "Post-Op Care & Therapy", avatar: "🧑‍⚕️" },
+      { name: "Dr. Anjali", role: "Lead Veterinarian", specialty: "Surgery & Internal Medicine", avatar: "UserRound" },
+      { name: "Dr. Ruwan", role: "Veterinarian", specialty: "Dermatology & Allergies", avatar: "UserRound" },
+      { name: "Priya", role: "Vet Nurse", specialty: "Post-Op Care & Therapy", avatar: "UserRound" },
     ],
     offerings: [
-      { name: "Wellness Checkup", price: "$45", duration: "30 min", icon: "🩺", desc: "Nose-to-tail examination for your pet" },
-      { name: "Vaccination", price: "$35", duration: "15 min", icon: "💉", desc: "Core and non-core vaccines available" },
-      { name: "Dental Cleaning", price: "$120", duration: "1 hr", icon: "🦷", desc: "Professional scaling and polishing" },
-      { name: "Surgery Consultation", price: "$80", duration: "45 min", icon: "🔬", desc: "Pre-surgical assessment and planning" },
-      { name: "Grooming & Bath", price: "$50", duration: "1 hr", icon: "🛁", desc: "Full bath, nail trim, and ear cleaning" },
-      { name: "Emergency Visit", price: "$100+", duration: "Varies", icon: "🚨", desc: "24/7 emergency care available" },
+      { name: "Wellness Checkup", price: "$45", duration: "30 min", icon: "Stethoscope", desc: "Nose-to-tail examination for your pet" },
+      { name: "Vaccination", price: "$35", duration: "15 min", icon: "Syringe", desc: "Core and non-core vaccines available" },
+      { name: "Dental Cleaning", price: "$120", duration: "1 hr", icon: "Sparkles", desc: "Professional scaling and polishing" },
+      { name: "Surgery Consultation", price: "$80", duration: "45 min", icon: "Microscope", desc: "Pre-surgical assessment and planning" },
+      { name: "Grooming & Bath", price: "$50", duration: "1 hr", icon: "ShowerHead", desc: "Full bath, nail trim, and ear cleaning" },
+      { name: "Emergency Visit", price: "$100+", duration: "Varies", icon: "AlertCircle", desc: "24/7 emergency care available" },
     ],
     tips: [
       { title: "Before Your Visit", tip: "Bring your pet's medical records, vaccination history, and a favourite toy to keep them calm." },
@@ -188,7 +188,7 @@ export const defaultTemplatesData: Record<string, {
       { title: "Emergency Signs", tip: "Difficulty breathing, sudden collapse, or seizures require immediate emergency attention." },
     ],
     reviews: [
-      { name: "Amanda K.", text: "Dr. Anjali saved my cat's life. The entire team was so caring and kept us informed every step of the way. 🐱", rating: 5 },
+      { name: "Amanda K.", text: "Dr. Anjali saved my cat's life. The entire team was so caring and kept us informed every step of the way.", rating: 5 },
       { name: "Dinesh P.", text: "Best vet clinic around. They treat our dog like family. The grooming service is amazing too!", rating: 5 },
     ]
   },
@@ -196,7 +196,7 @@ export const defaultTemplatesData: Record<string, {
     shop: {
       name: "Pulse Diagnostic Hub",
       tagline: "Precision imaging and advanced diagnostics",
-      logo: "⚡",
+      logo: "Activity",
       bannerGradient: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
       primaryColor: "#4f46e5",
       address: "42 Tech Plaza, Colombo 07",
@@ -208,8 +208,8 @@ export const defaultTemplatesData: Record<string, {
       announcement: "New MRI scanner installed. Zero wait time this week.",
     },
     staff: [
-      { name: "Dr. Victor", role: "Radiologist", credentials: "MD, FRCR", avatar: "👨‍🔬" },
-      { name: "Elena", role: "Lab Lead", specialty: "Biometric Screening", avatar: "👩‍🔬" },
+      { name: "Dr. Victor", role: "Radiologist", credentials: "MD, FRCR", avatar: "UserRound" },
+      { name: "Elena", role: "Lab Lead", specialty: "Biometric Screening", avatar: "UserRound" },
     ],
     offerings: [
       {
@@ -225,7 +225,7 @@ export const defaultTemplatesData: Record<string, {
     shop: {
       name: "Bright Dental Studio",
       tagline: "Your smile, engineered to perfection",
-      logo: "🦷",
+      logo: "Sparkles",
       bannerGradient: "linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 50%, #99f6e4 100%)",
       primaryColor: "#0d9488",
       address: "12 Marine Drive, Colombo 03",
@@ -236,8 +236,8 @@ export const defaultTemplatesData: Record<string, {
       instagram: "@bright.smile",
     },
     staff: [
-      { name: "Dr. Aruni", role: "Orthodontist", credentials: "BDS, MS", avatar: "👩‍⚕️" },
-      { name: "Dr. Sameer", role: "Dental Surgeon", credentials: "BDS", avatar: "👨‍⚕️" },
+      { name: "Dr. Aruni", role: "Orthodontist", credentials: "BDS, MS", avatar: "UserRound" },
+      { name: "Dr. Sameer", role: "Dental Surgeon", credentials: "BDS", avatar: "UserRound" },
     ],
     offerings: [
       {
@@ -253,7 +253,7 @@ export const defaultTemplatesData: Record<string, {
     shop: {
       name: "Paw Luxe Wellness",
       tagline: "The gold standard in boutique pet care",
-      logo: "💎",
+      logo: "Diamond",
       bannerGradient: "linear-gradient(135deg, #18181b 0%, #27272a 50%, #3f3f46 100%)",
       primaryColor: "#f59e0b",
       address: "07 Cinnamon Gardens, Colombo 07",
@@ -265,19 +265,19 @@ export const defaultTemplatesData: Record<string, {
       announcement: "Now offering Hydrotherapy and Zen Pet Massages.",
     },
     staff: [
-      { name: "Dr. Julian", role: "Executive Veterinarian", avatar: "👨‍⚕️" },
-      { name: "Sophie", role: "Wellness Dir.", avatar: "👩‍⚕️" },
+      { name: "Dr. Julian", role: "Executive Veterinarian", avatar: "UserRound" },
+      { name: "Sophie", role: "Wellness Dir.", avatar: "UserRound" },
     ],
     offerings: [
-      { name: "VIP Wellness Check", price: "$120", duration: "1 hr", icon: "✨", desc: "Comprehensive luxury health audit" },
-      { name: "Hydrotherapy", price: "$85", duration: "45 min", icon: "🌊", desc: "Low-impact therapeutic water exercise" },
+      { name: "VIP Wellness Check", price: "$120", duration: "1 hr", icon: "Star", desc: "Comprehensive luxury health audit" },
+      { name: "Hydrotherapy", price: "$85", duration: "45 min", icon: "Waves", desc: "Low-impact therapeutic water exercise" },
     ],
   },
   "wild-med": {
     shop: {
       name: "Wild Frontier Med",
       tagline: "Expert care for the extraordinary",
-      logo: "🦅",
+      logo: "Bird",
       bannerGradient: "linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)",
       primaryColor: "#10b981",
       address: "99 Green Belt Road, Ethul Kotte",
@@ -288,12 +288,12 @@ export const defaultTemplatesData: Record<string, {
       instagram: "@wildmed.sl",
     },
     staff: [
-      { name: "Dr. Ravi", role: "Exotics Specialist", avatar: "👨‍⚕️" },
-      { name: "Mara", role: "Wildlife Nurse", avatar: "👩‍⚕️" },
+      { name: "Dr. Ravi", role: "Exotics Specialist", avatar: "UserRound" },
+      { name: "Mara", role: "Wildlife Nurse", avatar: "UserRound" },
     ],
     offerings: [
-      { name: "Exotic Pet Consult", price: "$110", duration: "1 hr", icon: "🦜", desc: "Specialized care for birds, reptiles and mammals" },
-      { name: "Field Emergency", price: "$250", duration: "Varies", icon: "🚙", desc: "On-site emergency response for large animals" },
+      { name: "Exotic Pet Consult", price: "$110", duration: "1 hr", icon: "Bird", desc: "Specialized care for birds, reptiles and mammals" },
+      { name: "Field Emergency", price: "$250", duration: "Varies", icon: "Truck", desc: "On-site emergency response for large animals" },
     ],
   },
 };
@@ -317,6 +317,10 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (defaultTemplatesData[templateId]) {
       setActiveTemplate(templateId);
       
+      if (window.location.search.includes("manage=true")) {
+        setIsEditorOpen(true);
+      }
+      
       // Load from local storage or defaults
       const saved = localStorage.getItem(`flexslot_template_${templateId}`);
       if (saved) {
@@ -339,56 +343,21 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, []);
 
-  const saveToStorage = (updates: any) => {
+  // Persistence Effect: Saves only on the client when any data changes
+  useEffect(() => {
     if (activeTemplate) {
-      const current = {
-        shop: shopData,
-        staff,
-        offerings,
-        faqs,
-        tips,
-        reviews,
-        ...updates
-      };
-      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify(current));
+      const data = { shop: shopData, staff, offerings, faqs, tips, reviews };
+      localStorage.setItem(`flexslot_template_${activeTemplate}`, JSON.stringify(data));
     }
-  };
+  }, [activeTemplate, shopData, staff, offerings, faqs, tips, reviews]);
 
   const setShopData = (data: Partial<ShopData>) => {
-    setShopDataState((prev) => {
-      const next = { ...prev, ...data };
-      saveToStorage({ shop: next });
-      return next;
-    });
-  };
-
-  const updateStaff = (newStaff: Staff[]) => {
-    setStaff(newStaff);
-    saveToStorage({ staff: newStaff });
-  };
-
-  const updateOfferings = (newOfferings: any[]) => {
-    setOfferings(newOfferings);
-    saveToStorage({ offerings: newOfferings });
-  };
-
-  const updateFaqs = (newFaqs: Faq[]) => {
-    setFaqs(newFaqs);
-    saveToStorage({ faqs: newFaqs });
-  };
-
-  const updateTips = (newTips: Tip[]) => {
-    setTips(newTips);
-    saveToStorage({ tips: newTips });
-  };
-
-  const updateReviews = (newReviews: Review[]) => {
-    setReviews(newReviews);
-    saveToStorage({ reviews: newReviews });
+    setShopDataState((prev) => ({ ...prev, ...data }));
   };
 
   const resetToDefault = (templateId: string) => {
     if (defaultTemplatesData[templateId]) {
+      localStorage.removeItem(`flexslot_template_${templateId}`);
       const data = defaultTemplatesData[templateId];
       setShopDataState(data.shop);
       setStaff(data.staff);
@@ -396,7 +365,6 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setFaqs(data.faqs || []);
       setTips(data.tips || []);
       setReviews(data.reviews || []);
-      localStorage.removeItem(`flexslot_template_${templateId}`);
     }
   };
 
@@ -435,15 +403,15 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         shopData,
         setShopData,
         staff,
-        setStaff: updateStaff,
+        setStaff,
         offerings,
-        setOfferings: updateOfferings,
+        setOfferings,
         faqs,
-        setFaqs: updateFaqs,
+        setFaqs,
         tips,
-        setTips: updateTips,
+        setTips,
         reviews,
-        setReviews: updateReviews,
+        setReviews,
         isEditorOpen,
         setIsEditorOpen,
         resetToDefault,

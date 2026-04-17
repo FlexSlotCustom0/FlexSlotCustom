@@ -1,31 +1,44 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin, Clock, Phone, Star, Calendar, ChevronRight,
-  Share2, Heart, PawPrint, Shield, HelpCircle,
+  Share2, Heart, PawPrint, Shield, HelpCircle, CheckCircle2, Edit3
 } from "lucide-react";
 import Link from "next/link";
 
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
+import { LayoutDashboard } from "lucide-react";
+import { BookingSystem } from "@/components/BookingSystem";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as any },
+    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export default function VetWarmTemplate() {
-  const { 
-    shopData: shop, 
-    staff: vets, 
+  const {
+    shopData: shop,
+    staff: vets,
     offerings: services,
     tips,
     reviews
   } = useTemplateContext();
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>();
+
+  const handleBook = (svcName?: string) => {
+    if (typeof svcName === 'string') setSelectedService(svcName);
+    else setSelectedService(undefined);
+    setIsBookingOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-[#fffbf5] text-black font-sans selection:bg-orange-100">
@@ -36,16 +49,20 @@ export default function VetWarmTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} alt="Logo" className="h-8 w-auto object-contain" />
             ) : (
-              <span className="text-xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-5 h-5" />
             )}
-            <span className="font-bold text-base">{shop.name}</span>
+            <span className="font-bold text-base flex items-center gap-1.5">
+              {shop.name}
+              {window.location.search.includes("manage=true") && <Edit3 className="w-3 h-3 text-black/20" />}
+            </span>
           </div>
           <div className="flex items-center gap-3">
-            <button className="p-2 rounded-xl hover:bg-orange-50 transition-colors">
+            <a href={`tel:${shop.phone}`} className="p-2 rounded-xl hover:bg-orange-50 transition-colors">
               <Phone className="w-4 h-4 text-gray-400" />
-            </button>
+            </a>
             <button
-              className="text-white text-sm font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.03] shadow-lg"
+              onClick={() => handleBook()}
+              className="text-white text-sm font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.03] shadow-lg active:scale-95"
               style={{ backgroundColor: shop.primaryColor }}
             >
               Book Visit
@@ -78,7 +95,8 @@ export default function VetWarmTemplate() {
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <button
-                className="text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:scale-[1.02] transition-all"
+                onClick={() => handleBook()}
+                className="text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:scale-[1.02] transition-all active:scale-95"
                 style={{ backgroundColor: shop.primaryColor }}
               >
                 <Calendar className="w-4 h-4" /> Book a Visit
@@ -96,13 +114,17 @@ export default function VetWarmTemplate() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="rounded-[2.5rem] overflow-hidden aspect-square flex items-center justify-center relative shadow-2xl shadow-orange-500/10 border border-orange-100"
-            style={{ 
-              background: shop.bannerUrl 
-                ? `url(${shop.bannerUrl}) center/cover no-repeat` 
-                : "linear-gradient(135deg, #ffedd5 0%, #fff7ed 50%, #fef3c7 100%)" 
+            style={{
+              background: shop.bannerUrl
+                ? `url(${shop.bannerUrl}) center/cover no-repeat`
+                : "linear-gradient(135deg, #ffedd5 0%, #fff7ed 50%, #fef3c7 100%)"
             }}
           >
-            {!shop.bannerUrl && <div className="text-[120px]">🐕</div>}
+            {!shop.bannerUrl && (
+              <div className="text-[120px]">
+                <IconRenderer name={shop.logo} />
+              </div>
+            )}
             <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-md rounded-2xl p-3 shadow-lg border border-orange-100">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
@@ -152,7 +174,9 @@ export default function VetWarmTemplate() {
                     {v.imageUrl ? (
                       <img src={v.imageUrl} alt={v.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-orange-50 flex items-center justify-center text-4xl">{v.avatar}</div>
+                      <div className="w-full h-full bg-orange-50 flex items-center justify-center text-4xl">
+                        <IconRenderer name={v.avatar} className="w-12 h-12 text-orange-200" />
+                      </div>
                     )}
                   </div>
                   <h4 className="font-bold text-sm tracking-tight">{v.name}</h4>
@@ -176,30 +200,61 @@ export default function VetWarmTemplate() {
               Comprehensive pet healthcare
             </motion.h3>
             <div className="grid md:grid-cols-2 gap-4">
-              {services.map((svc: any, i: number) => (
-                <motion.div
-                  key={svc.name}
-                  custom={i + 1}
-                  variants={fadeUp}
-                  className="flex items-center justify-between p-5 rounded-[2rem] border border-orange-50 bg-white hover:border-orange-200 hover:shadow-sm transition-all group cursor-pointer"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
-                      {svc.icon || "🐾"}
+              {Array.isArray(services) && services.map((svc: any, i: number) => (
+                svc.name ? (
+                  <motion.div
+                    key={svc.name || i}
+                    custom={i + 1}
+                    variants={fadeUp}
+                    onClick={() => handleBook(svc.name)}
+                    className="flex items-center justify-between p-5 rounded-[2rem] border border-orange-50 bg-white hover:border-orange-200 hover:shadow-sm transition-all group cursor-pointer active:scale-[0.99]"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
+                        <IconRenderer name={svc.icon} className="w-6 h-6" style={{ color: shop.primaryColor }} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-sm tracking-tight">{svc.name}</h4>
+                        <p className="text-xs text-gray-400 font-medium">{svc.desc || "Professional pet care service"}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-sm tracking-tight">{svc.name}</h4>
-                      <p className="text-xs text-gray-400 font-medium">{svc.desc || "Professional pet care service"}</p>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="text-right">
+                        <span className="font-black text-sm block tracking-tight">{svc.price}</span>
+                        <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{svc.duration}</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-200 group-hover:text-black group-hover:translate-x-0.5 transition-all" />
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <div className="text-right">
-                      <span className="font-black text-sm block tracking-tight">{svc.price}</span>
-                      <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{svc.duration}</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-gray-200 group-hover:text-black group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                </motion.div>
+                  </motion.div>
+                ) : svc.services ? (
+                  // Fallback for nested categories (Medical data in Vet template)
+                  Array.isArray(svc.services) && svc.services.map((subSvc: any, j: number) => (
+                    <motion.div
+                      key={subSvc.name || `${i}-${j}`}
+                      custom={i + j + 1}
+                      variants={fadeUp}
+                      onClick={() => handleBook(subSvc.name)}
+                      className="flex items-center justify-between p-5 rounded-[2rem] border border-orange-50 bg-white hover:border-orange-200 hover:shadow-sm transition-all group cursor-pointer active:scale-[0.99]"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50/50 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
+                          <IconRenderer name={subSvc.icon || 'Scissors'} className="w-6 h-6" style={{ color: shop.primaryColor }} />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-sm tracking-tight">{subSvc.name}</h4>
+                          <p className="text-xs text-gray-400 font-medium">{subSvc.desc || "Clinical specialty"}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="text-right">
+                          <span className="font-black text-sm block tracking-tight">{subSvc.price}</span>
+                          <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">{subSvc.duration}</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-gray-200 group-hover:text-black group-hover:translate-x-0.5 transition-all" />
+                      </div>
+                    </motion.div>
+                  ))
+                ) : null
               ))}
             </div>
           </motion.div>
@@ -254,7 +309,7 @@ export default function VetWarmTemplate() {
                       <Star key={j} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600 font-medium mb-4 italic leading-relaxed">"{r.text}"</p>
+                  <p className="text-sm text-gray-600 font-medium mb-4 italic leading-relaxed">&quot;{r.text}&quot;</p>
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center font-bold text-[10px] text-orange-400">{r.name.charAt(0)}</div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{r.name}</span>
@@ -269,6 +324,7 @@ export default function VetWarmTemplate() {
       {/* ── Sticky Mobile CTA ── */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden z-[90] p-4 bg-[#fffbf5]/80 backdrop-blur-md border-t border-orange-100/50">
         <button
+          onClick={() => handleBook()}
           className="w-full text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-2xl transition-transform active:scale-95"
           style={{ backgroundColor: shop.primaryColor }}
         >
@@ -283,19 +339,40 @@ export default function VetWarmTemplate() {
             {shop.logoUrl ? (
               <img src={shop.logoUrl} className="h-6 w-auto" />
             ) : (
-              <span className="text-2xl">{shop.logo}</span>
+              <IconRenderer name={shop.logo} className="w-6 h-6" />
             )}
             <span className="font-bold tracking-tight text-lg">{shop.name}</span>
           </div>
           <div className="flex items-center gap-6">
-             <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
-             <p className="text-[10px] text-gray-400">
-                Managed via <span className="font-bold text-black">FlexSlot Clinic</span>
-             </p>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">© 2026 {shop.name}</span>
+            <p className="text-[10px] text-gray-400">
+              Managed via <span className="font-bold text-black">Kindred Calendar</span>
+            </p>
           </div>
         </div>
       </footer>
       <div className="h-24 md:hidden" />
+      
+      {/* ── Dashboard Navigation ── */}
+      <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+        <h3 className="text-2xl font-serif mb-4 text-[#ea580c]">Ready to manage your practice?</h3>
+        <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
+        <Link
+          href="/dashboard"
+          className="bg-[#ea580c] text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          Go to Dashboard
+        </Link>
+      </section>
+
+      <BookingSystem 
+        clinicId={shop.name}
+        primaryColor={shop.primaryColor}
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        serviceName={selectedService}
+      />
     </div>
   );
 }

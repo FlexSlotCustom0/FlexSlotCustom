@@ -7,24 +7,37 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTemplateContext } from "@/components/TemplateContext";
+import { IconRenderer } from "@/components/IconRenderer";
+import { LayoutDashboard } from "lucide-react";
+import { BookingSystem } from "@/components/BookingSystem";
+import { useState } from "react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as any },
+    transition: { delay: i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
 export default function PulseModernTemplate() {
-  const { 
-    shopData: shop, 
-    staff: doctors, 
+  const {
+    shopData: shop,
+    staff: doctors,
     offerings: serviceCategories,
     faqs,
     reviews
   } = useTemplateContext();
+
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>();
+
+  const handleBook = (svcName?: string) => {
+    if (typeof svcName === 'string') setSelectedService(svcName);
+    else setSelectedService(undefined);
+    setIsBookingOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-white text-black font-sans selection:bg-indigo-100">
@@ -33,7 +46,7 @@ export default function PulseModernTemplate() {
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg" style={{ backgroundColor: shop.primaryColor }}>
-              <Zap className="w-5 h-5 fill-white" />
+              <IconRenderer name={shop.logo} className="w-5 h-5" />
             </div>
             <div className="flex flex-col">
               <span className="font-black text-sm tracking-tight leading-none mb-0.5">{shop.name}</span>
@@ -41,6 +54,7 @@ export default function PulseModernTemplate() {
             </div>
           </div>
           <button
+            onClick={() => handleBook()}
             className="text-white text-xs font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all hover:scale-[1.03] shadow-xl shadow-indigo-100"
             style={{ backgroundColor: shop.primaryColor }}
           >
@@ -65,6 +79,7 @@ export default function PulseModernTemplate() {
               </p>
               <div className="flex items-center gap-6">
                 <button
+                  onClick={() => handleBook()}
                   className="text-white font-black text-xs uppercase tracking-widest px-8 py-4 rounded-2xl shadow-2xl hover:translate-y-[-2px] transition-all"
                   style={{ backgroundColor: shop.primaryColor }}
                 >
@@ -79,18 +94,20 @@ export default function PulseModernTemplate() {
               </div>
             </motion.div>
 
-            <motion.div 
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               className="relative"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative"
             >
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-100 rounded-full blur-3xl opacity-50" />
-              <div 
+              <div
                 className="w-full aspect-square rounded-[3rem] overflow-hidden relative shadow-2xl border border-gray-100"
                 style={{ background: shop.bannerGradient }}
               >
                 {!shop.bannerUrl && (
-                  <div className="w-full h-full flex items-center justify-center text-[120px] mix-blend-overlay opacity-20">⚡</div>
+                  <div className="w-full h-full flex items-center justify-center text-[120px] mix-blend-overlay opacity-20">
+                    <IconRenderer name={shop.logo} />
+                  </div>
                 )}
                 <div className="absolute inset-0 bg-black/5" />
               </div>
@@ -117,13 +134,14 @@ export default function PulseModernTemplate() {
         <section className="mb-24">
           <h2 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Our Diagnostic Capabilities</h2>
           <h3 className="text-4xl font-black tracking-tight mb-12 italic">Precision Results.</h3>
-          
+
           <div className="grid md:grid-cols-1 gap-4">
-            {serviceCategories.map((cat, catIdx) => (
+            {Array.isArray(serviceCategories) && serviceCategories.map((cat: any, catIdx) => (
               <div key={catIdx} className="space-y-4">
-                {cat.services.map((svc: any, i: number) => (
+                {cat && Array.isArray(cat.services) && cat.services.map((svc: any, i: number) => (
                   <motion.div
                     key={i}
+                    onClick={() => handleBook(svc.name)}
                     className="p-8 rounded-[2rem] bg-gray-50 hover:bg-white hover:shadow-2xl hover:scale-[1.01] transition-all border border-transparent hover:border-indigo-100 flex items-center justify-between group cursor-pointer"
                   >
                     <div className="flex items-center gap-6">
@@ -149,25 +167,45 @@ export default function PulseModernTemplate() {
 
       {/* ── Footer ── */}
       <footer className="bg-black text-white py-20 px-6 mt-20">
-         <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-50">
-               <div className="flex items-center gap-3">
-                  <span className="text-xl">{shop.logo}</span>
-                  <span className="font-black text-lg tracking-tight">{shop.name}</span>
-               </div>
-               <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.2em]">
-                  <a href="#">Security</a>
-                  <a href="#">Privacy</a>
-                  <a href="#">EMR Login</a>
-               </div>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-50">
+            <div className="flex items-center gap-3">
+              <IconRenderer name={shop.logo} className="w-6 h-6 text-white" />
+              <span className="font-black text-lg tracking-tight">{shop.name}</span>
             </div>
-            <div className="mt-16 pt-10 border-t border-white/10 text-center">
-               <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                  System Status: <span className="text-green-500 animate-pulse">Operational</span> · Powered by FlexSlot Custom
-               </p>
+            <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.2em]">
+              <a href="#">Security</a>
+              <a href="#">Privacy</a>
+              <a href="#">EMR Login</a>
             </div>
-         </div>
+          </div>
+          <div className="mt-16 pt-10 border-t border-white/10 text-center">
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+              System Status: <span className="text-green-500 animate-pulse">Operational</span> · Powered by Kindred Calendar
+            </p>
+          </div>
+        </div>
       </footer>
+      
+      {/* ── Dashboard Navigation ── */}
+      <section className="bg-white py-20 px-6 border-t border-gray-100 flex flex-col items-center justify-center text-center">
+        <h3 className="text-2xl font-serif mb-4 text-blue-600">Ready to manage your practice?</h3>
+        <p className="text-gray-400 mb-8 max-w-sm">Return to your dashboard to configure services, staff, and appointments.</p>
+        <Link
+          href="/dashboard"
+          className="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+        >
+          <LayoutDashboard className="w-5 h-5" />
+          Go to Dashboard
+        </Link>
+      </section>
+      <BookingSystem 
+        clinicId={shop.name}
+        primaryColor={shop.primaryColor}
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        serviceName={selectedService}
+      />
     </div>
   );
 }

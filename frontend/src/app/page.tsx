@@ -32,7 +32,7 @@ export default function NotionCalendarClone() {
               <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
                 <CalendarClock className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg">FlexSlotCustom</span>
+              <span className="font-bold text-lg text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
@@ -44,9 +44,9 @@ export default function NotionCalendarClone() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link href="/login" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
-            <Link href="/login" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
-              Get FlexSlotCustom free
+            <Link href="/login?step=login" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
+            <Link href="/login?step=role" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
+              Get Kindred Calendar free
             </Link>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCustom</h4>
+            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">Kindred Calendar</h4>
             <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
               Care simplified.
             </h1>
@@ -100,7 +100,7 @@ export default function NotionCalendarClone() {
             Ready to make time for what matters?
           </h2>
           <div className="flex flex-col items-center md:items-end gap-6">
-            <Link href="/login" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
+            <Link href="/login?step=role" className="bg-white text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-all shadow-2xl hover:scale-[1.05] whitespace-nowrap">
               Get Started
             </Link>
           </div>
@@ -150,7 +150,7 @@ export default function NotionCalendarClone() {
                 whileTap={{ scale: 0.95 }}
                 className="absolute z-10 bg-gray-50 text-gray-400 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl border border-gray-100 shadow-sm whitespace-nowrap"
               >
-                FlexSlotCustom
+                Kindred Calendar
               </motion.button>
             </div>
 
@@ -342,14 +342,14 @@ export default function NotionCalendarClone() {
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-6 h-6 bg-black rounded flex items-center justify-center"><Calendar className="w-4 h-4 text-white" /></div>
-              <span className="font-bold">FlexSlotCustom</span>
+              <span className="font-bold text-black">Kindred <span className="text-gray-400 font-serif italic font-normal">Calendar</span></span>
             </div>
             <div className="flex gap-4 mb-8">
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Globe className="w-4 h-4" /></Link>
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Share2 className="w-4 h-4" /></Link>
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><MessageSquare className="w-4 h-4" /></Link>
             </div>
-            <p className="text-sm text-gray-400">© 2026 FlexSlotCustom Labs, Inc.</p>
+            <p className="text-sm text-gray-400">© 2026 Kindred Calendar Labs, Inc.</p>
           </div>
         </div>
       </footer>
@@ -442,7 +442,7 @@ function BookingDemo() {
           {["Type", "AI", "Slots", "Done"].map((label, i) => (
             <div key={i} className="flex items-center gap-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-black transition-all duration-500 ${step >= i ? "bg-black text-white" : "bg-gray-100 text-gray-400"}`}>
-                {step > i ? "✓" : i + 1}
+                {step > i ? <Check className="w-4 h-4" /> : i + 1}
               </div>
               <span className={`text-[12px] font-bold font-serif italic tracking-tight transition-colors duration-300 ${step >= i ? "text-black" : "text-gray-300"}`}>{label}</span>
               {i < 3 && <div className={`w-8 h-[1px] bg-gray-200 ml-2 transition-all duration-1000 ${step > i ? "bg-black h-[2px]" : ""}`} />}
