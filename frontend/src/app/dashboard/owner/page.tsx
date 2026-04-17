@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
@@ -16,6 +16,8 @@ export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [clinicName, setClinicName] = useState("Happy Paws Clinic"); // Default for demo
   const [activeTemplate, setActiveTemplate] = useState("clinic-clean");
+
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const role = localStorage.getItem("flexslot_role");
@@ -60,17 +62,75 @@ export default function OwnerDashboard() {
       </aside>
 
       <main className="flex-1 flex flex-col overflow-y-auto">
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-10">
+        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-[60]">
           <h2 className="text-xl font-serif text-black italic">Clinic HQ</h2>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
               <Zap className="w-4 h-4 text-emerald-500 animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-widest text-black">Postgres RLS: ACTIVE</span>
             </div>
-            <button className="p-2 rounded-xl hover:bg-gray-50 transition-colors relative">
-               <Bell className="w-5 h-5 text-gray-400" />
-               <span className="absolute top-2 right-2.5 w-2 h-2 bg-black rounded-full ring-2 ring-white" />
-            </button>
+            
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className={`p-2 rounded-xl transition-all relative ${showNotifications ? 'bg-black text-white' : 'hover:bg-gray-50 text-gray-400'}`}
+              >
+                 <Bell className="w-5 h-5" />
+                 {!showNotifications && <span className="absolute top-2 right-2.5 w-2 h-2 bg-black rounded-full ring-2 ring-white" />}
+              </button>
+
+              <AnimatePresence>
+                {showNotifications && (
+                  <>
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setShowNotifications(false)}
+                      className="fixed inset-0 z-[-1]"
+                    />
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute right-0 mt-4 w-96 bg-white border border-gray-100 rounded-[2rem] shadow-2xl z-[70] p-4 overflow-hidden"
+                    >
+                      <div className="p-4 border-b border-gray-50 flex items-center justify-between mb-4">
+                        <span className="text-xs font-black uppercase tracking-widest text-black">Cloud Signals</span>
+                        <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">3 New</span>
+                      </div>
+                      <div className="space-y-2">
+                        <NotificationItem 
+                          title="New Appointment Request" 
+                          time="2 mins ago" 
+                          desc="Sarah Chen requested a Dental Checkup"
+                          isNew
+                        />
+                        <NotificationItem 
+                          title="Payment Finalized" 
+                          time="14 mins ago" 
+                          desc="Invoice #4928 successfully processed"
+                          isNew
+                        />
+                        <NotificationItem 
+                          title="Slot Lock Trigger" 
+                          time="1h ago" 
+                          desc="Auto-lock engaged for Tuesday AM slots"
+                        />
+                      </div>
+                      <Link 
+                        href="/provider/appointment/upcoming"
+                        onClick={() => setShowNotifications(false)}
+                        className="mt-6 block w-full py-4 bg-gray-50 hover:bg-black hover:text-white transition-all text-center rounded-2xl text-[10px] font-black uppercase tracking-widest"
+                      >
+                        Navigate to Live Feed
+                      </Link>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
+            </div>
+
             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-bold text-sm shadow-xl">DR</div>
           </div>
         </header>
@@ -83,6 +143,19 @@ export default function OwnerDashboard() {
           {activeTab === "audit" && <AuditTrailSection />}
         </div>
       </main>
+    </div>
+  );
+}
+
+function NotificationItem({ title, time, desc, isNew = false }: { title: string, time: string, desc: string, isNew?: boolean }) {
+  return (
+    <div className={`p-4 rounded-[1.5rem] transition-all cursor-pointer group ${isNew ? 'bg-gray-50 hover:bg-white border-white border group' : 'hover:bg-gray-50'}`}>
+      <div className="flex justify-between items-start mb-1">
+        <h5 className="text-xs font-bold text-black group-hover:italic">{title}</h5>
+        <span className="text-[9px] font-medium text-gray-400 italic">{time}</span>
+      </div>
+      <p className="text-[10px] text-gray-400 font-medium leading-relaxed">{desc}</p>
+      {isNew && <div className="mt-2 w-1.5 h-1.5 bg-black rounded-full" />}
     </div>
   );
 }
