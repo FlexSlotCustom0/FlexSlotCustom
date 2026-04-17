@@ -494,9 +494,7 @@ function SlotManagerSection({ activeTemplate }: { activeTemplate: string }) {
     <div className="space-y-16">
       <div className="flex justify-between items-start">
         <div className="space-y-1">
-          <div className="flex items-center gap-3 mb-2">
-            <div className={`px-3 py-1 bg-${accent}-500/10 text-${accent}-500 rounded-full text-[9px] font-black uppercase tracking-widest border border-${accent}-500/20`}>Operations Mode</div>
-          </div>
+
           <h2 className="text-5xl font-serif italic text-black">Master Schedule</h2>
 
         </div>
