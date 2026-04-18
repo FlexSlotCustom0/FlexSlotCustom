@@ -210,7 +210,7 @@ export default function PawsPremiumTemplate() {
             </div>
             <div className="max-w-6xl mx-auto mt-32 pt-8 border-t border-white/5 flex justify-between items-center opacity-30">
                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">© 2026 {shop.name}</span>
-               <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Curated by Kindred Calendar</span>
+               <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Curated by FlexSlot Custom</span>
             </div>
          </footer>
       

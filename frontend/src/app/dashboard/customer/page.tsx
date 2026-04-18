@@ -36,7 +36,7 @@ export default function CustomerDashboard() {
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
               <CalendarClock className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold tracking-tight text-lg text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
+            <span className="font-bold tracking-tight text-lg text-black">FlexSlot <span className="text-gray-400 font-serif italic">Custom</span></span>
           </Link>
         </div>
 
@@ -316,7 +316,7 @@ function MyAppointmentsSection() {
             <AppointmentRow 
                key={r.id} 
                title={r.serviceName} 
-               owner="Kindred Medical" 
+               owner="FlexSlot Medical" 
                time={`${r.slotDate} | ${r.slotTime}`} 
                status={new Date(r.slotDate) > new Date() ? "UPCOMING" : "ARCHIVED"} 
             />

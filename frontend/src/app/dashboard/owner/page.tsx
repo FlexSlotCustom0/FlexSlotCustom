@@ -68,7 +68,7 @@ export default function OwnerDashboard() {
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
               <CalendarClock className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold tracking-tight text-lg text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
+            <span className="font-bold tracking-tight text-lg text-black">FlexSlot <span className="text-gray-400 font-serif italic">Custom</span></span>
           </Link>
         </div>
 
@@ -221,7 +221,7 @@ function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
               </div>
               <h3 className="text-white font-bold text-3xl mb-3 tracking-tight">Your clinic is live.</h3>
-              <p className="text-white/80 text-sm font-medium italic max-w-sm leading-relaxed">Your professional site is broadcasting to patients. Any changes here sync in sub-100ms across the Kindred Network.</p>
+              <p className="text-white/80 text-sm font-medium italic max-w-sm leading-relaxed">Your professional site is broadcasting to patients. Any changes here sync in sub-100ms across the FlexSlot Network.</p>
            </div>
            <div className="relative z-10 flex gap-4 mt-10">
               <Link 

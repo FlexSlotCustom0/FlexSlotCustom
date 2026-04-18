@@ -181,7 +181,7 @@ export default function PulseModernTemplate() {
           </div>
           <div className="mt-16 pt-10 border-t border-white/10 text-center">
             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-              System Status: <span className="text-green-500 animate-pulse">Operational</span> · Powered by Kindred Calendar
+              System Status: <span className="text-green-500 animate-pulse">Operational</span> · Powered by FlexSlot Custom
             </p>
           </div>
         </div>

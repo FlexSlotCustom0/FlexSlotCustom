@@ -44,7 +44,7 @@ export default function TemplatesPage() {
             <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
               <Stethoscope className="w-4 h-4 text-white" />
             </div>
-            <span className="font-bold text-lg">Kindred Calendar</span>
+            <span className="font-bold text-lg">FlexSlot Custom</span>
           </Link>
           <Link
             href="/"
