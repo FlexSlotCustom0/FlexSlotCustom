@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
@@ -10,7 +10,7 @@ import {
   Palette, Sparkles, User
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
+import { api } from "@/lib/api";
 
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -20,12 +20,34 @@ export default function OwnerDashboard() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const [bookings, setBookings] = useState<any[]>([]);
+
+  const fetchBookings = async () => {
+    try {
+      const data = await api.getBookings();
+      if (data && data.length > 0) {
+        setBookings(data.reverse());
+      } else {
+        const saved = localStorage.getItem("flexslot_bookings");
+        if (saved) setBookings(JSON.parse(saved).reverse());
+      }
+    } catch (error) {
+      console.error("Failed to fetch bookings", error);
+      const saved = localStorage.getItem("flexslot_bookings");
+      if (saved) setBookings(JSON.parse(saved).reverse());
+    }
+  };
+
   useEffect(() => {
     const role = localStorage.getItem("flexslot_role");
     const savedName = localStorage.getItem("flexslot_active_clinic_name") || "Happy Paws Clinic";
     const savedTemplate = localStorage.getItem("flexslot_active_template") || "clinic-clean";
     setClinicName(savedName);
     setActiveTemplate(savedTemplate);
+    
+    fetchBookings();
+    window.addEventListener('storage', fetchBookings);
+    return () => window.removeEventListener('storage', fetchBookings);
   }, []);
 
   const handleTemplateSelect = (t: string) => {
@@ -97,7 +119,7 @@ export default function OwnerDashboard() {
 
 
         <div className="p-10 max-w-7xl mx-auto w-full space-y-12">
-          {activeTab === "overview" && <OverviewSection activeTemplate={activeTemplate} />}
+          {activeTab === "overview" && <OverviewSection bookings={bookings} activeTemplate={activeTemplate} />}
           {activeTab === "ui" && (
             <UIConfiguratorSection 
               activeTemplate={activeTemplate} 
@@ -106,7 +128,7 @@ export default function OwnerDashboard() {
           )}
           {activeTab === "services" && <ServiceCatalogSection />}
           {activeTab === "slots" && <SlotManagerSection activeTemplate={activeTemplate} />}
-          {activeTab === "audit" && <AuditTrailSection />}
+          {activeTab === "audit" && <AuditTrailSection bookings={bookings} setBookings={setBookings} />}
         </div>
       </main>
     </div>
@@ -160,7 +182,7 @@ function MetricCard({ label, value, trend, icon, desc }: { label: string, value:
   );
 }
 
-function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
+function OverviewSection({ activeTemplate, bookings }: { activeTemplate: string, bookings: any[] }) {
   return (
     <div className="space-y-12">
       <div className="mb-12">
@@ -171,7 +193,7 @@ function OverviewSection({ activeTemplate }: { activeTemplate: string }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <MetricCard 
           label="Patient Visits" 
-          value="842" 
+          value={(bookings?.length + 842).toString()} 
           trend="+12%" 
           icon={<Calendar />} 
           desc="Total unique clinical consultations recorded in the current billing cycle."
@@ -780,52 +802,15 @@ interface Booking {
   createdAt: string;
 }
 
-function AuditTrailSection() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+function AuditTrailSection({ bookings, setBookings }: { bookings: any[], setBookings: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredBookings = bookings.filter(b => 
-    b.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.clientEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.serviceName.toLowerCase().includes(searchQuery.toLowerCase())
+    (b.customer_name || b.clientName || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (b.customer_email || b.clientEmail || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (b.id || "").toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (b.service_name || b.serviceName || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const fetchBookings = () => {
-    const saved = localStorage.getItem("flexslot_bookings");
-    if (saved) {
-      setBookings(JSON.parse(saved).reverse());
-    } else {
-      const initialBookings = [
-        {
-          id: "B-1001",
-          clientName: "Alexander Wright",
-          clientEmail: "alex@example.com",
-          slotTime: "10:30 AM",
-          slotDate: "2026-04-20",
-          serviceName: "Dental Checkup",
-          createdAt: new Date().toISOString()
-        },
-        {
-          id: "B-1002",
-          clientName: "Bella (Golden Retriever)",
-          clientEmail: "owner@pets.com",
-          slotTime: "02:00 PM",
-          slotDate: "2026-04-19",
-          serviceName: "Vaccination",
-          createdAt: new Date().toISOString()
-        }
-      ];
-      setBookings(initialBookings);
-      localStorage.setItem("flexslot_bookings", JSON.stringify(initialBookings));
-    }
-  };
-
-  useEffect(() => {
-    fetchBookings();
-    window.addEventListener('storage', fetchBookings);
-    return () => window.removeEventListener('storage', fetchBookings);
-  }, []);
 
   const deleteEntry = (id: string) => {
     const next = bookings.filter(b => b.id !== id);
@@ -904,11 +889,11 @@ function AuditTrailSection() {
                 {filteredBookings.length > 0 ? filteredBookings.map((b, i) => (
                   <AuditRow 
                     key={b.id}
-                    id={b.id} 
-                    name={b.clientName} 
-                    time={`${b.slotTime} — ${b.slotDate}`} 
-                    status="VERIFIED" 
-                    service={b.serviceName}
+                    id={b.id.toString()} 
+                    name={b.customer_name || b.clientName} 
+                    time={`${b.slot_time || b.slotTime} — ${b.slot_date || b.slotDate}`} 
+                    status={b.status || "VERIFIED"} 
+                    service={b.service_name || b.serviceName}
                     onDelete={() => deleteEntry(b.id)}
                   />
                 )) : (
