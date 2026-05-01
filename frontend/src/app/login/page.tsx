@@ -10,11 +10,15 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { createClient } from "@/utils/supabase/client";
+
 type Step = "choice" | "role" | "service" | "template" | "finalize" | "login";
 
 function AuthFlowContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const supabase = createClient();
+  
   const [step, setStep] = useState<Step>("choice");
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
   const [email, setEmail] = useState("");
@@ -22,6 +26,8 @@ function AuthFlowContent() {
   const [username, setUsername] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initialStep = searchParams.get("step") as Step;
@@ -30,8 +36,13 @@ function AuthFlowContent() {
     }
   }, [searchParams]);
 
-  const nextStep = (s: Step) => setStep(s);
+  const nextStep = (s: Step) => {
+    setError(null);
+    setStep(s);
+  };
+  
   const prevStep = () => {
+    setError(null);
     if (step === "role") setStep("choice");
     if (step === "service") setStep("role");
     if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
@@ -39,37 +50,73 @@ function AuthFlowContent() {
     if (step === "login") setStep("choice");
   };
 
-  const handleFinish = (templateOverride?: string) => {
-    // Basic validation
-    if (!email) return;
+  const handleFinish = async (templateOverride?: string) => {
+    if (!email || !password) return;
+    setLoading(true);
+    setError(null);
 
     const finalTemplate = templateOverride || selectedTemplate;
 
-    if (email === "owner@clinic.com") {
-      localStorage.setItem("flexslot_role", "owner");
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      
-      if (finalTemplate) {
-        localStorage.setItem("flexslot_active_template", finalTemplate);
-        if (service === 'vet') localStorage.setItem("flexslot_clinic_niche", "veterinary");
-        else localStorage.setItem("flexslot_clinic_niche", "medical");
+    try {
+      if (step === "login") {
+        // --- REAL LOGIN ---
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInError) throw signInError;
+
+        // Fetch profile to see if they are a PROVIDER or PATIENT
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", data.user.id)
+          .single();
+
+        const userRole = profile?.role?.toLowerCase() || "patient";
         
-        // Redirect directly to the template customization page
-        router.push(`/templates/${finalTemplate}?manage=true`);
+        if (userRole === "provider") {
+          router.push("/dashboard/owner");
+        } else {
+          router.push("/dashboard/customer");
+        }
       } else {
-        router.push("/dashboard/owner");
+        // --- REAL REGISTRATION ---
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: username,
+              role: role === "owner" ? "PROVIDER" : "PATIENT",
+            },
+          },
+        });
+
+        if (signUpError) throw signUpError;
+
+        if (data.user) {
+          if (role === 'owner') {
+            // If they are an owner, we might want to pre-save their template choice
+            // For now, we'll redirect them to template setup
+            if (finalTemplate) {
+              localStorage.setItem("flexslot_active_template", finalTemplate);
+              const niche = service === 'vet' ? 'veterinary' : 'medical';
+              localStorage.setItem("flexslot_clinic_niche", niche);
+              router.push(`/templates/${finalTemplate}?manage=true`);
+            } else {
+              router.push("/dashboard/owner");
+            }
+          } else {
+            router.push("/dashboard/customer");
+          }
+        }
       }
-    } else if (email === "client@test.com") {
-      localStorage.setItem("flexslot_role", "customer");
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard/customer");
-    } else {
-      // Default fallback
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -268,12 +315,25 @@ function AuthFlowContent() {
                       Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
                     </p>
                   </div>
+                  {error && (
+                    <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
+                      <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest text-center">
+                        {error}
+                      </p>
+                    </div>
+                  )}
                   <button
                     onClick={() => role === 'owner' ? nextStep('template') : handleFinish()}
-                    disabled={!email || !username || !password}
+                    disabled={!email || !username || !password || loading}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
-                    {role === 'owner' ? 'Continue to Templates' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        {role === 'owner' ? 'Continue to Templates' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.div>
@@ -319,12 +379,25 @@ function AuthFlowContent() {
                       Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
                     </p>
                   </div>
+                  {error && (
+                    <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
+                      <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest text-center">
+                        {error}
+                      </p>
+                    </div>
+                  )}
                   <button
                     onClick={() => handleFinish()}
-                    disabled={!email || !username}
+                    disabled={!email || !username || loading}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
-                    Log In <ArrowRight className="w-4 h-4" />
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        Log In <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.div>
