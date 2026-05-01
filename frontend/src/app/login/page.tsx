@@ -24,6 +24,7 @@ function AuthFlowContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [clinicName, setClinicName] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,10 @@ function AuthFlowContent() {
     if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
     if (step === "template") setStep("finalize");
     if (step === "login") setStep("choice");
+  };
+
+  const generateSlug = (name: string) => {
+    return name.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
   };
 
   const handleFinish = async (templateOverride?: string) => {
@@ -98,8 +103,24 @@ function AuthFlowContent() {
 
         if (data.user) {
           if (role === 'owner') {
-            // If they are an owner, we might want to pre-save their template choice
-            // For now, we'll redirect them to template setup
+            // --- CREATE TENANT (CLINIC) ---
+            const slug = generateSlug(clinicName || username);
+            const { error: tenantError } = await supabase
+              .from("tenants")
+              .insert({
+                owner_id: data.user.id,
+                name: clinicName || `${username}'s Clinic`,
+                slug: slug,
+                type: service === 'vet' ? 'VETERINARY' : 'HUMAN',
+                template_id: finalTemplate || 'clinic-clean',
+                booking_mode: 'SLOT'
+              });
+
+            if (tenantError) {
+              console.error("Error creating tenant:", tenantError);
+              // We don't throw here to avoid locking the user out, but they might need to re-onboard
+            }
+
             if (finalTemplate) {
               localStorage.setItem("flexslot_active_template", finalTemplate);
               const niche = service === 'vet' ? 'veterinary' : 'medical';
@@ -280,6 +301,18 @@ function AuthFlowContent() {
                 </div>
                 <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
                 <div className="space-y-4">
+                  {role === 'owner' && (
+                    <div className="relative">
+                      <Store className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input 
+                        type="text" 
+                        placeholder="Clinic Name (e.g. Happy Paws)" 
+                        value={clinicName}
+                        onChange={(e) => setClinicName(e.target.value)}
+                        className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                      />
+                    </div>
+                  )}
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input 
