@@ -286,20 +286,42 @@ function AuthFlowContent() {
                 <div className="grid grid-cols-2 gap-4">
                   {service === 'vet' ? (
                     <>
-                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => handleFinish('vet-warm')} />
-                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => handleFinish('paws-premium')} />
+                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" selected={selectedTemplate === 'vet-warm'} onClick={() => setSelectedTemplate('vet-warm')} />
+                      <TemplatePreview name="Paws Premium" type="Luxury Pet" selected={selectedTemplate === 'paws-premium'} onClick={() => setSelectedTemplate('paws-premium')} />
                     </>
                   ) : service === 'dental' ? (
                     <>
-                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => handleFinish('dental-bright')} />
+                      <TemplatePreview name="Dental Bright" type="Cosmetic" selected={selectedTemplate === 'dental-bright'} onClick={() => setSelectedTemplate('dental-bright')} />
                     </>
                   ) : (
                     <>
-                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => handleFinish('clinic-clean')} />
-                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => handleFinish('pulse-modern')} />
+                      <TemplatePreview name="Clinic Clean" type="Modern Medical" selected={selectedTemplate === 'clinic-clean'} onClick={() => setSelectedTemplate('clinic-clean')} />
+                      <TemplatePreview name="Pulse Modern" type="Imaging" selected={selectedTemplate === 'pulse-modern'} onClick={() => setSelectedTemplate('pulse-modern')} />
                     </>
                   )}
                 </div>
+                
+                {error && (
+                  <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
+                    <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest text-center">
+                      {error}
+                    </p>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => handleFinish()}
+                  disabled={!selectedTemplate || loading}
+                  className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
+                >
+                  {loading ? (
+                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      Complete Setup & Launch <Sparkles className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
               </motion.div>
             )}
 
@@ -516,13 +538,13 @@ function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: 
   );
 }
 
-function TemplatePreview({ name, type, onClick }: { name: string, type: string, onClick: () => void }) {
+function TemplatePreview({ name, type, onClick, selected }: { name: string, type: string, onClick: () => void, selected: boolean }) {
   return (
     <button
       onClick={onClick}
-      className="bg-white border border-gray-100 rounded-[2rem] p-6 text-left hover:border-black/20 hover:shadow-xl transition-all group overflow-hidden relative"
+      className={`bg-white border rounded-[2rem] p-6 text-left hover:shadow-xl transition-all group overflow-hidden relative ${selected ? 'border-black ring-2 ring-black/5' : 'border-gray-100'}`}
     >
-      <div className="w-full aspect-[4/3] bg-gray-50 rounded-2xl mb-4 p-4 overflow-hidden">
+      <div className={`w-full aspect-[4/3] rounded-2xl mb-4 p-4 overflow-hidden transition-colors ${selected ? 'bg-black/5' : 'bg-gray-50'}`}>
         <div className="w-full h-full border border-gray-200 rounded-lg flex flex-col p-2 gap-2 bg-white">
           <div className="w-1/2 h-2 bg-gray-100 rounded-full" />
           <div className="w-full h-1 bg-gray-50 rounded-full" />
@@ -536,7 +558,7 @@ function TemplatePreview({ name, type, onClick }: { name: string, type: string, 
       </div>
       <h4 className="font-bold text-sm mb-0.5">{name}</h4>
       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{type}</p>
-      <div className="absolute top-4 right-4 bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className={`absolute top-4 right-4 bg-black text-white p-1 rounded-full transition-all ${selected ? 'opacity-100 scale-100' : 'opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100'}`}>
         <Check className="w-3 h-3" strokeWidth={4} />
       </div>
     </button>
