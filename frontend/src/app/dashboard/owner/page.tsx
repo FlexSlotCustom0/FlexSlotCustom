@@ -25,14 +25,7 @@ export default function OwnerDashboard() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [bookings, setBookings] = useState<any[]>([]);
 
-<<<<<<< HEAD
-  const fetchBookings = () => {
-    const saved = localStorage.getItem("flexslot_bookings");
-    if (saved) setBookings(JSON.parse(saved).reverse());
-  };
 
-=======
->>>>>>> e525c626a3b0f83ceaf67aa27a86d43d0324245e
   useEffect(() => {
     fetchInitialData();
   }, []);

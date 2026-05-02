@@ -65,21 +65,20 @@ function AuthFlowContent() {
     try {
       if (step === "login") {
         // --- REAL LOGIN ---
-        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
-        }).catch(err => ({ data: { user: null }, error: err }));
+        });
 
         if (signInError) throw signInError;
-        if (!data.user) throw new Error("Login failed");
+        if (!signInData.user) throw new Error("Login failed");
 
         // Fetch profile
         const { data: profile } = await supabase
           .from("profiles")
           .select("role")
-          .eq("id", data.user.id)
-          .single()
-          .catch(() => ({ data: { role: 'PATIENT' }, error: null }));
+          .eq("id", signInData.user.id)
+          .single();
 
         const userRole = profile?.role?.toLowerCase() || "patient";
         
