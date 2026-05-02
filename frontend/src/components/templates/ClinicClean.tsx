@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { IconRenderer } from "@/components/IconRenderer";
-import { BookingSystem } from "@/components/BookingSystem";
+import { AIBookingSystem } from "@/components/AIBookingSystem";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -139,30 +139,44 @@ export default function ClinicClean({ tenant, services, staff, faqs, reviews = [
           <div className="grid md:grid-cols-3 gap-6">
             {staff.map((d, i) => (
               <div key={d.id} className="p-6 rounded-[2.5rem] border border-gray-100 bg-gray-50/50 text-center">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-3xl bg-white flex items-center justify-center text-4xl">
-                  <IconRenderer name="UserRound" className="w-10 h-10 text-gray-400" />
+                <div className="w-20 h-20 mx-auto mb-4 rounded-[2rem] bg-white flex items-center justify-center text-4xl overflow-hidden border border-gray-100">
+                  {d.image_url ? (
+                    <img src={d.image_url} alt={d.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <IconRenderer name="UserRound" className="w-10 h-10 text-gray-400" />
+                  )}
                 </div>
                 <h4 className="font-bold text-sm">{d.name}</h4>
-                <p className="text-xs text-gray-500 font-medium mb-1">{d.specialty}</p>
-                <p className="text-[10px] font-black tracking-widest uppercase" style={{ color: primaryColor }}>
-                  {d.credentials}
-                </p>
+                <p className="text-xs text-gray-500 font-medium mb-1">{d.role}</p>
               </div>
             ))}
           </div>
         </section>
+
+        {/* ── FAQs ── */}
+        {faqs && faqs.length > 0 && (
+          <section className="py-14 border-t border-gray-100">
+            <h2 className="text-xs font-black tracking-widest uppercase text-gray-400 mb-8">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {faqs.map((faq, i) => (
+                <div key={faq.id} className="p-6 rounded-[2rem] border border-gray-100 bg-gray-50/50">
+                  <h4 className="font-bold text-sm mb-2">{faq.question}</h4>
+                  <p className="text-xs text-gray-500 font-medium leading-relaxed">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       <footer className="mt-12 bg-gray-50 border-t border-gray-100 py-16 px-6 text-center">
         <p className="text-[10px] text-gray-400">© 2026 {tenant.name}. Powered by FlexSlot Custom.</p>
       </footer>
 
-      <BookingSystem 
-        clinicId={tenant.id}
-        primaryColor={primaryColor}
+      <AIBookingSystem 
+        tenantId={tenant.id}
         isOpen={isBookingOpen}
         onClose={() => setIsBookingOpen(false)}
-        serviceName={selectedService}
       />
     </div>
   );
