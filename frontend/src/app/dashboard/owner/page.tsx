@@ -7,42 +7,86 @@ import {
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
   Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard,
-  Palette, Sparkles, User
+  Palette, Sparkles, User, MessageSquare
 } from "lucide-react";
 import Link from "next/link";
 
 
+import { createClient } from "@/utils/supabase/client";
+
 export default function OwnerDashboard() {
+  const supabase = createClient();
   const [activeTab, setActiveTab] = useState("overview");
-  const [clinicName, setClinicName] = useState("Happy Paws Clinic"); // Default for demo
+  const [tenant, setTenant] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTemplate, setActiveTemplate] = useState("clinic-clean");
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-
   const [bookings, setBookings] = useState<any[]>([]);
 
+<<<<<<< HEAD
   const fetchBookings = () => {
     const saved = localStorage.getItem("flexslot_bookings");
     if (saved) setBookings(JSON.parse(saved).reverse());
   };
 
+=======
+>>>>>>> e525c626a3b0f83ceaf67aa27a86d43d0324245e
   useEffect(() => {
-    const role = localStorage.getItem("flexslot_role");
-    const savedName = localStorage.getItem("flexslot_active_clinic_name") || "Happy Paws Clinic";
-    const savedTemplate = localStorage.getItem("flexslot_active_template") || "clinic-clean";
-    setClinicName(savedName);
-    setActiveTemplate(savedTemplate);
-    
-    fetchBookings();
-    window.addEventListener('storage', fetchBookings);
-    return () => window.removeEventListener('storage', fetchBookings);
+    fetchInitialData();
   }, []);
 
-  const handleTemplateSelect = (t: string) => {
+  const fetchInitialData = async () => {
+    setLoading(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    // 1. Fetch Tenant
+    const { data: tenantData } = await supabase
+      .from("tenants")
+      .select("*")
+      .eq("owner_id", user.id)
+      .single();
+    
+    if (tenantData) {
+      setTenant(tenantData);
+      setActiveTemplate(tenantData.template_id || "clinic-clean");
+      
+      // 2. Fetch Bookings
+      const { data: bookingsData } = await supabase
+        .from("bookings")
+        .select(`
+          *,
+          profiles:customer_id (full_name, email)
+        `)
+        .eq("tenant_id", tenantData.id)
+        .order("created_at", { ascending: false });
+      
+      if (bookingsData) {
+        setBookings(bookingsData);
+      }
+    }
+    setLoading(false);
+  };
+
+  const handleTemplateSelect = async (t: string) => {
+    if (!tenant) return;
     setIsUpdating(true);
-    setActiveTemplate(t);
-    localStorage.setItem("flexslot_active_template", t);
+    
+    const { error } = await supabase
+      .from("tenants")
+      .update({ template_id: t })
+      .eq("id", tenant.id);
+
+    if (!error) {
+      setActiveTemplate(t);
+      setTenant({ ...tenant, template_id: t });
+    }
+    
     setTimeout(() => setIsUpdating(false), 1200);
   };
 
@@ -87,14 +131,14 @@ export default function OwnerDashboard() {
           <SideNavItem icon={<BarChart3 />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
           <SideNavItem icon={<Layout />} label="Clinic Themes" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
           <SideNavItem icon={<Briefcase />} label="Treatments" active={activeTab === "services"} onClick={() => setActiveTab("services")} />
+          <SideNavItem icon={<Users />} label="Staff Directory" active={activeTab === "staff"} onClick={() => setActiveTab("staff")} />
           <SideNavItem icon={<Calendar />} label="Clinic Schedule" active={activeTab === "slots"} onClick={() => setActiveTab("slots")} />
           <Link href="/provider/appointment/upcoming" className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl text-sm font-bold tracking-tight text-gray-400 hover:bg-gray-50 hover:text-black transition-all">
             <LayoutDashboard className="w-5 h-5 text-emerald-500" />
             Upcoming Feed
           </Link>
           <SideNavItem icon={<Users />} label="Patient Registry" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
-          
-
+          <SideNavItem icon={<MessageSquare />} label="Content Manager" active={activeTab === "content"} onClick={() => setActiveTab("content")} />
         </div>
 
         <div className="p-6 border-t border-gray-50">
@@ -108,16 +152,33 @@ export default function OwnerDashboard() {
 
 
         <div className="p-10 max-w-7xl mx-auto w-full space-y-12">
-          {activeTab === "overview" && <OverviewSection bookings={bookings} activeTemplate={activeTemplate} />}
-          {activeTab === "ui" && (
-            <UIConfiguratorSection 
-              activeTemplate={activeTemplate} 
-              onSelectTemplate={handleTemplateSelect} 
-            />
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-40 opacity-20">
+              <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="text-xs font-black uppercase tracking-widest">Initialising Clinical Environment...</p>
+            </div>
+          ) : !tenant ? (
+            <div className="flex flex-col items-center justify-center py-40 text-center">
+              <h2 className="text-3xl font-serif mb-4">No Clinic Found</h2>
+              <p className="text-gray-400 mb-8 max-w-sm">It looks like you haven't set up your clinic yet.</p>
+              <Link href="/login?step=role" className="bg-black text-white px-8 py-4 rounded-2xl font-bold">Start Onboarding</Link>
+            </div>
+          ) : (
+            <>
+              {activeTab === "overview" && <OverviewSection bookings={bookings} activeTemplate={activeTemplate} />}
+              {activeTab === "ui" && (
+                <UIConfiguratorSection 
+                  activeTemplate={activeTemplate} 
+                  onSelectTemplate={handleTemplateSelect} 
+                />
+              )}
+              {activeTab === "services" && <ServiceCatalogSection tenantId={tenant.id} />}
+              {activeTab === "staff" && <StaffManagerSection tenantId={tenant.id} />}
+              {activeTab === "content" && <FAQManagerSection tenantId={tenant.id} />}
+              {activeTab === "slots" && <SlotManagerSection activeTemplate={activeTemplate} />}
+              {activeTab === "audit" && <AuditTrailSection bookings={bookings} setBookings={setBookings} />}
+            </>
           )}
-          {activeTab === "services" && <ServiceCatalogSection />}
-          {activeTab === "slots" && <SlotManagerSection activeTemplate={activeTemplate} />}
-          {activeTab === "audit" && <AuditTrailSection bookings={bookings} setBookings={setBookings} />}
         </div>
       </main>
     </div>
@@ -328,11 +389,12 @@ function UIConfiguratorSection({ activeTemplate, onSelectTemplate }: { activeTem
   );
 }
 
-function ServiceCatalogSection() {
+function ServiceCatalogSection({ tenantId }: { tenantId: string }) {
+  const supabase = createClient();
   const [services, setServices] = useState<any[]>([]);
   const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
   
-  // Form State
   const [formData, setFormData] = useState({
     name: '',
     type: 'diagnostic',
@@ -341,44 +403,53 @@ function ServiceCatalogSection() {
     desc: ''
   });
 
-  const fetchServices = () => {
-    const saved = localStorage.getItem("flexslot_clinical_services");
-    if (saved) {
-      setServices(JSON.parse(saved));
-    } else {
-      const initial = [
-        { id: 'T-101', name: 'General Wellness Check', dur: '45m', fee: '$85', desc: 'Comprehensive diagnostic screening and health report.', type: 'diagnostic' },
-        { id: 'T-102', name: 'Specialist Consultation', dur: '30m', fee: '$150', desc: 'Expert clinical review for specific physiological concerns.', type: 'specialist' },
-        { id: 'T-103', name: 'Clinical Follow-up', dur: '15m', fee: '$60', desc: 'Post-treatment validation and medical roadmap update.', type: 'followup' }
-      ];
-      setServices(initial);
-      localStorage.setItem("flexslot_clinical_services", JSON.stringify(initial));
-    }
-  };
-
   useEffect(() => {
-    fetchServices();
-    window.addEventListener('storage', fetchServices);
-    return () => window.removeEventListener('storage', fetchServices);
-  }, []);
+    if (tenantId) fetchServices();
+  }, [tenantId]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newS = {
-      id: `T-${100 + services.length + 1}`,
-      ...formData
-    };
-    const next = [...services, newS];
-    setServices(next);
-    localStorage.setItem("flexslot_clinical_services", JSON.stringify(next));
-    setIsAdding(false);
-    setFormData({ name: '', type: 'diagnostic', dur: '30m', fee: '$100', desc: '' });
+  const fetchServices = async () => {
+    const { data } = await supabase
+      .from("services")
+      .select("*")
+      .eq("tenant_id", tenantId)
+      .order("created_at", { ascending: false });
+    
+    if (data) setServices(data);
   };
 
-  const deleteService = (id: string) => {
-    const next = services.filter(s => s.id !== id);
-    setServices(next);
-    localStorage.setItem("flexslot_clinical_services", JSON.stringify(next));
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    const { data, error } = await supabase
+      .from("services")
+      .insert({
+        tenant_id: tenantId,
+        name: formData.name,
+        duration: formData.dur,
+        price: formData.fee,
+        description: formData.desc
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      setServices([data, ...services]);
+      setIsAdding(false);
+      setFormData({ name: '', type: 'diagnostic', dur: '30m', fee: '$100', desc: '' });
+    }
+    setLoading(false);
+  };
+
+  const deleteService = async (id: string) => {
+    const { error } = await supabase
+      .from("services")
+      .delete()
+      .eq("id", id);
+    
+    if (!error) {
+      setServices(services.filter(s => s.id !== id));
+    }
   };
 
   return (
@@ -933,6 +1004,289 @@ function AuditRow({ id, name, time, status, service, onDelete }: { id: string, n
              </button>
           </div>
        </div>
+    </div>
+  );
+}
+
+function StaffManagerSection({ tenantId }: { tenantId: string }) {
+  const supabase = createClient();
+  const [staff, setStaff] = useState<any[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    role: '',
+    image_url: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop'
+  });
+
+  useEffect(() => {
+    if (tenantId) fetchStaff();
+  }, [tenantId]);
+
+  const fetchStaff = async () => {
+    const { data } = await supabase
+      .from("staff")
+      .select("*")
+      .eq("tenant_id", tenantId)
+      .order("created_at", { ascending: false });
+    
+    if (data) setStaff(data);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    const { data, error } = await supabase
+      .from("staff")
+      .insert({
+        tenant_id: tenantId,
+        name: formData.name,
+        role: formData.role,
+        image_url: formData.image_url
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      setStaff([data, ...staff]);
+      setIsAdding(false);
+      setFormData({ name: '', role: '', image_url: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop' });
+    }
+    setLoading(false);
+  };
+
+  const deleteStaff = async (id: string) => {
+    const { error } = await supabase
+      .from("staff")
+      .delete()
+      .eq("id", id);
+    
+    if (!error) {
+      setStaff(staff.filter(s => s.id !== id));
+    }
+  };
+
+  return (
+    <div className="space-y-12 pb-24 relative">
+      <AnimatePresence>
+        {isAdding && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              onClick={() => setIsAdding(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100]" 
+            />
+            <motion.div 
+              initial={{ x: '100%' }} 
+              animate={{ x: 0 }} 
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-white shadow-2xl z-[110] p-12 overflow-y-auto"
+            >
+               <div className="flex justify-between items-center mb-12">
+                  <div>
+                    <h2 className="text-4xl font-serif italic text-black">Add Practitioner</h2>
+                    <p className="text-sm text-gray-400 font-medium italic mt-2">Onboard a new medical professional.</p>
+                  </div>
+                  <button onClick={() => setIsAdding(false)} className="p-4 hover:bg-gray-50 rounded-full transition-all group">
+                    <Trash2 className="w-6 h-6 text-gray-300 group-hover:text-black" />
+                  </button>
+               </div>
+
+               <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Full Name</label>
+                    <input 
+                      required
+                      value={formData.name}
+                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      placeholder="e.g. Dr. Sarah Jenkins"
+                      className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Specialty / Role</label>
+                    <input 
+                      required
+                      value={formData.role}
+                      onChange={e => setFormData({...formData, role: e.target.value})}
+                      placeholder="e.g. Lead Cardiologist"
+                      className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Image URL</label>
+                    <input 
+                      value={formData.image_url}
+                      onChange={e => setFormData({...formData, image_url: e.target.value})}
+                      placeholder="https://..."
+                      className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all font-bold text-sm"
+                    />
+                  </div>
+
+                  <div className="pt-12">
+                     <button type="submit" disabled={loading} className="w-full py-6 bg-black text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all">
+                        {loading ? 'Processing...' : 'Register Practitioner'}
+                     </button>
+                  </div>
+               </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <div className="flex justify-between items-end mb-4">
+        <div>
+          <h1 className="text-5xl font-serif italic text-black">Staff Directory</h1>
+          <p className="text-sm text-gray-400 font-medium italic mt-4">Manage your clinic's professionals and availability profiles.</p>
+        </div>
+        <div className="flex gap-4">
+           <button 
+             onClick={() => setIsAdding(true)}
+             className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3"
+           >
+              <Plus className="w-4 h-4" /> Add Practitioner
+           </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {staff.map((s) => (
+          <div key={s.id} className="bg-white rounded-[2.5rem] border border-black/5 overflow-hidden hover:border-black/20 hover:shadow-2xl hover:shadow-black/[0.02] transition-all group flex flex-col relative">
+             <button 
+                onClick={() => deleteStaff(s.id)}
+                className="absolute top-4 right-4 z-10 p-3 bg-white/80 backdrop-blur-sm rounded-xl text-gray-400 hover:text-red-500 hover:bg-white transition-all shadow-sm opacity-0 group-hover:opacity-100"
+              >
+                <Trash2 className="w-4 h-4" />
+             </button>
+             <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
+                <img src={s.image_url || 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=200&auto=format&fit=crop'} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                   <h3 className="text-2xl font-serif italic text-white mb-1">{s.name}</h3>
+                   <div className="text-[10px] font-black uppercase tracking-widest text-white/80">{s.role}</div>
+                </div>
+             </div>
+             <div className="p-6 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500">
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Available
+                </div>
+             </div>
+          </div>
+        ))}
+        {staff.length === 0 && !loading && (
+           <div className="col-span-full py-24 flex flex-col items-center justify-center text-center border-2 border-dashed border-black/5 rounded-[2.5rem]">
+              <Users className="w-12 h-12 text-gray-200 mb-4" />
+              <p className="text-sm text-gray-400 font-medium italic">No practitioners registered yet.</p>
+           </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FAQManagerSection({ tenantId }: { tenantId: string }) {
+  const supabase = createClient();
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  const [formData, setFormData] = useState({ question: '', answer: '' });
+
+  useEffect(() => {
+    if (tenantId) fetchFaqs();
+  }, [tenantId]);
+
+  const fetchFaqs = async () => {
+    const { data } = await supabase.from("faqs").select("*").eq("tenant_id", tenantId);
+    if (data) setFaqs(data);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { data, error } = await supabase.from("faqs").insert({ tenant_id: tenantId, question: formData.question, answer: formData.answer }).select().single();
+    if (!error && data) {
+      setFaqs([...faqs, data]);
+      setIsAdding(false);
+      setFormData({ question: '', answer: '' });
+    }
+    setLoading(false);
+  };
+
+  const deleteFaq = async (id: string) => {
+    const { error } = await supabase.from("faqs").delete().eq("id", id);
+    if (!error) setFaqs(faqs.filter(f => f.id !== id));
+  };
+
+  return (
+    <div className="space-y-12 pb-24 relative">
+      <AnimatePresence>
+        {isAdding && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsAdding(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100]" 
+            />
+            <motion.div 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-xl bg-white shadow-2xl z-[110] p-12 overflow-y-auto"
+            >
+               <div className="flex justify-between items-center mb-12">
+                  <div>
+                    <h2 className="text-4xl font-serif italic text-black">Add Content</h2>
+                    <p className="text-sm text-gray-400 font-medium italic mt-2">Publish new information to your clinic page.</p>
+                  </div>
+                  <button onClick={() => setIsAdding(false)} className="p-4 hover:bg-gray-50 rounded-full transition-all"><Trash2 className="w-6 h-6 text-gray-300 hover:text-black" /></button>
+               </div>
+               <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Question / Heading</label>
+                    <input required value={formData.question} onChange={e => setFormData({...formData, question: e.target.value})} className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl font-bold focus:outline-none focus:ring-2 focus:ring-black focus:bg-white" />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Answer / Body</label>
+                    <textarea required rows={5} value={formData.answer} onChange={e => setFormData({...formData, answer: e.target.value})} className="w-full p-6 bg-gray-50 border border-black/5 rounded-2xl font-medium italic focus:outline-none focus:ring-2 focus:ring-black focus:bg-white" />
+                  </div>
+                  <button type="submit" disabled={loading} className="w-full py-6 bg-black text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all">
+                     {loading ? 'Publishing...' : 'Publish Content'}
+                  </button>
+               </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <div className="flex justify-between items-end mb-4">
+        <div>
+          <h1 className="text-5xl font-serif italic text-black">Content Manager</h1>
+          <p className="text-sm text-gray-400 font-medium italic mt-4">Manage Frequently Asked Questions and Care Tips.</p>
+        </div>
+        <button onClick={() => setIsAdding(true)} className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3">
+           <Plus className="w-4 h-4" /> Add FAQ
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {faqs.map((f) => (
+          <div key={f.id} className="bg-white p-8 rounded-[2.5rem] border border-black/5 hover:border-black/20 hover:shadow-2xl hover:shadow-black/[0.02] transition-all group flex flex-col justify-between">
+             <div>
+                <h3 className="text-xl font-bold text-black mb-4 pr-12">{f.question}</h3>
+                <p className="text-gray-500 font-medium italic leading-relaxed">{f.answer}</p>
+             </div>
+             <div className="pt-6 mt-6 border-t border-black/5 flex justify-end">
+                <button onClick={() => deleteFaq(f.id)} className="p-3 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                   <Trash2 className="w-4 h-4" />
+                </button>
+             </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
