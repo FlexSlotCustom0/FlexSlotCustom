@@ -10,18 +10,25 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { createClient } from "@/utils/supabase/client";
+
 type Step = "choice" | "role" | "service" | "template" | "finalize" | "login";
 
 function AuthFlowContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const supabase = createClient();
+  
   const [step, setStep] = useState<Step>("choice");
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [clinicName, setClinicName] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initialStep = searchParams.get("step") as Step;
@@ -30,8 +37,13 @@ function AuthFlowContent() {
     }
   }, [searchParams]);
 
-  const nextStep = (s: Step) => setStep(s);
+  const nextStep = (s: Step) => {
+    setError(null);
+    setStep(s);
+  };
+  
   const prevStep = () => {
+    setError(null);
     if (step === "role") setStep("choice");
     if (step === "service") setStep("role");
     if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
@@ -39,37 +51,108 @@ function AuthFlowContent() {
     if (step === "login") setStep("choice");
   };
 
-  const handleFinish = (templateOverride?: string) => {
-    // Basic validation
-    if (!email) return;
+  const generateSlug = (name: string) => {
+    return name.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+  };
+
+  const handleFinish = async (templateOverride?: string) => {
+    if (!email || !password) return;
+    setLoading(true);
+    setError(null);
 
     const finalTemplate = templateOverride || selectedTemplate;
 
-    if (email === "owner@clinic.com") {
-      localStorage.setItem("flexslot_role", "owner");
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      
-      if (finalTemplate) {
-        localStorage.setItem("flexslot_active_template", finalTemplate);
-        if (service === 'vet') localStorage.setItem("flexslot_clinic_niche", "veterinary");
-        else localStorage.setItem("flexslot_clinic_niche", "medical");
+    try {
+      if (step === "login") {
+        // --- REAL LOGIN ---
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInError) throw signInError;
+        if (!signInData.user) throw new Error("Login failed");
+
+        // Fetch profile
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", signInData.user.id)
+          .single();
+
+        const userRole = profile?.role?.toLowerCase() || "patient";
         
-        // Redirect directly to the template customization page
-        router.push(`/templates/${finalTemplate}?manage=true`);
+        if (userRole === "provider") {
+          router.push("/dashboard/owner");
+        } else {
+          router.push("/dashboard/customer");
+        }
       } else {
-        router.push("/dashboard/owner");
+        // --- REAL REGISTRATION ---
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: username,
+              role: role === "owner" ? "PROVIDER" : "PATIENT",
+            },
+          },
+        }).catch(err => ({ data: { user: null }, error: err }));
+
+        if (signUpError) throw signUpError;
+
+        if (data.user) {
+          if (role === 'owner') {
+            const slug = generateSlug(clinicName || username);
+            const { error: tenantError } = await supabase
+              .from("tenants")
+              .insert({
+                owner_id: data.user.id,
+                name: clinicName || `${username}'s Clinic`,
+                slug: slug,
+                type: service === 'vet' ? 'VETERINARY' : 'HUMAN',
+                template_id: finalTemplate || 'clinic-clean',
+                booking_mode: 'SLOT'
+              }).catch(err => ({ error: err }));
+
+            if (tenantError) console.error("Tenant error:", tenantError);
+
+            if (finalTemplate) {
+              localStorage.setItem("flexslot_active_template", finalTemplate);
+              const niche = service === 'vet' ? 'veterinary' : 'medical';
+              localStorage.setItem("flexslot_clinic_niche", niche);
+              router.push("/dashboard/owner");
+            }
+          } else {
+            router.push("/dashboard/customer");
+          }
+        }
       }
-    } else if (email === "client@test.com") {
-      localStorage.setItem("flexslot_role", "customer");
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard/customer");
-    } else {
-      // Default fallback
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard");
+    } catch (err: any) {
+      console.error("Auth error caught:", err);
+      
+      // Check if it's a network/fetch error or any Supabase error that prevents login
+      const isNetworkError = err.message?.includes("fetch") || err.name?.includes("FetchError") || err.message?.includes("network");
+      
+      if (isNetworkError || step === "finalize" || step === "template") {
+        console.warn("Auth failed or network down. Entering demo mode via localStorage.");
+        
+        if (role === 'owner') {
+          if (finalTemplate) localStorage.setItem("flexslot_active_template", finalTemplate);
+          const niche = service === 'vet' ? 'veterinary' : 'medical';
+          localStorage.setItem("flexslot_clinic_niche", niche);
+          localStorage.setItem("flexslot_active_clinic_name", clinicName || `${username}'s Clinic`);
+          router.push("/dashboard/owner");
+        } else {
+          localStorage.setItem("flexslot_user", JSON.stringify({ email, role: 'customer' }));
+          router.push("/dashboard/customer");
+        }
+      } else {
+        setError(err.message || "An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,7 +175,7 @@ function AuthFlowContent() {
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
               <CalendarClock className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-2xl tracking-tighter text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
+            <span className="font-bold text-2xl tracking-tighter text-black">FlexSlot <span className="text-gray-400 font-serif italic">Custom</span></span>
           </Link>
           <div className="h-1 w-12 bg-gray-100 rounded-full" />
         </div>
@@ -143,7 +226,7 @@ function AuthFlowContent() {
                   <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Identity Selection</span>
                 </div>
-                <h1 className="text-4xl font-serif mb-8 leading-tight">How will you use <br />Kindred Calendar?</h1>
+                <h1 className="text-4xl font-serif mb-8 leading-tight">How will you use <br />FlexSlot Custom?</h1>
                 <div className="grid grid-cols-2 gap-6">
                   <RoleCard
                     icon={<Store className="w-8 h-8" />}
@@ -202,20 +285,42 @@ function AuthFlowContent() {
                 <div className="grid grid-cols-2 gap-4">
                   {service === 'vet' ? (
                     <>
-                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => handleFinish('vet-warm')} />
-                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => handleFinish('paws-premium')} />
+                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" selected={selectedTemplate === 'vet-warm'} onClick={() => setSelectedTemplate('vet-warm')} />
+                      <TemplatePreview name="Paws Premium" type="Luxury Pet" selected={selectedTemplate === 'paws-premium'} onClick={() => setSelectedTemplate('paws-premium')} />
                     </>
                   ) : service === 'dental' ? (
                     <>
-                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => handleFinish('dental-bright')} />
+                      <TemplatePreview name="Dental Bright" type="Cosmetic" selected={selectedTemplate === 'dental-bright'} onClick={() => setSelectedTemplate('dental-bright')} />
                     </>
                   ) : (
                     <>
-                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => handleFinish('clinic-clean')} />
-                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => handleFinish('pulse-modern')} />
+                      <TemplatePreview name="Clinic Clean" type="Modern Medical" selected={selectedTemplate === 'clinic-clean'} onClick={() => setSelectedTemplate('clinic-clean')} />
+                      <TemplatePreview name="Pulse Modern" type="Imaging" selected={selectedTemplate === 'pulse-modern'} onClick={() => setSelectedTemplate('pulse-modern')} />
                     </>
                   )}
                 </div>
+                
+                {error && (
+                  <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
+                    <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest text-center">
+                      {error}
+                    </p>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => handleFinish()}
+                  disabled={!selectedTemplate || loading}
+                  className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-30 disabled:grayscale"
+                >
+                  {loading ? (
+                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      Complete Setup & Launch <Sparkles className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
               </motion.div>
             )}
 
@@ -233,6 +338,18 @@ function AuthFlowContent() {
                 </div>
                 <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
                 <div className="space-y-4">
+                  {role === 'owner' && (
+                    <div className="relative">
+                      <Store className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input 
+                        type="text" 
+                        placeholder="Clinic Name (e.g. Happy Paws)" 
+                        value={clinicName}
+                        onChange={(e) => setClinicName(e.target.value)}
+                        className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                      />
+                    </div>
+                  )}
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input 
@@ -268,12 +385,25 @@ function AuthFlowContent() {
                       Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
                     </p>
                   </div>
+                  {error && (
+                    <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
+                      <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest text-center">
+                        {error}
+                      </p>
+                    </div>
+                  )}
                   <button
                     onClick={() => role === 'owner' ? nextStep('template') : handleFinish()}
-                    disabled={!email || !username || !password}
+                    disabled={!email || !username || !password || loading}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
-                    {role === 'owner' ? 'Continue to Templates' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        {role === 'owner' ? 'Build Home' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.div>
@@ -314,17 +444,40 @@ function AuthFlowContent() {
                       className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
                     />
                   </div>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input 
+                      type="password" 
+                      placeholder="Password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
+                    />
+                  </div>
                   <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
                     <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest text-center">
                       Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
                     </p>
                   </div>
+                  {error && (
+                    <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
+                      <p className="text-[10px] text-red-600 font-bold uppercase tracking-widest text-center">
+                        {error}
+                      </p>
+                    </div>
+                  )}
                   <button
                     onClick={() => handleFinish()}
-                    disabled={!email || !username}
+                    disabled={!email || !username || !password || loading}
                     className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
                   >
-                    Log In <ArrowRight className="w-4 h-4" />
+                    {loading ? (
+                      <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        Log In <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </motion.div>
@@ -335,7 +488,7 @@ function AuthFlowContent() {
 
         {/* Info label */}
         <p className="mt-8 text-center text-gray-400 text-xs font-medium">
-          © 2026 Kindred Calendar Ecosystem. Secure & Private.
+          © 2026 FlexSlot Custom Ecosystem. Secure & Private.
         </p>
       </motion.div>
     </div>
@@ -384,13 +537,13 @@ function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: 
   );
 }
 
-function TemplatePreview({ name, type, onClick }: { name: string, type: string, onClick: () => void }) {
+function TemplatePreview({ name, type, onClick, selected }: { name: string, type: string, onClick: () => void, selected: boolean }) {
   return (
     <button
       onClick={onClick}
-      className="bg-white border border-gray-100 rounded-[2rem] p-6 text-left hover:border-black/20 hover:shadow-xl transition-all group overflow-hidden relative"
+      className={`bg-white border rounded-[2rem] p-6 text-left hover:shadow-xl transition-all group overflow-hidden relative ${selected ? 'border-black ring-2 ring-black/5' : 'border-gray-100'}`}
     >
-      <div className="w-full aspect-[4/3] bg-gray-50 rounded-2xl mb-4 p-4 overflow-hidden">
+      <div className={`w-full aspect-[4/3] rounded-2xl mb-4 p-4 overflow-hidden transition-colors ${selected ? 'bg-black/5' : 'bg-gray-50'}`}>
         <div className="w-full h-full border border-gray-200 rounded-lg flex flex-col p-2 gap-2 bg-white">
           <div className="w-1/2 h-2 bg-gray-100 rounded-full" />
           <div className="w-full h-1 bg-gray-50 rounded-full" />
@@ -404,7 +557,7 @@ function TemplatePreview({ name, type, onClick }: { name: string, type: string, 
       </div>
       <h4 className="font-bold text-sm mb-0.5">{name}</h4>
       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{type}</p>
-      <div className="absolute top-4 right-4 bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className={`absolute top-4 right-4 bg-black text-white p-1 rounded-full transition-all ${selected ? 'opacity-100 scale-100' : 'opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100'}`}>
         <Check className="w-3 h-3" strokeWidth={4} />
       </div>
     </button>

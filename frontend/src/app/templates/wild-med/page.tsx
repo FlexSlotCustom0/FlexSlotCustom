@@ -210,7 +210,7 @@ export default function WildMedTemplate() {
 
                <div className="mt-32 flex justify-between w-full text-[8px] font-black uppercase tracking-[0.5em] text-[#064e3b]">
                   <span>© 2026 {shop.name}</span>
-                  <span>Built and Protected by Kindred Calendar</span>
+                  <span>Built and Protected by FlexSlot Custom</span>
                </div>
             </div>
          </footer>

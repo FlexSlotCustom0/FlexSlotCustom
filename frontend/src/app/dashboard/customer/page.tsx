@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+
 export default function CustomerDashboard() {
   const [activeTab, setActiveTab] = useState("explore");
   const [chatInput, setChatInput] = useState("");
@@ -36,7 +37,7 @@ export default function CustomerDashboard() {
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
               <CalendarClock className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold tracking-tight text-lg text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
+            <span className="font-bold tracking-tight text-lg text-black">FlexSlot <span className="text-gray-400 font-serif italic">Custom</span></span>
           </Link>
         </div>
 
@@ -90,8 +91,11 @@ function ExploreMarketSection() {
   const [publishedClinics, setPublishedClinics] = useState<any[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("flexslot_public_clinics");
-    if (saved) setPublishedClinics(JSON.parse(saved));
+    const fetchClinics = () => {
+      const saved = localStorage.getItem("flexslot_public_clinics");
+      if (saved) setPublishedClinics(JSON.parse(saved));
+    };
+    fetchClinics();
   }, []);
 
   return (
@@ -276,18 +280,13 @@ function MyAppointmentsSection() {
 
   const syncRecords = () => {
     setIsSyncing(true);
-    setTimeout(() => {
-      const saved = localStorage.getItem("flexslot_bookings");
-      if (saved) {
-        setRecords(JSON.parse(saved).reverse());
-      } else {
-        setRecords([
-          { id: 'B-Demo1', clientName: 'Alexander Wright', serviceName: 'General Wellness', slotDate: '2026-04-20', slotTime: '10:30 AM' },
-          { id: 'B-Demo2', clientName: 'Alexander Wright', serviceName: 'Specialist Consultation', slotDate: '2026-04-24', slotTime: '02:00 PM' }
-        ]);
-      }
-      setIsSyncing(false);
-    }, 1500);
+    const demoRecords = [
+      { id: 'B-Demo1', customer_name: 'Alexander Wright', service_name: 'General Wellness', slot_date: '2026-04-20', slot_time: '10:30 AM' },
+      { id: 'B-Demo2', customer_name: 'Alexander Wright', service_name: 'Specialist Consultation', slot_date: '2026-04-24', slot_time: '02:00 PM' }
+    ];
+    const saved = localStorage.getItem("flexslot_bookings");
+    setRecords(saved ? JSON.parse(saved).reverse() : demoRecords);
+    setIsSyncing(false);
   };
 
   useEffect(() => {
@@ -315,10 +314,10 @@ function MyAppointmentsSection() {
           {records.length > 0 ? records.map((r) => (
             <AppointmentRow 
                key={r.id} 
-               title={r.serviceName} 
-               owner="Kindred Medical" 
-               time={`${r.slotDate} | ${r.slotTime}`} 
-               status={new Date(r.slotDate) > new Date() ? "UPCOMING" : "ARCHIVED"} 
+               title={r.service_name || r.serviceName} 
+               owner="FlexSlot Medical" 
+               time={`${r.slot_date || r.slotDate} | ${r.slot_time || r.slotTime}`} 
+               status={new Date(r.slot_date || r.slotDate) > new Date() ? "UPCOMING" : "ARCHIVED"} 
             />
           )) : (
             <div className="col-span-2 p-24 bg-gray-50/50 rounded-[3rem] border border-black/5 flex flex-col items-center justify-center text-center">
