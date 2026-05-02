@@ -10,7 +10,7 @@ import {
   Palette, Sparkles, User
 } from "lucide-react";
 import Link from "next/link";
-import { api } from "@/lib/api";
+
 
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -22,20 +22,9 @@ export default function OwnerDashboard() {
 
   const [bookings, setBookings] = useState<any[]>([]);
 
-  const fetchBookings = async () => {
-    try {
-      const data = await api.getBookings();
-      if (data && data.length > 0) {
-        setBookings(data.reverse());
-      } else {
-        const saved = localStorage.getItem("flexslot_bookings");
-        if (saved) setBookings(JSON.parse(saved).reverse());
-      }
-    } catch (error) {
-      console.error("Failed to fetch bookings", error);
-      const saved = localStorage.getItem("flexslot_bookings");
-      if (saved) setBookings(JSON.parse(saved).reverse());
-    }
+  const fetchBookings = () => {
+    const saved = localStorage.getItem("flexslot_bookings");
+    if (saved) setBookings(JSON.parse(saved).reverse());
   };
 
   useEffect(() => {

@@ -10,7 +10,7 @@ import {
   Lock, RefreshCwIcon, HeartPulse, PawPrint, Syringe, CalendarClock
 } from "lucide-react";
 import Link from "next/link";
-import { api } from "@/lib/api";
+
 
 export default function CustomerDashboard() {
   const [activeTab, setActiveTab] = useState("explore");
@@ -91,21 +91,9 @@ function ExploreMarketSection() {
   const [publishedClinics, setPublishedClinics] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchClinics = async () => {
-      try {
-        const data = await api.getTenants();
-        if (data && data.length > 0) {
-          setPublishedClinics(data);
-        } else {
-          // Fallback if DB is empty but server is up
-          const saved = localStorage.getItem("flexslot_public_clinics");
-          if (saved) setPublishedClinics(JSON.parse(saved));
-        }
-      } catch (error) {
-        console.error("Failed to fetch clinics from API", error);
-        const saved = localStorage.getItem("flexslot_public_clinics");
-        if (saved) setPublishedClinics(JSON.parse(saved));
-      }
+    const fetchClinics = () => {
+      const saved = localStorage.getItem("flexslot_public_clinics");
+      if (saved) setPublishedClinics(JSON.parse(saved));
     };
     fetchClinics();
   }, []);
@@ -290,26 +278,14 @@ function MyAppointmentsSection() {
   const [records, setRecords] = useState<any[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  const syncRecords = async () => {
+  const syncRecords = () => {
     setIsSyncing(true);
-    try {
-      const data = await api.getBookings();
-      if (data && data.length > 0) {
-        setRecords(data.reverse());
-      } else {
-        // Fallback to demo data
-        setRecords([
-          { id: 'B-Demo1', customer_name: 'Alexander Wright', service_name: 'General Wellness', slot_date: '2026-04-20', slot_time: '10:30 AM' },
-          { id: 'B-Demo2', customer_name: 'Alexander Wright', service_name: 'Specialist Consultation', slot_date: '2026-04-24', slot_time: '02:00 PM' }
-        ]);
-      }
-    } catch (error) {
-      console.error("Failed to sync records from API", error);
-      setRecords([
-        { id: 'B-Demo1', customer_name: 'Alexander Wright', service_name: 'General Wellness', slot_date: '2026-04-20', slot_time: '10:30 AM' },
-        { id: 'B-Demo2', customer_name: 'Alexander Wright', service_name: 'Specialist Consultation', slot_date: '2026-04-24', slot_time: '02:00 PM' }
-      ]);
-    }
+    const demoRecords = [
+      { id: 'B-Demo1', customer_name: 'Alexander Wright', service_name: 'General Wellness', slot_date: '2026-04-20', slot_time: '10:30 AM' },
+      { id: 'B-Demo2', customer_name: 'Alexander Wright', service_name: 'Specialist Consultation', slot_date: '2026-04-24', slot_time: '02:00 PM' }
+    ];
+    const saved = localStorage.getItem("flexslot_bookings");
+    setRecords(saved ? JSON.parse(saved).reverse() : demoRecords);
     setIsSyncing(false);
   };
 

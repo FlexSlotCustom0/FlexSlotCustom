@@ -43,6 +43,8 @@ function BuilderToolbar() {
       publishClinic();
       setIsPublishing(false);
       setLastPublished(new Date().toLocaleTimeString());
+      // Redirect to dashboard after publishing
+      window.location.href = "/dashboard/owner";
     }, 1000);
   };
 
