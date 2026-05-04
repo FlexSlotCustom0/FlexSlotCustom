@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { supabase } from "@/utils/supabase";
 
 type Step = "choice" | "role" | "service" | "template" | "finalize" | "login";
 
@@ -22,6 +23,8 @@ function AuthFlowContent() {
   const [username, setUsername] = useState("");
   const [service, setService] = useState<string | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initialStep = searchParams.get("step") as Step;
@@ -30,8 +33,13 @@ function AuthFlowContent() {
     }
   }, [searchParams]);
 
-  const nextStep = (s: Step) => setStep(s);
+  const nextStep = (s: Step) => {
+    setError(null);
+    setStep(s);
+  };
+
   const prevStep = () => {
+    setError(null);
     if (step === "role") setStep("choice");
     if (step === "service") setStep("role");
     if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
@@ -39,37 +47,116 @@ function AuthFlowContent() {
     if (step === "login") setStep("choice");
   };
 
-  const handleFinish = (templateOverride?: string) => {
-    // Basic validation
-    if (!email) return;
+  const handleFinish = async (templateOverride?: string) => {
+    if (!email || !password) return;
+    setLoading(true);
+    setError(null);
 
     const finalTemplate = templateOverride || selectedTemplate;
 
-    if (email === "owner@clinic.com") {
-      localStorage.setItem("flexslot_role", "owner");
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      
-      if (finalTemplate) {
-        localStorage.setItem("flexslot_active_template", finalTemplate);
-        if (service === 'vet') localStorage.setItem("flexslot_clinic_niche", "veterinary");
-        else localStorage.setItem("flexslot_clinic_niche", "medical");
+    try {
+      if (step === "login") {
+        // Handle Login
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
         
-        // Redirect directly to the template customization page
-        router.push(`/templates/${finalTemplate}?manage=true`);
+        if (signInError) throw signInError;
+        
+        // Fetch profile to determine role
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', data.user.id)
+          .single();
+          
+        const userRole = profile?.role || 'customer';
+        localStorage.setItem("flexslot_role", userRole);
+        localStorage.setItem("flexslot_user_email", email);
+        
+        router.push(userRole === 'owner' ? "/dashboard/owner" : "/dashboard/customer");
       } else {
-        router.push("/dashboard/owner");
+        // Registration - Minimal sign up to avoid trigger conflicts
+        console.log("Attempting sign-up...");
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password
+        });
+        
+        if (signUpError) {
+          if (signUpError.message.includes("Database error")) {
+            throw new Error("Supabase Database Error: Please ensure you have run the SQL script in 'supabase_setup.md'.");
+          }
+          throw signUpError;
+        }
+        
+        if (data.user) {
+          console.log("User created, syncing profile...");
+          
+          // 1. Create Profile
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .upsert({
+              id: data.user.id,
+              username: username || email.split('@')[0],
+              role: role || 'customer',
+              email: email
+            });
+            
+          if (profileError) console.error("Profile sync error:", profileError);
+          
+          // 2. Create Tenant (Owner only)
+          if (role === 'owner' && finalTemplate) {
+            console.log("Syncing tenant...");
+            let { error: tenantError } = await supabase
+              .from('tenants')
+              .upsert({
+                owner_id: data.user.id,
+                name: `${username || email.split('@')[0]}'s Clinic`,
+                niche: service === 'vet' ? 'veterinary' : 'medical',
+                template_id: finalTemplate
+              });
+              
+            // If niche column doesn't exist, retry without it
+            if (tenantError && (tenantError.message?.includes("niche") || tenantError.code === 'PGRST204')) {
+               console.warn("Retrying tenant creation without niche column...");
+               const { error: retryError } = await supabase
+                 .from('tenants')
+                 .upsert({
+                   owner_id: data.user.id,
+                   name: `${username || email.split('@')[0]}'s Clinic`,
+                   template_id: finalTemplate
+                 });
+               tenantError = retryError;
+            }
+
+            if (tenantError) console.error("Tenant sync error:", tenantError);
+          }
+        }
+        
+        if (!data.session) {
+          setError("Check your email to verify your account, then log in.");
+          setLoading(false);
+          return;
+        }
+        
+        localStorage.setItem("flexslot_role", role || 'customer');
+        localStorage.setItem("flexslot_user_email", email);
+        if (username) localStorage.setItem("flexslot_username", username);
+        
+        if (role === 'owner' && finalTemplate) {
+          localStorage.setItem("flexslot_active_template", finalTemplate);
+          router.push(`/templates/${finalTemplate}?manage=true`);
+        } else {
+          router.push(role === 'owner' ? "/dashboard/owner" : "/dashboard/customer");
+        }
       }
-    } else if (email === "client@test.com") {
-      localStorage.setItem("flexslot_role", "customer");
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard/customer");
-    } else {
-      // Default fallback
-      localStorage.setItem("flexslot_user_email", email);
-      if (username) localStorage.setItem("flexslot_username", username);
-      router.push("/dashboard");
+    } catch (err: any) {
+      console.error("Auth process error:", err);
+      setError(err.message || "Authentication failed. Check your setup.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,7 +173,6 @@ function AuthFlowContent() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-xl relative z-10"
       >
-        {/* Logo */}
         <div className="flex flex-col items-center mb-12">
           <Link href="/" className="flex items-center gap-2 mb-4">
             <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
@@ -100,7 +186,6 @@ function AuthFlowContent() {
         <div className="bg-white border border-gray-100 rounded-[3rem] p-12 shadow-2xl relative overflow-hidden group">
           <AnimatePresence mode="wait">
 
-            {/* STEP: CHOICE */}
             {step === "choice" && (
               <motion.div
                 key="choice"
@@ -130,7 +215,6 @@ function AuthFlowContent() {
               </motion.div>
             )}
 
-            {/* STEP: ROLE */}
             {step === "role" && (
               <motion.div
                 key="role"
@@ -147,21 +231,20 @@ function AuthFlowContent() {
                 <div className="grid grid-cols-2 gap-6">
                   <RoleCard
                     icon={<Store className="w-8 h-8" />}
-                    title="I&apos;m an Owner"
+                    title="I'm an Owner"
                     desc="I want to list services and manage slots."
-                    onClick={() => { setRole("owner"); localStorage.setItem("flexslot_role", "owner"); nextStep("service"); }}
+                    onClick={() => { setRole("owner"); nextStep("service"); }}
                   />
                   <RoleCard
                     icon={<User className="w-8 h-8" />}
-                    title="I&apos;m a Customer"
+                    title="I'm a Customer"
                     desc="I want to book services and meet experts."
-                    onClick={() => { setRole("customer"); localStorage.setItem("flexslot_role", "customer"); nextStep("finalize"); }}
+                    onClick={() => { setRole("customer"); nextStep("finalize"); }}
                   />
                 </div>
               </motion.div>
             )}
 
-            {/* STEP: SERVICE CATEGORY (Owner Only) */}
             {step === "service" && (
               <motion.div
                 key="service"
@@ -183,7 +266,6 @@ function AuthFlowContent() {
               </motion.div>
             )}
 
-            {/* STEP: TEMPLATE SELECTION (Owner Only) */}
             {step === "template" && (
               <motion.div
                 key="template"
@@ -219,7 +301,6 @@ function AuthFlowContent() {
               </motion.div>
             )}
 
-            {/* STEP: FINALIZE */}
             {step === "finalize" && (
               <motion.div
                 key="finalize"
@@ -229,57 +310,43 @@ function AuthFlowContent() {
               >
                 <div className="flex items-center gap-4 mb-4">
                   <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Finalizing Credentials</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Credentials</span>
                 </div>
                 <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
                 <div className="space-y-4">
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input 
-                      type="text" 
-                      placeholder="Username" 
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
-                    />
-                  </div>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input 
-                      type="email" 
-                      placeholder="Email address" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
-                    />
-                  </div>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input 
-                      type="password" 
-                      placeholder="Password" 
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
-                    />
-                  </div>
-                  <div className="p-4 bg-orange-50/50 rounded-2xl border border-orange-100/50">
-                    <p className="text-[10px] text-orange-600 font-bold uppercase tracking-widest text-center">
-                      Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
-                    </p>
-                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Username" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  />
+                  <input 
+                    type="email" 
+                    placeholder="Email address" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  />
+                  <input 
+                    type="password" 
+                    placeholder="Password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  />
+                  {error && <p className="text-red-500 text-[10px] font-bold italic text-center">{error}</p>}
                   <button
                     onClick={() => role === 'owner' ? nextStep('template') : handleFinish()}
-                    disabled={!email || !username || !password}
-                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
+                    disabled={!email || !password || loading}
+                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl flex items-center justify-center gap-2"
                   >
-                    {role === 'owner' ? 'Continue to Templates' : 'Complete Registration'} <Sparkles className="w-4 h-4" />
+                    {loading ? "Processing..." : (role === 'owner' ? 'Continue to Templates' : 'Complete Registration')}
                   </button>
                 </div>
               </motion.div>
             )}
 
-            {/* STEP: LOGIN */}
             {step === "login" && (
               <motion.div
                 key="login"
@@ -289,42 +356,31 @@ function AuthFlowContent() {
               >
                 <div className="flex items-center gap-4 mb-4">
                   <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Returning User</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Login</span>
                 </div>
                 <h1 className="text-4xl font-serif mb-2">Welcome back.</h1>
-                <p className="text-gray-500 text-sm font-medium italic mb-2">Enter the username and email you used to register.</p>
                 <div className="space-y-4">
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input 
-                      type="text" 
-                      placeholder="Username" 
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
-                    />
-                  </div>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input 
-                      type="email" 
-                      placeholder="Email address" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-black/5" 
-                    />
-                  </div>
-                  <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50">
-                    <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest text-center">
-                      Hint: Use <span className="text-black">owner@clinic.com</span> or <span className="text-black">client@test.com</span>
-                    </p>
-                  </div>
+                  <input 
+                    type="email" 
+                    placeholder="Email address" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  />
+                  <input 
+                    type="password" 
+                    placeholder="Password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  />
+                  {error && <p className="text-red-500 text-[10px] font-bold italic text-center">{error}</p>}
                   <button
                     onClick={() => handleFinish()}
-                    disabled={!email || !username}
-                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl hover:bg-gray-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:bg-black"
+                    disabled={!email || !password || loading}
+                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl flex items-center justify-center gap-2"
                   >
-                    Log In <ArrowRight className="w-4 h-4" />
+                    {loading ? "Authenticating..." : "Log In"}
                   </button>
                 </div>
               </motion.div>
@@ -332,11 +388,6 @@ function AuthFlowContent() {
 
           </AnimatePresence>
         </div>
-
-        {/* Info label */}
-        <p className="mt-8 text-center text-gray-400 text-xs font-medium">
-          © 2026 Kindred Calendar Ecosystem. Secure & Private.
-        </p>
       </motion.div>
     </div>
   );
@@ -344,11 +395,7 @@ function AuthFlowContent() {
 
 export default function AuthFlow() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-gray-100 border-t-black rounded-full animate-spin" />
-      </div>
-    }>
+    <Suspense fallback={<div>Loading...</div>}>
       <AuthFlowContent />
     </Suspense>
   );
@@ -356,29 +403,18 @@ export default function AuthFlow() {
 
 function RoleCard({ icon, title, desc, onClick }: { icon: any, title: string, desc: string, onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      className="bg-white border border-gray-100 rounded-[2rem] p-8 text-left hover:border-black/10 hover:shadow-xl hover:shadow-black/[0.02] transition-all group relative overflow-hidden h-full"
-    >
-      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 text-black group-hover:bg-black group-hover:text-white transition-colors">
-        {icon}
-      </div>
+    <button onClick={onClick} className="bg-white border border-gray-100 rounded-[2rem] p-8 text-left hover:border-black/10 transition-all group relative overflow-hidden h-full">
+      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 text-black group-hover:bg-black group-hover:text-white transition-colors">{icon}</div>
       <h3 className="text-xl font-bold mb-2 tracking-tight leading-tight">{title}</h3>
       <p className="text-xs text-gray-400 leading-relaxed font-medium italic">{desc}</p>
-      <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-gray-50 rounded-full opacity-50 group-hover:scale-110 transition-transform" />
     </button>
   );
 }
 
 function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: string, value: string, selected: boolean, onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-4 p-5 rounded-2xl border transition-all text-left ${selected ? 'border-black bg-black text-white' : 'border-gray-50 bg-gray-50/30 hover:bg-gray-50'}`}
-    >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selected ? 'bg-white/10 text-white' : 'bg-white text-gray-300 shadow-sm'}`}>
-        {icon}
-      </div>
+    <button onClick={onClick} className={`flex items-center gap-4 p-5 rounded-2xl border transition-all text-left ${selected ? 'border-black bg-black text-white' : 'border-gray-50 bg-gray-50/30 hover:bg-gray-50'}`}>
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selected ? 'bg-white/10 text-white' : 'bg-white text-gray-300 shadow-sm'}`}>{icon}</div>
       <span className="text-sm font-bold tracking-tight">{label}</span>
     </button>
   );
@@ -386,27 +422,10 @@ function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: 
 
 function TemplatePreview({ name, type, onClick }: { name: string, type: string, onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      className="bg-white border border-gray-100 rounded-[2rem] p-6 text-left hover:border-black/20 hover:shadow-xl transition-all group overflow-hidden relative"
-    >
-      <div className="w-full aspect-[4/3] bg-gray-50 rounded-2xl mb-4 p-4 overflow-hidden">
-        <div className="w-full h-full border border-gray-200 rounded-lg flex flex-col p-2 gap-2 bg-white">
-          <div className="w-1/2 h-2 bg-gray-100 rounded-full" />
-          <div className="w-full h-1 bg-gray-50 rounded-full" />
-          <div className="w-full h-1 bg-gray-50 rounded-full" />
-          <div className="mt-auto grid grid-cols-3 gap-2">
-            <div className="h-6 bg-gray-50 rounded" />
-            <div className="h-6 bg-gray-100 rounded" />
-            <div className="h-6 bg-gray-50 rounded" />
-          </div>
-        </div>
-      </div>
+    <button onClick={onClick} className="bg-white border border-gray-100 rounded-[2rem] p-6 text-left hover:border-black/20 hover:shadow-xl transition-all group overflow-hidden relative">
+      <div className="w-full aspect-[4/3] bg-gray-50 rounded-2xl mb-4 p-4 overflow-hidden" />
       <h4 className="font-bold text-sm mb-0.5">{name}</h4>
       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{type}</p>
-      <div className="absolute top-4 right-4 bg-black text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-        <Check className="w-3 h-3" strokeWidth={4} />
-      </div>
     </button>
   );
 }
