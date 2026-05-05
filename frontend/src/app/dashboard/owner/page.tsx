@@ -123,10 +123,19 @@ export default function OwnerDashboard() {
               <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
               <div className="flex items-center gap-2 bg-black/5 p-1 rounded-xl ml-4">
                  <button 
-                  onClick={() => setDateRange(prev => prev.includes("May") ? "Apr 1 - Apr 30, 2026" : "May 1 - May 31, 2026")}
-                  className="px-4 py-2 bg-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm hover:bg-black hover:text-white transition-all"
+                  onClick={() => {
+                    const months = [
+                      { label: "This Month", range: "May 1 - May 31, 2026" },
+                      { label: "Last Month", range: "Apr 1 - Apr 30, 2026" },
+                      { label: "2 Months Ago", range: "Mar 1 - Mar 31, 2026" }
+                    ];
+                    const currentIndex = months.findIndex(m => m.range === dateRange);
+                    const nextIndex = (currentIndex + 1) % months.length;
+                    setDateRange(months[nextIndex].range);
+                  }}
+                  className="px-4 py-2 bg-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm hover:bg-black hover:text-white transition-all min-w-[100px]"
                 >
-                  {dateRange.includes("May") ? "This Month" : "Last Month"}
+                  {dateRange.includes("May") ? "This Month" : dateRange.includes("Apr") ? "Last Month" : "2 Months Ago"}
                 </button>
                  <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black/40 cursor-default">
                     <Calendar size={14} />
@@ -336,12 +345,25 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
               <div className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">6/5/26</div>
            </div>
            
-           <div className="flex items-end gap-6 h-48 border-b border-black/5 pb-6 mb-6 px-4">
-              <div className="flex-1 bg-black/5 rounded-t-xl h-[40%]" />
-              <div className="flex-1 bg-black rounded-t-xl h-[90%] shadow-2xl relative">
-                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded">1.0</div>
-              </div>
-              <div className="flex-1 bg-black/5 rounded-t-xl h-[60%]" />
+           <div className="flex items-end gap-6 h-48 border-b border-black/5 pb-6 mb-6 px-4 relative">
+              <motion.div 
+                animate={{ height: `${Math.min(90, (doneCount * 10) + 10)}%` }}
+                className="flex-1 bg-black rounded-t-xl shadow-2xl relative group"
+              >
+                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Completed: {doneCount}</div>
+              </motion.div>
+              <motion.div 
+                animate={{ height: `${Math.min(90, (bookings.length * 5) + 20)}%` }}
+                className="flex-1 bg-black/40 rounded-t-xl relative group"
+              >
+                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Pending: {bookings.length}</div>
+              </motion.div>
+              <motion.div 
+                animate={{ height: "40%" }}
+                className="flex-1 bg-black/10 rounded-t-xl relative group"
+              >
+                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Confirmed Signal</div>
+              </motion.div>
            </div>
 
            <div className="space-y-3">
