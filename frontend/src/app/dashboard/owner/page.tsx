@@ -316,10 +316,6 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
               <StatusLegend label="Pending" color="bg-black/20" value="0" />
               <StatusLegend label="Rescheduled" color="bg-black/10" value="0" />
            </div>
-           
-           <div className="absolute top-20 right-8 pointer-events-none opacity-5">
-              <PieChart className="w-48 h-48" />
-           </div>
         </div>
 
         <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm">
