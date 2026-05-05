@@ -5,345 +5,367 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, ArrowRight, User, Store, Scissors, Code,
   Stethoscope, Briefcase, Check, ChevronLeft, Layout,
-  Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe, CalendarClock
+  Sparkles, Lock, Mail, HeartPulse, PawPrint, Syringe, CalendarClock,
+  ShieldCheck, Globe, Rocket, Plus, Trash2, Settings, Users, Activity
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/utils/supabase";
 
-type Step = "choice" | "role" | "service" | "template" | "finalize" | "login";
+type Step = "choice" | "role" | "business" | "credentials" | "practitioner" | "services" | "build_home" | "login";
 
 function AuthFlowContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("choice");
   const [role, setRole] = useState<"owner" | "customer" | null>(null);
+  
+  // State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [service, setService] = useState<string | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [businessName, setBusinessName] = useState("");
+  const [niche, setNiche] = useState("General Practice");
+  const [practitionerName, setPractitionerName] = useState("");
+  const [services, setServices] = useState<string[]>(["Initial Consultation"]);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("clinic-clean");
+  
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initialStep = searchParams.get("step") as Step;
-    if (initialStep && ["role", "service", "template", "finalize"].includes(initialStep)) {
-      setStep(initialStep);
-    }
+    if (initialStep) setStep(initialStep);
   }, [searchParams]);
 
-  const nextStep = (s: Step) => {
-    setError(null);
-    setStep(s);
-  };
-
-  const prevStep = () => {
-    setError(null);
-    if (step === "role") setStep("choice");
-    if (step === "service") setStep("role");
-    if (step === "finalize") setStep(role === 'owner' ? "service" : "role");
-    if (step === "template") setStep("finalize");
-    if (step === "login") setStep("choice");
-  };
-
-  const handleFinish = async (templateOverride?: string) => {
-    // BYPASS AUTH FOR TESTING
-    console.log("Bypassing auth for testing...");
+  const handleFinish = () => {
     setLoading(true);
+    localStorage.setItem("flexslot_role", role || "owner");
+    localStorage.setItem("flexslot_user_email", email || "admin@practice.com");
+    localStorage.setItem("flexslot_active_clinic_name", businessName || "Kindred Wellness");
+    localStorage.setItem("flexslot_active_template", selectedTemplate);
     
-    const finalTemplate = templateOverride || selectedTemplate || "clinic-clean";
-    const userRole = role || "owner";
-    const userEmail = email || "dummy@sigma.com";
-    const userDisplayName = username || "Sigma Clinic";
-
-    localStorage.setItem("flexslot_role", userRole);
-    localStorage.setItem("flexslot_user_email", userEmail);
-    localStorage.setItem("flexslot_username", userDisplayName);
-    localStorage.setItem("flexslot_clinic_id", "dummy-clinic-id");
-
-    if (userRole === 'owner') {
-      localStorage.setItem("flexslot_active_template", finalTemplate);
-      router.push(`/templates/${finalTemplate}?manage=true`);
-    } else {
-      router.push("/dashboard/customer");
-    }
-    setLoading(false);
-    return;
-    
-    /* Original auth logic preserved in comments
-    if (!email || !password) return;
-    setLoading(true);
-    ...
-    */
+    setTimeout(() => {
+      if (role === 'owner') {
+        router.push("/dashboard/owner");
+      } else {
+        router.push("/dashboard/customer");
+      }
+      setLoading(false);
+    }, 1500);
   };
+
+  const stepsList = [
+    { id: 'business', label: 'Business Info' },
+    { id: 'credentials', label: 'Credentials' },
+    { id: 'practitioner', label: 'Practitioner' },
+    { id: 'services', label: 'Services' },
+    { id: 'build_home', label: 'Home Page' }
+  ];
+
+  const currentStepIdx = stepsList.findIndex(s => s.id === step);
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans flex flex-col items-center justify-center p-6 selection:bg-black selection:text-white">
-      {/* Background decoration */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03]">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-black rounded-full blur-[120px]" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-black rounded-full blur-[120px]" />
+    <div className="min-h-screen bg-white text-black font-sans flex flex-col items-center justify-center p-4">
+      {/* Background Subtle Gradient */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.02]">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,#000,transparent_50%)]" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl relative z-10"
-      >
-        <div className="flex flex-col items-center mb-12">
-          <Link href="/" className="flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center shadow-xl">
-              <CalendarClock className="w-6 h-6 text-white" />
+      <div className="w-full max-w-5xl bg-white border border-black/10 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] flex overflow-hidden min-h-[650px] relative z-10">
+        
+        {/* Sidebar Steps (Only for Owner Registration) */}
+        {role === 'owner' && step !== 'choice' && step !== 'role' && step !== 'login' && (
+          <div className="w-72 bg-black/[0.02] border-r border-black/5 p-12 flex flex-col">
+            <div className="flex items-center gap-3 mb-16">
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center shadow-2xl">
+                <CalendarClock className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-black tracking-tighter uppercase text-sm">Kindred</span>
             </div>
-            <span className="font-bold text-2xl tracking-tighter text-black">Kindred <span className="text-gray-400 font-serif italic">Calendar</span></span>
-          </Link>
-          <div className="h-1 w-12 bg-gray-100 rounded-full" />
-        </div>
+            
+            <div className="flex-1 space-y-10">
+              {stepsList.map((s, idx) => {
+                const isPassed = stepsList.findIndex(x => x.id === step) > idx;
+                const isActive = step === s.id;
+                return (
+                  <div key={s.id} className="flex items-center gap-4 group">
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isPassed ? 'bg-black border-black' : isActive ? 'border-black' : 'border-black/10'
+                    }`}>
+                      {isPassed ? <Check size={12} className="text-white" /> : <div className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-black' : 'transparent'}`} />}
+                    </div>
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${isActive ? 'text-black' : 'text-black/20'}`}>
+                      {s.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-auto pt-10 border-t border-black/5">
+               <div className="text-[10px] font-bold text-black/20 uppercase tracking-widest italic">Setup Progress</div>
+               <div className="mt-2 h-1 bg-black/5 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((currentStepIdx + 1) / stepsList.length) * 100}%` }}
+                    className="h-full bg-black"
+                  />
+               </div>
+            </div>
+          </div>
+        )}
 
-        <div className="bg-white border border-gray-100 rounded-[3rem] p-12 shadow-2xl relative overflow-hidden group">
+        {/* Content Area */}
+        <div className="flex-1 p-16 flex flex-col relative">
           <AnimatePresence mode="wait">
-
             {step === "choice" && (
-              <motion.div
-                key="choice"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
-                className="space-y-8"
-              >
-                <div className="text-center">
-                  <h1 className="text-4xl font-serif mb-3">Welcome</h1>
-                  <p className="text-gray-400 font-medium italic">Select your entry point to the ecosystem.</p>
-                </div>
-                <div className="grid gap-4">
-                  <button
-                    onClick={() => nextStep("role")}
-                    className="w-full py-5 bg-black text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-800 transition-all shadow-lg"
-                  >
-                    Get Started <ArrowRight className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => nextStep("login")}
-                    className="w-full py-5 border border-gray-100 rounded-2xl font-bold hover:bg-gray-50 transition-all"
-                  >
-                    Log in
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {step === "role" && (
-              <motion.div
-                key="role"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-8"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Identity Selection</span>
-                </div>
-                <h1 className="text-4xl font-serif mb-8 leading-tight">How will you use <br />Kindred Calendar?</h1>
-                <div className="grid grid-cols-2 gap-6">
-                  <RoleCard
-                    icon={<Store className="w-8 h-8" />}
-                    title="I'm an Owner"
-                    desc="I want to list services and manage slots."
-                    onClick={() => { setRole("owner"); nextStep("service"); }}
-                  />
-                  <RoleCard
-                    icon={<User className="w-8 h-8" />}
-                    title="I'm a Customer"
-                    desc="I want to book services and meet experts."
-                    onClick={() => { setRole("customer"); nextStep("finalize"); }}
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {step === "service" && (
-              <motion.div
-                key="service"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="space-y-8"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Specialization</span>
-                </div>
-                <h1 className="text-4xl font-serif mb-8">What do you <br />offer?</h1>
-                <div className="grid grid-cols-2 gap-4">
-                  <ServiceTypeBtn icon={<Stethoscope />} label="General Practice" value="gp" selected={service === 'gp'} onClick={() => { setService('gp'); nextStep('finalize'); }} />
-                  <ServiceTypeBtn icon={<HeartPulse />} label="Specialist Clinic" value="specialist" selected={service === 'specialist'} onClick={() => { setService('specialist'); nextStep('finalize'); }} />
-                  <ServiceTypeBtn icon={<PawPrint />} label="Vet & Pet Care" value="vet" selected={service === 'vet'} onClick={() => { setService('vet'); nextStep('finalize'); }} />
-                  <ServiceTypeBtn icon={<Syringe />} label="Dental & Lab" value="dental" selected={service === 'dental'} onClick={() => { setService('dental'); nextStep('finalize'); }} />
-                </div>
-              </motion.div>
-            )}
-
-            {step === "template" && (
-              <motion.div
-                key="template"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="space-y-8"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Niche Interface</span>
-                </div>
-                <div>
-                  <h1 className="text-4xl font-serif mb-2">Build your home.</h1>
-                  <p className="text-gray-400 font-medium italic">Pick a template optimized for {service} businesses.</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  {service === 'vet' ? (
-                    <>
-                      <TemplatePreview name="Vet Warm" type="Neighborhood Vet" onClick={() => handleFinish('vet-warm')} />
-                      <TemplatePreview name="Paws Premium" type="Luxury Pet" onClick={() => handleFinish('paws-premium')} />
-                    </>
-                  ) : service === 'dental' ? (
-                    <>
-                      <TemplatePreview name="Dental Bright" type="Cosmetic" onClick={() => handleFinish('dental-bright')} />
-                    </>
-                  ) : (
-                    <>
-                      <TemplatePreview name="Clinic Clean" type="Modern Medical" onClick={() => handleFinish('clinic-clean')} />
-                      <TemplatePreview name="Pulse Modern" type="Imaging" onClick={() => handleFinish('pulse-modern')} />
-                    </>
-                  )}
-                </div>
-              </motion.div>
-            )}
-
-            {step === "finalize" && (
-              <motion.div
-                key="finalize"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="space-y-8"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Credentials</span>
-                </div>
-                <h1 className="text-4xl font-serif mb-2">Almost there.</h1>
+              <motion.div key="choice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col items-center justify-center h-full text-center space-y-12">
                 <div className="space-y-4">
-                  <input 
-                    type="text" 
-                    placeholder="Username" 
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  <h1 className="text-6xl font-black tracking-tighter uppercase italic">The New Standard.</h1>
+                  <p className="text-black/30 font-bold uppercase tracking-widest text-xs">Choose your point of entry into the Kindred ecosystem</p>
+                </div>
+                <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
+                  <AuthOption 
+                    icon={<Plus size={24} />} 
+                    title="Create Account" 
+                    desc="Initialize a new practice or patient profile" 
+                    onClick={() => setStep("role")} 
                   />
-                  <input 
-                    type="email" 
-                    placeholder="Email address" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
+                  <AuthOption 
+                    icon={<User size={24} />} 
+                    title="Sign In" 
+                    desc="Access your existing administrative portal" 
+                    onClick={() => setStep("login")} 
                   />
-                  <input 
-                    type="password" 
-                    placeholder="Password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
-                  />
-                  {error && <p className="text-red-500 text-[10px] font-bold italic text-center">{error}</p>}
-                  <button
-                    onClick={() => role === 'owner' ? nextStep('template') : handleFinish()}
-                    disabled={!email || !password || loading}
-                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl flex items-center justify-center gap-2"
-                  >
-                    {loading ? "Processing..." : (role === 'owner' ? 'Continue to Templates' : 'Complete Registration')}
-                  </button>
                 </div>
               </motion.div>
             )}
 
             {step === "login" && (
-              <motion.div
-                key="login"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="space-y-8"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <button onClick={prevStep} className="p-2 hover:bg-gray-50 rounded-lg transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Login</span>
-                </div>
-                <h1 className="text-4xl font-serif mb-2">Welcome back.</h1>
-                <div className="space-y-4">
-                  <input 
-                    type="email" 
-                    placeholder="Email address" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
-                  />
-                  <input 
-                    type="password" 
-                    placeholder="Password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:outline-none" 
-                  />
-                  {error && <p className="text-red-500 text-[10px] font-bold italic text-center">{error}</p>}
-                  <button
-                    onClick={() => handleFinish()}
-                    disabled={!email || !password || loading}
-                    className="w-full py-5 bg-black text-white rounded-3xl font-bold mt-4 shadow-xl flex items-center justify-center gap-2"
-                  >
-                    {loading ? "Authenticating..." : "Log In"}
+              <motion.div key="login" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col justify-center h-full max-w-md mx-auto w-full space-y-10">
+                <div className="space-y-2">
+                  <button onClick={() => setStep("choice")} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black mb-6">
+                    <ChevronLeft size={14} /> Back
                   </button>
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Secure Access</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Enter your credentials to proceed</p>
+                </div>
+                <div className="space-y-4">
+                  <Input label="Email Address" type="email" placeholder="admin@practice.com" />
+                  <Input label="Security Key" type="password" placeholder="••••••••" />
+                </div>
+                <button onClick={() => { setRole("owner"); handleFinish(); }} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-black/20">
+                  Authenticate Instance
+                </button>
+              </motion.div>
+            )}
+
+            {step === "role" && (
+              <motion.div key="role" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col justify-center h-full max-w-lg mx-auto w-full space-y-12">
+                <div className="text-center space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Select Role</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Define your identity within the network</p>
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <RoleCard 
+                    icon={<Store size={24} />} 
+                    title="Clinic Owner" 
+                    desc="Build a practice and manage patients" 
+                    onClick={() => { setRole("owner"); setStep("business"); }} 
+                  />
+                  <RoleCard 
+                    icon={<User size={24} />} 
+                    title="Patient" 
+                    desc="Book sessions and manage health" 
+                    onClick={() => { setRole("customer"); setStep("credentials"); }} 
+                  />
                 </div>
               </motion.div>
             )}
 
+            {step === "business" && (
+              <motion.div key="business" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Business Identity</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Define your clinical brand</p>
+                </div>
+                <div className="space-y-6">
+                  <Input label="Clinic Name" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. Kindred Wellness" />
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-black/30">Practice Focus</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {["General Practice", "Veterinary", "Dental", "Mental Health"].map(n => (
+                        <button key={n} onClick={() => setNiche(n)} className={`p-4 rounded-2xl border text-xs font-bold uppercase tracking-widest transition-all ${niche === n ? 'bg-black text-white border-black shadow-xl' : 'bg-white border-black/5 text-black/40 hover:border-black/20'}`}>
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <button onClick={() => setStep("credentials")} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  Proceed <ArrowRight size={16} />
+                </button>
+              </motion.div>
+            )}
+
+            {step === "credentials" && (
+              <motion.div key="credentials" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Access Keys</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Secure your administrative portal</p>
+                </div>
+                <div className="space-y-6">
+                  <Input label="Primary Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="admin@practice.com" />
+                  <Input label="Master Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="••••••••" />
+                </div>
+                <button onClick={() => role === 'owner' ? setStep("practitioner") : handleFinish()} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  Configure Practitioner <ArrowRight size={16} />
+                </button>
+              </motion.div>
+            )}
+
+            {step === "practitioner" && (
+              <motion.div key="practitioner" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Lead Practitioner</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Identify the primary caregiver</p>
+                </div>
+                <div className="space-y-6">
+                  <Input label="Full Legal Name" value={practitionerName} onChange={(e) => setPractitionerName(e.target.value)} placeholder="e.g. Dr. Sarah Anderson" />
+                  <div className="p-8 bg-black/5 rounded-[2rem] border border-dashed border-black/10 flex items-center gap-6">
+                     <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white">
+                        <User size={20} />
+                     </div>
+                     <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest leading-relaxed">This identity will be associated with all clinical records and session logs.</p>
+                  </div>
+                </div>
+                <button onClick={() => setStep("services")} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  Define Services <ArrowRight size={16} />
+                </button>
+              </motion.div>
+            )}
+
+            {step === "services" && (
+              <motion.div key="services" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Clinical Offerings</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Define your initial service catalog</p>
+                </div>
+                <div className="space-y-4">
+                  {services.map((s, i) => (
+                    <div key={i} className="flex items-center gap-4 bg-black/5 p-6 rounded-[2rem] border border-black/5">
+                      <div className="flex-1 text-xs font-black uppercase tracking-widest">{s}</div>
+                      <button onClick={() => setServices(services.filter((_, idx) => idx !== i))} className="p-2 hover:bg-black hover:text-white rounded-xl transition-all">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                  <button onClick={() => setServices([...services, "New Specialized Service"])} className="w-full py-5 border-2 border-dashed border-black/10 rounded-[2rem] text-[10px] font-black uppercase tracking-widest text-black/20 hover:text-black hover:border-black/40 transition-all flex items-center justify-center gap-2">
+                    <Plus size={14} /> Append Service
+                  </button>
+                </div>
+                <button onClick={() => setStep("build_home")} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  Build Home Page <ArrowRight size={16} />
+                </button>
+              </motion.div>
+            )}
+
+            {step === "build_home" && (
+              <motion.div key="build_home" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Visual DNA</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Select your clinic's public identity</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <TemplateCard 
+                    id="clinic-clean" 
+                    name="Pristine" 
+                    desc="Clinical Minimalism" 
+                    active={selectedTemplate === 'clinic-clean'} 
+                    onClick={() => setSelectedTemplate('clinic-clean')} 
+                  />
+                  <TemplateCard 
+                    id="pulse-modern" 
+                    name="Diagnostic" 
+                    desc="High-Tech Diagnostic" 
+                    active={selectedTemplate === 'pulse-modern'} 
+                    onClick={() => setSelectedTemplate('pulse-modern')} 
+                  />
+                  <TemplateCard 
+                    id="vet-warm" 
+                    name="Kindred" 
+                    desc="Warm Neighborhood" 
+                    active={selectedTemplate === 'vet-warm'} 
+                    onClick={() => setSelectedTemplate('vet-warm')} 
+                  />
+                  <TemplateCard 
+                    id="wild-med" 
+                    name="Raw" 
+                    desc="Outdoor & Field Med" 
+                    active={selectedTemplate === 'wild-med'} 
+                    onClick={() => setSelectedTemplate('wild-med')} 
+                  />
+                </div>
+                <button onClick={handleFinish} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl shadow-black/40">
+                  {loading ? "INITIALIZING INSTANCE..." : "DEPLOY CLINIC PORTAL"}
+                </button>
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
 
-export default function AuthFlow() {
+function AuthOption({ icon, title, desc, onClick }: any) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <button onClick={onClick} className="p-8 bg-white border border-black/5 rounded-[2.5rem] text-left hover:border-black/20 hover:shadow-2xl transition-all group relative overflow-hidden">
+      <div className="w-12 h-12 bg-black/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-black group-hover:text-white transition-all">
+        {icon}
+      </div>
+      <h4 className="text-xl font-black uppercase tracking-tighter italic mb-1">{title}</h4>
+      <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest leading-relaxed">{desc}</p>
+    </button>
+  );
+}
+
+function RoleCard({ icon, title, desc, onClick }: any) {
+  return (
+    <button onClick={onClick} className="p-10 bg-white border border-black/5 rounded-[3rem] text-center hover:border-black/20 hover:shadow-2xl transition-all group">
+      <div className="w-16 h-16 bg-black/5 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 group-hover:bg-black group-hover:text-white transition-all">
+        {icon}
+      </div>
+      <h4 className="text-xl font-black uppercase tracking-tighter italic mb-1">{title}</h4>
+      <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest leading-relaxed">{desc}</p>
+    </button>
+  );
+}
+
+function TemplateCard({ id, name, desc, active, onClick }: any) {
+  return (
+    <button onClick={onClick} className={`p-8 rounded-[2rem] border text-left transition-all relative group ${active ? 'bg-black text-white border-black shadow-2xl' : 'bg-white border-black/5 hover:border-black/20'}`}>
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${active ? 'bg-white/10' : 'bg-black/5'}`}>
+        <Layout size={18} />
+      </div>
+      <h4 className="text-sm font-black uppercase tracking-widest mb-0.5">{name}</h4>
+      <p className={`text-[9px] font-bold uppercase tracking-widest ${active ? 'text-white/40' : 'text-black/30'}`}>{desc}</p>
+      {active && <div className="absolute top-4 right-4 w-2 h-2 bg-white rounded-full" />}
+    </button>
+  );
+}
+
+function Input({ label, ...props }: any) {
+  return (
+    <div className="space-y-3">
+      <label className="text-[10px] font-black uppercase tracking-widest text-black/30">{label}</label>
+      <input {...props} className="w-full px-8 py-5 bg-black/5 border-transparent rounded-[1.5rem] text-xs font-black uppercase tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-black transition-all shadow-inner" />
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center font-black uppercase tracking-[1em] italic text-black/20 animate-pulse">Synchronizing...</div>}>
       <AuthFlowContent />
     </Suspense>
-  );
-}
-
-function RoleCard({ icon, title, desc, onClick }: { icon: any, title: string, desc: string, onClick: () => void }) {
-  return (
-    <button onClick={onClick} className="bg-white border border-gray-100 rounded-[2rem] p-8 text-left hover:border-black/10 transition-all group relative overflow-hidden h-full">
-      <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 text-black group-hover:bg-black group-hover:text-white transition-colors">{icon}</div>
-      <h3 className="text-xl font-bold mb-2 tracking-tight leading-tight">{title}</h3>
-      <p className="text-xs text-gray-400 leading-relaxed font-medium italic">{desc}</p>
-    </button>
-  );
-}
-
-function ServiceTypeBtn({ icon, label, onClick, selected }: { icon: any, label: string, value: string, selected: boolean, onClick: () => void }) {
-  return (
-    <button onClick={onClick} className={`flex items-center gap-4 p-5 rounded-2xl border transition-all text-left ${selected ? 'border-black bg-black text-white' : 'border-gray-50 bg-gray-50/30 hover:bg-gray-50'}`}>
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selected ? 'bg-white/10 text-white' : 'bg-white text-gray-300 shadow-sm'}`}>{icon}</div>
-      <span className="text-sm font-bold tracking-tight">{label}</span>
-    </button>
-  );
-}
-
-function TemplatePreview({ name, type, onClick }: { name: string, type: string, onClick: () => void }) {
-  return (
-    <button onClick={onClick} className="bg-white border border-gray-100 rounded-[2rem] p-6 text-left hover:border-black/20 hover:shadow-xl transition-all group overflow-hidden relative">
-      <div className="w-full aspect-[4/3] bg-gray-50 rounded-2xl mb-4 p-4 overflow-hidden" />
-      <h4 className="font-bold text-sm mb-0.5">{name}</h4>
-      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{type}</p>
-    </button>
   );
 }
