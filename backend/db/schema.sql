@@ -93,3 +93,22 @@ BEGIN
     RETURN v_updated_config;
 END;
 $$;
+
+-- Scheduler: slots table
+CREATE TABLE IF NOT EXISTS public.slots (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    clinic_id UUID NOT NULL REFERENCES public.clinics(id) ON DELETE CASCADE,
+    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    end_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    status TEXT NOT NULL DEFAULT 'available', -- available, booked, blocked
+    service_id TEXT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    
+    -- Constraint to prevent start_time being after end_time
+    CONSTRAINT start_before_end CHECK (start_time < end_time)
+);
+
+-- Index for faster range queries
+CREATE INDEX IF NOT EXISTS idx_slots_clinic_time ON public.slots(clinic_id, start_time, end_time);
+

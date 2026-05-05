@@ -112,8 +112,11 @@ export default function OwnerDashboard() {
           <SideNavItem icon={<BarChart3 size={18} />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
           <div className="h-px bg-black/5 my-4 mx-2" />
           <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
-          <SideNavItem icon={<Calendar size={18} />} label="Schedules" active={activeTab === "slots"} onClick={() => setActiveTab("slots")} />
+          <Link href="/dashboard/scheduler" className="block">
+            <SideNavItem icon={<Calendar size={18} />} label="Schedules" active={activeTab === "slots"} onClick={() => {}} />
+          </Link>
           <SideNavItem icon={<Users size={18} />} label="Patient List" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
+
         </nav>
 
         <div className="p-6 border-t border-black/5">
