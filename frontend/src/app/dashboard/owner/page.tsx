@@ -29,20 +29,25 @@ export default function OwnerDashboard() {
     const savedDone = localStorage.getItem("flexslot_done_count");
     const savedNotes = localStorage.getItem("flexslot_notes");
 
-    if (savedDone) setDoneCount(parseInt(savedDone));
-    if (savedNotes) setNotesCount(parseInt(savedNotes));
-    
-    if (savedBookings) {
-      setBookings(JSON.parse(savedBookings).reverse());
-    } else {
       const dummy = [
         { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM' },
         { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM' },
         { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM' },
         { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM' },
-        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM' }
+        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM' },
+        { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM' },
+        { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM' },
+        { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM' }
       ];
+
+    if (savedDone) setDoneCount(parseInt(savedDone));
+    if (savedNotes) setNotesCount(parseInt(savedNotes));
+    
+    if (savedBookings && JSON.parse(savedBookings).length > 0) {
+      setBookings(JSON.parse(savedBookings).reverse());
+    } else {
       setBookings(dummy);
+      localStorage.setItem("flexslot_bookings", JSON.stringify(dummy));
     }
   }, []);
 
@@ -199,10 +204,11 @@ function FilterDropdown({ label, options }: { label: string, options: string[] }
 
 function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }: any) {
   const ongoing = bookings[0];
+  const upcoming = bookings.slice(1, 5);
 
   return (
     <div className="grid grid-cols-12 gap-8">
-      {/* Left Column - Appointments */}
+      {/* Left Column - Clinical Overview & Stream */}
       <div className="col-span-8 space-y-8">
         <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm">
           <div className="flex justify-between items-center mb-10">
@@ -234,62 +240,93 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">Total Notes: {notesCount}</p>
             </div>
           </div>
-
-          <div className="mt-12 h-64 border-t border-black/5 pt-12 flex items-end gap-6 px-10 relative">
-             <div className="absolute left-0 top-12 text-[9px] font-black text-black/20">1.0 —</div>
-             <div className="absolute left-0 top-1/2 -translate-y-1/2 text-[9px] font-black text-black/20">0.5 —</div>
-             <div className="absolute left-0 bottom-0 text-[9px] font-black text-black/20">0.0 —</div>
-             
-             {[0.8, 0.4, 0.6, 0.2, 0.9, 0.5].map((h, i) => (
-               <div key={i} className="flex-1 flex flex-col items-center gap-4">
-                 <motion.div 
-                    initial={{ height: 0 }}
-                    animate={{ height: `${h * 100}%` }}
-                    className="w-full bg-black rounded-t-xl relative group shadow-2xl"
-                 />
-                 <span className="text-[9px] font-black text-black/20 uppercase tracking-widest">{5+i}/5/26</span>
-               </div>
-             ))}
-          </div>
         </div>
 
-        <AnimatePresence mode="wait">
-          {ongoing ? (
-            <motion.div 
-              key={ongoing.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="bg-black text-white rounded-[3rem] p-10 shadow-2xl relative overflow-hidden"
-            >
-               <div className="flex justify-between items-center relative z-10">
-                  <div className="flex items-center gap-6">
-                     <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center animate-pulse"><Activity className="w-8 h-8" /></div>
-                     <div className="space-y-1">
-                        <h4 className="text-4xl font-black tracking-tighter uppercase italic leading-none">{ongoing.clientName}</h4>
-                        <p className="text-white/40 text-[10px] font-black uppercase tracking-widest italic">{ongoing.serviceName} · Started 12m ago</p>
-                     </div>
+        {/* Integrated Ongoing & Upcoming Feed */}
+        <div className="space-y-6">
+          <AnimatePresence mode="wait">
+            {ongoing ? (
+              <motion.div 
+                key={ongoing.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="bg-black text-white rounded-[3rem] p-12 text-white shadow-[0_32px_64px_rgba(0,0,0,0.15)] relative overflow-hidden group"
+              >
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-10">
+                  <div className="flex items-center gap-10">
+                    <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/10">
+                      <Activity className="w-8 h-8 text-white animate-pulse" />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-white text-black rounded-lg">Ongoing</span>
+                        <span className="text-white/30 text-[10px] font-black uppercase tracking-widest">Room_01</span>
+                      </div>
+                      <h2 className="text-5xl font-black tracking-tighter uppercase italic">{ongoing.clientName}</h2>
+                      <p className="text-white/40 text-xs font-bold uppercase tracking-widest italic">{ongoing.serviceName} · Consultation In_Progress</p>
+                    </div>
                   </div>
                   <button 
                     onClick={onComplete}
-                    className="px-10 py-5 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/10"
+                    className="px-12 py-6 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10"
                   >
                     Complete Session
                   </button>
-               </div>
-               <Sparkles className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5" />
-            </motion.div>
-          ) : (
-            <div className="p-16 border-2 border-dashed border-black/5 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-widest italic">
-               Shift Stream Terminated.
-            </div>
-          )}
-        </AnimatePresence>
+                </div>
+                <Sparkles className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5 rotate-12" />
+              </motion.div>
+            ) : (
+              <div className="p-20 border-2 border-dashed border-black/5 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-widest italic">
+                 Shift Stream Terminated.
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* Upcoming Feed List */}
+          <div className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm space-y-8">
+             <div className="flex items-center justify-between">
+                <h3 className="text-xl font-black uppercase tracking-tighter italic">Upcoming Feed</h3>
+                <span className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">{upcoming.length} Signals_Queued</span>
+             </div>
+             
+             <div className="space-y-2">
+                <AnimatePresence mode="popLayout">
+                  {upcoming.map((u, i) => (
+                    <motion.div 
+                      key={u.id}
+                      layout
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="flex items-center justify-between p-6 rounded-[2rem] hover:bg-black/5 transition-all group"
+                    >
+                       <div className="flex items-center gap-6">
+                          <div className="w-12 h-12 bg-black/5 rounded-2xl flex flex-col items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
+                             <span className="text-[10px] font-black leading-none">{u.slotTime.split(' ')[0]}</span>
+                             <span className="text-[8px] font-black opacity-40 uppercase">{u.slotTime.split(' ')[1]}</span>
+                          </div>
+                          <div>
+                             <h4 className="text-lg font-black uppercase tracking-tighter italic">{u.clientName}</h4>
+                             <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{u.serviceName}</p>
+                          </div>
+                       </div>
+                       <div className="flex items-center gap-2">
+                          <button className="p-4 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-sm"><Phone size={16} /></button>
+                          <button className="p-4 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-sm"><MailIcon size={16} /></button>
+                       </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                {upcoming.length === 0 && (
+                  <div className="p-10 text-center text-black/10 font-black uppercase tracking-widest text-[10px] italic">No further signals in current cycle.</div>
+                )}
+             </div>
+          </div>
+        </div>
       </div>
 
       {/* Right Column - Status Analytics & New Clients */}
       <div className="col-span-4 space-y-8">
-        {/* Replacement for Income: Status Analytics Chart */}
         <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden">
            <div className="flex justify-between items-center mb-8 relative z-10">
               <div className="flex items-center gap-3">
@@ -300,9 +337,7 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
            </div>
            
            <div className="flex items-end gap-6 h-48 border-b border-black/5 pb-6 mb-6 px-4">
-              <div className="flex-1 bg-black/5 rounded-t-xl h-[40%] relative group">
-                 <div className="absolute inset-0 bg-black rounded-t-xl scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500 opacity-20" />
-              </div>
+              <div className="flex-1 bg-black/5 rounded-t-xl h-[40%]" />
               <div className="flex-1 bg-black rounded-t-xl h-[90%] shadow-2xl relative">
                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded">1.0</div>
               </div>
@@ -310,10 +345,10 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
            </div>
 
            <div className="space-y-3">
-              <StatusLegend label="Completed" color="bg-black" value="1" />
+              <StatusLegend label="Completed" color="bg-black" value={doneCount.toString()} />
               <StatusLegend label="Arrived" color="bg-black/60" value="0" />
               <StatusLegend label="Confirmed" color="bg-black/40" value="0" />
-              <StatusLegend label="Pending" color="bg-black/20" value="0" />
+              <StatusLegend label="Pending" color="bg-black/20" value={bookings.length.toString()} />
               <StatusLegend label="Rescheduled" color="bg-black/10" value="0" />
            </div>
         </div>
