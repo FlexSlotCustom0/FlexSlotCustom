@@ -22,14 +22,21 @@ const fadeUp = {
   }),
 };
 
-export default function ClinicCleanTemplate() {
+export default function ClinicCleanTemplate({ slots: initialSlots, clinic, isPortal }: { slots?: any[], clinic?: any, isPortal?: boolean }) {
   const {
-    shopData: shop,
-    staff: doctors,
-    offerings: serviceCategories,
+    shopData: contextShop,
+    staff: contextDoctors,
+    offerings: contextServiceCategories,
     faqs,
     reviews
   } = useTemplateContext();
+
+  // Use props if in portal, otherwise use context
+  const shop = clinic?.ui_config || contextShop;
+  const doctors = isPortal ? (clinic?.staff || contextDoctors) : contextDoctors;
+  const serviceCategories = isPortal ? (clinic?.offerings || contextServiceCategories) : contextServiceCategories;
+  const slots = initialSlots || [];
+
 
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<string | undefined>();
@@ -331,12 +338,14 @@ export default function ClinicCleanTemplate() {
       </section>
 
       <BookingSystem 
-        clinicId={shop.name}
+        clinicId={clinic?.id || "dummy-clinic-id"}
         primaryColor={shop.primaryColor}
         isOpen={isBookingOpen}
         onClose={() => setIsBookingOpen(false)}
         serviceName={selectedService}
+        initialSlots={slots}
       />
+
     </div>
   );
 }

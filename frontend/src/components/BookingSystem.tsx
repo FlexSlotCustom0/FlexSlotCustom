@@ -6,9 +6,9 @@ import { Calendar, Clock, User, Phone, Mail, CheckCircle2, ChevronRight, X, Load
 
 interface Slot {
   id: string;
-  time: string;
-  date: string;
-  available: boolean;
+  start_time: string;
+  end_time: string;
+  status: string;
 }
 
 interface BookingSystemProps {
@@ -17,9 +17,10 @@ interface BookingSystemProps {
   isOpen: boolean;
   onClose: () => void;
   serviceName?: string;
+  initialSlots?: Slot[];
 }
 
-export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose, serviceName }: BookingSystemProps) {
+export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose, serviceName, initialSlots }: BookingSystemProps) {
   const [step, setStep] = useState<"slots" | "form" | "confirm">("slots");
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
@@ -33,38 +34,35 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
 
   useEffect(() => {
     if (isOpen) {
-      const saved = localStorage.getItem("flexslot_available_slots");
-      if (saved) {
-        setSlots(JSON.parse(saved).filter((s: Slot) => s.available));
+      if (initialSlots && initialSlots.length > 0) {
+        setSlots(initialSlots);
       } else {
-        // Seed default slots if none exist
-        const initial = [
-          { id: 'S-901', time: '09:00 AM', date: '2026-04-20', available: true },
-          { id: 'S-903', time: '11:00 AM', date: '2026-04-20', available: true },
-          { id: 'S-904', time: '01:30 PM', date: '2026-04-20', available: true },
-        ];
-        setSlots(initial);
-        localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
+        // Fallback to dummy if none provided
+        setSlots([]);
       }
       setStep("slots");
       setSelectedSlot(null);
     }
-  }, [isOpen]);
+  }, [isOpen, initialSlots]);
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (!selectedSlot) return;
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      // 1. Mark slot as booked
-      const allSlots = JSON.parse(localStorage.getItem("flexslot_available_slots") || "[]");
-      const updatedSlots = allSlots.map((s: Slot) => 
-        s.id === selectedSlot.id ? { ...s, available: false } : s
-      );
-      localStorage.setItem("flexslot_available_slots", JSON.stringify(updatedSlots));
-      window.dispatchEvent(new Event('storage'));
+    try {
+      // 1. Mark slot as booked in Backend
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/scheduler/${selectedSlot.id}`, {
+        method: "PATCH",
+        headers: { 
+            "Content-Type": "application/json",
+            "X-Clinic-ID": clinicId
+        },
+        body: JSON.stringify({ status: "booked" })
+      });
 
-      // 2. Save booking
+      if (!res.ok) throw new Error("Failed to book slot");
+
+      // 2. Local storage sync (optional for dashboard immediate feedback)
       const bookings = JSON.parse(localStorage.getItem("flexslot_bookings") || "[]");
       const newBooking = {
         id: `B-${Date.now()}`,
@@ -74,17 +72,21 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
         clientPhone: formData.phone,
         serviceName: serviceName || "General Visit",
         slotId: selectedSlot.id,
-        slotTime: selectedSlot.time,
-        slotDate: selectedSlot.date,
+        slotTime: new Date(selectedSlot.start_time).toLocaleTimeString(),
+        slotDate: new Date(selectedSlot.start_time).toLocaleDateString(),
         createdAt: new Date().toISOString()
       };
       bookings.push(newBooking);
       localStorage.setItem("flexslot_bookings", JSON.stringify(bookings));
       window.dispatchEvent(new Event('storage'));
 
-      setIsSubmitting(false);
       setStep("confirm");
-    }, 1500);
+    } catch (err) {
+      console.error(err);
+      alert("Booking failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -133,11 +135,16 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
                           onClick={() => { setSelectedSlot(slot); setStep("form"); }}
                           className="p-5 rounded-2xl border border-gray-100 bg-white hover:border-black hover:shadow-xl transition-all text-left group"
                         >
-                          <div className="text-[10px] font-black text-gray-300 uppercase mb-2 tracking-widest">{slot.date}</div>
-                          <div className="text-lg font-bold group-hover:text-black transition-colors">{slot.time}</div>
+                          <div className="text-[10px] font-black text-gray-300 uppercase mb-2 tracking-widest">
+                            {new Date(slot.start_time).toLocaleDateString()}
+                          </div>
+                          <div className="text-lg font-bold group-hover:text-black transition-colors">
+                            {new Date(slot.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
                         </button>
                       ))}
                     </div>
+
                   ) : (
                     <div className="py-12 text-center">
                       <Calendar className="w-12 h-12 text-gray-100 mx-auto mb-4" />
@@ -153,8 +160,11 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
                     <Clock className="w-5 h-5 text-gray-400" />
                     <div>
                       <div className="text-xs font-black uppercase tracking-widest text-gray-400">Selected Appointment</div>
-                      <div className="text-sm font-bold">{selectedSlot.time} on {selectedSlot.date}</div>
+                      <div className="text-sm font-bold">
+                        {new Date(selectedSlot.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} on {new Date(selectedSlot.start_time).toLocaleDateString()}
+                      </div>
                     </div>
+
                   </div>
 
                   <div className="space-y-4">
