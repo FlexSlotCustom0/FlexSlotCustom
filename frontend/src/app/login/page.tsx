@@ -39,7 +39,7 @@ function AuthFlowContent() {
     setLoading(true);
     localStorage.setItem("flexslot_role", role || "owner");
     localStorage.setItem("flexslot_user_email", email || "admin@practice.com");
-    localStorage.setItem("flexslot_active_clinic_name", businessName || "Kindred Wellness");
+    localStorage.setItem("flexslot_active_clinic_name", businessName || "FlexSlotCoustom Wellness");
     localStorage.setItem("flexslot_active_template", selectedTemplate);
     
     setTimeout(() => {
@@ -78,7 +78,7 @@ function AuthFlowContent() {
               <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center shadow-2xl">
                 <CalendarClock className="w-5 h-5 text-white" />
               </div>
-              <span className="font-black tracking-tighter uppercase text-sm">Kindred</span>
+              <span className="font-black tracking-tighter uppercase text-sm">FlexSlotCoustom</span>
             </div>
             
             <div className="flex-1 space-y-10">
@@ -120,7 +120,7 @@ function AuthFlowContent() {
               <motion.div key="choice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col items-center justify-center h-full text-center space-y-12">
                 <div className="space-y-4">
                   <h1 className="text-6xl font-black tracking-tighter uppercase italic">The New Standard.</h1>
-                  <p className="text-black/30 font-bold uppercase tracking-widest text-xs">Choose your point of entry into the Kindred ecosystem</p>
+                  <p className="text-black/30 font-bold uppercase tracking-widest text-xs">Choose your point of entry into the FlexSlotCoustom ecosystem</p>
                 </div>
                 <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
                   <AuthOption 
@@ -188,7 +188,7 @@ function AuthFlowContent() {
                   <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Define your clinical brand</p>
                 </div>
                 <div className="space-y-6">
-                  <Input label="Clinic Name" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. Kindred Wellness" />
+                  <Input label="Clinic Name" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. FlexSlotCoustom Wellness" />
                   <div className="space-y-3">
                     <label className="text-[10px] font-black uppercase tracking-widest text-black/30">Practice Focus</label>
                     <div className="grid grid-cols-2 gap-3">
