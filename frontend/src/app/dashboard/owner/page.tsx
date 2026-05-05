@@ -8,7 +8,8 @@ import {
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
   Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard,
   Palette, Sparkles, User, AlertCircle, Phone, Mail as MailIcon, CalendarDays, Activity, Timer, ZapOff,
-  CircleDot, ChevronDown, Filter, MoreHorizontal
+  CircleDot, ChevronDown, Filter, MoreHorizontal, Download, ArrowUpRight, ArrowDownRight, PieChart,
+  X, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -16,24 +17,82 @@ import { useEffect } from "react";
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [clinicName, setClinicName] = useState("Kindred Wellness");
-  const [activeTemplate, setActiveTemplate] = useState("monochrome"); // Strict black/white
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [dateRange, setDateRange] = useState("May 1 - May 31, 2026");
+  const [isApplying, setIsApplying] = useState(false);
+  
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [doneCount, setDoneCount] = useState(0);
+  const [notesCount, setNotesCount] = useState(0);
 
   useEffect(() => {
-    const savedName = localStorage.getItem("flexslot_active_clinic_name") || "Kindred Wellness";
-    setClinicName(savedName);
+    const savedBookings = localStorage.getItem("flexslot_bookings");
+    const savedDone = localStorage.getItem("flexslot_done_count");
+    const savedNotes = localStorage.getItem("flexslot_notes");
+
+    if (savedDone) setDoneCount(parseInt(savedDone));
+    if (savedNotes) setNotesCount(parseInt(savedNotes));
+    
+    if (savedBookings) {
+      setBookings(JSON.parse(savedBookings).reverse());
+    } else {
+      const dummy = [
+        { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM' },
+        { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM' },
+        { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM' },
+        { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM' },
+        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM' }
+      ];
+      setBookings(dummy);
+    }
   }, []);
+
+  const handleComplete = () => {
+    if (bookings.length === 0) return;
+    const next = [...bookings];
+    next.shift();
+    setBookings(next);
+    
+    const nextDone = doneCount + 1;
+    const nextNotes = notesCount + 1;
+    
+    setDoneCount(nextDone);
+    setNotesCount(nextNotes);
+
+    localStorage.setItem("flexslot_bookings", JSON.stringify([...next].reverse()));
+    localStorage.setItem("flexslot_done_count", nextDone.toString());
+    localStorage.setItem("flexslot_notes", nextNotes.toString());
+  };
+
+  const handleApplyFilters = () => {
+    setIsApplying(true);
+    setTimeout(() => setIsApplying(false), 800);
+  };
 
   return (
     <div className="min-h-screen bg-white text-black font-sans flex overflow-hidden">
-      {/* Sidebar - Strict Monochrome Minimalist */}
+      <AnimatePresence>
+        {isApplying && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-white/60 backdrop-blur-sm flex items-center justify-center"
+          >
+            <div className="flex flex-col items-center gap-4">
+              <RefreshCw className="w-8 h-8 text-black animate-spin" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Syncing Neural Feed...</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <aside className="w-64 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
         <div className="h-20 flex items-center px-8">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-black/20">
               <CalendarClock className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold tracking-tighter text-xl uppercase">Kindred</span>
+            <span className="font-black tracking-tighter text-xl uppercase">Kindred</span>
           </Link>
         </div>
 
@@ -54,34 +113,259 @@ export default function OwnerDashboard() {
       </aside>
 
       <main className="flex-1 flex flex-col overflow-y-auto">
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-black/5 px-10 flex items-center justify-between sticky top-0 z-10">
-           <div className="flex items-center gap-4">
-              <h2 className="text-[10px] font-black text-black/30 uppercase tracking-[0.3em]">{activeTab === 'dashboard' ? 'Real-time Feed' : activeTab}</h2>
-              <div className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
-           </div>
-           <div className="flex items-center gap-6">
-              <button className="p-2 hover:bg-black/5 rounded-full transition-colors relative">
-                <Bell size={18} className="text-black" />
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-black rounded-full border-2 border-white" />
-              </button>
-              <div className="flex items-center gap-3 pl-6 border-l border-black/5">
-                 <div className="text-right">
-                    <div className="text-[10px] font-black uppercase tracking-widest leading-none">Admin Portal</div>
-                    <div className="text-xs font-bold text-black/40 italic">Dr. Anderson</div>
+        <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md">
+           <div className="flex items-center gap-6 flex-1">
+              <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
+              <div className="flex items-center gap-2 bg-black/5 p-1 rounded-xl ml-4">
+                 <button 
+                  onClick={() => setDateRange(prev => prev.includes("May") ? "Apr 1 - Apr 30, 2026" : "May 1 - May 31, 2026")}
+                  className="px-4 py-2 bg-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm hover:bg-black hover:text-white transition-all"
+                >
+                  {dateRange.includes("May") ? "This Month" : "Last Month"}
+                </button>
+                 <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black/40 cursor-default">
+                    <Calendar size={14} />
+                    {dateRange}
                  </div>
-                 <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white text-xs font-black shadow-xl">BA</div>
               </div>
+           </div>
+           <div className="flex items-center gap-4">
+              <FilterDropdown label="All Practitioners" options={["Dr. Anderson", "Dr. Jenkins", "Dr. Wright"]} />
+              <FilterDropdown label="All Locations" options={["Main Clinic", "West Wing", "Remote"]} />
+              <button 
+                onClick={handleApplyFilters}
+                className="px-8 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-black/20 hover:scale-105 active:scale-95 transition-all"
+              >
+                Apply Filters
+              </button>
            </div>
         </header>
 
-        <div className="p-12 max-w-6xl mx-auto w-full space-y-16">
-          {activeTab === "dashboard" && <MonochromeFeedSection />}
+        <div className="p-8 space-y-8">
+          {activeTab === "dashboard" && (
+            <MonochromeCommandCenter 
+              bookings={bookings} 
+              doneCount={doneCount} 
+              notesCount={notesCount}
+              onComplete={handleComplete}
+            />
+          )}
           {activeTab === "overview" && <OverviewSection />}
           {activeTab === "ui" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Identity Module Active</div>}
           {activeTab === "slots" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Scheduling Engine Loaded</div>}
           {activeTab === "audit" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Patient Data Secure</div>}
         </div>
       </main>
+    </div>
+  );
+}
+
+function FilterDropdown({ label, options }: { label: string, options: string[] }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(label);
+
+  return (
+    <div className="relative">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`px-6 py-3 bg-white border rounded-xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all ${isOpen ? 'border-black text-black' : 'border-black/5 text-black/40 hover:border-black/20'}`}
+      >
+        {selected}
+        <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute top-full right-0 mt-2 w-48 bg-white border border-black/5 rounded-2xl shadow-2xl z-[50] overflow-hidden p-2"
+          >
+            {options.map(o => (
+              <button 
+                key={o} 
+                onClick={() => { setSelected(o); setIsOpen(false); }}
+                className="w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-black/5 rounded-xl transition-colors"
+              >
+                {o}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }: any) {
+  const ongoing = bookings[0];
+
+  return (
+    <div className="grid grid-cols-12 gap-8">
+      {/* Left Column - Appointments */}
+      <div className="col-span-8 space-y-8">
+        <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm">
+          <div className="flex justify-between items-center mb-10">
+            <div className="flex items-center gap-3">
+              <Calendar className="w-5 h-5" />
+              <h3 className="text-sm font-black uppercase tracking-widest">Appointments</h3>
+            </div>
+            <button className="text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black transition-colors underline underline-offset-4 decoration-black/10">Appointment Report</button>
+          </div>
+          
+          <div className="grid grid-cols-3 gap-6">
+            <MetricBox label="Total Attended" value={doneCount.toString()} trend={`${Math.round((doneCount/(doneCount+bookings.length || 1))*100)}%`} up={true} />
+            <MetricBox label="Total Pending" value={bookings.length.toString()} trend="Live" up={false} />
+            <div className="bg-black/5 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center">
+               <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 mb-4">Clinical Notes</h4>
+               <div className="relative w-24 h-24 mb-4">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="rgba(0,0,0,0.05)" strokeWidth="12" />
+                    <motion.circle 
+                      cx="50" cy="50" r="40" fill="transparent" stroke="black" strokeWidth="12" 
+                      strokeDasharray="251.2" 
+                      initial={{ strokeDashoffset: 251.2 }}
+                      animate={{ strokeDashoffset: 251.2 - (notesCount * 25.12) }} 
+                      transition={{ duration: 1 }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center font-black text-xl italic">{notesCount}</div>
+               </div>
+               <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">Total Notes: {notesCount}</p>
+            </div>
+          </div>
+
+          <div className="mt-12 h-64 border-t border-black/5 pt-12 flex items-end gap-6 px-10 relative">
+             <div className="absolute left-0 top-12 text-[9px] font-black text-black/20">1.0 —</div>
+             <div className="absolute left-0 top-1/2 -translate-y-1/2 text-[9px] font-black text-black/20">0.5 —</div>
+             <div className="absolute left-0 bottom-0 text-[9px] font-black text-black/20">0.0 —</div>
+             
+             {[0.8, 0.4, 0.6, 0.2, 0.9, 0.5].map((h, i) => (
+               <div key={i} className="flex-1 flex flex-col items-center gap-4">
+                 <motion.div 
+                    initial={{ height: 0 }}
+                    animate={{ height: `${h * 100}%` }}
+                    className="w-full bg-black rounded-t-xl relative group shadow-2xl"
+                 />
+                 <span className="text-[9px] font-black text-black/20 uppercase tracking-widest">{5+i}/5/26</span>
+               </div>
+             ))}
+          </div>
+        </div>
+
+        <AnimatePresence mode="wait">
+          {ongoing ? (
+            <motion.div 
+              key={ongoing.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="bg-black text-white rounded-[3rem] p-10 shadow-2xl relative overflow-hidden"
+            >
+               <div className="flex justify-between items-center relative z-10">
+                  <div className="flex items-center gap-6">
+                     <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center animate-pulse"><Activity className="w-8 h-8" /></div>
+                     <div className="space-y-1">
+                        <h4 className="text-4xl font-black tracking-tighter uppercase italic leading-none">{ongoing.clientName}</h4>
+                        <p className="text-white/40 text-[10px] font-black uppercase tracking-widest italic">{ongoing.serviceName} · Started 12m ago</p>
+                     </div>
+                  </div>
+                  <button 
+                    onClick={onComplete}
+                    className="px-10 py-5 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/10"
+                  >
+                    Complete Session
+                  </button>
+               </div>
+               <Sparkles className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5" />
+            </motion.div>
+          ) : (
+            <div className="p-16 border-2 border-dashed border-black/5 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-widest italic">
+               Shift Stream Terminated.
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Right Column - Status Analytics & New Clients */}
+      <div className="col-span-4 space-y-8">
+        {/* Replacement for Income: Status Analytics Chart */}
+        <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden">
+           <div className="flex justify-between items-center mb-8 relative z-10">
+              <div className="flex items-center gap-3">
+                <BarChart3 className="w-5 h-5" />
+                <h3 className="text-sm font-black uppercase tracking-widest">Status Feed</h3>
+              </div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">6/5/26</div>
+           </div>
+           
+           <div className="flex items-end gap-6 h-48 border-b border-black/5 pb-6 mb-6 px-4">
+              <div className="flex-1 bg-black/5 rounded-t-xl h-[40%] relative group">
+                 <div className="absolute inset-0 bg-black rounded-t-xl scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500 opacity-20" />
+              </div>
+              <div className="flex-1 bg-black rounded-t-xl h-[90%] shadow-2xl relative">
+                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded">1.0</div>
+              </div>
+              <div className="flex-1 bg-black/5 rounded-t-xl h-[60%]" />
+           </div>
+
+           <div className="space-y-3">
+              <StatusLegend label="Completed" color="bg-black" value="1" />
+              <StatusLegend label="Arrived" color="bg-black/60" value="0" />
+              <StatusLegend label="Confirmed" color="bg-black/40" value="0" />
+              <StatusLegend label="Pending" color="bg-black/20" value="0" />
+              <StatusLegend label="Rescheduled" color="bg-black/10" value="0" />
+           </div>
+           
+           <div className="absolute top-20 right-8 pointer-events-none opacity-5">
+              <PieChart className="w-48 h-48" />
+           </div>
+        </div>
+
+        <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm">
+           <div className="flex justify-between items-center mb-10">
+              <div className="flex items-center gap-3">
+                <Users className="w-5 h-5" />
+                <h3 className="text-sm font-black uppercase tracking-widest">New Clients</h3>
+              </div>
+              <button className="text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black">More Detail</button>
+           </div>
+           <div className="bg-black/5 rounded-[2rem] p-10 text-center space-y-2 group hover:bg-black hover:text-white transition-all cursor-pointer">
+              <div className="text-[10px] font-black text-black/20 group-hover:text-white/30 uppercase tracking-widest">Total Acquisitions</div>
+              <div className="text-5xl font-black italic">2</div>
+              <div className="flex items-center justify-center gap-1 text-[10px] font-black">
+                 <ArrowUpRight size={12} />
+                 100% vs Previous
+              </div>
+           </div>
+           <button className="w-full mt-10 text-left text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black underline underline-offset-4 decoration-black/10 transition-colors">New Client Report</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusLegend({ label, color, value }: { label: string, color: string, value: string }) {
+  return (
+    <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest group cursor-default">
+       <div className="flex items-center gap-3">
+          <div className={`w-2.5 h-2.5 rounded-full ${color} group-hover:scale-125 transition-transform`} />
+          <span className="text-black/40 group-hover:text-black transition-colors">{label}</span>
+       </div>
+       <span className="text-black/20 group-hover:text-black transition-colors italic">{value}</span>
+    </div>
+  );
+}
+
+function MetricBox({ label, value, trend, up }: { label: string, value: string, trend: string, up: boolean }) {
+  return (
+    <div className="bg-black/5 rounded-[2rem] p-10 text-center space-y-4 shadow-inner group hover:bg-black hover:text-white transition-all cursor-default">
+       <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 group-hover:text-white/30">{label}</h4>
+       <div className="text-6xl font-black italic">{value}</div>
+       <div className="flex items-center justify-center gap-1 text-[10px] font-black uppercase tracking-widest">
+          {up ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+          {trend} <span className="text-black/30 group-hover:text-white/30 font-bold ml-1">Volume</span>
+       </div>
     </div>
   );
 }
@@ -97,166 +381,7 @@ function SideNavItem({ icon, label, active, onClick }: { icon: any, label: strin
     >
       {icon}
       {label}
-      {active && <motion.div layoutId="nav-dot" className="absolute right-4 w-1 h-1 bg-white rounded-full" />}
     </button>
-  );
-}
-
-function MonochromeFeedSection() {
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [doneCount, setDoneCount] = useState(0);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("flexslot_bookings");
-    const savedDone = localStorage.getItem("flexslot_done_count");
-    if (savedDone) setDoneCount(parseInt(savedDone));
-    
-    if (saved) {
-      setBookings(JSON.parse(saved).reverse());
-    } else {
-      const dummy = [
-        { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM' },
-        { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM' },
-        { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM' },
-        { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM' },
-        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM' }
-      ];
-      setBookings(dummy);
-      localStorage.setItem("flexslot_bookings", JSON.stringify(dummy));
-    }
-  }, []);
-
-  const handleComplete = () => {
-    if (bookings.length === 0) return;
-    const next = [...bookings];
-    next.shift();
-    setBookings(next);
-    const nextDone = doneCount + 1;
-    setDoneCount(nextDone);
-    localStorage.setItem("flexslot_bookings", JSON.stringify([...next].reverse()));
-    localStorage.setItem("flexslot_done_count", nextDone.toString());
-  };
-
-  const total = bookings.length + doneCount;
-  const ongoing = bookings[0];
-
-  return (
-    <div className="space-y-16">
-      {/* Metrics - High Contrast Monochrome */}
-      <div className="grid grid-cols-3 gap-8">
-        <MetricCard label="Total Capacity" value={total} sub="Full Shift Goal" icon={<Plus size={18} />} />
-        <MetricCard label="Sessions Logged" value={doneCount} sub="Successfully closed" icon={<CheckCircle2 size={18} />} />
-        <MetricCard label="Remaining Stream" value={bookings.length} sub="Active patient signals" icon={<Timer size={18} />} />
-      </div>
-
-      {/* Ongoing - Bold Black & White Action Card */}
-      <AnimatePresence mode="wait">
-        {ongoing ? (
-          <motion.div 
-            key={ongoing.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="bg-black rounded-[3rem] p-12 text-white shadow-[0_32px_64px_rgba(0,0,0,0.15)] relative overflow-hidden"
-          >
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-12">
-              <div className="flex items-center gap-10">
-                <div className="w-24 h-24 bg-white/5 rounded-[2rem] flex items-center justify-center backdrop-blur-3xl border border-white/10 shadow-inner">
-                  <Activity className="w-10 h-10 text-white" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] px-2 py-1 bg-white text-black rounded-lg">Ongoing</span>
-                    <span className="text-white/30 text-[10px] font-black uppercase tracking-widest">Signal_Live</span>
-                  </div>
-                  <h2 className="text-6xl font-black tracking-tighter uppercase italic leading-tight">{ongoing.clientName}</h2>
-                  <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em] italic">{ongoing.serviceName} · Consultation In_Progress</p>
-                </div>
-              </div>
-              <button 
-                onClick={handleComplete}
-                className="px-12 py-6 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10"
-              >
-                Complete Session
-              </button>
-            </div>
-          </motion.div>
-        ) : (
-          <div className="p-20 border border-dashed border-black/10 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-[0.5em] italic">
-             No incoming clinical stream detected.
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Feed - Strict Minimalist List */}
-      <div className="space-y-10">
-        <div className="flex items-center justify-between border-b border-black/5 pb-10">
-           <div className="space-y-1">
-              <h3 className="text-2xl font-black tracking-tighter uppercase italic">Upcoming Stream</h3>
-              <p className="text-black/30 text-[10px] font-bold uppercase tracking-[0.2em] italic">Validated patient records for current shift</p>
-           </div>
-           <div className="flex items-center gap-4">
-              <div className="relative group">
-                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
-                <input type="text" placeholder="FILTER SIGNALS..." className="pl-12 pr-6 py-4 bg-black/5 border-transparent rounded-2xl text-[10px] font-black uppercase tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-black transition-all w-64 shadow-inner" />
-              </div>
-              <button className="p-4 bg-black/5 rounded-2xl text-black hover:bg-black hover:text-white transition-all shadow-inner"><Filter size={20} /></button>
-           </div>
-        </div>
-
-        <div className="space-y-3">
-           <AnimatePresence mode="popLayout">
-             {bookings.map((b, i) => (
-               <motion.div 
-                  key={b.id} 
-                  layout
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className={`flex items-center justify-between p-10 rounded-[2.5rem] transition-all border border-transparent hover:border-black/5 hover:bg-black/5 group ${i === 0 ? 'bg-black/[0.02] border-black/5' : ''}`}
-               >
-                  <div className="flex items-center gap-10">
-                     <div className="w-16 h-16 bg-white border border-black/5 rounded-3xl flex flex-col items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-                        <span className="text-sm font-black text-black leading-none">{b.slotTime.split(' ')[0]}</span>
-                        <span className="text-[8px] font-black text-black/30 uppercase tracking-widest mt-1">{b.slotTime.split(' ')[1]}</span>
-                     </div>
-                     <div className="space-y-1">
-                        <h4 className="text-2xl font-black tracking-tighter uppercase italic leading-none">{b.clientName}</h4>
-                        <div className="flex items-center gap-3">
-                           <span className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{b.serviceName}</span>
-                           <div className="w-1 h-1 rounded-full bg-black/10" />
-                           <span className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">Signal_Pending</span>
-                        </div>
-                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                     <button className="p-5 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all"><Phone size={18} /></button>
-                     <button className="p-5 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all"><MailIcon size={18} /></button>
-                     <button className="p-5 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all"><MoreHorizontal size={18} /></button>
-                  </div>
-               </motion.div>
-             ))}
-           </AnimatePresence>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MetricCard({ label, value, sub, icon }: any) {
-  return (
-    <div className="bg-white border border-black/5 p-10 rounded-[3rem] shadow-sm hover:shadow-2xl hover:translate-y-[-8px] transition-all group overflow-hidden relative">
-      <div className="flex items-center justify-between mb-10">
-        <span className="text-[10px] font-black text-black/20 uppercase tracking-[0.2em]">{label}</span>
-        <div className="p-3 bg-black/5 rounded-2xl group-hover:bg-black group-hover:text-white transition-all">
-          {icon}
-        </div>
-      </div>
-      <div className="space-y-1">
-        <span className="text-6xl font-black tracking-tighter text-black leading-none italic">{value}</span>
-        <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{sub}</p>
-      </div>
-    </div>
   );
 }
 
@@ -272,22 +397,6 @@ function OverviewSection() {
       <div className="grid grid-cols-3 gap-10">
         <div className="h-64 bg-black/5 rounded-[3rem] p-10 flex flex-col justify-between">
            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Temporal Load</div>
-           <div className="flex items-end gap-2 h-20">
-              {[30, 60, 45, 90, 70].map((h, i) => <div key={i} className="flex-1 bg-black rounded-t-lg" style={{ height: `${h}%` }} />)}
-           </div>
-        </div>
-        <div className="h-64 bg-black rounded-[3rem] p-10 text-white flex flex-col justify-between shadow-2xl shadow-black/20">
-           <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">System Status</div>
-           <div className="text-4xl font-black uppercase italic leading-tight">All Vectors Normal</div>
-           <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Optimized</span>
-           </div>
-        </div>
-        <div className="h-64 bg-black/5 rounded-[3rem] p-10 flex flex-col justify-between">
-           <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Signal Strength</div>
-           <Bot className="w-12 h-12 text-black/10" />
-           <div className="text-2xl font-black italic uppercase">Validated</div>
         </div>
       </div>
     </div>
