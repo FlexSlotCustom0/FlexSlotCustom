@@ -225,21 +225,21 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
     <div className="grid grid-cols-12 gap-8">
       {/* Left Column - Clinical Overview & Stream */}
       <div className="col-span-8 space-y-8">
-        <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm">
-          <div className="flex justify-between items-center mb-10">
+        <div className="bg-white border border-black/5 rounded-[2rem] p-6 shadow-sm">
+          <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5" />
-              <h3 className="text-sm font-black uppercase tracking-widest">Appointments</h3>
+              <Calendar className="w-4 h-4" />
+              <h3 className="text-xs font-black uppercase tracking-widest">Appointments</h3>
             </div>
-            <button className="text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black transition-colors underline underline-offset-4 decoration-black/10">Appointment Report</button>
+            <button className="text-[9px] font-black uppercase tracking-widest text-black/30 hover:text-black transition-colors underline underline-offset-4 decoration-black/10">Appointment Report</button>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-4">
             <MetricBox label="Total Attended" value={doneCount.toString()} trend={`${Math.round((doneCount / (doneCount + bookings.length || 1)) * 100)}%`} up={true} />
             <MetricBox label="Total Pending" value={bookings.length.toString()} trend="Live" up={false} />
-            <div className="bg-black/5 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 mb-4">Clinical Notes</h4>
-              <div className="relative w-24 h-24 mb-4">
+            <div className="bg-black/5 rounded-[1.5rem] p-6 flex flex-col items-center justify-center text-center">
+              <h4 className="text-[9px] font-black uppercase tracking-widest text-black/30 mb-2">Clinical Notes</h4>
+              <div className="relative w-16 h-16 mb-2">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="40" fill="transparent" stroke="rgba(0,0,0,0.05)" strokeWidth="12" />
                   <motion.circle
@@ -250,9 +250,9 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                     transition={{ duration: 1 }}
                   />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center font-black text-xl italic">{notesCount}</div>
+                <div className="absolute inset-0 flex items-center justify-center font-black text-lg italic">{notesCount}</div>
               </div>
-              <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">Total Notes: {notesCount}</p>
+              <p className="text-[9px] font-bold text-black/30 uppercase tracking-widest">Notes: {notesCount}</p>
             </div>
           </div>
         </div>
@@ -427,11 +427,11 @@ function StatusLegend({ label, color, value }: { label: string, color: string, v
 
 function MetricBox({ label, value, trend, up }: { label: string, value: string, trend: string, up: boolean }) {
   return (
-    <div className="bg-black/5 rounded-[2rem] p-10 text-center space-y-4 shadow-inner group hover:bg-black hover:text-white transition-all cursor-default">
-      <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 group-hover:text-white/30">{label}</h4>
-      <div className="text-6xl font-black italic">{value}</div>
-      <div className="flex items-center justify-center gap-1 text-[10px] font-black uppercase tracking-widest">
-        {up ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+    <div className="bg-black/5 rounded-[1.5rem] p-6 text-center space-y-3 shadow-inner group hover:bg-black hover:text-white transition-all cursor-default">
+      <h4 className="text-[9px] font-black uppercase tracking-widest text-black/30 group-hover:text-white/30">{label}</h4>
+      <div className="text-4xl font-black italic">{value}</div>
+      <div className="flex items-center justify-center gap-1 text-[9px] font-black uppercase tracking-widest">
+        {up ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
         {trend} <span className="text-black/30 group-hover:text-white/30 font-bold ml-1">Volume</span>
       </div>
     </div>
