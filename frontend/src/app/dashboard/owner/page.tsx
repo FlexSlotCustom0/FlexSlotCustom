@@ -112,7 +112,7 @@ export default function OwnerDashboard() {
           <SideNavItem icon={<BarChart3 size={18} />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
           <div className="h-px bg-black/5 my-4 mx-2" />
           <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
-          <SideNavItem icon={<Calendar size={18} />} label="Schedules" active={activeTab === "slots"} onClick={() => setActiveTab("slots")} />
+          <SideNavItem icon={<CalendarDays size={18} />} label="Calendar" active={activeTab === "calendar"} onClick={() => setActiveTab("calendar")} />
           <SideNavItem icon={<Users size={18} />} label="Patient List" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
         </nav>
 
@@ -172,7 +172,7 @@ export default function OwnerDashboard() {
           )}
           {activeTab === "overview" && <OverviewSection />}
           {activeTab === "ui" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Identity Module Active</div>}
-          {activeTab === "slots" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Scheduling Engine Loaded</div>}
+          {activeTab === "calendar" && <CalendarPage />}
           {activeTab === "audit" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Patient Data Secure</div>}
         </div>
       </main>
@@ -457,19 +457,168 @@ function SideNavItem({ icon, label, active, onClick }: { icon: any, label: strin
   );
 }
 
-function OverviewSection() {
+function CalendarPage() {
+  const days = ["Mon 4 May", "Tue 5 May", "Wed 6 May", "Thu 7 May", "Fri 8 May", "Sat 9 May", "Sun 10 May"];
+  const times = ["8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM"];
+
   return (
-    <div className="space-y-16">
-      <div className="flex justify-between items-end">
-        <div className="space-y-2">
-          <h1 className="text-7xl font-black tracking-tighter uppercase italic leading-none">Intelligence</h1>
-          <p className="text-black/30 text-xs font-bold uppercase tracking-[0.3em] italic">Full spectrum analytical data mapping for current cycle</p>
+    <div className="flex h-[calc(100vh-140px)] -m-8 relative overflow-hidden bg-white">
+      {/* Main Calendar Section */}
+      <div className="flex-1 flex flex-col min-w-0 border-r border-black/5">
+        {/* Calendar Header */}
+        <div className="h-14 border-b border-black/5 flex items-center justify-between px-6 bg-white shrink-0">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <button className="p-1 hover:bg-black/5 rounded"><ChevronRight size={14} className="rotate-180" /></button>
+              <span className="text-[10px] font-black uppercase tracking-widest min-w-[150px] text-center">Mon 4/5 - Sun 10/5/2026</span>
+              <button className="p-1 hover:bg-black/5 rounded"><ChevronRight size={14} /></button>
+            </div>
+            <button className="px-3 py-1 bg-black/5 rounded text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Today</button>
+          </div>
+          
+          <div className="flex items-center gap-1 bg-black/5 p-1 rounded-lg">
+            {["Day", "M-F", "Week", "Month"].map(view => (
+              <button 
+                key={view}
+                className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded ${view === "Week" ? "bg-black text-white" : "text-black/40 hover:text-black"}`}
+              >
+                {view}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button className="p-2 hover:bg-black/5 rounded"><RefreshCw size={14} /></button>
+            <button className="p-2 hover:bg-black/5 rounded"><Search size={14} /></button>
+            <button className="px-3 py-1 border border-black/10 rounded text-[9px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">Time Finder</button>
+          </div>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="flex-1 overflow-y-auto overflow-x-auto custom-scrollbar">
+          <div className="min-w-[800px]">
+            {/* Days Header */}
+            <div className="grid grid-cols-[80px_repeat(7,1fr)] border-b border-black/5">
+              <div className="h-10 border-r border-black/5" />
+              {days.map(day => (
+                <div key={day} className="h-10 flex items-center justify-center text-[9px] font-black uppercase tracking-widest border-r border-black/5 bg-black/5">
+                  {day}
+                </div>
+              ))}
+            </div>
+
+            {/* Time Rows */}
+            <div className="relative">
+              {times.map((time, idx) => (
+                <div key={time} className="grid grid-cols-[80px_repeat(7,1fr)] group">
+                  <div className="h-16 flex items-start justify-center pt-2 text-[9px] font-black text-black/20 border-r border-black/5">
+                    {time}
+                  </div>
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <div key={i} className="h-16 border-r border-black/5 border-b border-black/5 group-hover:bg-black/[0.01] transition-colors relative">
+                      {/* Example Bookings */}
+                      {idx === 1 && i === 1 && (
+                        <div className="absolute inset-x-1 top-1 bottom-1 bg-black text-white p-2 rounded-lg shadow-xl z-10">
+                          <p className="text-[8px] font-black uppercase leading-tight">John Smith</p>
+                          <p className="text-[7px] font-bold opacity-60">9:00AM - 11:00AM</p>
+                        </div>
+                      )}
+                      {idx === 1 && i === 2 && (
+                        <div className="absolute inset-x-1 top-1 bottom-1 bg-black/5 border border-black/10 text-black p-2 rounded-lg z-10">
+                          <p className="text-[8px] font-black uppercase leading-tight">Mary Lee</p>
+                          <p className="text-[7px] font-bold opacity-40">9:00AM - 11:00AM</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+              {/* Current Time Indicator Line */}
+              <div className="absolute top-[384px] left-[80px] right-0 h-0.5 bg-black/10 z-0 pointer-events-none" />
+            </div>
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-10">
-        <div className="h-64 bg-black/5 rounded-[3rem] p-10 flex flex-col justify-between">
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Temporal Load</div>
+
+      {/* Right Sidebar - New Appointment */}
+      <div className="w-[320px] bg-white flex flex-col border-l border-black/5 overflow-y-auto shrink-0">
+        <div className="p-4 bg-black text-white flex items-center justify-between sticky top-0 z-10">
+          <span className="text-[10px] font-black uppercase tracking-widest italic">New Appointment</span>
+          <X size={14} className="cursor-pointer" />
         </div>
+
+        <div className="p-5 space-y-6">
+          {/* Section: When & Where */}
+          <div className="space-y-4">
+            <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">When & Where</h4>
+            
+            <div className="space-y-3">
+              <CalendarInput label="When" value="08/05/2026" icon={<CalendarDays size={14} />} />
+              <div className="grid grid-cols-2 gap-2">
+                <CalendarInput label="Time" value="9:00 AM" icon={<Clock size={14} />} />
+                <CalendarInput label="End" value="9:30 AM" icon={<Clock size={14} />} />
+              </div>
+              <CalendarInput label="Location" value="Main Clinic" icon={<ChevronDown size={14} />} />
+              <CalendarInput label="With" value="Dr. Jenkins" icon={<ChevronDown size={14} />} />
+            </div>
+          </div>
+
+          {/* Section: Client/Personal/Group Toggle */}
+          <div className="grid grid-cols-3 border border-black/10 rounded-xl overflow-hidden">
+             {["Client", "Personal", "Group"].map((type, i) => (
+               <button key={type} className={`py-2 flex flex-col items-center gap-1 border-r border-black/10 last:border-0 ${i === 0 ? "bg-black text-white" : "bg-white text-black/40 hover:text-black"}`}>
+                 <User size={12} />
+                 <span className="text-[8px] font-black uppercase">{type}</span>
+               </button>
+             ))}
+          </div>
+
+          {/* Section: Client Search */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+               <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
+               <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline">+ New Client</button>
+            </div>
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder="Search for a client*" 
+                className="w-full bg-black/5 border-none rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:ring-1 focus:ring-black transition-all"
+              />
+              <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20" />
+            </div>
+          </div>
+
+          {/* Section: Appointment Details */}
+          <div className="space-y-4">
+            <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Appointment Details</h4>
+            <div className="space-y-2">
+              <CalendarInput label="Service" value="Select a Service" icon={<ChevronDown size={14} />} />
+              <CalendarInput label="Resources" value="Select Resources" icon={<ChevronDown size={14} />} />
+              <CalendarInput label="Flag" value="Select a Flag" icon={<ChevronDown size={14} />} />
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="pt-4 space-y-2">
+            <button className="w-full bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-black/20 hover:scale-[1.02] active:scale-95 transition-all">Save</button>
+            <button className="w-full bg-white border border-black/10 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-black/5 transition-all">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CalendarInput({ label, value, icon }: { label: string, value: string, icon: any }) {
+  return (
+    <div className="flex items-center justify-between px-3 py-2.5 bg-black/5 rounded-lg border border-transparent hover:border-black/10 transition-all cursor-pointer">
+      <div className="flex flex-col">
+        <span className="text-[7px] font-black text-black/20 uppercase tracking-widest">{label}</span>
+        <span className="text-[10px] font-black uppercase tracking-widest">{value}</span>
+      </div>
+      <div className="text-black/40">
+        {icon}
       </div>
     </div>
   );
