@@ -29,22 +29,28 @@ export default function OwnerDashboard() {
     const savedDone = localStorage.getItem("flexslot_done_count");
     const savedNotes = localStorage.getItem("flexslot_notes");
 
-      const dummy = [
-        { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM' },
-        { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM' },
-        { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM' },
-        { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM' },
-        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM' },
-        { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM' },
-        { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM' },
-        { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM' }
-      ];
-
     if (savedDone) setDoneCount(parseInt(savedDone));
     if (savedNotes) setNotesCount(parseInt(savedNotes));
     
-    if (savedBookings && JSON.parse(savedBookings).length > 0) {
-      setBookings(JSON.parse(savedBookings).reverse());
+    const dummy = [
+        { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM', practitioner: 'Dr. Anderson' },
+        { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM', practitioner: 'Dr. Jenkins' },
+        { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM', practitioner: 'Dr. Wright' },
+        { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM', practitioner: 'Dr. Anderson' },
+        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM', practitioner: 'Dr. Jenkins' },
+        { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM', practitioner: 'Dr. Anderson' },
+        { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM', practitioner: 'Dr. Wright' },
+        { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM', practitioner: 'Dr. Jenkins' }
+    ];
+
+    let loadedBookings = null;
+    try {
+      loadedBookings = savedBookings ? JSON.parse(savedBookings) : null;
+    } catch (e) {}
+
+    // Force reset if practitioner data is missing (legacy data fix)
+    if (loadedBookings && loadedBookings.length > 0 && loadedBookings[0].practitioner) {
+      setBookings(loadedBookings.reverse());
     } else {
       setBookings(dummy);
       localStorage.setItem("flexslot_bookings", JSON.stringify(dummy));
@@ -117,8 +123,8 @@ export default function OwnerDashboard() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col overflow-y-auto">
-        <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md">
+      <main className="flex-1 flex flex-col overflow-y-auto relative">
+        <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
            <div className="flex items-center gap-6 flex-1">
               <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
               <div className="flex items-center gap-2 bg-black/5 p-1 rounded-xl ml-4">
@@ -260,25 +266,37 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="bg-black text-white rounded-[3rem] p-12 text-white shadow-[0_32px_64px_rgba(0,0,0,0.15)] relative overflow-hidden group"
+                className="bg-black text-white rounded-[3rem] p-12 shadow-[0_32px_64px_rgba(0,0,0,0.15)] relative overflow-hidden group"
               >
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-10">
-                  <div className="flex items-center gap-10">
-                    <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/10">
+                <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-10">
+                  <div className="flex gap-10">
+                    <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/10 shrink-0">
                       <Activity className="w-8 h-8 text-white animate-pulse" />
                     </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-white text-black rounded-lg">Ongoing</span>
-                        <span className="text-white/30 text-[10px] font-black uppercase tracking-widest">Room_01</span>
+                    <div className="space-y-4">
+                      {/* Line 1: Patient Name */}
+                      <h2 className="text-7xl font-black tracking-tighter uppercase italic leading-[0.8]">{ongoing.clientName}</h2>
+                      
+                      <div className="space-y-1 pt-2">
+                        {/* Line 2: Room Number */}
+                        <div className="flex items-center gap-2">
+                           <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-white text-black rounded">Room_01</span>
+                        </div>
+                        
+                        {/* Line 3: Consultation */}
+                        <p className="text-white/40 text-xs font-bold uppercase tracking-[0.3em] italic">Consultation In_Progress</p>
+                        
+                        {/* Line 4: Doctor Name */}
+                        <div className="flex items-center gap-2 pt-1">
+                           <Stethoscope size={12} className="text-white/20" />
+                           <span className="text-white/60 text-[10px] font-black uppercase tracking-widest italic">{ongoing.practitioner}</span>
+                        </div>
                       </div>
-                      <h2 className="text-5xl font-black tracking-tighter uppercase italic">{ongoing.clientName}</h2>
-                      <p className="text-white/40 text-xs font-bold uppercase tracking-widest italic">{ongoing.serviceName} · Consultation In_Progress</p>
                     </div>
                   </div>
                   <button 
                     onClick={onComplete}
-                    className="px-12 py-6 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10"
+                    className="px-12 py-6 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 mt-4 md:mt-0"
                   >
                     Complete Session
                   </button>
@@ -316,7 +334,7 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                           </div>
                           <div>
                              <h4 className="text-lg font-black uppercase tracking-tighter italic">{u.clientName}</h4>
-                             <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{u.serviceName}</p>
+                             <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{u.serviceName} · {u.practitioner}</p>
                           </div>
                        </div>
                        <div className="flex items-center gap-2">
@@ -326,9 +344,6 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                {upcoming.length === 0 && (
-                  <div className="p-10 text-center text-black/10 font-black uppercase tracking-widest text-[10px] italic">No further signals in current cycle.</div>
-                )}
              </div>
           </div>
         </div>
