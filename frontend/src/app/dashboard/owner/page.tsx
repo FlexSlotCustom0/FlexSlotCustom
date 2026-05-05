@@ -282,10 +282,6 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                            <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 rounded">ID: {ongoing.id.slice(0, 8)}</span>
                            <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-black/5 text-black/60 rounded">Room_01</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-black/40 uppercase tracking-widest">
-                          <Clock size={10} className="text-emerald-500" />
-                          Duration: <span className="text-black font-mono">12:45</span>
-                        </div>
                       </div>
                     </div>
                     
