@@ -228,7 +228,6 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
         <div className="bg-white border border-black/5 rounded-[1.5rem] p-4 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
-              <Calendar className="w-3.5 h-3.5" />
               <h3 className="text-[10px] font-black uppercase tracking-widest">Appointments</h3>
             </div>
           </div>
@@ -374,7 +373,6 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
         <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden">
           <div className="flex justify-between items-center mb-8 relative z-10">
             <div className="flex items-center gap-3">
-              <BarChart3 className="w-5 h-5" />
               <h3 className="text-sm font-black uppercase tracking-widest">Status Feed</h3>
             </div>
             <div className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">6/5/26</div>
