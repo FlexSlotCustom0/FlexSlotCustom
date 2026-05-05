@@ -390,24 +390,6 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
           </div>
         </div>
 
-        <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm">
-          <div className="flex justify-between items-center mb-10">
-            <div className="flex items-center gap-3">
-              <Users className="w-5 h-5" />
-              <h3 className="text-sm font-black uppercase tracking-widest">New Clients</h3>
-            </div>
-            <button className="text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black">More Detail</button>
-          </div>
-          <div className="bg-black/5 rounded-[2rem] p-10 text-center space-y-2 group hover:bg-black hover:text-white transition-all cursor-pointer">
-            <div className="text-[10px] font-black text-black/20 group-hover:text-white/30 uppercase tracking-widest">Total Acquisitions</div>
-            <div className="text-5xl font-black italic">2</div>
-            <div className="flex items-center justify-center gap-1 text-[10px] font-black">
-              <ArrowUpRight size={12} />
-              100% vs Previous
-            </div>
-          </div>
-          <button className="w-full mt-10 text-left text-[10px] font-black uppercase tracking-widest text-black/30 hover:text-black underline underline-offset-4 decoration-black/10 transition-colors">New Client Report</button>
-        </div>
       </div>
     </div>
   );
