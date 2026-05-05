@@ -296,7 +296,7 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                   </div>
                   <button 
                     onClick={onComplete}
-                    className="px-12 py-6 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 mt-4 md:mt-0"
+                    className="px-6 py-3 bg-white text-black rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 mt-4 md:mt-0"
                   >
                     Complete Session
                   </button>
