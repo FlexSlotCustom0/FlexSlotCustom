@@ -265,79 +265,67 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="bg-[#050505] text-white rounded-[2.5rem] p-8 shadow-[0_32px_64px_rgba(0,0,0,0.3)] border border-white/5 relative overflow-hidden group ring-1 ring-white/10"
+                className="bg-emerald-50/80 backdrop-blur-3xl text-black rounded-[2rem] p-5 shadow-[0_24px_48px_rgba(16,185,129,0.08)] border border-emerald-100 relative overflow-hidden group ring-1 ring-emerald-200"
               >
                 {/* Futuristic Background Accents */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] -mr-32 -mt-32 animate-pulse" />
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/5 rounded-full blur-[80px] -ml-24 -mb-24" />
+                <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-400/10 rounded-full blur-[80px] -mr-24 -mt-24" />
                 
-                <div className="relative z-10 flex flex-col gap-8">
+                <div className="relative z-10 flex flex-col gap-4">
                   {/* Top Row: Meta & Timer */}
                   <div className="flex justify-between items-start">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center backdrop-blur-3xl border border-white/10 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
-                        <Activity className="w-6 h-6 text-cyan-400 animate-pulse" />
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white/50 rounded-xl flex items-center justify-center backdrop-blur-3xl border border-emerald-200">
+                        <Activity className="w-4 h-4 text-emerald-500 animate-pulse" />
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-0.5">
                         <div className="flex items-center gap-2">
-                           <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded border border-cyan-500/30">ID: {ongoing.id.slice(0, 8)}</span>
-                           <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 bg-white/5 text-white/60 rounded border border-white/10">Room_01</span>
+                           <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 rounded border border-emerald-500/30">ID: {ongoing.id.slice(0, 8)}</span>
+                           <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-black/5 text-black/60 rounded">Room_01</span>
                         </div>
-                        <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
-                          <Clock size={12} className="text-cyan-400" />
-                          Session Duration: <span className="text-white font-mono">12:45</span>
+                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-black/40 uppercase tracking-widest">
+                          <Clock size={10} className="text-emerald-500" />
+                          Duration: <span className="text-black font-mono">12:45</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
-                       <Badge label="24 YRS" color="bg-white/5" />
-                       <Badge label="MALE" color="bg-white/5" />
-                       <Badge label="O+" color="bg-cyan-500/10 text-cyan-400 border-cyan-500/20" />
+                    <div className="flex gap-1.5">
+                       <Badge label="24 YRS" color="bg-black/5" />
+                       <Badge label="MALE" color="bg-black/5" />
+                       <Badge label="O+" color="bg-emerald-500/10 text-emerald-600 border-emerald-500/20" />
                     </div>
                   </div>
 
                   {/* Middle Row: Patient Name & Reason */}
-                  <div className="space-y-4">
-                    <div className="flex items-end justify-between gap-4">
-                      <div className="space-y-1">
-                        <h2 className="text-6xl font-black tracking-tighter uppercase italic leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40">{ongoing.clientName}</h2>
-                        <div className="flex items-center gap-2 pt-2">
-                          <span className="px-3 py-1 bg-cyan-500 text-black text-[9px] font-black uppercase tracking-widest rounded-full">Routine Checkup</span>
-                          <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.3em] italic">Consultation In_Progress</p>
-                        </div>
+                  <div className="flex items-end justify-between gap-4">
+                    <div className="space-y-1">
+                      <h2 className="text-4xl font-black tracking-tighter uppercase italic leading-none text-transparent bg-clip-text bg-gradient-to-br from-black to-black/40">{ongoing.clientName}</h2>
+                      <div className="flex items-center gap-2 pt-1">
+                        <span className="px-2 py-0.5 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest rounded-full">Routine Checkup</span>
+                        <p className="text-black/40 text-[8px] font-bold uppercase tracking-[0.2em] italic">Consultation In_Progress</p>
                       </div>
-                      
-                      <button 
-                        onClick={onComplete}
-                        className="px-6 py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 shrink-0"
-                      >
-                        Complete Session
-                      </button>
                     </div>
+                    
+                    <button 
+                      onClick={onComplete}
+                      className="px-5 py-2.5 bg-black text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 shrink-0"
+                    >
+                      Complete
+                    </button>
                   </div>
 
                   {/* Footer Row: Doctor info */}
-                  <div className="pt-6 border-t border-white/5 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                         <Stethoscope size={14} className="text-cyan-400" />
+                  <div className="pt-3 border-t border-emerald-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center border border-black/10">
+                         <Stethoscope size={10} className="text-emerald-500" />
                       </div>
                       <div>
-                         <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Assigned Practitioner</p>
-                         <p className="text-[10px] font-black text-white/80 uppercase tracking-widest italic">{ongoing.practitioner}</p>
+                         <p className="text-[8px] font-black text-black/80 uppercase tracking-widest italic">{ongoing.practitioner}</p>
                       </div>
-                    </div>
-                    <div className="flex -space-x-2">
-                       {[1,2,3].map(i => (
-                         <div key={i} className="w-6 h-6 rounded-full border-2 border-[#050505] bg-white/10" />
-                       ))}
                     </div>
                   </div>
                 </div>
-                
-                {/* Glassmorphic Glow Layer */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
               </motion.div>
             ) : (
               <div className="p-20 border-2 border-dashed border-black/5 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-widest italic">
