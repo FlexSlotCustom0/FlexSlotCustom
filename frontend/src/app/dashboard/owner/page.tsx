@@ -109,7 +109,7 @@ export default function OwnerDashboard() {
 
         <nav className="flex-1 px-4 py-6 space-y-1">
           <SideNavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
-          <SideNavItem icon={<BarChart3 size={18} />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
+
           <div className="h-px bg-black/5 my-4 mx-2" />
           <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
           <Link href="/dashboard/scheduler" className="block">
@@ -173,10 +173,11 @@ export default function OwnerDashboard() {
               onComplete={handleComplete}
             />
           )}
-          {activeTab === "overview" && <OverviewSection />}
-          {activeTab === "ui" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Identity Module Active</div>}
+          {activeTab === "ui" && <ClinicSetupSection />}
+
           {activeTab === "slots" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Scheduling Engine Loaded</div>}
-          {activeTab === "audit" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Patient Data Secure</div>}
+          {activeTab === "audit" && <PatientListSection />}
+
         </div>
       </main>
     </div>
@@ -440,7 +441,6 @@ function MetricBox({ label, value, trend, up }: { label: string, value: string, 
     </div>
   );
 }
-
 function SideNavItem({ icon, label, active, onClick }: { icon: any, label: string, active?: boolean, onClick: () => void }) {
   return (
     <button
@@ -456,20 +456,179 @@ function SideNavItem({ icon, label, active, onClick }: { icon: any, label: strin
   );
 }
 
-function OverviewSection() {
+function ClinicSetupSection() {
+  const [selectedTemplate, setSelectedTemplate] = useState("clinic-sigma");
+  const [primaryColor, setPrimaryColor] = useState("#991b1b"); // maroon-800
+  
+  const templates = [
+    { id: "clinic-sigma", name: "Sigma Dark", description: "High-performance black & white aesthetic for modern practices.", preview: "/previews/sigma.png" },
+    { id: "clinic-clean", name: "Clean Minimal", description: "Spacious, airy design with focus on typography and clarity.", preview: "/previews/clean.png" },
+    { id: "clinic-medical", name: "Classic Medical", description: "Professional blue-toned layout for traditional healthcare services.", preview: "/previews/medical.png" }
+  ];
+
   return (
-    <div className="space-y-16">
-      <div className="flex justify-between items-end">
-        <div className="space-y-2">
-          <h1 className="text-7xl font-black tracking-tighter uppercase italic leading-none">Intelligence</h1>
-          <p className="text-black/30 text-xs font-bold uppercase tracking-[0.3em] italic">Full spectrum analytical data mapping for current cycle</p>
-        </div>
+    <div className="space-y-12 max-w-6xl">
+      <div className="space-y-2">
+        <h2 className="text-6xl font-black tracking-tighter uppercase italic leading-none">Identity</h2>
+        <p className="text-black/30 text-xs font-bold uppercase tracking-[0.3em] italic">Configure your clinical presence and portal aesthetics</p>
       </div>
-      <div className="grid grid-cols-3 gap-10">
-        <div className="h-64 bg-black/5 rounded-[3rem] p-10 flex flex-col justify-between">
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Temporal Load</div>
+
+      <div className="grid grid-cols-12 gap-12">
+        <div className="col-span-8 space-y-8">
+          <div className="grid grid-cols-2 gap-6">
+            {templates.map(t => (
+              <button 
+                key={t.id}
+                onClick={() => setSelectedTemplate(t.id)}
+                className={`group relative text-left transition-all ${selectedTemplate === t.id ? 'scale-[1.02]' : 'opacity-60 grayscale hover:grayscale-0 hover:opacity-100'}`}
+              >
+                <div className={`aspect-video rounded-[2rem] overflow-hidden border-2 transition-all ${selectedTemplate === t.id ? 'border-black shadow-2xl' : 'border-black/5'}`}>
+                  <div className="w-full h-full bg-black/5 flex items-center justify-center relative">
+                     <Layout className="w-12 h-12 text-black/10 group-hover:scale-110 transition-transform" />
+                     {selectedTemplate === t.id && (
+                       <div className="absolute top-4 right-4 bg-black text-white p-2 rounded-full shadow-lg">
+                         <CheckCircle2 size={16} />
+                       </div>
+                     )}
+                  </div>
+                </div>
+                <div className="mt-4 px-2">
+                  <h4 className="text-lg font-black uppercase italic tracking-tighter">{t.name}</h4>
+                  <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest">{t.description}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="col-span-4 space-y-6">
+          <div className="bg-white border border-black/5 rounded-[2.5rem] p-8 shadow-sm space-y-8">
+            <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
+              <Palette size={14} /> Brand DNA
+            </h3>
+            
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <label className="text-[9px] font-black uppercase tracking-widest text-black/30">Primary Accent</label>
+                <div className="flex gap-3">
+                  {["#991b1b", "#1e40af", "#065f46", "#3730a3", "#000000"].map(c => (
+                    <button 
+                      key={c}
+                      onClick={() => setPrimaryColor(c)}
+                      className={`w-8 h-8 rounded-full border-2 transition-all ${primaryColor === c ? 'border-black scale-110' : 'border-transparent'}`}
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[9px] font-black uppercase tracking-widest text-black/30">Clinic Name</label>
+                <input 
+                  type="text" 
+                  placeholder="Kindred Wellness"
+                  className="w-full bg-black/5 border-none rounded-xl px-4 py-3 text-xs font-bold focus:ring-1 ring-black/10 outline-none"
+                />
+              </div>
+
+              <button className="w-full py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-black/10 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2">
+                <Zap size={14} fill="currentColor" /> Deploy Identity
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-black text-white rounded-[2rem] p-8 space-y-4">
+             <div className="flex items-center gap-2 text-white/40">
+                <Globe size={14} />
+                <span className="text-[9px] font-black uppercase tracking-widest">Public Endpoint</span>
+             </div>
+             <p className="text-lg font-black italic tracking-tighter truncate">flexslot.com/kindred-wellness</p>
+             <Link href="/kindred-wellness" target="_blank" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors">
+                View Patient Portal <ExternalLink size={12} />
+             </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+function PatientListSection() {
+  const patients = [
+    { id: "P-001", name: "Alexander Wright", email: "a.wright@example.com", phone: "+1 234 567 8901", status: "Active", lastVisit: "2 hours ago" },
+    { id: "P-002", name: "Sarah Jenkins", email: "s.jenkins@example.com", phone: "+1 234 567 8902", status: "Active", lastVisit: "Yesterday" },
+    { id: "P-003", name: "Michael Chen", email: "m.chen@example.com", phone: "+1 234 567 8903", status: "Inactive", lastVisit: "3 days ago" },
+    { id: "P-004", name: "Emily Rodriguez", email: "e.rod@example.com", phone: "+1 234 567 8904", status: "Active", lastVisit: "5 days ago" },
+  ];
+
+  return (
+    <div className="space-y-12">
+      <div className="flex justify-between items-end">
+        <div className="space-y-2">
+          <h2 className="text-6xl font-black tracking-tighter uppercase italic leading-none">Registry</h2>
+          <p className="text-black/30 text-xs font-bold uppercase tracking-[0.3em] italic">Full historical patient synchronization and audit logs</p>
+        </div>
+        <div className="flex items-center gap-3">
+           <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-black/20" />
+              <input 
+                type="text" 
+                placeholder="Search Database..."
+                className="pl-12 pr-6 py-4 bg-black/5 rounded-2xl text-[10px] font-black uppercase tracking-widest w-64 outline-none focus:bg-black/10 transition-all"
+              />
+           </div>
+           <button className="p-4 bg-black text-white rounded-2xl shadow-xl shadow-black/10 hover:scale-105 transition-all">
+              <Download size={18} />
+           </button>
+        </div>
+      </div>
+
+      <div className="bg-white border border-black/5 rounded-[3rem] overflow-hidden shadow-sm">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-black/5">
+              <th className="px-8 py-6 text-[9px] font-black uppercase tracking-widest text-black/30">Patient ID</th>
+              <th className="px-8 py-6 text-[9px] font-black uppercase tracking-widest text-black/30">Identity</th>
+              <th className="px-8 py-6 text-[9px] font-black uppercase tracking-widest text-black/30">Contact Status</th>
+              <th className="px-8 py-6 text-[9px] font-black uppercase tracking-widest text-black/30">Last Activity</th>
+              <th className="px-8 py-6 text-[9px] font-black uppercase tracking-widest text-black/30 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-black/5">
+            {patients.map(p => (
+              <tr key={p.id} className="hover:bg-black/[0.02] transition-colors group">
+                <td className="px-8 py-6">
+                  <span className="text-[10px] font-black text-black/20 group-hover:text-black transition-colors">{p.id}</span>
+                </td>
+                <td className="px-8 py-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-black/5 rounded-xl flex items-center justify-center font-black italic text-black/20 group-hover:bg-black group-hover:text-white transition-all">
+                      {p.name[0]}
+                    </div>
+                    <div>
+                      <div className="text-sm font-black uppercase italic tracking-tighter">{p.name}</div>
+                      <div className="text-[9px] font-bold text-black/30 uppercase tracking-widest">{p.email}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-8 py-6">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-1.5 h-1.5 rounded-full ${p.status === 'Active' ? 'bg-emerald-500' : 'bg-black/20'}`} />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-black/40">{p.status}</span>
+                  </div>
+                </td>
+                <td className="px-8 py-6 text-[10px] font-black uppercase tracking-widest text-black/20 italic">{p.lastVisit}</td>
+                <td className="px-8 py-6 text-right">
+                  <button className="p-2 text-black/20 hover:text-black transition-colors"><MoreHorizontal size={16} /></button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+
+

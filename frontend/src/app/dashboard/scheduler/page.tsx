@@ -35,10 +35,20 @@ export default function SchedulerPage() {
 
   const fetchSlots = async () => {
     try {
+
       const clinicId = localStorage.getItem("flexslot_clinic_id") || "dummy-clinic-id";
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/scheduler/`, {
+      
+      // Smart Detector: Use 127.0.0.1 if on localhost, otherwise use current hostname
+      const host = window.location.hostname === "localhost" ? "127.0.0.1" : window.location.hostname;
+      const apiUrl = `http://${host}:8000`;
+      
+      console.log("📡 [Registry Sync] Connecting to:", apiUrl);
+      
+      const res = await fetch(`${apiUrl}/api/v1/scheduler/`, {
         headers: { "X-Clinic-ID": clinicId }
       });
+
+
       const data = await res.json();
       setSlots(data);
     } catch (err) {
@@ -56,8 +66,13 @@ export default function SchedulerPage() {
     setIsReleasing(true);
     try {
       const clinicId = localStorage.getItem("flexslot_clinic_id") || "dummy-clinic-id";
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/scheduler/bulk-create`, {
+      const host = window.location.hostname === "localhost" ? "127.0.0.1" : window.location.hostname;
+      const apiUrl = `http://${host}:8000`;
+      
+      const res = await fetch(`${apiUrl}/api/v1/scheduler/bulk-create`, {
         method: "POST",
+
+
         headers: { 
           "Content-Type": "application/json",
           "X-Clinic-ID": clinicId 

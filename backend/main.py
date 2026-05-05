@@ -12,6 +12,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def log_requests(request, call_next):
+    print(f"📡 Incoming Request: {request.method} {request.url}")
+    response = await call_next(request)
+    print(f"✅ Response Status: {response.status_code}")
+    return response
+
+
 app.include_router(templates.router, prefix="/api/v1/templates", tags=["Templates"])
 app.include_router(clinics.router, prefix="/api/v1/clinics", tags=["Clinics"])
 app.include_router(scheduler.router, prefix="/api/v1/scheduler", tags=["Scheduler"])

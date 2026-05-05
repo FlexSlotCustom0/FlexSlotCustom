@@ -33,10 +33,13 @@ async def get_slots(x_clinic_id: str = Header(...)):
             "owner_id": "00000000-0000-0000-0000-000000000000"
         }).execute()
 
-    response = supabase.table("slots").select("*").eq("clinic_id", actual_clinic_id).order("start_time").execute()
-    if hasattr(response, 'error') and response.error:
-        raise HTTPException(status_code=400, detail=str(response.error))
-    return response.data
+    try:
+        response = supabase.table("slots").select("*").eq("clinic_id", actual_clinic_id).order("start_time").execute()
+        return response.data
+    except Exception as e:
+        print(f"❌ Supabase Registry Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Registry Error: {str(e)}")
+
 
 
 @router.post("/bulk-create")
