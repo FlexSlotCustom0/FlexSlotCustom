@@ -265,7 +265,7 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="bg-emerald-50/80 backdrop-blur-3xl text-black rounded-[2rem] p-5 shadow-[0_24px_48px_rgba(16,185,129,0.08)] border border-emerald-100 relative overflow-hidden group ring-1 ring-emerald-200"
+                className="bg-emerald-50/80 backdrop-blur-3xl text-black rounded-[2rem] p-5 shadow-[0_24px_48px_rgba(16,185,129,0.08)] relative overflow-hidden group"
               >
                 {/* Futuristic Background Accents */}
                 <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-400/10 rounded-full blur-[80px] -mr-24 -mt-24" />
@@ -274,12 +274,12 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                   {/* Top Row: Meta & Timer */}
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-white/50 rounded-xl flex items-center justify-center backdrop-blur-3xl border border-emerald-200">
+                      <div className="w-10 h-10 bg-white/50 rounded-xl flex items-center justify-center backdrop-blur-3xl">
                         <Activity className="w-4 h-4 text-emerald-500 animate-pulse" />
                       </div>
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-2">
-                           <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 rounded border border-emerald-500/30">ID: {ongoing.id.slice(0, 8)}</span>
+                           <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 rounded">ID: {ongoing.id.slice(0, 8)}</span>
                            <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-black/5 text-black/60 rounded">Room_01</span>
                         </div>
                         <div className="flex items-center gap-1.5 text-[9px] font-bold text-black/40 uppercase tracking-widest">
@@ -292,7 +292,7 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                     <div className="flex gap-1.5">
                        <Badge label="24 YRS" color="bg-black/5" />
                        <Badge label="MALE" color="bg-black/5" />
-                       <Badge label="O+" color="bg-emerald-500/10 text-emerald-600 border-emerald-500/20" />
+                       <Badge label="O+" color="bg-emerald-500/10 text-emerald-600" />
                     </div>
                   </div>
 
@@ -315,9 +315,9 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                   </div>
 
                   {/* Footer Row: Doctor info */}
-                  <div className="pt-3 border-t border-emerald-100 flex items-center justify-between">
+                  <div className="pt-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center border border-black/10">
+                      <div className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center">
                          <Stethoscope size={10} className="text-emerald-500" />
                       </div>
                       <div>
