@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header, Body
-from backend.database import supabase
+from database import supabase
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime, timedelta
@@ -24,22 +24,43 @@ async def get_slots(x_clinic_id: str = Header(...)):
     # Simple bypass for dummy
     actual_clinic_id = "00000000-0000-0000-0000-000000000000" if x_clinic_id == "dummy-clinic-id" else x_clinic_id
     
+    # Ensure Dummy Clinic exists if bypassing
+    if x_clinic_id == "dummy-clinic-id":
+        supabase.table("clinics").upsert({
+            "id": "00000000-0000-0000-0000-000000000000",
+            "name": "Dummy Sigma Clinic",
+            "slug": "dummy-sigma",
+            "owner_id": "00000000-0000-0000-0000-000000000000"
+        }).execute()
+
     response = supabase.table("slots").select("*").eq("clinic_id", actual_clinic_id).order("start_time").execute()
     if hasattr(response, 'error') and response.error:
         raise HTTPException(status_code=400, detail=str(response.error))
     return response.data
 
+
 @router.post("/bulk-create")
 async def bulk_create_slots(req: BulkCreateRequest, x_clinic_id: str = Header(...)):
     actual_clinic_id = "00000000-0000-0000-0000-000000000000" if x_clinic_id == "dummy-clinic-id" else x_clinic_id
     
+    # Ensure Dummy Clinic exists if bypassing
+    if x_clinic_id == "dummy-clinic-id":
+        supabase.table("clinics").upsert({
+            "id": "00000000-0000-0000-0000-000000000000",
+            "name": "Dummy Sigma Clinic",
+            "slug": "dummy-sigma",
+            "owner_id": "00000000-0000-0000-0000-000000000000"
+        }).execute()
+
     slots = []
     try:
-        # Parse start and end times
-        start_dt = datetime.fromisoformat(f"{req.date}T{req.start_time}:00Z")
-        end_dt_limit = datetime.fromisoformat(f"{req.date}T{req.end_time}:00Z")
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid date or time format. Use YYYY-MM-DD and HH:MM.")
+        # Parse start and end times - Ensure consistent ISO format
+        clean_date = req.date.split('T')[0] # Handle cases where date might have time
+        start_dt = datetime.fromisoformat(f"{clean_date}T{req.start_time}:00")
+        end_dt_limit = datetime.fromisoformat(f"{clean_date}T{req.end_time}:00")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Temporal Sync Error: {str(e)}. Use YYYY-MM-DD and HH:MM.")
+
 
     current_time = start_dt
     count = 0

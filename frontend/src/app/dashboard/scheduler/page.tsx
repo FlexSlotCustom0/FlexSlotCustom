@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Calendar, Clock, Plus, Trash2, Check, AlertCircle, 
-  ChevronLeft, ChevronRight, Filter, Settings, Zap, Release
+  ChevronLeft, ChevronRight, Filter, Settings, Zap, Bot
 } from "lucide-react";
+
+
 import Link from "next/link";
 
 interface Slot {
@@ -71,12 +73,17 @@ export default function SchedulerPage() {
       if (res.ok) {
         await fetchSlots();
         alert("Inventory Registry Updated.");
+      } else {
+        const errData = await res.json();
+        alert(`Engine Conflict: ${errData.detail || "Unknown error"}`);
       }
     } catch (err) {
       console.error("Failed to release slots:", err);
+      alert("System Registry Connection Failed.");
     } finally {
       setIsReleasing(false);
     }
+
   };
 
   const handleAiRelease = async () => {

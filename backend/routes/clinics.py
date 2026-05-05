@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header
-from backend.database import supabase
+from database import supabase
 from datetime import datetime, timezone
 
 router = APIRouter()
