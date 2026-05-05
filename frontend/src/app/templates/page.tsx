@@ -2,28 +2,17 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Scissors, Stethoscope, SprayCan, ArrowRight } from "lucide-react";
+import { Stethoscope, ArrowRight, Sparkles, Activity, ShieldCheck, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useTemplateContext } from "@/components/TemplateContext";
+import { useRouter } from "next/navigation";
 
-const templates = [
-  {
-    category: "Medical & Healthcare",
-    icon: <Stethoscope className="w-5 h-5" />,
-    color: "from-blue-500 to-cyan-600",
-    bg: "bg-blue-50",
-    items: [
-      {
-        name: "Clinic Clean",
-        slug: "clinic-clean",
-        desc: "Minimal and trustworthy. For private practices, dentists, and specialists.",
-      },
-      {
-        name: "Vet Warm",
-        slug: "vet-warm",
-        desc: "Friendly and approachable. Designed for veterinary clinics and pet care.",
-      },
-    ],
-  },
-];
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  default_ui_config: any;
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -35,113 +24,143 @@ const fadeUp = {
 };
 
 export default function TemplatesPage() {
+  const [apiTemplates, setApiTemplates] = useState<Template[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { selectTemplate } = useTemplateContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/templates`);
+        if (!res.ok) throw new Error("Failed to fetch templates");
+        const data = await res.json();
+        setApiTemplates(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTemplates();
+  }, []);
+
+  const handleSelect = async (templateId: string) => {
+    await selectTemplate(templateId);
+    // Usually redirect to dashboard or customize mode
+    router.push(`/templates/${templateId}?manage=true`);
+  };
+
   return (
-    <div className="min-h-screen bg-white text-black font-sans">
+    <div className="min-h-screen bg-[#0A0A0B] text-white font-sans selection:bg-maroon-500/30">
       {/* Header */}
-      <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <nav className="fixed w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
-              <Stethoscope className="w-4 h-4 text-white" />
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Zap className="w-5 h-5 fill-current" />
             </div>
-            <span className="font-bold text-lg">Kindred Calendar</span>
+            <span className="font-black text-lg tracking-tighter uppercase italic">FlexSlot <span className="text-white/40 not-italic font-medium">Sigma</span></span>
           </Link>
-          <Link
-            href="/"
-            className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
-          >
-            ← Back to Home
-          </Link>
+          <div className="flex items-center gap-6">
+             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Enterprise Grade</span>
+             <div className="h-4 w-px bg-white/10" />
+             <Link href="/" className="text-xs font-bold hover:text-white transition-colors text-white/60">Dashboard</Link>
+          </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-16 text-center">
+      <section className="pt-40 pb-20 text-center relative overflow-hidden">
+        {/* Sigma Background Elements */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-maroon-900/20 blur-[120px] -z-10 rounded-full" />
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="relative z-10"
         >
-          <h4 className="text-gray-400 font-bold text-xs tracking-widest uppercase mb-3">
-            Clinic Template Gallery
-          </h4>
-          <h1 className="text-5xl md:text-7xl font-serif tracking-tight mb-6">
-            Build your medical presence.
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6">
+            <ShieldCheck className="w-3.5 h-3.5 text-maroon-500" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Multi-Tenant Engine v2.0</span>
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 uppercase italic leading-[0.9]">
+            The Sigma <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-maroon-600 to-white">Standard.</span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-500 font-medium max-w-xl mx-auto leading-relaxed">
-            Choose a professional template tailored for private practices and veterinary clinics.
-            Customize everything in real-time.
+          <p className="text-lg md:text-xl text-white/50 font-medium max-w-2xl mx-auto leading-relaxed mb-10">
+            Select a high-performance template for your clinic. Engineered for high-concurrency 
+            and maximum tenant flexibility.
           </p>
         </motion.div>
       </section>
 
-      {/* Categories */}
-      <section className="pb-32 max-w-6xl mx-auto px-6 space-y-20">
-        {templates.map((cat, catIdx) => (
-          <motion.div
-            key={cat.category}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-          >
-            {/* Category Header */}
-            <motion.div
-              custom={0}
-              variants={fadeUp}
-              className="flex items-center gap-3 mb-8"
-            >
-              <div
-                className={`w-10 h-10 rounded-2xl ${cat.bg} flex items-center justify-center text-gray-700`}
+      {/* Grid */}
+      <section className="pb-32 max-w-7xl mx-auto px-6">
+        {loading ? (
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-[400px] rounded-3xl bg-white/5 animate-pulse border border-white/10" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-8">
+            {apiTemplates.map((tmpl, i) => (
+              <motion.div 
+                key={tmpl.id} 
+                custom={i} 
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="group cursor-pointer"
+                onClick={() => handleSelect(tmpl.id)}
               >
-                {cat.icon}
-              </div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                {cat.category}
-              </h2>
-            </motion.div>
-
-            {/* Template Cards */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {cat.items.map((tmpl, i) => (
-                <motion.div key={tmpl.slug} custom={i + 1} variants={fadeUp}>
-                  <Link href={`/templates/${tmpl.slug}`}>
-                    <div className="group relative rounded-3xl border border-gray-100 bg-gray-50 overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
-                      {/* Preview Gradient Banner */}
-                      <div
-                        className={`h-44 bg-gradient-to-br ${cat.color} relative overflow-hidden`}
-                      >
-                        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+PC9zdmc+')] opacity-60" />
-                        <div className="absolute bottom-4 left-6">
-                          <span className="bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full">
-                            {tmpl.name}
-                          </span>
-                        </div>
-                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="bg-white/20 backdrop-blur-md rounded-full p-2">
-                            <ArrowRight className="w-4 h-4 text-white" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Info */}
-                      <div className="p-6">
-                        <h3 className="text-lg font-bold mb-1">{tmpl.name}</h3>
-                        <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                          {tmpl.desc}
-                        </p>
-                        <div className="mt-4 flex items-center gap-2 text-xs font-bold text-gray-400 group-hover:text-black transition-colors">
-                          <span>Preview template</span>
-                          <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </div>
+                <div className="relative h-full rounded-[2rem] bg-[#111112] border border-white/10 overflow-hidden hover:border-maroon-500/50 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(128,0,0,0.3)]">
+                  {/* Visual Preview */}
+                  <div className="h-48 relative overflow-hidden">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${i === 0 ? 'from-maroon-900 to-black' : i === 1 ? 'from-zinc-900 to-black' : 'from-stone-900 to-black'}`} />
+                    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                    <div className="absolute top-6 left-6 p-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
+                      {i === 0 ? <Activity className="w-6 h-6 text-maroon-500" /> : i === 1 ? <Stethoscope className="w-6 h-6 text-maroon-500" /> : <Sparkles className="w-6 h-6 text-maroon-500" />}
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8">
+                    <div className="flex items-center justify-between mb-4">
+                       <h3 className="text-2xl font-black italic uppercase tracking-tight">{tmpl.name}</h3>
+                       <div className="w-2 h-2 rounded-full bg-maroon-500 shadow-[0_0_10px_rgba(128,0,0,0.8)]" />
+                    </div>
+                    <p className="text-white/40 text-sm font-medium leading-relaxed mb-8">
+                      {tmpl.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                       <div className="flex -space-x-2">
+                          {[1, 2, 3].map(j => (
+                            <div key={j} className="w-6 h-6 rounded-full border-2 border-[#111112] bg-white/10" />
+                          ))}
+                          <div className="w-6 h-6 rounded-full border-2 border-[#111112] bg-maroon-900 flex items-center justify-center text-[8px] font-bold">+24</div>
+                       </div>
+                       <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-maroon-500 group-hover:gap-4 transition-all">
+                          Select Engine <ArrowRight className="w-4 h-4" />
+                       </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </section>
+
+      <style jsx global>{`
+        .selection\:bg-maroon-500\/30 ::selection {
+          background-color: rgba(128, 0, 0, 0.3);
+        }
+      `}</style>
     </div>
   );
+}
+
 }

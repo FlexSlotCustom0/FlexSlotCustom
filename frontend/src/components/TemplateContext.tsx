@@ -86,6 +86,7 @@ interface TemplateContextType {
   setIsEditorOpen: (open: boolean) => void;
   resetToDefault: (templateId: string) => void;
   publishClinic: () => void;
+  selectTemplate: (templateId: string) => Promise<void>;
 }
 
 const TemplateContext = createContext<TemplateContextType | undefined>(undefined);
@@ -368,6 +369,38 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
+  const selectTemplate = async (templateId: string) => {
+    try {
+      const clinicId = localStorage.getItem("flexslot_clinic_id") || "mock-clinic-id";
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/clinics/select-template/${templateId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Clinic-ID": clinicId
+        }
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "Failed to select template");
+      }
+
+      const result = await response.json();
+      const newConfig = result.data;
+      
+      // Update local state with merged config
+      setShopDataState(newConfig);
+      setActiveTemplate(templateId);
+      
+      // Save to local storage for offline fallback
+      localStorage.setItem(`flexslot_template_${templateId}`, JSON.stringify({ shop: newConfig }));
+      
+    } catch (err) {
+      console.error("Error selecting template:", err);
+      alert(err instanceof Error ? err.message : "Error selecting template");
+    }
+  };
+
   const publishClinic = () => {
     if (!activeTemplate) return;
 
@@ -416,6 +449,7 @@ export const TemplateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsEditorOpen,
         resetToDefault,
         publishClinic,
+        selectTemplate,
       }}
     >
       {children}
