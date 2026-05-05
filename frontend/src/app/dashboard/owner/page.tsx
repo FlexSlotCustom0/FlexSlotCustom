@@ -967,38 +967,56 @@ function ClinicSetupSection() {
                   <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
                     <Stethoscope size={16} /> Practitioner Flow
                   </h3>
-                  <button onClick={() => setDoctors([...doctors, { id: Date.now(), name: "New Doctor", room: "TBD", status: "Present", delay: 0, photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
+                  <button onClick={() => setDoctors([...doctors, { id: Date.now(), name: "New Doctor", room: "TBD", specialty: "General Physician", quote: "Dedicated to patient care.", status: "Present", delay: 0, photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
                 </div>
                 <div className="space-y-4">
                   {doctors.map(doc => (
-                    <div key={doc.id} className="flex gap-6 p-6 bg-black/[0.02] rounded-[2rem] items-center border border-black/5 hover:bg-black/5 transition-all">
+                    <div key={doc.id} className="flex gap-6 p-6 bg-black/[0.02] rounded-[2rem] items-start border border-black/5 hover:bg-black/5 transition-all">
                       <div 
                         onClick={() => handleFileUpload((url) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, photo: url} : d)))}
-                        className="w-16 h-16 rounded-2xl bg-black/5 border border-black/10 flex items-center justify-center cursor-pointer hover:bg-black/10 transition-all shrink-0 overflow-hidden"
+                        className="w-20 h-20 rounded-2xl bg-black/5 border border-black/10 flex items-center justify-center cursor-pointer hover:bg-black/10 transition-all shrink-0 overflow-hidden"
                       >
-                        {doc.photo ? <img src={doc.photo} alt="" className="w-full h-full object-cover" /> : <User size={20} className="text-black/20" />}
+                        {doc.photo ? <img src={doc.photo} alt="" className="w-full h-full object-cover" /> : <User size={24} className="text-black/20" />}
                       </div>
-                      <div className="flex-1 grid grid-cols-3 gap-4 items-center">
-                        <div>
-                          <input type="text" value={doc.name} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, name: e.target.value} : d))} className="bg-transparent border-none text-sm font-black uppercase italic tracking-tighter w-full outline-none" />
-                          <input type="text" value={doc.room} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, room: e.target.value} : d))} className="bg-transparent border-none text-[9px] font-bold text-black/30 uppercase tracking-widest w-full outline-none" placeholder="Room" />
+                      <div className="flex-1 space-y-3">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-[7px] font-black uppercase tracking-widest text-black/20 block">Name</label>
+                            <input type="text" value={doc.name} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, name: e.target.value} : d))} className="bg-transparent border-none text-sm font-black uppercase italic tracking-tighter w-full outline-none" />
+                          </div>
+                          <div>
+                            <label className="text-[7px] font-black uppercase tracking-widest text-black/20 block">Specialty</label>
+                            <input type="text" value={doc.specialty || ""} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, specialty: e.target.value} : d))} className="bg-transparent border-none text-[10px] font-bold uppercase tracking-widest w-full outline-none text-black/50" />
+                          </div>
                         </div>
-                        <div className="flex gap-2">
-                          {["Present", "Late", "Away"].map(s => (
-                            <button 
-                              key={s} 
-                              onClick={() => setDoctors(doctors.map(d => d.id === doc.id ? {...d, status: s} : d))}
-                              className={`px-3 py-1.5 text-[8px] font-black uppercase tracking-widest rounded-lg transition-all ${doc.status === s ? (s === 'Present' ? 'bg-emerald-600 text-white' : s === 'Late' ? 'bg-amber-500 text-white' : 'bg-gray-400 text-white') : 'text-black/20 hover:text-black'}`}
-                            >
-                              {s}
-                            </button>
-                          ))}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-[7px] font-black uppercase tracking-widest text-black/20 block">Room</label>
+                            <input type="text" value={doc.room} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, room: e.target.value} : d))} className="bg-transparent border-none text-[9px] font-bold text-black/30 uppercase tracking-widest w-full outline-none" />
+                          </div>
+                          <div>
+                            <label className="text-[7px] font-black uppercase tracking-widest text-black/20 block">Quote</label>
+                            <input type="text" value={doc.quote || ""} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, quote: e.target.value} : d))} className="bg-transparent border-none text-[9px] font-bold italic text-black/30 w-full outline-none" />
+                          </div>
                         </div>
-                        <div className="flex items-center gap-3 justify-end">
-                          <span className="text-[8px] font-black uppercase text-black/30">Delay:</span>
-                          <input type="number" value={doc.delay} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, delay: parseInt(e.target.value) || 0} : d))} className="w-16 bg-white border border-black/10 rounded-lg px-2 py-1 text-[10px] font-black outline-none" />
-                          <span className="text-[8px] font-black uppercase text-black/30">min</span>
-                          <button onClick={() => setDoctors(doctors.filter(d => d.id !== doc.id))} className="text-black/10 hover:text-red-500 transition-colors ml-2"><Trash2 size={16} /></button>
+                        <div className="flex items-center gap-4 pt-1">
+                          <div className="flex gap-1.5">
+                            {["Present", "Late", "Away"].map(s => (
+                              <button 
+                                key={s} 
+                                onClick={() => setDoctors(doctors.map(d => d.id === doc.id ? {...d, status: s} : d))}
+                                className={`px-2.5 py-1 text-[7px] font-black uppercase tracking-widest rounded-md transition-all ${doc.status === s ? (s === 'Present' ? 'bg-emerald-600 text-white' : s === 'Late' ? 'bg-amber-500 text-white' : 'bg-gray-400 text-white') : 'text-black/20 hover:text-black bg-black/5'}`}
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-2 ml-auto">
+                            <span className="text-[7px] font-black uppercase text-black/20">Delay:</span>
+                            <input type="number" value={doc.delay} onChange={(e) => setDoctors(doctors.map(d => d.id === doc.id ? {...d, delay: parseInt(e.target.value) || 0} : d))} className="w-12 bg-white border border-black/10 rounded px-1.5 py-0.5 text-[9px] font-black outline-none text-center" />
+                            <span className="text-[7px] font-black uppercase text-black/20">min</span>
+                            <button onClick={() => setDoctors(doctors.filter(d => d.id !== doc.id))} className="text-black/10 hover:text-red-500 transition-colors ml-2"><Trash2 size={14} /></button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1037,7 +1055,7 @@ function ClinicSetupSection() {
               <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2"><Sparkles size={16} /> News & Broadcasts</h3>
-                  <button onClick={() => setNews([...news, { id: Date.now(), title: "New Announcement", date: new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }), photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
+                  <button onClick={() => setNews([...news, { id: Date.now(), title: "New Announcement", desc: "Enter a brief description...", date: new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }), photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
                 </div>
                 <div className="space-y-4">
                   {news.map(n => (
@@ -1048,9 +1066,10 @@ function ClinicSetupSection() {
                       >
                         {n.photo ? <img src={n.photo} alt="" className="w-full h-full object-cover" /> : <FileText size={20} className="text-black/20" />}
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 space-y-1">
                         <input type="text" value={n.title} onChange={(e) => setNews(news.map(x => x.id === n.id ? {...x, title: e.target.value} : x))} className="bg-transparent border-none text-sm font-black uppercase italic tracking-tighter w-full outline-none" />
-                        <input type="text" value={n.date} onChange={(e) => setNews(news.map(x => x.id === n.id ? {...x, date: e.target.value} : x))} className="bg-transparent border-none text-[9px] font-bold text-black/30 uppercase tracking-widest w-full outline-none" />
+                        <textarea value={n.desc || ""} onChange={(e) => setNews(news.map(x => x.id === n.id ? {...x, desc: e.target.value} : x))} className="bg-transparent border-none text-[9px] font-bold text-black/40 w-full outline-none resize-none h-8" placeholder="Description..." />
+                        <input type="text" value={n.date} onChange={(e) => setNews(news.map(x => x.id === n.id ? {...x, date: e.target.value} : x))} className="bg-transparent border-none text-[8px] font-bold text-black/20 uppercase tracking-widest w-full outline-none" />
                       </div>
                       <button onClick={() => setNews(news.filter(x => x.id !== n.id))} className="opacity-0 group-hover:opacity-100 text-black/10 hover:text-red-500"><Trash2 size={16} /></button>
                     </div>
@@ -1061,11 +1080,18 @@ function ClinicSetupSection() {
               <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2"><TrendingUp size={16} /> Patient Reviews</h3>
-                  <button onClick={() => setReviews([...reviews, { id: Date.now(), text: "New review text here...", author: "Patient" }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
+                  <button onClick={() => setReviews([...reviews, { id: Date.now(), text: "New review text here...", author: "Patient", rating: 5 }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {reviews.map(r => (
                     <div key={r.id} className="p-6 bg-black/[0.02] rounded-[2rem] border border-black/5 space-y-3 group hover:bg-black/5 transition-all">
+                      <div className="flex gap-0.5 mb-1">
+                        {[1,2,3,4,5].map(s => (
+                          <button key={s} onClick={() => setReviews(reviews.map(x => x.id === r.id ? {...x, rating: s} : x))}>
+                            <Star size={14} fill={s <= (r.rating || 5) ? '#facc15' : 'none'} className={s <= (r.rating || 5) ? 'text-yellow-400' : 'text-black/10'} />
+                          </button>
+                        ))}
+                      </div>
                       <textarea value={r.text} onChange={(e) => setReviews(reviews.map(x => x.id === r.id ? {...x, text: e.target.value} : x))} className="bg-transparent border-none text-[10px] font-bold italic text-black/60 w-full resize-none outline-none h-16" />
                       <div className="flex justify-between items-center">
                         <input type="text" value={r.author} onChange={(e) => setReviews(reviews.map(x => x.id === r.id ? {...x, author: e.target.value} : x))} className="bg-transparent border-none text-[8px] font-black uppercase tracking-widest text-black/30 outline-none" />
@@ -1138,17 +1164,21 @@ function ClinicSetupSection() {
                   <span className="text-lg font-bold tracking-tight">{clinicName}</span>
                 </div>
                 <div className="flex items-center gap-8 text-[11px] font-medium tracking-wide">
-                  <span className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">Home</span>
-                  <span className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">About</span>
-                  <span className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">Services</span>
-                  <span className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">Doctors</span>
-                  <span className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">Contact</span>
-                  <button style={{ background: ct.accent, color: ct.accentText }} className="px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider">Book Now</button>
+                  {[
+                    { label: "Home", target: "portal-hero" },
+                    { label: "About", target: "portal-hero" },
+                    { label: "Services", target: "portal-services" },
+                    { label: "Doctors", target: "portal-doctors" },
+                    { label: "Contact", target: "portal-contact" },
+                  ].map(link => (
+                    <span key={link.label} onClick={() => document.getElementById(link.target)?.scrollIntoView({ behavior: "smooth", block: "start" })} className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">{link.label}</span>
+                  ))}
+                  <button onClick={() => document.getElementById("portal-booking")?.scrollIntoView({ behavior: "smooth", block: "start" })} style={{ background: ct.accent, color: ct.accentText }} className="px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider">Book Now</button>
                 </div>
               </nav>
 
-              {/* ─── HERO SECTION ─── */}
-              <section style={{ background: ct.heroBg }} className="relative min-h-[480px] flex items-center overflow-hidden">
+              {/* HERO SECTION */}
+              <section id="portal-hero" style={{ background: ct.heroBg }} className="relative min-h-[480px] flex items-center overflow-hidden">
                 {clinicBanner && <img src={clinicBanner} alt="" className="absolute inset-0 w-full h-full object-cover" />}
                 <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${ct.heroBg}ee 0%, ${ct.heroBg}88 50%, transparent 100%)` }} />
                 <div className="relative z-10 px-16 max-w-2xl space-y-6">
@@ -1165,7 +1195,7 @@ function ClinicSetupSection() {
               </section>
 
               {/* ─── QUICK INFO BAR ─── */}
-              <div style={{ background: ct.accent, color: ct.accentText }} className="grid grid-cols-3 divide-x divide-white/10">
+              <div id="portal-contact" style={{ background: ct.accent, color: ct.accentText }} className="grid grid-cols-3 divide-x divide-white/10">
                 <div className="p-6 flex items-center gap-4 justify-center">
                   <Phone size={18} className="opacity-60" />
                   <div>
@@ -1198,7 +1228,7 @@ function ClinicSetupSection() {
               )}
 
               {/* ─── DOCTORS SECTION (VIDA STYLE) ─── */}
-              <section className="px-16 py-16" style={{ background: ct.sectionBg }}>
+              <section id="portal-doctors" className="px-16 py-16" style={{ background: ct.sectionBg }}>
                 <div className="mb-10">
                   <h2 className="text-3xl font-bold tracking-tight" style={{ color: ct.bodyText }}>Our Doctors and Medical Professionals</h2>
                   <p className="text-sm mt-1" style={{ color: ct.muted }}>Our Specialists</p>
@@ -1232,7 +1262,7 @@ function ClinicSetupSection() {
               </section>
 
               {/* ─── SERVICES SECTION ─── */}
-              <section className="px-16 py-16" style={{ background: ct.bodyBg }}>
+              <section id="portal-services" className="px-16 py-16" style={{ background: ct.bodyBg }}>
                 <h2 className="text-3xl font-bold tracking-tight mb-2" style={{ color: ct.bodyText }}>Our Services</h2>
                 <p className="text-sm mb-10" style={{ color: ct.muted }}>Comprehensive healthcare solutions for you and your family</p>
                 <div className="grid grid-cols-3 gap-6">
@@ -1303,7 +1333,7 @@ function ClinicSetupSection() {
               )}
 
               {/* ─── CTA / BOOKING ─── */}
-              <section className="px-16 py-20 text-center" style={{ background: ct.heroBg }}>
+              <section id="portal-booking" className="px-16 py-20 text-center" style={{ background: ct.heroBg }}>
                 <h2 className="text-4xl font-bold mb-4" style={{ color: ct.heroText }}>Book Your Appointment</h2>
                 <p className="text-base mb-8 opacity-60" style={{ color: ct.heroText }}>Schedule your visit online in seconds. We're ready to care for you.</p>
                 <button className="px-10 py-4 rounded-xl text-sm font-bold uppercase tracking-wider shadow-2xl hover:scale-105 active:scale-95 transition-all" style={{ background: ct.accentText === '#fff' ? '#fff' : ct.accent, color: ct.accentText === '#fff' ? ct.accent : ct.accentText }}>
