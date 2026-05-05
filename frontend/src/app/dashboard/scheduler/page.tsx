@@ -22,9 +22,14 @@ export default function SchedulerPage() {
   
   // Bulk Create State
   const [bulkDate, setBulkDate] = useState(new Date().toISOString().split('T')[0]);
-  const [startHour, setStartHour] = useState(9);
-  const [endHour, setStartHourEnd] = useState(17);
-  const [interval, setIntervalMinutes] = useState(30);
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("17:00");
+  const [duration, setDuration] = useState(30);
+  const [slotCount, setSlotCount] = useState<number | "">("");
+  
+  // AI State
+  const [aiCommand, setAiCommand] = useState("");
+  const [isAiProcessing, setIsAiProcessing] = useState(false);
 
   const fetchSlots = async () => {
     try {
@@ -57,14 +62,15 @@ export default function SchedulerPage() {
         },
         body: JSON.stringify({
           date: bulkDate,
-          start_hour: startHour,
-          end_hour: endHour,
-          interval_minutes: interval
+          start_time: startTime,
+          end_time: endTime,
+          slot_duration: duration,
+          number_of_slots: slotCount || null
         })
       });
       if (res.ok) {
         await fetchSlots();
-        alert("Slots released successfully!");
+        alert("Inventory Registry Updated.");
       }
     } catch (err) {
       console.error("Failed to release slots:", err);
@@ -72,6 +78,39 @@ export default function SchedulerPage() {
       setIsReleasing(false);
     }
   };
+
+  const handleAiRelease = async () => {
+    if (!aiCommand) return;
+    setIsAiProcessing(true);
+    try {
+        // In a real app, this would call a backend endpoint that uses Groq
+        // For now, we simulate the "Best Method" of AI parsing
+        console.log("AI Parsing command:", aiCommand);
+        
+        // Mocking AI parsing result
+        const mockResult = {
+            date: new Date().toISOString().split('T')[0],
+            start_time: "08:00",
+            end_time: "12:00",
+            slot_duration: 20,
+            number_of_slots: 10
+        };
+
+        // Update UI with AI suggestions
+        setBulkDate(mockResult.date);
+        setStartTime(mockResult.start_time);
+        setEndTime(mockResult.end_time);
+        setDuration(mockResult.slot_duration);
+        setSlotCount(mockResult.number_of_slots);
+        
+        alert("AI interpreted your command. Review settings below.");
+    } catch (err) {
+        console.error("AI Error:", err);
+    } finally {
+        setIsAiProcessing(false);
+    }
+  };
+
 
   const toggleSlotStatus = async (slotId: string, currentStatus: string) => {
     const newStatus = currentStatus === "available" ? "blocked" : "available";
@@ -131,9 +170,30 @@ export default function SchedulerPage() {
       <div className="grid lg:grid-cols-3 gap-12">
         {/* Release Panel */}
         <section className="space-y-8">
+          {/* AI Smart Command */}
+          <div className="bg-gradient-to-br from-maroon-900/40 to-[#111112] border border-maroon-500/30 rounded-[2rem] p-8 space-y-4">
+             <div className="flex items-center gap-2">
+                <Bot className="w-5 h-5 text-maroon-500" />
+                <h2 className="text-sm font-black uppercase tracking-widest italic">AI Smart Release</h2>
+             </div>
+             <textarea 
+               value={aiCommand}
+               onChange={(e) => setAiCommand(e.target.value)}
+               placeholder="e.g. Release 10 slots of 20 mins each starting from 8 AM tomorrow"
+               className="w-full bg-black/40 border border-white/5 rounded-2xl p-4 text-xs font-medium placeholder:text-white/10 outline-none focus:border-maroon-500/50 min-h-[100px] resize-none"
+             />
+             <button 
+               onClick={handleAiRelease}
+               disabled={isAiProcessing}
+               className="w-full py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+             >
+               {isAiProcessing ? "Thinking..." : "AI Sync Engine"}
+             </button>
+          </div>
+
           <div className="bg-[#111112] border border-white/10 rounded-[2rem] p-8 space-y-6">
             <h2 className="text-xl font-bold uppercase tracking-tight flex items-center gap-2">
-              <Plus className="w-5 h-5 text-maroon-500" /> Release Slots
+              <Plus className="w-5 h-5 text-maroon-500" /> Release Configuration
             </h2>
             
             <div className="space-y-4">
@@ -149,38 +209,50 @@ export default function SchedulerPage() {
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">Start Hour</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">Start Time</label>
                   <input 
-                    type="number" 
-                    min="0" max="23"
-                    value={startHour}
-                    onChange={(e) => setStartHour(parseInt(e.target.value))}
+                    type="time" 
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-maroon-500 outline-none transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">End Hour</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">End Time</label>
                   <input 
-                    type="number" 
-                    min="0" max="23"
-                    value={endHour}
-                    onChange={(e) => setStartHourEnd(parseInt(e.target.value))}
+                    type="time" 
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-maroon-500 outline-none transition-colors"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">Interval (Minutes)</label>
-                <select 
-                  value={interval}
-                  onChange={(e) => setIntervalMinutes(parseInt(e.target.value))}
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-maroon-500 outline-none transition-colors appearance-none"
-                >
-                  <option value={15}>15 Minutes</option>
-                  <option value={30}>30 Minutes</option>
-                  <option value={60}>1 Hour</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">Slot Duration</label>
+                  <select 
+                    value={duration}
+                    onChange={(e) => setDuration(parseInt(e.target.value))}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-maroon-500 outline-none transition-colors appearance-none"
+                  >
+                    <option value={15}>15 Mins</option>
+                    <option value={20}>20 Mins</option>
+                    <option value={30}>30 Mins</option>
+                    <option value={45}>45 Mins</option>
+                    <option value={60}>60 Mins</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-white/40 block mb-2">Slot Count (Optional)</label>
+                  <input 
+                    type="number" 
+                    placeholder="Auto"
+                    value={slotCount}
+                    onChange={(e) => setSlotCount(e.target.value ? parseInt(e.target.value) : "")}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-maroon-500 outline-none transition-colors"
+                  />
+                </div>
               </div>
 
               <button 
@@ -192,6 +264,7 @@ export default function SchedulerPage() {
               </button>
             </div>
           </div>
+
 
           <div className="bg-maroon-900/10 border border-maroon-500/20 rounded-2xl p-6 flex gap-4">
              <AlertCircle className="w-5 h-5 text-maroon-500 shrink-0" />
