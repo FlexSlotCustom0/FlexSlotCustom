@@ -2,148 +2,56 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  BarChart3, Users, Calendar, Settings, Bot, Search, Bell, 
-  TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText, 
+import {
+  BarChart3, Users, Calendar, Settings, Bot, Search, Bell,
+  TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText,
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase,
   Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronRight, CalendarClock, Trash2, LayoutDashboard,
   Palette, Sparkles, User, AlertCircle, Phone, Mail as MailIcon, CalendarDays, Activity, Timer, ZapOff,
-  CircleDot, ChevronDown, Filter, MoreHorizontal
+  CircleDot, ChevronDown, Filter, MoreHorizontal, Download, ArrowUpRight, ArrowDownRight, PieChart,
+  X, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 
 export default function OwnerDashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard"); // Feed is now default "dashboard"
-  const [clinicName, setClinicName] = useState("Kindred Wellness");
-  const [activeTemplate, setActiveTemplate] = useState("clinic-clean");
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [clinicName, setClinicName] = useState("FlexSlotCoustom");
+  const [dateRange, setDateRange] = useState("May 1 - May 31, 2026");
+  const [isApplying, setIsApplying] = useState(false);
 
-  useEffect(() => {
-    const savedName = localStorage.getItem("flexslot_active_clinic_name") || "Kindred Wellness";
-    const savedTemplate = localStorage.getItem("flexslot_active_template") || "clinic-clean";
-    setClinicName(savedName);
-    setActiveTemplate(savedTemplate);
-  }, []);
-
-  const handleTemplateSelect = (t: string) => {
-    setIsUpdating(true);
-    setActiveTemplate(t);
-    localStorage.setItem("flexslot_active_template", t);
-    setTimeout(() => setIsUpdating(false), 1200);
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans flex overflow-hidden">
-      {/* Sidebar - Modern & Minimal */}
-      <aside className="w-64 bg-white border-r border-slate-200/60 flex flex-col h-screen sticky top-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
-        <div className="h-20 flex items-center px-8">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
-              <CalendarClock className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold tracking-tight text-lg">Kindred</span>
-          </Link>
-        </div>
-
-        <nav className="flex-1 px-4 py-6 space-y-1.5">
-          <SideNavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
-          <SideNavItem icon={<BarChart3 size={18} />} label="Insights" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
-          <div className="h-px bg-slate-100 my-4 mx-2" />
-          <SideNavItem icon={<Layout size={18} />} label="Branding" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
-          <SideNavItem icon={<Calendar size={18} />} label="Scheduling" active={activeTab === "slots"} onClick={() => setActiveTab("slots")} />
-          <SideNavItem icon={<Users size={18} />} label="Patients" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
-        </nav>
-
-        <div className="p-6 border-t border-slate-100">
-           <button className="flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-slate-900 transition-colors font-semibold text-sm w-full">
-             <Settings size={16} /> Preferences
-           </button>
-        </div>
-      </aside>
-
-      <main className="flex-1 flex flex-col overflow-y-auto">
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200/60 px-10 flex items-center justify-between sticky top-0 z-10">
-           <div className="flex items-center gap-4">
-              <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest">{activeTab === 'dashboard' ? 'Daily Feed' : activeTab}</h2>
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-           </div>
-           <div className="flex items-center gap-4">
-              <button className="p-2.5 hover:bg-slate-50 rounded-full transition-colors relative">
-                <Bell size={20} className="text-slate-500" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
-              </button>
-              <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white text-xs font-bold shadow-sm">DR</div>
-           </div>
-        </header>
-
-        <div className="p-10 max-w-6xl mx-auto w-full space-y-12">
-          {activeTab === "dashboard" && <ModernFeedSection />}
-          {activeTab === "overview" && <OverviewSection />}
-          {activeTab === "ui" && (
-            <div className="space-y-10">
-              <SectionHeader title="Visual Identity" desc="Refine your practice's digital presence with high-fidelity themes." />
-              <div className="grid grid-cols-3 gap-6">
-                <ThemeCard name="Pristine" desc="Clinical Minimalism" active={activeTemplate === 'clinic-clean'} onClick={() => handleTemplateSelect('clinic-clean')} />
-                <ThemeCard name="Kindred" desc="Warm Veterinary" active={activeTemplate === 'vet-warm'} onClick={() => handleTemplateSelect('vet-warm')} />
-                <ThemeCard name="Cyber" desc="Advanced Diagnostic" active={activeTemplate === 'pulse-modern'} onClick={() => handleTemplateSelect('pulse-modern')} />
-              </div>
-            </div>
-          )}
-          {activeTab === "slots" && <SlotManagerSection />}
-          {activeTab === "audit" && <AuditLogsSection />}
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function SectionHeader({ title, desc }: { title: string, desc: string }) {
-  return (
-    <div className="space-y-1">
-      <h3 className="text-3xl font-bold tracking-tight text-slate-900">{title}</h3>
-      <p className="text-slate-400 text-sm font-medium">{desc}</p>
-    </div>
-  );
-}
-
-function SideNavItem({ icon, label, active, onClick }: { icon: any, label: string, active?: boolean, onClick: () => void }) {
-  return (
-    <button 
-      onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all relative group ${active 
-        ? 'bg-slate-900 text-white shadow-lg shadow-slate-200' 
-        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-      }`}
-    >
-      {icon}
-      {label}
-    </button>
-  );
-}
-
-function ModernFeedSection() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [doneCount, setDoneCount] = useState(0);
+  const [notesCount, setNotesCount] = useState(0);
 
   useEffect(() => {
-    const saved = localStorage.getItem("flexslot_bookings");
+    const savedBookings = localStorage.getItem("flexslot_bookings");
     const savedDone = localStorage.getItem("flexslot_done_count");
+    const savedNotes = localStorage.getItem("flexslot_notes");
+
     if (savedDone) setDoneCount(parseInt(savedDone));
-    
-    if (saved) {
-      setBookings(JSON.parse(saved).reverse());
+    if (savedNotes) setNotesCount(parseInt(savedNotes));
+
+    const dummy = [
+      { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM', practitioner: 'Dr. Anderson' },
+      { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM', practitioner: 'Dr. Jenkins' },
+      { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM', practitioner: 'Dr. Wright' },
+      { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM', practitioner: 'Dr. Anderson' },
+      { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM', practitioner: 'Dr. Jenkins' },
+      { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM', practitioner: 'Dr. Anderson' },
+      { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM', practitioner: 'Dr. Wright' },
+      { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM', practitioner: 'Dr. Jenkins' }
+    ];
+
+    let loadedBookings = null;
+    try {
+      loadedBookings = savedBookings ? JSON.parse(savedBookings) : null;
+    } catch (e) { }
+
+    // Force reset if practitioner data is missing (legacy data fix)
+    if (loadedBookings && loadedBookings.length > 0 && loadedBookings[0].practitioner) {
+      setBookings(loadedBookings.reverse());
     } else {
-      const dummy = [
-        { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM' },
-        { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM' },
-        { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM' },
-        { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM' },
-        { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM' },
-        { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM' },
-        { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM' },
-        { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM' }
-      ];
       setBookings(dummy);
       localStorage.setItem("flexslot_bookings", JSON.stringify(dummy));
     }
@@ -154,157 +62,417 @@ function ModernFeedSection() {
     const next = [...bookings];
     next.shift();
     setBookings(next);
+
     const nextDone = doneCount + 1;
+    const nextNotes = notesCount + 1;
+
     setDoneCount(nextDone);
+    setNotesCount(nextNotes);
+
     localStorage.setItem("flexslot_bookings", JSON.stringify([...next].reverse()));
     localStorage.setItem("flexslot_done_count", nextDone.toString());
+    localStorage.setItem("flexslot_notes", nextNotes.toString());
   };
 
-  const total = bookings.length + doneCount;
-  const ongoing = bookings[0];
+  const handleApplyFilters = () => {
+    setIsApplying(true);
+    setTimeout(() => setIsApplying(false), 800);
+  };
 
   return (
-    <div className="space-y-10">
-      {/* Sleek Metrics Bar */}
-      <div className="grid grid-cols-3 gap-6">
-        <MetricCard label="Total Shift Goal" value={total} sub="Total appointments" icon={<Plus className="text-indigo-500" size={20} />} />
-        <MetricCard label="Completed" value={doneCount} sub={`${Math.round((doneCount/total)*100 || 0)}% of shift`} icon={<CheckCircle2 className="text-emerald-500" size={20} />} />
-        <MetricCard label="Pending" value={bookings.length} sub="Patients remaining" icon={<Timer className="text-amber-500" size={20} />} />
-      </div>
-
-      {/* Ongoing - High Contrast & Simple */}
-      <AnimatePresence mode="wait">
-        {ongoing ? (
-          <motion.div 
-            key={ongoing.id}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="bg-slate-900 rounded-[2rem] p-10 text-white shadow-2xl shadow-slate-200 relative overflow-hidden group"
+    <div className="min-h-screen bg-white text-black font-sans flex overflow-hidden">
+      <AnimatePresence>
+        {isApplying && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-white/60 backdrop-blur-sm flex items-center justify-center"
           >
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-10">
-              <div className="flex items-center gap-8">
-                <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/10">
-                  <Activity className="w-8 h-8 text-white animate-pulse" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="px-2.5 py-0.5 bg-emerald-500 text-[10px] font-bold uppercase tracking-wider rounded-full">Active Now</span>
-                    <span className="text-white/40 text-xs font-medium italic">Consultation room 1</span>
-                  </div>
-                  <h2 className="text-5xl font-bold tracking-tight">{ongoing.clientName}</h2>
-                  <p className="text-white/60 text-sm mt-1 font-medium italic">{ongoing.serviceName} · Started 12m ago</p>
-                </div>
-              </div>
-              <button 
-                onClick={handleComplete}
-                className="px-10 py-5 bg-white text-slate-900 rounded-2xl font-bold hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-white/10"
-              >
-                Complete Session
-              </button>
+            <div className="flex flex-col items-center gap-4">
+              <RefreshCw className="w-8 h-8 text-black animate-spin" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Syncing Neural Feed...</span>
             </div>
-            <Sparkles className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5 rotate-12" />
           </motion.div>
-        ) : (
-          <div className="p-12 border-2 border-dashed border-slate-100 rounded-[2rem] text-center text-slate-300 italic">
-             No active consultation in the current shift.
-          </div>
         )}
       </AnimatePresence>
 
-      {/* Feed Area - Structured & Clear */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-           <h3 className="text-xl font-bold tracking-tight text-slate-800">Upcoming Stream</h3>
-           <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type="text" placeholder="Filter..." className="pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all w-48 shadow-sm" />
-              </div>
-              <button className="p-2 bg-white border border-slate-200 rounded-xl text-slate-500 hover:bg-slate-50 transition-colors shadow-sm"><Filter size={18} /></button>
-           </div>
+      <aside className="w-72 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
+        <div className="h-20 flex items-center px-8">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-black/20">
+              <CalendarClock className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-black tracking-tighter text-lg uppercase truncate">FlexSlotCoustom</span>
+          </Link>
         </div>
 
-        <div className="bg-white border border-slate-200/60 rounded-[2.5rem] p-2 shadow-sm">
-           <div className="space-y-1">
-             <AnimatePresence mode="popLayout">
-               {bookings.map((b, i) => (
-                 <motion.div 
-                    key={b.id} 
+        <nav className="flex-1 px-4 py-6 space-y-1">
+          <SideNavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
+          <SideNavItem icon={<BarChart3 size={18} />} label="Analytics" active={activeTab === "overview"} onClick={() => setActiveTab("overview")} />
+          <div className="h-px bg-black/5 my-4 mx-2" />
+          <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
+          <SideNavItem icon={<Calendar size={18} />} label="Schedules" active={activeTab === "slots"} onClick={() => setActiveTab("slots")} />
+          <SideNavItem icon={<Users size={18} />} label="Patient List" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
+        </nav>
+
+        <div className="p-6 border-t border-black/5">
+          <button className="flex items-center gap-3 px-3 py-2 text-black/40 hover:text-black transition-colors font-bold text-xs uppercase tracking-widest w-full">
+            <Settings size={14} /> System Registry
+          </button>
+        </div>
+      </aside>
+
+      <main className="flex-1 flex flex-col overflow-y-auto relative">
+        <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
+          <div className="flex items-center gap-6 flex-1">
+            <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
+            <div className="flex items-center gap-2 bg-black/5 p-1 rounded-xl ml-4">
+              <button
+                onClick={() => {
+                  const months = [
+                    { label: "This Month", range: "May 1 - May 31, 2026" },
+                    { label: "Last Month", range: "Apr 1 - Apr 30, 2026" },
+                    { label: "2 Months Ago", range: "Mar 1 - Mar 31, 2026" }
+                  ];
+                  const currentIndex = months.findIndex(m => m.range === dateRange);
+                  const nextIndex = (currentIndex + 1) % months.length;
+                  setDateRange(months[nextIndex].range);
+                }}
+                className="px-4 py-2 bg-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm hover:bg-black hover:text-white transition-all min-w-[100px]"
+              >
+                {dateRange.includes("May") ? "This Month" : dateRange.includes("Apr") ? "Last Month" : "2 Months Ago"}
+              </button>
+              <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black/40 cursor-default">
+                <Calendar size={14} />
+                {dateRange}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <FilterDropdown label="All Practitioners" options={["Dr. Anderson", "Dr. Jenkins", "Dr. Wright"]} />
+            <FilterDropdown label="All Locations" options={["Main Clinic", "West Wing", "Remote"]} />
+            <button
+              onClick={handleApplyFilters}
+              className="px-8 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-black/20 hover:scale-105 active:scale-95 transition-all"
+            >
+              Apply Filters
+            </button>
+          </div>
+        </header>
+
+        <div className="p-8 space-y-8">
+          {activeTab === "dashboard" && (
+            <MonochromeCommandCenter
+              bookings={bookings}
+              doneCount={doneCount}
+              notesCount={notesCount}
+              onComplete={handleComplete}
+            />
+          )}
+          {activeTab === "overview" && <OverviewSection />}
+          {activeTab === "ui" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Identity Module Active</div>}
+          {activeTab === "slots" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Scheduling Engine Loaded</div>}
+          {activeTab === "audit" && <div className="p-20 text-center italic text-black/20 font-black uppercase tracking-[0.5em]">Patient Data Secure</div>}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function FilterDropdown({ label, options }: { label: string, options: string[] }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(label);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`px-6 py-3 bg-white border rounded-xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all ${isOpen ? 'border-black text-black' : 'border-black/5 text-black/40 hover:border-black/20'}`}
+      >
+        {selected}
+        <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute top-full right-0 mt-2 w-48 bg-white border border-black/5 rounded-2xl shadow-2xl z-[50] overflow-hidden p-2"
+          >
+            {options.map(o => (
+              <button
+                key={o}
+                onClick={() => { setSelected(o); setIsOpen(false); }}
+                className="w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-black/5 rounded-xl transition-colors"
+              >
+                {o}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }: any) {
+  const ongoing = bookings[0];
+  const upcoming = bookings.slice(1, 5);
+
+  return (
+    <div className="grid grid-cols-12 gap-8">
+      {/* Left Column - Clinical Overview & Stream */}
+      <div className="col-span-8 space-y-8">
+        <div className="bg-white border border-black/5 rounded-[1.5rem] p-4 shadow-sm">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-3.5 h-3.5" />
+              <h3 className="text-[10px] font-black uppercase tracking-widest">Appointments</h3>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <MetricBox label="Total Attended" value={doneCount.toString()} />
+            <MetricBox label="Total Pending" value={bookings.length.toString()} />
+            <div className="bg-black/5 rounded-[1.25rem] p-4 flex flex-col items-center justify-center text-center min-h-[100px]">
+              <h4 className="text-[8px] font-black uppercase tracking-widest text-black/30 mb-2">Clinical Notes</h4>
+              <div className="relative w-12 h-12 mb-2">
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="transparent" stroke="rgba(0,0,0,0.05)" strokeWidth="12" />
+                  <motion.circle
+                    cx="50" cy="50" r="40" fill="transparent" stroke="black" strokeWidth="12"
+                    strokeDasharray="251.2"
+                    initial={{ strokeDashoffset: 251.2 }}
+                    animate={{ strokeDashoffset: 251.2 - (notesCount * 25.12) }}
+                    transition={{ duration: 1 }}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center font-black text-sm italic">{notesCount}</div>
+              </div>
+              <p className="text-[8px] font-bold text-black/30 uppercase tracking-widest">Notes: {notesCount}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Integrated Ongoing & Upcoming Feed */}
+        <div className="space-y-6">
+          <AnimatePresence mode="wait">
+            {ongoing ? (
+              <motion.div 
+                key={ongoing.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="bg-emerald-50/80 backdrop-blur-3xl text-black rounded-[2rem] p-5 shadow-[0_24px_48px_rgba(16,185,129,0.08)] relative overflow-hidden group"
+              >
+                {/* Futuristic Background Accents */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-400/10 rounded-full blur-[80px] -mr-24 -mt-24" />
+                
+                <div className="relative z-10 flex flex-col gap-4">
+                  {/* Top Row: Meta & Timer */}
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white/50 rounded-xl flex items-center justify-center backdrop-blur-3xl">
+                        <Activity className="w-4 h-4 text-emerald-500 animate-pulse" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                           <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-emerald-500/20 text-emerald-600 rounded">ID: {ongoing.id.slice(0, 8)}</span>
+                           <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-black/5 text-black/60 rounded">Room_01</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-1.5">
+                       <Badge label="24 YRS" color="bg-black/5" />
+                       <Badge label="MALE" color="bg-black/5" />
+                       <Badge label="O+" color="bg-emerald-500/10 text-emerald-600" />
+                    </div>
+                  </div>
+
+                  {/* Middle Row: Patient Name & Reason */}
+                  <div className="flex items-end justify-between gap-4">
+                    <div className="space-y-1">
+                      <h2 className="text-4xl font-black tracking-tighter uppercase italic leading-none text-transparent bg-clip-text bg-gradient-to-br from-black to-black/40">{ongoing.clientName}</h2>
+                      <div className="flex items-center gap-2 pt-1">
+                        <span className="px-2 py-0.5 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest rounded-full">Routine Checkup</span>
+                        <p className="text-black/40 text-[8px] font-bold uppercase tracking-[0.2em] italic">Consultation In_Progress</p>
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={onComplete}
+                      className="px-5 py-2.5 bg-black text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 shrink-0"
+                    >
+                      Complete
+                    </button>
+                  </div>
+
+                  {/* Footer Row: Doctor info */}
+                  <div className="pt-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center">
+                         <Stethoscope size={10} className="text-emerald-500" />
+                      </div>
+                      <div>
+                         <p className="text-[8px] font-black text-black/80 uppercase tracking-widest italic">{ongoing.practitioner}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <div className="p-20 border-2 border-dashed border-black/5 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-widest italic">
+                Shift Stream Terminated.
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* Upcoming Feed List */}
+          <div className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm space-y-8">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-black uppercase tracking-tighter italic">Upcoming Feed</h3>
+              <span className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">{upcoming.length} Signals_Queued</span>
+            </div>
+
+            <div className="space-y-2">
+              <AnimatePresence mode="popLayout">
+                {upcoming.map((u, i) => (
+                  <motion.div
+                    key={u.id}
                     layout
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className={`flex items-center justify-between p-6 rounded-[2rem] transition-all hover:bg-slate-50 group ${i === 0 ? 'bg-slate-50/50' : ''}`}
-                 >
+                    className="flex items-center justify-between p-6 rounded-[2rem] hover:bg-black/5 transition-all group"
+                  >
                     <div className="flex items-center gap-6">
-                       <div className="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex flex-col items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                          <span className="text-sm font-bold text-slate-900">{b.slotTime.split(' ')[0]}</span>
-                          <span className="text-[10px] font-black text-slate-400 uppercase">{b.slotTime.split(' ')[1]}</span>
-                       </div>
-                       <div>
-                          <h4 className="text-lg font-bold text-slate-900">{b.clientName}</h4>
-                          <div className="flex items-center gap-2 mt-0.5">
-                             <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                             <span className="text-xs text-slate-500 font-medium italic">{b.serviceName}</span>
-                          </div>
-                       </div>
+                      <div className="w-12 h-12 bg-black/5 rounded-2xl flex flex-col items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
+                        <span className="text-[10px] font-black leading-none">{u.slotTime.split(' ')[0]}</span>
+                        <span className="text-[8px] font-black opacity-40 uppercase">{u.slotTime.split(' ')[1]}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-black uppercase tracking-tighter italic">{u.clientName}</h4>
+                        <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{u.serviceName} · {u.practitioner}</p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
-                       <button className="p-3 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-none hover:shadow-sm"><Phone size={18} /></button>
-                       <button className="p-3 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-none hover:shadow-sm"><MailIcon size={18} /></button>
-                       <button className="p-3 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-none hover:shadow-sm"><MoreHorizontal size={18} /></button>
+                      <button className="p-4 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-sm"><Phone size={16} /></button>
+                      <button className="p-4 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-sm"><MailIcon size={16} /></button>
                     </div>
-                 </motion.div>
-               ))}
-             </AnimatePresence>
-             {bookings.length === 0 && (
-               <div className="p-20 text-center space-y-4">
-                  <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
-                    <ZapOff className="text-slate-300" />
-                  </div>
-                  <p className="text-slate-400 font-medium italic">The stream is currently silent.</p>
-               </div>
-             )}
-           </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* Right Column - Status Analytics & New Clients */}
+      <div className="col-span-4 space-y-8">
+        <div className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden">
+          <div className="flex justify-between items-center mb-8 relative z-10">
+            <div className="flex items-center gap-3">
+              <BarChart3 className="w-5 h-5" />
+              <h3 className="text-sm font-black uppercase tracking-widest">Status Feed</h3>
+            </div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">6/5/26</div>
+          </div>
+
+          <div className="flex items-end gap-6 h-48 border-b border-black/5 pb-6 mb-6 px-4 relative">
+            <motion.div
+              animate={{ height: `${Math.min(90, (doneCount * 10) + 10)}%` }}
+              className="flex-1 bg-black rounded-t-xl shadow-2xl relative group"
+            >
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Completed: {doneCount}</div>
+            </motion.div>
+            <motion.div
+              animate={{ height: `${Math.min(90, (bookings.length * 5) + 20)}%` }}
+              className="flex-1 bg-black/40 rounded-t-xl relative group"
+            >
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Pending: {bookings.length}</div>
+            </motion.div>
+            <motion.div
+              animate={{ height: "40%" }}
+              className="flex-1 bg-black/10 rounded-t-xl relative group"
+            >
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] font-black bg-black text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Confirmed Signal</div>
+            </motion.div>
+          </div>
+
+          <div className="space-y-3">
+            <StatusLegend label="Completed" color="bg-black" value={doneCount.toString()} />
+            <StatusLegend label="Arrived" color="bg-black/60" value="0" />
+            <StatusLegend label="Confirmed" color="bg-black/40" value="0" />
+            <StatusLegend label="Pending" color="bg-black/20" value={bookings.length.toString()} />
+            <StatusLegend label="Rescheduled" color="bg-black/10" value="0" />
+          </div>
+        </div>
+
       </div>
     </div>
   );
 }
 
-function MetricCard({ label, value, sub, icon }: any) {
+function StatusLegend({ label, color, value }: { label: string, color: string, value: string }) {
   return (
-    <div className="bg-white border border-slate-200/60 p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all group">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{label}</span>
-        <div className="p-2.5 bg-slate-50 rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-colors">
-          {icon}
-        </div>
+    <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest group cursor-default">
+      <div className="flex items-center gap-3">
+        <div className={`w-2.5 h-2.5 rounded-full ${color} group-hover:scale-125 transition-transform`} />
+        <span className="text-black/40 group-hover:text-black transition-colors">{label}</span>
       </div>
-      <div className="flex items-baseline gap-2">
-        <span className="text-4xl font-bold tracking-tight text-slate-900">{value}</span>
-        <span className="text-xs font-medium text-slate-400 italic">{sub}</span>
-      </div>
+      <span className="text-black/20 group-hover:text-black transition-colors italic">{value}</span>
     </div>
   );
 }
 
-function ThemeCard({ name, desc, active, onClick }: any) {
+function Badge({ label, color = "bg-black/5" }: { label: string, color?: string }) {
   return (
-    <button onClick={onClick} className={`p-8 rounded-[2.5rem] border text-left transition-all relative group h-full ${active ? 'bg-slate-900 text-white border-slate-900 shadow-2xl' : 'bg-white border-slate-200 text-slate-900 hover:border-slate-400'}`}>
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${active ? 'bg-white/10' : 'bg-slate-50'}`}>
-        <PaletteIcon className={active ? 'text-white' : 'text-slate-400'} size={24} />
-      </div>
-      <h4 className="text-xl font-bold mb-1">{name}</h4>
-      <p className={`text-xs font-medium italic ${active ? 'text-white/60' : 'text-slate-400'}`}>{desc}</p>
-      {active && <div className="absolute top-6 right-6 w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_12px_rgba(52,211,153,0.5)]" />}
+    <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md border border-white/5 ${color}`}>
+      {label}
+    </span>
+  );
+}
+
+function MetricBox({ label, value }: { label: string, value: string }) {
+  return (
+    <div className="bg-black/5 rounded-[1.25rem] p-4 flex flex-col items-center justify-center text-center space-y-1 shadow-inner group hover:bg-black hover:text-white transition-all cursor-default min-h-[100px]">
+      <h4 className="text-[8px] font-black uppercase tracking-widest text-black/30 group-hover:text-white/30">{label}</h4>
+      <div className="text-3xl font-black italic">{value}</div>
+    </div>
+  );
+}
+
+function SideNavItem({ icon, label, active, onClick }: { icon: any, label: string, active?: boolean, onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all relative group ${active
+        ? 'bg-black text-white shadow-2xl shadow-black/20'
+        : 'text-black/40 hover:bg-black/5 hover:text-black'
+        }`}
+    >
+      {icon}
+      {label}
     </button>
   );
 }
 
-// Sub-components for other tabs to prevent errors
-function OverviewSection() { return <div className="p-20 text-center italic text-slate-400">Advanced Analytics Module Loading...</div>; }
-function SlotManagerSection() { return <div className="p-20 text-center italic text-slate-400">Slot Configuration Engine Offline</div>; }
-function AuditLogsSection() { return <div className="p-20 text-center italic text-slate-400">Patient Data Protection Active</div>; }
-function PaletteIcon({ className, size }: any) { return <div className={className}><Layers size={size} /></div>; }
+function OverviewSection() {
+  return (
+    <div className="space-y-16">
+      <div className="flex justify-between items-end">
+        <div className="space-y-2">
+          <h1 className="text-7xl font-black tracking-tighter uppercase italic leading-none">Intelligence</h1>
+          <p className="text-black/30 text-xs font-bold uppercase tracking-[0.3em] italic">Full spectrum analytical data mapping for current cycle</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-10">
+        <div className="h-64 bg-black/5 rounded-[3rem] p-10 flex flex-col justify-between">
+          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Temporal Load</div>
+        </div>
+      </div>
+    </div>
+  );
+}
