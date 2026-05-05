@@ -16,7 +16,7 @@ import { useEffect } from "react";
 
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [clinicName, setClinicName] = useState("Kindred Wellness");
+  const [clinicName, setClinicName] = useState("FlexSlotCoustom");
   const [dateRange, setDateRange] = useState("May 1 - May 31, 2026");
   const [isApplying, setIsApplying] = useState(false);
 
@@ -97,13 +97,13 @@ export default function OwnerDashboard() {
         )}
       </AnimatePresence>
 
-      <aside className="w-64 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
+      <aside className="w-72 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
         <div className="h-20 flex items-center px-8">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-black/20">
               <CalendarClock className="w-5 h-5 text-white" />
             </div>
-            <span className="font-black tracking-tighter text-xl uppercase">Kindred</span>
+            <span className="font-black tracking-tighter text-lg uppercase truncate">FlexSlotCoustom</span>
           </Link>
         </div>
 
