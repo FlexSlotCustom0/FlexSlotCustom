@@ -458,29 +458,72 @@ function SideNavItem({ icon, label, active, onClick }: { icon: any, label: strin
 }
 
 function CalendarPage() {
+  const [activeView, setActiveView] = useState("Week");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [currentWeek, setCurrentWeek] = useState("Mon 4/5 - Sun 10/5/2026");
+  const [isSaving, setIsSaving] = useState(false);
+
   const days = ["Mon 4 May", "Tue 5 May", "Wed 6 May", "Thu 7 May", "Fri 8 May", "Sat 9 May", "Sun 10 May"];
   const times = ["8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM"];
 
+  const handleSave = () => {
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      setIsSidebarOpen(false);
+    }, 1200);
+  };
+
   return (
     <div className="flex h-[calc(100vh-140px)] -m-8 relative overflow-hidden bg-white">
+      <AnimatePresence>
+        {isSaving && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-white/80 backdrop-blur-md flex items-center justify-center"
+          >
+            <div className="flex flex-col items-center gap-4">
+               <RefreshCw className="w-10 h-10 text-black animate-spin" />
+               <span className="text-[10px] font-black uppercase tracking-[0.4em]">Registering Signal...</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main Calendar Section */}
       <div className="flex-1 flex flex-col min-w-0 border-r border-black/5">
         {/* Calendar Header */}
         <div className="h-14 border-b border-black/5 flex items-center justify-between px-6 bg-white shrink-0">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <button className="p-1 hover:bg-black/5 rounded"><ChevronRight size={14} className="rotate-180" /></button>
-              <span className="text-[10px] font-black uppercase tracking-widest min-w-[150px] text-center">Mon 4/5 - Sun 10/5/2026</span>
-              <button className="p-1 hover:bg-black/5 rounded"><ChevronRight size={14} /></button>
+              <button 
+                onClick={() => setCurrentWeek("Mon 27/4 - Sun 3/5/2026")}
+                className="p-1 hover:bg-black/5 rounded transition-colors"
+              >
+                <ChevronRight size={14} className="rotate-180" />
+              </button>
+              <span className="text-[10px] font-black uppercase tracking-widest min-w-[150px] text-center">{currentWeek}</span>
+              <button 
+                onClick={() => setCurrentWeek("Mon 11/5 - Sun 17/5/2026")}
+                className="p-1 hover:bg-black/5 rounded transition-colors"
+              >
+                <ChevronRight size={14} />
+              </button>
             </div>
-            <button className="px-3 py-1 bg-black/5 rounded text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Today</button>
+            <button 
+              onClick={() => setCurrentWeek("Mon 4/5 - Sun 10/5/2026")}
+              className="px-3 py-1 bg-black/5 rounded text-[10px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all active:scale-95"
+            >
+              Today
+            </button>
           </div>
           
           <div className="flex items-center gap-1 bg-black/5 p-1 rounded-lg">
             {["Day", "M-F", "Week", "Month"].map(view => (
               <button 
                 key={view}
-                className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded ${view === "Week" ? "bg-black text-white" : "text-black/40 hover:text-black"}`}
+                onClick={() => setActiveView(view)}
+                className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded transition-all ${activeView === view ? "bg-black text-white shadow-lg" : "text-black/40 hover:text-black"}`}
               >
                 {view}
               </button>
@@ -488,9 +531,17 @@ function CalendarPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="p-2 hover:bg-black/5 rounded"><RefreshCw size={14} /></button>
-            <button className="p-2 hover:bg-black/5 rounded"><Search size={14} /></button>
-            <button className="px-3 py-1 border border-black/10 rounded text-[9px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">Time Finder</button>
+            <button className="p-2 hover:bg-black/5 rounded transition-colors active:rotate-180 duration-500"><RefreshCw size={14} /></button>
+            <button className="p-2 hover:bg-black/5 rounded transition-colors"><Search size={14} /></button>
+            <button className="px-3 py-1 border border-black/10 rounded text-[9px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all active:scale-95">Time Finder</button>
+            {!isSidebarOpen && (
+              <button 
+                onClick={() => setIsSidebarOpen(true)}
+                className="ml-2 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 active:scale-90 transition-all shadow-lg"
+              >
+                <Plus size={16} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -515,16 +566,20 @@ function CalendarPage() {
                     {time}
                   </div>
                   {Array.from({ length: 7 }).map((_, i) => (
-                    <div key={i} className="h-16 border-r border-black/5 border-b border-black/5 group-hover:bg-black/[0.01] transition-colors relative">
+                    <div 
+                      key={i} 
+                      className="h-16 border-r border-black/5 border-b border-black/5 group-hover:bg-black/[0.01] transition-colors relative cursor-pointer"
+                      onClick={() => setIsSidebarOpen(true)}
+                    >
                       {/* Example Bookings */}
                       {idx === 1 && i === 1 && (
-                        <div className="absolute inset-x-1 top-1 bottom-1 bg-black text-white p-2 rounded-lg shadow-xl z-10">
+                        <div className="absolute inset-x-1 top-1 bottom-1 bg-black text-white p-2 rounded-lg shadow-xl z-10 hover:scale-[1.02] transition-transform">
                           <p className="text-[8px] font-black uppercase leading-tight">John Smith</p>
                           <p className="text-[7px] font-bold opacity-60">9:00AM - 11:00AM</p>
                         </div>
                       )}
                       {idx === 1 && i === 2 && (
-                        <div className="absolute inset-x-1 top-1 bottom-1 bg-black/5 border border-black/10 text-black p-2 rounded-lg z-10">
+                        <div className="absolute inset-x-1 top-1 bottom-1 bg-black/5 border border-black/10 text-black p-2 rounded-lg z-10 hover:bg-black/10 transition-colors">
                           <p className="text-[8px] font-black uppercase leading-tight">Mary Lee</p>
                           <p className="text-[7px] font-bold opacity-40">9:00AM - 11:00AM</p>
                         </div>
@@ -541,84 +596,125 @@ function CalendarPage() {
       </div>
 
       {/* Right Sidebar - New Appointment */}
-      <div className="w-[320px] bg-white flex flex-col border-l border-black/5 overflow-y-auto shrink-0">
-        <div className="p-4 bg-black text-white flex items-center justify-between sticky top-0 z-10">
-          <span className="text-[10px] font-black uppercase tracking-widest italic">New Appointment</span>
-          <X size={14} className="cursor-pointer" />
-        </div>
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div 
+            initial={{ x: 320 }}
+            animate={{ x: 0 }}
+            exit={{ x: 320 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="w-[320px] bg-white flex flex-col border-l border-black/5 overflow-y-auto shrink-0 shadow-[-20px_0_40px_rgba(0,0,0,0.02)] z-50"
+          >
+            <div className="p-4 bg-black text-white flex items-center justify-between sticky top-0 z-10">
+              <span className="text-[10px] font-black uppercase tracking-widest italic">New Appointment</span>
+              <X size={14} className="cursor-pointer hover:rotate-90 transition-transform" onClick={() => setIsSidebarOpen(false)} />
+            </div>
 
-        <div className="p-5 space-y-6">
-          {/* Section: When & Where */}
-          <div className="space-y-4">
-            <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">When & Where</h4>
-            
-            <div className="space-y-3">
-              <CalendarInput label="When" value="08/05/2026" icon={<CalendarDays size={14} />} />
-              <div className="grid grid-cols-2 gap-2">
-                <CalendarInput label="Time" value="9:00 AM" icon={<Clock size={14} />} />
-                <CalendarInput label="End" value="9:30 AM" icon={<Clock size={14} />} />
+            <div className="p-5 space-y-6">
+              {/* Section: When & Where */}
+              <div className="space-y-4">
+                <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">When & Where</h4>
+                
+                <div className="space-y-3">
+                  <CalendarInput label="When" value="08/05/2026" icon={<CalendarDays size={14} />} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <CalendarInput label="Time" value="9:00 AM" icon={<Clock size={14} />} />
+                    <CalendarInput label="End" value="9:30 AM" icon={<Clock size={14} />} />
+                  </div>
+                  <CalendarInput label="Location" value="Main Clinic" icon={<ChevronDown size={14} />} />
+                  <CalendarInput label="With" value="Dr. Jenkins" icon={<ChevronDown size={14} />} />
+                </div>
               </div>
-              <CalendarInput label="Location" value="Main Clinic" icon={<ChevronDown size={14} />} />
-              <CalendarInput label="With" value="Dr. Jenkins" icon={<ChevronDown size={14} />} />
-            </div>
-          </div>
 
-          {/* Section: Client/Personal/Group Toggle */}
-          <div className="grid grid-cols-3 border border-black/10 rounded-xl overflow-hidden">
-             {["Client", "Personal", "Group"].map((type, i) => (
-               <button key={type} className={`py-2 flex flex-col items-center gap-1 border-r border-black/10 last:border-0 ${i === 0 ? "bg-black text-white" : "bg-white text-black/40 hover:text-black"}`}>
-                 <User size={12} />
-                 <span className="text-[8px] font-black uppercase">{type}</span>
-               </button>
-             ))}
-          </div>
+              {/* Section: Client/Personal/Group Toggle */}
+              <div className="grid grid-cols-3 border border-black/10 rounded-xl overflow-hidden shadow-inner">
+                 {["Client", "Personal", "Group"].map((type, i) => (
+                   <button 
+                     key={type} 
+                     className={`py-2 flex flex-col items-center gap-1 border-r border-black/10 last:border-0 transition-all ${i === 0 ? "bg-black text-white" : "bg-white text-black/40 hover:text-black hover:bg-black/5"}`}
+                   >
+                     <User size={12} />
+                     <span className="text-[8px] font-black uppercase">{type}</span>
+                   </button>
+                 ))}
+              </div>
 
-          {/* Section: Client Search */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-               <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
-               <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline">+ New Client</button>
-            </div>
-            <div className="relative">
-              <input 
-                type="text" 
-                placeholder="Search for a client*" 
-                className="w-full bg-black/5 border-none rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:ring-1 focus:ring-black transition-all"
-              />
-              <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20" />
-            </div>
-          </div>
+              {/* Section: Client Search */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                   <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
+                   <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline active:scale-95 transition-all">+ New Client</button>
+                </div>
+                <div className="relative group">
+                  <input 
+                    type="text" 
+                    placeholder="Search for a client*" 
+                    className="w-full bg-black/5 border border-transparent rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:bg-white focus:border-black focus:ring-0 transition-all outline-none"
+                  />
+                  <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
+                </div>
+              </div>
 
-          {/* Section: Appointment Details */}
-          <div className="space-y-4">
-            <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Appointment Details</h4>
-            <div className="space-y-2">
-              <CalendarInput label="Service" value="Select a Service" icon={<ChevronDown size={14} />} />
-              <CalendarInput label="Resources" value="Select Resources" icon={<ChevronDown size={14} />} />
-              <CalendarInput label="Flag" value="Select a Flag" icon={<ChevronDown size={14} />} />
-            </div>
-          </div>
+              {/* Section: Appointment Details */}
+              <div className="space-y-4">
+                <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Appointment Details</h4>
+                <div className="space-y-2">
+                  <CalendarInput label="Service" value="Select a Service" icon={<ChevronDown size={14} />} />
+                  <CalendarInput label="Resources" value="Select Resources" icon={<ChevronDown size={14} />} />
+                  <CalendarInput label="Flag" value="Select a Flag" icon={<ChevronDown size={14} />} />
+                </div>
+              </div>
 
-          {/* Action Buttons */}
-          <div className="pt-4 space-y-2">
-            <button className="w-full bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-black/20 hover:scale-[1.02] active:scale-95 transition-all">Save</button>
-            <button className="w-full bg-white border border-black/10 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-black/5 transition-all">Close</button>
-          </div>
-        </div>
-      </div>
+              {/* Action Buttons */}
+              <div className="pt-4 space-y-2">
+                <button 
+                  onClick={handleSave}
+                  className="w-full bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-black/20 hover:bg-emerald-600 hover:shadow-emerald-500/20 active:scale-95 transition-all"
+                >
+                  Save Appointment
+                </button>
+                <button 
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="w-full bg-white border border-black/10 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-black/5 active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
 function CalendarInput({ label, value, icon }: { label: string, value: string, icon: any }) {
   return (
-    <div className="flex items-center justify-between px-3 py-2.5 bg-black/5 rounded-lg border border-transparent hover:border-black/10 transition-all cursor-pointer">
+    <div className="flex items-center justify-between px-3 py-2.5 bg-black/5 rounded-lg border border-transparent hover:border-black/10 hover:bg-black/[0.07] transition-all cursor-pointer group active:scale-[0.98]">
       <div className="flex flex-col">
-        <span className="text-[7px] font-black text-black/20 uppercase tracking-widest">{label}</span>
+        <span className="text-[7px] font-black text-black/20 uppercase tracking-widest group-hover:text-black/40 transition-colors">{label}</span>
         <span className="text-[10px] font-black uppercase tracking-widest">{value}</span>
       </div>
-      <div className="text-black/40">
+      <div className="text-black/40 group-hover:text-black transition-colors">
         {icon}
+      </div>
+    </div>
+  );
+}
+
+function OverviewSection() {
+  return (
+    <div className="space-y-16">
+      <div className="flex justify-between items-end">
+        <div className="space-y-2">
+          <h1 className="text-7xl font-black tracking-tighter uppercase italic leading-none">Intelligence</h1>
+          <p className="text-black/30 text-xs font-bold uppercase tracking-[0.3em] italic">Full spectrum analytical data mapping for current cycle</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-10">
+        <div className="h-64 bg-black/5 rounded-[3rem] p-10 flex flex-col justify-between">
+          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30">Temporal Load</div>
+        </div>
       </div>
     </div>
   );
