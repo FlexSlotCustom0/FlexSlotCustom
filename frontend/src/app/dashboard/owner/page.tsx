@@ -231,12 +231,11 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
               <Calendar className="w-4 h-4" />
               <h3 className="text-xs font-black uppercase tracking-widest">Appointments</h3>
             </div>
-            <button className="text-[9px] font-black uppercase tracking-widest text-black/30 hover:text-black transition-colors underline underline-offset-4 decoration-black/10">Appointment Report</button>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            <MetricBox label="Total Attended" value={doneCount.toString()} trend={`${Math.round((doneCount / (doneCount + bookings.length || 1)) * 100)}%`} up={true} />
-            <MetricBox label="Total Pending" value={bookings.length.toString()} trend="Live" up={false} />
+            <MetricBox label="Total Attended" value={doneCount.toString()} />
+            <MetricBox label="Total Pending" value={bookings.length.toString()} />
             <div className="bg-black/5 rounded-[1.5rem] p-6 flex flex-col items-center justify-center text-center">
               <h4 className="text-[9px] font-black uppercase tracking-widest text-black/30 mb-2">Clinical Notes</h4>
               <div className="relative w-16 h-16 mb-2">
@@ -407,15 +406,11 @@ function StatusLegend({ label, color, value }: { label: string, color: string, v
   );
 }
 
-function MetricBox({ label, value, trend, up }: { label: string, value: string, trend: string, up: boolean }) {
+function MetricBox({ label, value }: { label: string, value: string }) {
   return (
     <div className="bg-black/5 rounded-[1.5rem] p-6 text-center space-y-3 shadow-inner group hover:bg-black hover:text-white transition-all cursor-default">
       <h4 className="text-[9px] font-black uppercase tracking-widest text-black/30 group-hover:text-white/30">{label}</h4>
       <div className="text-4xl font-black italic">{value}</div>
-      <div className="flex items-center justify-center gap-1 text-[9px] font-black uppercase tracking-widest">
-        {up ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
-        {trend} <span className="text-black/30 group-hover:text-white/30 font-bold ml-1">Volume</span>
-      </div>
     </div>
   );
 }
