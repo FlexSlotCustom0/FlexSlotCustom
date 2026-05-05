@@ -265,42 +265,79 @@ function MonochromeCommandCenter({ bookings, doneCount, notesCount, onComplete }
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="bg-black text-white rounded-[2.5rem] p-8 shadow-[0_32px_64px_rgba(0,0,0,0.15)] relative overflow-hidden group"
+                className="bg-[#050505] text-white rounded-[2.5rem] p-8 shadow-[0_32px_64px_rgba(0,0,0,0.3)] border border-white/5 relative overflow-hidden group ring-1 ring-white/10"
               >
-                <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-8">
-                  <div className="flex gap-8">
-                    <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/10 shrink-0">
-                      <Activity className="w-6 h-6 text-white animate-pulse" />
-                    </div>
-                    <div className="space-y-3">
-                      {/* Line 1: Patient Name */}
-                      <h2 className="text-5xl font-black tracking-tighter uppercase italic leading-[0.8]">{ongoing.clientName}</h2>
-                      
-                      <div className="space-y-1 pt-1">
-                        {/* Line 2: Room Number */}
+                {/* Futuristic Background Accents */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] -mr-32 -mt-32 animate-pulse" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/5 rounded-full blur-[80px] -ml-24 -mb-24" />
+                
+                <div className="relative z-10 flex flex-col gap-8">
+                  {/* Top Row: Meta & Timer */}
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center backdrop-blur-3xl border border-white/10 shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+                        <Activity className="w-6 h-6 text-cyan-400 animate-pulse" />
+                      </div>
+                      <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                           <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 bg-white text-black rounded">Room_01</span>
+                           <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded border border-cyan-500/30">ID: {ongoing.id.slice(0, 8)}</span>
+                           <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 bg-white/5 text-white/60 rounded border border-white/10">Room_01</span>
                         </div>
-                        
-                        {/* Line 3: Consultation */}
-                        <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.3em] italic">Consultation In_Progress</p>
-                        
-                        {/* Line 4: Doctor Name */}
-                        <div className="flex items-center gap-2 pt-0.5">
-                           <Stethoscope size={10} className="text-white/20" />
-                           <span className="text-white/60 text-[9px] font-black uppercase tracking-widest italic">{ongoing.practitioner}</span>
+                        <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                          <Clock size={12} className="text-cyan-400" />
+                          Session Duration: <span className="text-white font-mono">12:45</span>
                         </div>
                       </div>
                     </div>
+                    
+                    <div className="flex gap-2">
+                       <Badge label="24 YRS" color="bg-white/5" />
+                       <Badge label="MALE" color="bg-white/5" />
+                       <Badge label="O+" color="bg-cyan-500/10 text-cyan-400 border-cyan-500/20" />
+                    </div>
                   </div>
-                  <button 
-                    onClick={onComplete}
-                    className="px-4 py-2 bg-white text-black rounded-full font-black text-[8px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 mt-4 md:mt-0"
-                  >
-                    Complete Session
-                  </button>
+
+                  {/* Middle Row: Patient Name & Reason */}
+                  <div className="space-y-4">
+                    <div className="flex items-end justify-between gap-4">
+                      <div className="space-y-1">
+                        <h2 className="text-6xl font-black tracking-tighter uppercase italic leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40">{ongoing.clientName}</h2>
+                        <div className="flex items-center gap-2 pt-2">
+                          <span className="px-3 py-1 bg-cyan-500 text-black text-[9px] font-black uppercase tracking-widest rounded-full">Routine Checkup</span>
+                          <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.3em] italic">Consultation In_Progress</p>
+                        </div>
+                      </div>
+                      
+                      <button 
+                        onClick={onComplete}
+                        className="px-6 py-3 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 shrink-0"
+                      >
+                        Complete Session
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Footer Row: Doctor info */}
+                  <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                         <Stethoscope size={14} className="text-cyan-400" />
+                      </div>
+                      <div>
+                         <p className="text-[8px] font-black text-white/20 uppercase tracking-widest">Assigned Practitioner</p>
+                         <p className="text-[10px] font-black text-white/80 uppercase tracking-widest italic">{ongoing.practitioner}</p>
+                      </div>
+                    </div>
+                    <div className="flex -space-x-2">
+                       {[1,2,3].map(i => (
+                         <div key={i} className="w-6 h-6 rounded-full border-2 border-[#050505] bg-white/10" />
+                       ))}
+                    </div>
+                  </div>
                 </div>
-                <Sparkles className="absolute -bottom-6 -right-6 w-32 h-32 text-white/5 rotate-12" />
+                
+                {/* Glassmorphic Glow Layer */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
               </motion.div>
             ) : (
               <div className="p-20 border-2 border-dashed border-black/5 rounded-[3rem] text-center text-black/20 font-black uppercase tracking-widest italic">
@@ -403,6 +440,14 @@ function StatusLegend({ label, color, value }: { label: string, color: string, v
       </div>
       <span className="text-black/20 group-hover:text-black transition-colors italic">{value}</span>
     </div>
+  );
+}
+
+function Badge({ label, color = "bg-black/5" }: { label: string, color?: string }) {
+  return (
+    <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-md border border-white/5 ${color}`}>
+      {label}
+    </span>
   );
 }
 
