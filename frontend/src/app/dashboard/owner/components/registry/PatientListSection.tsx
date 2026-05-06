@@ -80,8 +80,6 @@ export function PatientListSection() {
               <tr>
                 <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Patient ID</th>
                 <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Identity</th>
-                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Status</th>
-                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Visits</th>
                 <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Last Signal</th>
                 <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40"></th>
               </tr>
@@ -98,19 +96,6 @@ export function PatientListSection() {
                     <div className="flex flex-col">
                       <span className="text-sm font-black uppercase tracking-tighter italic">{p.name}</span>
                       <span className="text-[9px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${
-                      p.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600' : 
-                      p.status === 'Follow-up' ? 'bg-amber-500/10 text-amber-600' : 
-                      p.status === 'New' ? 'bg-blue-500/10 text-blue-600' : 'bg-black/5 text-black/40'
-                    }`}>{p.status}</span>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-black italic">{p.visits}</span>
-                      {p.visits > 10 ? <ArrowUpRight size={12} className="text-emerald-500" /> : <ArrowDownRight size={12} className="text-black/10" />}
                     </div>
                   </td>
                   <td className="px-8 py-6 text-[10px] font-bold text-black/30">{p.lastVisit}</td>
