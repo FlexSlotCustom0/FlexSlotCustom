@@ -74,8 +74,8 @@ export function CalendarPage() {
   };
 
   const contentTypes = [
-    "Motivational Quote", "Customer Testimonial", "Blog Post", "Case Study", 
-    "Fun Fact", "Weekly Recap", "FAQ", "Contest or Giveaway", 
+    "Motivational Quote", "Customer Testimonial", "Blog Post", "Case Study",
+    "Fun Fact", "Weekly Recap", "FAQ", "Contest or Giveaway",
     "Behind-the-Brand", "User-Generated Content"
   ];
 
@@ -127,11 +127,11 @@ export function CalendarPage() {
       <div className="flex-1 p-12 flex flex-col gap-8">
         <div className="flex justify-between items-center px-4">
           <div className="flex gap-4">
-             {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
-               <div key={day} className="w-24 py-2 bg-black text-white rounded-full text-center">
-                 <span className="text-[10px] font-black uppercase tracking-widest">{day}</span>
-               </div>
-             ))}
+            {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
+              <div key={day} className="w-24 py-2 bg-black text-white rounded-full text-center">
+                <span className="text-[10px] font-black uppercase tracking-widest">{day}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -139,11 +139,11 @@ export function CalendarPage() {
           {calendarDays.map((d, i) => {
             const dayNum = d > 0 && d <= 31 ? d : null;
             const appts = appointments.filter(a => a.day === dayNum);
-            
+
             return (
-              <div 
-                key={i} 
-                onClick={() => { if(dayNum) { setSelectedDay(dayNum); setIsSidebarOpen(true); } }}
+              <div
+                key={i}
+                onClick={() => { if (dayNum) { setSelectedDay(dayNum); setIsSidebarOpen(true); } }}
                 className={`p-4 border-r border-b border-black/10 relative group transition-all ${dayNum ? "hover:bg-black/[0.02] cursor-pointer" : "bg-black/[0.01]"}`}
               >
                 <div className="flex justify-between items-start mb-2">
@@ -175,42 +175,50 @@ export function CalendarPage() {
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="w-[400px] bg-white border-l border-black/5 h-screen sticky top-0 shadow-2xl p-10 flex flex-col gap-10 z-[200]"
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "100%", opacity: 0 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="w-[450px] bg-white border-l border-black/5 h-screen fixed top-0 right-0 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] p-12 flex flex-col gap-12 z-[200] overflow-y-auto custom-scrollbar"
           >
+
+
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-black uppercase tracking-widest italic">Manual Override</h3>
-              <button onClick={() => setIsSidebarOpen(false)} className="p-2 hover:bg-black/5 rounded-full transition-colors"><X size={20} /></button>
+              <div className="space-y-1">
+                <h3 className="text-2xl font-black uppercase tracking-tighter italic leading-none">Manual Override</h3>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-black/20 italic">Override Protocol v4.0</p>
+              </div>
+              <button onClick={() => setIsSidebarOpen(false)} className="p-3 hover:bg-black/5 rounded-2xl transition-all active:scale-90 group">
+                <X size={24} className="text-black/20 group-hover:text-black transition-colors" />
+              </button>
             </div>
+
 
             <div className="space-y-8 overflow-y-auto pr-2 custom-scrollbar">
               {/* Section: Temporal Config */}
               <div className="space-y-3">
                 <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Temporal Config</h4>
                 <div className="space-y-2">
-                  <CalendarInput 
-                    label="When" 
-                    value={formData.when} 
+                  <CalendarInput
+                    label="When"
+                    value={formData.when}
                     type="date"
-                    icon={<CalendarDays size={14} />} 
+                    icon={<CalendarDays size={14} />}
                     onChange={(v) => updateField("when", v)}
                   />
                   <div className="grid grid-cols-2 gap-2">
-                    <CalendarInput 
-                      label="Time" 
-                      value={formData.time} 
+                    <CalendarInput
+                      label="Time"
+                      value={formData.time}
                       type="time"
-                      icon={<Clock size={14} />} 
+                      icon={<Clock size={14} />}
                       onChange={(v) => updateField("time", v)}
                     />
-                    <CalendarInput 
-                      label="End" 
-                      value={formData.end} 
+                    <CalendarInput
+                      label="End"
+                      value={formData.end}
                       type="time"
-                      icon={<Clock size={14} />} 
+                      icon={<Clock size={14} />}
                       onChange={(v) => updateField("end", v)}
                     />
                   </div>
@@ -220,13 +228,13 @@ export function CalendarPage() {
               {/* Section: Client Search */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                   <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
-                   <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline active:scale-95 transition-all">+ New Client</button>
+                  <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
+                  <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline active:scale-95 transition-all">+ New Client</button>
                 </div>
                 <div className="relative group">
-                  <input 
-                    type="text" 
-                    placeholder="Search for a client*" 
+                  <input
+                    type="text"
+                    placeholder="Search for a client*"
                     value={formData.searchClient}
                     onFocus={() => setSearchFocused(true)}
                     onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
@@ -234,7 +242,7 @@ export function CalendarPage() {
                     className="w-full bg-black/5 border border-transparent rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:bg-white focus:border-black focus:ring-0 transition-all outline-none"
                   />
                   <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
-                  
+
                   {searchFocused && formData.searchClient && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-black/10 rounded-xl shadow-2xl z-[300] max-h-48 overflow-y-auto custom-scrollbar overflow-hidden">
                       {patients
@@ -262,20 +270,20 @@ export function CalendarPage() {
               <div className="space-y-4">
                 <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Appointment Details</h4>
                 <div className="space-y-2">
-                  <CalendarInput 
-                    label="Service" 
-                    value={formData.service} 
+                  <CalendarInput
+                    label="Service"
+                    value={formData.service}
                     type="select"
                     options={contentTypes}
-                    icon={<ChevronDown size={14} />} 
+                    icon={<ChevronDown size={14} />}
                     onChange={(v) => updateField("service", v)}
                   />
-                  <CalendarInput 
-                    label="Resources" 
-                    value={formData.resources} 
+                  <CalendarInput
+                    label="Resources"
+                    value={formData.resources}
                     type="select"
                     options={["Room 101", "Room 102", "Room 103"]}
-                    icon={<ChevronDown size={14} />} 
+                    icon={<ChevronDown size={14} />}
                     onChange={(v) => updateField("resources", v)}
                   />
                 </div>
@@ -283,13 +291,13 @@ export function CalendarPage() {
 
               {/* Action Buttons */}
               <div className="pt-4 space-y-2">
-                <button 
+                <button
                   onClick={handleSave}
                   className="w-full bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-black/20 hover:bg-emerald-600 hover:shadow-emerald-500/20 active:scale-95 transition-all"
                 >
                   Save Appointment
                 </button>
-                <button 
+                <button
                   onClick={() => setIsSidebarOpen(false)}
                   className="w-full bg-white border border-black/10 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-black/5 active:scale-95 transition-all"
                 >
