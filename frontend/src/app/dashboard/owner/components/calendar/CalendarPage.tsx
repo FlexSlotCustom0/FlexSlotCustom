@@ -87,15 +87,16 @@ export function CalendarPage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-7 gap-0 border-b border-black/5">
+        <div className="grid grid-cols-7 gap-0">
           {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
-            <div key={day} className="flex justify-center py-4 border-r border-black/5 last:border-r-0">
+            <div key={day} className="flex justify-center py-4">
               <div className="w-24 py-2 bg-black text-white rounded-full text-center shadow-lg">
                 <span className="text-[10px] font-black uppercase tracking-widest">{day}</span>
               </div>
             </div>
           ))}
         </div>
+
 
 
         <div className="flex-1 grid grid-cols-7 grid-rows-5 gap-0 border-t border-black/10">
