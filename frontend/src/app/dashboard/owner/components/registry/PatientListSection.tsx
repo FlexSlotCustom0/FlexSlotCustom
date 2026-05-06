@@ -217,17 +217,6 @@ export function PatientListSection() {
                   </div>
                 </div>
 
-                {/* Quick Schedule Footer */}
-                <div className="bg-black text-white rounded-[2.5rem] p-10 shadow-2xl flex items-center justify-between overflow-hidden relative group">
-                  <div className="relative z-10 space-y-2">
-                    <h3 className="text-2xl font-black uppercase italic tracking-tighter">Schedule Next Protocol?</h3>
-                    <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Authorized slots available for next 7 days</p>
-                  </div>
-                  <button className="relative z-10 px-6 py-3 bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all">
-                    Initiate Session
-                  </button>
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-emerald-500/30 transition-all" />
-                </div>
               </div>
             </div>
           </motion.div>
