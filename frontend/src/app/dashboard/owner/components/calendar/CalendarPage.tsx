@@ -155,10 +155,11 @@ export function CalendarPage() {
                   ))}
                 </div>
                 {dayNum && appts.map(a => (
-                  <p key={a.id} className="text-[9px] font-bold text-black/60 uppercase leading-tight mt-2 line-clamp-2">
-                    {a.label}
-                  </p>
+                  <div key={a.id} className="mt-auto flex justify-end">
+                    {/* Text labels removed as per request */}
+                  </div>
                 ))}
+
                 {!appts.length && dayNum && (
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                     <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-lg scale-90 group-hover:scale-100 transition-transform">
