@@ -78,9 +78,9 @@ export function PatientListSection() {
           <table className="w-full text-left">
             <thead className="bg-black/5">
               <tr>
-                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Patient ID</th>
-                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Identity</th>
-                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Last Signal</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-black/50">Patient ID</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-black/50">Identity</th>
+                <th className="px-8 py-6 text-[10px] font-black uppercase tracking-[0.25em] text-black/50">Last Signal</th>
                 <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40"></th>
               </tr>
             </thead>
