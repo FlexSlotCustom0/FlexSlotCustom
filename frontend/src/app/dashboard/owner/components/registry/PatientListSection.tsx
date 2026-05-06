@@ -193,89 +193,65 @@ export function PatientListSection() {
 
                 {/* Tabbed Visit Interface */}
                 <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-10 flex-1 min-h-[500px]">
-                  {/* Tabs */}
-                  <div className="flex items-center gap-12 border-b border-black/5 pb-2">
-                    {[
-                      { id: 'future', label: `Future visits (${activeDossierTab === 'future' ? 2 : 2})` },
-                      { id: 'past', label: `Past visits (15)` },
-                      { id: 'planned', label: 'Planned treatments' }
-                    ].map(tab => (
-                      <button 
-                        key={tab.id}
-                        onClick={() => setActiveDossierTab(tab.id)}
-                        className={`text-xs font-black uppercase tracking-widest pb-4 relative transition-all ${
-                          activeDossierTab === tab.id ? 'text-black' : 'text-black/20 hover:text-black/40'
-                        }`}
-                      >
-                        {tab.label}
-                        {activeDossierTab === tab.id && (
-                          <motion.div layoutId="dossierTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
-                        )}
-                      </button>
-                    ))}
+                  {/* Future Visits Header */}
+                  <div className="flex items-center justify-between border-b border-black/5 pb-6">
+                    <h3 className="text-xl font-black uppercase italic tracking-tighter">Future Visits (2)</h3>
+                    <div className="h-0.5 w-12 bg-black" />
                   </div>
 
                   {/* Visit Cards */}
                   <div className="space-y-4">
-                    {activeDossierTab === 'future' ? (
-                      <>
-                        <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
-                          <div className="w-1.5 h-full bg-emerald-500 self-stretch" />
-                          <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
-                            <div className="space-y-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">11.00-12.30</span>
-                              <p className="text-lg font-black italic">26 JUN 2026</p>
-                            </div>
-                            <div className="space-y-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Service:</span>
-                              <p className="text-sm font-black uppercase tracking-tight italic">Root Canal Protocol</p>
-                            </div>
-                            <div className="space-y-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Specialist:</span>
-                              <p className="text-sm font-black text-emerald-600">Dr. Sarah Jenkins</p>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="space-y-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
-                                <div className="px-4 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
-                              </div>
-                              <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
-                            </div>
-                          </div>
+                    <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
+                      <div className="w-1.5 h-full bg-emerald-500 self-stretch" />
+                      <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20">11.00-12.30</span>
+                          <p className="text-lg font-black italic">26 JUN 2026</p>
                         </div>
-
-                        <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
-                          <div className="w-1.5 h-full bg-blue-500 self-stretch" />
-                          <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
-                            <div className="space-y-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">14.30-15.30</span>
-                              <p className="text-lg font-black italic">02 JUL 2026</p>
-                            </div>
-                            <div className="space-y-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Service:</span>
-                              <p className="text-sm font-black uppercase tracking-tight italic">Thermal Whitening</p>
-                            </div>
-                            <div className="space-y-2">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Specialist:</span>
-                              <p className="text-sm font-black text-blue-600">Dr. Max Oched</p>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="space-y-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
-                                <div className="px-4 py-1.5 bg-blue-500/10 text-blue-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
-                              </div>
-                              <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
-                            </div>
-                          </div>
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Service:</span>
+                          <p className="text-sm font-black uppercase tracking-tight italic">Root Canal Protocol</p>
                         </div>
-                      </>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-20 text-black/10 space-y-4">
-                        <Activity size={48} />
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em]">Historical Data Encrypted</p>
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Specialist:</span>
+                          <p className="text-sm font-black text-emerald-600">Dr. Sarah Jenkins</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <div className="space-y-2">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
+                            <div className="px-4 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
+                          </div>
+                          <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
+                        </div>
                       </div>
-                    )}
+                    </div>
+
+                    <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
+                      <div className="w-1.5 h-full bg-blue-500 self-stretch" />
+                      <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20">14.30-15.30</span>
+                          <p className="text-lg font-black italic">02 JUL 2026</p>
+                        </div>
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Service:</span>
+                          <p className="text-sm font-black uppercase tracking-tight italic">Thermal Whitening</p>
+                        </div>
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Specialist:</span>
+                          <p className="text-sm font-black text-blue-600">Dr. Max Oched</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <div className="space-y-2">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
+                            <div className="px-4 py-1.5 bg-blue-500/10 text-blue-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
+                          </div>
+                          <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
                 </div>
 
               </div>
