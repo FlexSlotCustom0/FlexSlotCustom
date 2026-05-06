@@ -106,7 +106,7 @@ export default function OwnerDashboard() {
           </Link>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        <nav className="flex-1 px-4 py-6 space-y-3">
           <SideNavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
           <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
           <SideNavItem icon={<CalendarDays size={18} />} label="Calendar" active={activeTab === "calendar"} onClick={() => setActiveTab("calendar")} />
