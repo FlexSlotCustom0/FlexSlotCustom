@@ -106,9 +106,8 @@ export default function OwnerDashboard() {
           </Link>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-1">
+        <nav className="flex-1 px-4 py-6 space-y-3">
           <SideNavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
-          <div className="h-px bg-black/5 my-4 mx-2" />
           <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
           <SideNavItem icon={<CalendarDays size={18} />} label="Calendar" active={activeTab === "calendar"} onClick={() => setActiveTab("calendar")} />
           <SideNavItem icon={<Users size={18} />} label="Patient List" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
@@ -122,7 +121,7 @@ export default function OwnerDashboard() {
       </aside>
 
       <main className="flex-1 flex flex-col overflow-y-auto relative">
-        {activeTab !== "calendar" && (
+        {activeTab !== "calendar" && activeTab !== "audit" && (
           <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
             <div className="flex items-center gap-6 flex-1">
               <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
