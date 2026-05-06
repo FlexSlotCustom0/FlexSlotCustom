@@ -201,13 +201,11 @@ export function PatientListSection() {
                   {/* Future Visits Header */}
                   <div className="flex items-center justify-between border-b border-black/5 pb-6">
                     <h3 className="text-xl font-black uppercase italic tracking-tighter">Future Visits (2)</h3>
-                    <div className="h-0.5 w-12 bg-black" />
                   </div>
 
                   {/* Visit Cards */}
                   <div className="space-y-4">
                     <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
-                      <div className="w-1.5 h-full bg-emerald-500 self-stretch" />
                       <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
                         <div className="space-y-2">
                           <span className="text-[10px] font-black uppercase tracking-widest text-black/20">11.00-12.30</span>
@@ -226,13 +224,11 @@ export function PatientListSection() {
                             <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
                             <div className="px-4 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
                           </div>
-                          <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
                         </div>
                       </div>
                     </div>
 
                     <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
-                      <div className="w-1.5 h-full bg-blue-500 self-stretch" />
                       <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
                         <div className="space-y-2">
                           <span className="text-[10px] font-black uppercase tracking-widest text-black/20">14.30-15.30</span>
@@ -251,7 +247,6 @@ export function PatientListSection() {
                             <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
                             <div className="px-4 py-1.5 bg-blue-500/10 text-blue-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
                           </div>
-                          <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
                         </div>
                       </div>
                     </div>
