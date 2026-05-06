@@ -2,137 +2,264 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, CalendarDays, Clock, User, Search, X, ChevronDown } from "lucide-react";
+import { CalendarDays, Clock, User, Search, X, ChevronDown, Plus } from "lucide-react";
 import { CalendarInput } from "./CalendarInput";
 
 export function CalendarPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState(8);
+  const [searchFocused, setSearchFocused] = useState(false);
 
-  const days = [
-    { num: 5, label: "MON", appointments: 12 },
-    { num: 6, label: "TUE", appointments: 8 },
-    { num: 7, label: "WED", appointments: 15 },
-    { num: 8, label: "THU", appointments: 4 },
-    { num: 9, label: "FRI", appointments: 20 },
-    { num: 10, label: "SAT", appointments: 2 },
-    { num: 11, label: "SUN", appointments: 0 },
+  // Patient database
+  const patients = [
+    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com' },
+    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com' },
+    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com' },
+    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com' },
+    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com' },
   ];
 
-  const timeSlots = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
+  // Manual Override State
+  const [formData, setFormData] = useState({
+    when: "2026-01-08",
+    time: "09:00",
+    end: "09:30",
+    location: "Main Clinic",
+    withPerson: "Dr. Jenkins",
+    type: "Client",
+    searchClient: "",
+    service: "Motivational Quote",
+    resources: "Room 101",
+    flag: "Urgent"
+  });
+
+  const [appointments, setAppointments] = useState([]);
+
+
+  const updateField = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSave = () => {
+    const newDay = parseInt(formData.when.split("-")[2]) || selectedDay;
+    const newAppt = {
+      id: Math.random().toString(36).substr(2, 9),
+      day: newDay,
+      time: formData.time,
+      client: formData.searchClient || "Manual Allocation",
+      room: formData.resources,
+      service: formData.service,
+      color: "bg-black"
+    };
+    setAppointments([...appointments, newAppt]);
+
+    setSelectedDay(newDay);
     setIsSidebarOpen(false);
   };
 
+  const contentTypes = [
+    "Motivational Quote", "Customer Testimonial", "Blog Post", "Case Study",
+    "Fun Fact", "Weekly Recap", "FAQ", "Contest or Giveaway",
+    "Behind-the-Brand", "User-Generated Content"
+  ];
+
+  const platforms = [
+    { name: "PLATFORM A", color: "bg-[#b68a35]" },
+    { name: "PLATFORM B", color: "bg-[#a65d3f]" },
+    { name: "PLATFORM C", color: "bg-[#9b9b9b]" },
+    { name: "PLATFORM D", color: "bg-[#4a6741]" },
+    { name: "PLATFORM E", color: "bg-[#7d7d7d]" },
+  ];
+
+  const currentMonthDate = new Date(formData.when);
+  const year = currentMonthDate.getFullYear();
+  const month = currentMonthDate.getMonth(); // 0-indexed
+
+  const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+  // Previous month padding
+  const prevMonthLastDay = new Date(year, month, 0).getDate();
+  const prevMonthPadding = Array.from({ length: firstDayOfMonth }, (_, i) => -(firstDayOfMonth - 1 - i));
+  
+  // Current month days
+  const currentMonthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  
+  // Next month padding (to fill 35 or 42 cells)
+  const totalCells = (firstDayOfMonth + daysInMonth) > 35 ? 42 : 35;
+  const nextMonthPadding = Array.from({ length: totalCells - (firstDayOfMonth + daysInMonth) }, (_, i) => daysInMonth + i + 1);
+
+  const calendarDays = [...prevMonthPadding, ...currentMonthDays, ...nextMonthPadding];
+
+
   return (
-    <div className="flex h-full gap-8">
-      <div className="flex-1 space-y-8">
-        <header className="flex items-center justify-between">
-          <div className="space-y-1">
-             <h2 className="text-4xl font-black uppercase tracking-tighter italic">Schedule Matrix</h2>
-             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-black/20 italic">Time-Slot Allocation Protocol</p>
-          </div>
-          <button onClick={() => setIsSidebarOpen(true)} className="px-10 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl shadow-black/20 hover:scale-105 active:scale-95 transition-all">New Allocation</button>
-        </header>
+    <div className="flex h-screen bg-[#e9e7e2] text-black overflow-hidden font-sans">
+      {/* Main Grid - Full Width */}
+      <div className="flex-1 p-12 flex flex-col gap-8 overflow-y-auto">
+        <div className="px-4 mb-4">
+          <h1 className="text-7xl font-black tracking-tighter leading-none mb-1 uppercase italic">
+            {new Date(formData.when).toLocaleString('default', { month: 'long' })}
+          </h1>
+          <h2 className="text-4xl font-black text-black/10 tracking-tighter leading-none uppercase italic">
+            {new Date(formData.when).getFullYear()}
+          </h2>
+        </div>
 
-        {/* Calendar Grid */}
-        <div className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm">
-          <div className="grid grid-cols-7 gap-4 mb-12">
-            {days.map(d => (
-              <button 
-                key={d.num} 
-                onClick={() => setSelectedDay(d.num)}
-                className={`p-6 rounded-[2rem] flex flex-col items-center gap-2 transition-all ${selectedDay === d.num ? "bg-black text-white shadow-2xl scale-105" : "bg-black/[0.02] hover:bg-black/5"}`}
+        <div className="grid grid-cols-7 gap-0">
+          {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
+            <div key={day} className="flex justify-center py-4">
+              <div className="w-24 py-2 bg-black text-white rounded-full text-center shadow-lg">
+                <span className="text-[10px] font-black uppercase tracking-widest">{day}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+
+
+        <div className="flex-1 grid grid-cols-7 gap-0 border-t border-black/10 auto-rows-fr">
+          {calendarDays.map((d, i) => {
+            const isCurrentMonth = d > 0 && d <= daysInMonth;
+            const dayNum = isCurrentMonth ? d : null;
+            const appts = appointments.filter(a => a.day === dayNum);
+            
+            let displayNum = d;
+            if (d < 1) displayNum = prevMonthLastDay + d;
+            if (d > daysInMonth) displayNum = d - daysInMonth;
+
+
+            return (
+              <div
+                key={i}
+                onClick={() => { if (dayNum) { setSelectedDay(dayNum); setIsSidebarOpen(true); } }}
+                className={`p-4 border-r border-b border-black/10 relative group transition-all ${dayNum ? "hover:bg-black/[0.02] cursor-pointer" : "bg-black/[0.01]"}`}
               >
-                <span className="text-[10px] font-black uppercase opacity-40">{d.label}</span>
-                <span className="text-2xl font-black italic">{d.num}</span>
-                <div className={`w-1.5 h-1.5 rounded-full ${d.appointments > 10 ? "bg-emerald-500" : d.appointments > 0 ? "bg-amber-500" : "bg-transparent"}`} />
-              </button>
-            ))}
-          </div>
+                <div className="flex justify-between items-start mb-2">
+                  <span className={`text-xs font-black ${!isCurrentMonth ? "text-black/10" : "text-black/30"}`}>
+                    {displayNum}
+                  </span>
 
-          <div className="space-y-1">
-            {timeSlots.map(time => (
-              <div key={time} className="group flex items-center gap-6 h-20 border-t border-black/5 first:border-0 hover:bg-black/[0.02] transition-colors relative">
-                <div className="w-20 text-[10px] font-black text-black/20 uppercase tracking-widest text-right">{time}</div>
-                <div className="flex-1 h-px bg-black/5" />
-                {time === "10:00 AM" && selectedDay === 8 && (
-                  <div className="absolute left-32 right-10 top-2 bottom-2 bg-black text-white rounded-2xl p-4 flex justify-between items-center shadow-xl group/item">
-                    <div className="space-y-1">
-                       <p className="text-[8px] font-black uppercase tracking-widest text-white/40">Dr. Jenkins · Room 102</p>
-                       <h4 className="text-sm font-black uppercase tracking-tighter italic">Alexander Wright</h4>
-                    </div>
-                    <div className="flex items-center gap-2 opacity-0 group-hover/item:opacity-100 transition-opacity">
-                       <button className="p-2 hover:bg-white/10 rounded-lg transition-all"><X size={14} /></button>
-                       <ChevronRight size={16} />
+                  {dayNum && appts.map(a => (
+                    <div key={a.id} className={`w-6 h-6 rounded-full ${a.color} shadow-sm group-hover:scale-110 transition-transform`} />
+                  ))}
+                </div>
+                {dayNum && appts.map(a => (
+                  <div key={a.id} className="mt-3 flex flex-col gap-1 bg-white/50 p-2 rounded-xl border border-black/5">
+                     <div className="flex justify-between items-center mb-1">
+                        <span className="text-[7px] font-black text-black/30 uppercase tracking-widest">{a.time || "09:00"}</span>
+                        <div className={`w-1.5 h-1.5 rounded-full ${a.color}`} />
+                     </div>
+                     <p className="text-[10px] font-black uppercase tracking-tighter italic leading-none truncate">{a.client || a.label}</p>
+                     <p className="text-[7px] font-bold text-black/40 uppercase tracking-wider truncate">{a.service || "Standard Service"}</p>
+                     <p className="text-[7px] font-bold text-black/20 uppercase tracking-widest truncate">{a.room || "Room 101"}</p>
+                  </div>
+                ))}
+
+
+                {!appts.length && dayNum && (
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                    <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-lg scale-90 group-hover:scale-100 transition-transform">
+                      <Plus size={14} />
                     </div>
                   </div>
                 )}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                   <button onClick={() => setIsSidebarOpen(true)} className="bg-white border border-black/10 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm hover:scale-105 transition-all">Quick Reserve</button>
-                </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
 
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div 
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="w-[400px] bg-white border-l border-black/5 h-screen sticky top-0 shadow-2xl p-10 flex flex-col gap-10 z-[200]"
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "100%", opacity: 0 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="w-[450px] bg-white border-l border-black/5 h-screen fixed top-0 right-0 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] p-12 flex flex-col gap-12 z-[200] overflow-y-auto custom-scrollbar"
           >
+
+
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-black uppercase tracking-widest italic">Manual Override</h3>
-              <button onClick={() => setIsSidebarOpen(false)} className="p-2 hover:bg-black/5 rounded-full transition-colors"><X size={20} /></button>
+              <div className="space-y-1">
+                <h3 className="text-2xl font-black uppercase tracking-tighter italic leading-none">Manual Override</h3>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-black/20 italic">Override Protocol v4.0</p>
+              </div>
+              <button onClick={() => setIsSidebarOpen(false)} className="p-3 hover:bg-black/5 rounded-2xl transition-all active:scale-90 group">
+                <X size={24} className="text-black/20 group-hover:text-black transition-colors" />
+              </button>
             </div>
+
 
             <div className="space-y-8 overflow-y-auto pr-2 custom-scrollbar">
               {/* Section: Temporal Config */}
               <div className="space-y-3">
                 <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Temporal Config</h4>
                 <div className="space-y-2">
-                  <CalendarInput label="When" value="08/05/2026" icon={<CalendarDays size={14} />} />
+                  <CalendarInput
+                    label="When"
+                    value={formData.when}
+                    type="date"
+                    icon={<CalendarDays size={14} />}
+                    onChange={(v) => updateField("when", v)}
+                  />
                   <div className="grid grid-cols-2 gap-2">
-                    <CalendarInput label="Time" value="9:00 AM" icon={<Clock size={14} />} />
-                    <CalendarInput label="End" value="9:30 AM" icon={<Clock size={14} />} />
+                    <CalendarInput
+                      label="Time"
+                      value={formData.time}
+                      type="time"
+                      icon={<Clock size={14} />}
+                      onChange={(v) => updateField("time", v)}
+                    />
+                    <CalendarInput
+                      label="End"
+                      value={formData.end}
+                      type="time"
+                      icon={<Clock size={14} />}
+                      onChange={(v) => updateField("end", v)}
+                    />
                   </div>
-                  <CalendarInput label="Location" value="Main Clinic" icon={<ChevronDown size={14} />} />
-                  <CalendarInput label="With" value="Dr. Jenkins" icon={<ChevronDown size={14} />} />
                 </div>
-              </div>
-
-              {/* Section: Client/Personal/Group Toggle */}
-              <div className="grid grid-cols-3 border border-black/10 rounded-xl overflow-hidden shadow-inner">
-                 {["Client", "Personal", "Group"].map((type, i) => (
-                   <button 
-                     key={type} 
-                     className={`py-2 flex flex-col items-center gap-1 border-r border-black/10 last:border-0 transition-all ${i === 0 ? "bg-black text-white" : "bg-white text-black/40 hover:text-black hover:bg-black/5"}`}
-                   >
-                     <User size={12} />
-                     <span className="text-[8px] font-black uppercase">{type}</span>
-                   </button>
-                 ))}
               </div>
 
               {/* Section: Client Search */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                   <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
-                   <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline active:scale-95 transition-all">+ New Client</button>
+                  <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
+                  <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline active:scale-95 transition-all">+ New Client</button>
                 </div>
                 <div className="relative group">
-                  <input 
-                    type="text" 
-                    placeholder="Search for a client*" 
+                  <input
+                    type="text"
+                    placeholder="Search for a client*"
+                    value={formData.searchClient}
+                    onFocus={() => setSearchFocused(true)}
+                    onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
+                    onChange={(e) => updateField("searchClient", e.target.value)}
                     className="w-full bg-black/5 border border-transparent rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:bg-white focus:border-black focus:ring-0 transition-all outline-none"
                   />
                   <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
+
+                  {searchFocused && formData.searchClient && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-black/10 rounded-xl shadow-2xl z-[300] max-h-48 overflow-y-auto custom-scrollbar overflow-hidden">
+                      {patients
+                        .filter(p => p.name.toLowerCase().includes(formData.searchClient.toLowerCase()) || p.email.toLowerCase().includes(formData.searchClient.toLowerCase()))
+                        .map(p => (
+                          <button
+                            key={p.id}
+                            onClick={() => {
+                              updateField("searchClient", p.name);
+                              setSearchFocused(false);
+                            }}
+                            className="w-full px-4 py-3 text-left hover:bg-black/5 flex flex-col gap-0.5 border-b border-black/5 last:border-0 transition-colors"
+                          >
+                            <span className="text-[10px] font-black uppercase tracking-tighter italic">{p.name}</span>
+                            <span className="text-[8px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
+                          </button>
+                        ))
+                      }
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -140,21 +267,34 @@ export function CalendarPage() {
               <div className="space-y-4">
                 <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Appointment Details</h4>
                 <div className="space-y-2">
-                  <CalendarInput label="Service" value="Select a Service" icon={<ChevronDown size={14} />} />
-                  <CalendarInput label="Resources" value="Select Resources" icon={<ChevronDown size={14} />} />
-                  <CalendarInput label="Flag" value="Select a Flag" icon={<ChevronDown size={14} />} />
+                  <CalendarInput
+                    label="Service"
+                    value={formData.service}
+                    type="select"
+                    options={contentTypes}
+                    icon={<ChevronDown size={14} />}
+                    onChange={(v) => updateField("service", v)}
+                  />
+                  <CalendarInput
+                    label="Resources"
+                    value={formData.resources}
+                    type="select"
+                    options={["Room 101", "Room 102", "Room 103"]}
+                    icon={<ChevronDown size={14} />}
+                    onChange={(v) => updateField("resources", v)}
+                  />
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="pt-4 space-y-2">
-                <button 
+                <button
                   onClick={handleSave}
                   className="w-full bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-black/20 hover:bg-emerald-600 hover:shadow-emerald-500/20 active:scale-95 transition-all"
                 >
                   Save Appointment
                 </button>
-                <button 
+                <button
                   onClick={() => setIsSidebarOpen(false)}
                   className="w-full bg-white border border-black/10 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-black/5 active:scale-95 transition-all"
                 >
