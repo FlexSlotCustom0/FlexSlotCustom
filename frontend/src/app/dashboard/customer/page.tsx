@@ -91,7 +91,21 @@ function ExploreMarketSection() {
 
   useEffect(() => {
     const saved = localStorage.getItem("flexslot_public_clinics");
-    if (saved) setPublishedClinics(JSON.parse(saved));
+    if (saved) {
+      const allClinics = JSON.parse(saved);
+      // Filter out legacy/demo clinics as requested by user
+      const filtered = allClinics.filter((c: any) => 
+        c.name !== "Alpha Vet Care" && 
+        c.name !== "Antigravity Clinic"
+      );
+      
+      setPublishedClinics(filtered);
+      
+      // Sync back to local storage if items were removed
+      if (filtered.length !== allClinics.length) {
+        localStorage.setItem("flexslot_public_clinics", JSON.stringify(filtered));
+      }
+    }
   }, []);
 
   return (
