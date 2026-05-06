@@ -124,27 +124,14 @@ export function PatientListSection() {
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="fixed inset-0 bg-[#e9e7e2] z-[500] flex flex-col p-12 overflow-y-auto custom-scrollbar"
           >
-            {/* Header / Nav */}
-            <div className="flex justify-between items-start mb-16">
-              <div className="flex items-center gap-6">
-                <button 
-                  onClick={() => setSelectedPatient(null)}
-                  className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm active:scale-90"
-                >
-                  <X size={20} />
-                </button>
-                <div className="space-y-1">
-                  <h3 className="text-4xl font-black uppercase tracking-tighter italic leading-none">Patient Dossier</h3>
-                  <p className="text-xs font-black uppercase tracking-[0.3em] text-black/20 italic">Registry Authorization Level 5</p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                 <button className="px-5 py-2.5 bg-white border border-black/5 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-sm hover:bg-black/5 transition-all active:scale-95">Edit Identity</button>
-                 <button className="px-5 py-2.5 bg-black text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl shadow-black/20 hover:scale-105 transition-all active:scale-95">Archive Profile</button>
-              </div>
-            </div>
+            <button 
+              onClick={() => setSelectedPatient(null)}
+              className="fixed top-8 right-8 w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-xl active:scale-90 z-[600]"
+            >
+              <X size={20} />
+            </button>
 
-            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12">
+            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12 mt-12">
               {/* Left Column: Core Identity */}
               <div className="col-span-4 space-y-8">
                 <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
@@ -239,7 +226,6 @@ export function PatientListSection() {
                   <button className="relative z-10 px-6 py-3 bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all">
                     Initiate Session
                   </button>
-
                   <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-emerald-500/30 transition-all" />
                 </div>
               </div>
