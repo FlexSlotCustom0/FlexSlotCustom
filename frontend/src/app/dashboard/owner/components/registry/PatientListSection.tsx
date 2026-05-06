@@ -146,7 +146,7 @@ export function PatientListSection() {
               <div className="col-span-4 space-y-8">
                 <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
                   <div className="w-40 h-40 rounded-full bg-black flex items-center justify-center shadow-2xl relative">
-                    <User size={64} className="text-white" />
+                    <span className="text-6xl font-black text-white italic">{selectedPatient.name.charAt(0)}</span>
                   </div>
                   <div className="text-center space-y-2">
                     <h2 className="text-4xl font-black uppercase tracking-tighter italic leading-none">{selectedPatient.name}</h2>
@@ -156,16 +156,16 @@ export function PatientListSection() {
                 <div className="bg-white rounded-[2.5rem] p-8 border border-black/5 shadow-sm space-y-4">
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 border-b border-black/5 pb-2 ml-2">Contact</h4>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
-                      <Mail size={18} className="text-black/20" />
+                    <div className="flex flex-col gap-1 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
+                      <span className="text-[8px] font-black uppercase tracking-widest text-black/20">Email</span>
                       <span className="text-xs font-black uppercase tracking-tight">{selectedPatient.email}</span>
                     </div>
-                    <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
-                      <Phone size={18} className="text-black/20" />
+                    <div className="flex flex-col gap-1 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
+                      <span className="text-[8px] font-black uppercase tracking-widest text-black/20">Phone</span>
                       <span className="text-xs font-black uppercase tracking-tight">{selectedPatient.phone}</span>
                     </div>
-                    <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
-                      <MapPin size={18} className="text-black/20" />
+                    <div className="flex flex-col gap-1 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
+                      <span className="text-[8px] font-black uppercase tracking-widest text-black/20">Location</span>
                       <span className="text-xs font-black uppercase tracking-tight">{selectedPatient.location}</span>
                     </div>
                   </div>
@@ -182,24 +182,15 @@ export function PatientListSection() {
                   </div>
                   <div className="grid grid-cols-3 gap-8">
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-black/20">
-                        <CalendarDays size={18} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Date of Birth</span>
-                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Date of Birth</span>
                       <p className="text-lg font-black italic">{selectedPatient.dob || 'N/A'}</p>
                     </div>
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-black/20">
-                        <Heart size={18} className="text-rose-500" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Blood Type</span>
-                      </div>
-                      <p className="text-lg font-black italic">{selectedPatient.bloodType || 'N/A'}</p>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Blood Type</span>
+                      <p className="text-lg font-black italic text-rose-500">{selectedPatient.bloodType || 'N/A'}</p>
                     </div>
                     <div className="space-y-3 col-span-1">
-                      <div className="flex items-center gap-3 text-black/20">
-                        <AlertCircle size={18} className="text-amber-500" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Allergies</span>
-                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Allergies</span>
                       <p className="text-sm font-black uppercase tracking-tight leading-tight text-black/60">{selectedPatient.allergies || 'NONE DETECTED'}</p>
                     </div>
                   </div>
