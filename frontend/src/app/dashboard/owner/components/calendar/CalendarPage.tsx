@@ -8,20 +8,32 @@ import { CalendarInput } from "./CalendarInput";
 export function CalendarPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState(8);
+  const [searchFocused, setSearchFocused] = useState(false);
+
+  // Patient database from PATIENT LIST PAGE
+  const patients = [
+    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com' },
+    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com' },
+    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com' },
+    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com' },
+    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com' },
+  ];
+
 
   // Manual Override State
   const [formData, setFormData] = useState({
-    when: "08/05/2026",
-    time: "9:00 AM",
-    end: "9:30 AM",
+    when: "2026-05-08",
+    time: "09:00",
+    end: "09:30",
     location: "Main Clinic",
     withPerson: "Dr. Jenkins",
     type: "Client",
     searchClient: "",
-    service: "Select a Service",
-    resources: "Select Resources",
-    flag: "Select a Flag"
+    service: "Consultation",
+    resources: "Room 101",
+    flag: "Urgent"
   });
+
 
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -53,10 +65,19 @@ export function CalendarPage() {
   const timeSlots = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
 
   const handleSave = () => {
+    // Format time for display (HH:mm -> hh:mm AM/PM)
+    const formatTime = (t: string) => {
+      const [h, m] = t.split(":");
+      const hour = parseInt(h);
+      const ampm = hour >= 12 ? "PM" : "AM";
+      const h12 = hour % 12 || 12;
+      return `${h12}:${m} ${ampm}`;
+    };
+
     const newAppt = {
       id: Math.random().toString(36).substr(2, 9),
-      day: parseInt(formData.when.split("/")[0]) || selectedDay,
-      time: formData.time,
+      day: parseInt(formData.when.split("-")[2]) || selectedDay,
+      time: formatTime(formData.time),
       client: formData.searchClient || "Unknown Client",
       with: formData.withPerson,
       location: formData.location
@@ -64,6 +85,7 @@ export function CalendarPage() {
     setAppointments([...appointments, newAppt]);
     setIsSidebarOpen(false);
   };
+
 
   const removeAppointment = (id: string) => {
     setAppointments(appointments.filter(a => a.id !== id));
@@ -158,6 +180,7 @@ export function CalendarPage() {
                   <CalendarInput 
                     label="When" 
                     value={formData.when} 
+                    type="date"
                     icon={<CalendarDays size={14} />} 
                     onChange={(v) => updateField("when", v)}
                   />
@@ -165,12 +188,14 @@ export function CalendarPage() {
                     <CalendarInput 
                       label="Time" 
                       value={formData.time} 
+                      type="time"
                       icon={<Clock size={14} />} 
                       onChange={(v) => updateField("time", v)}
                     />
                     <CalendarInput 
                       label="End" 
                       value={formData.end} 
+                      type="time"
                       icon={<Clock size={14} />} 
                       onChange={(v) => updateField("end", v)}
                     />
@@ -178,17 +203,22 @@ export function CalendarPage() {
                   <CalendarInput 
                     label="Location" 
                     value={formData.location} 
+                    type="select"
+                    options={["Main Clinic", "City Branch", "West Side", "Dental Care Unit"]}
                     icon={<ChevronDown size={14} />} 
                     onChange={(v) => updateField("location", v)}
                   />
                   <CalendarInput 
                     label="With" 
                     value={formData.withPerson} 
+                    type="select"
+                    options={["Dr. Jenkins", "Dr. Smith", "Dr. Sarah", "Dr. Michael"]}
                     icon={<ChevronDown size={14} />} 
                     onChange={(v) => updateField("withPerson", v)}
                   />
                 </div>
               </div>
+
 
 
               {/* Section: Client/Personal/Group Toggle */}
@@ -217,11 +247,39 @@ export function CalendarPage() {
                     type="text" 
                     placeholder="Search for a client*" 
                     value={formData.searchClient}
+                    onFocus={() => setSearchFocused(true)}
+                    onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
                     onChange={(e) => updateField("searchClient", e.target.value)}
                     className="w-full bg-black/5 border border-transparent rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:bg-white focus:border-black focus:ring-0 transition-all outline-none"
                   />
                   <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
+                  
+                  {/* Search Results Dropdown */}
+                  {searchFocused && formData.searchClient && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-black/10 rounded-xl shadow-2xl z-[300] max-h-48 overflow-y-auto custom-scrollbar overflow-hidden">
+                      {patients
+                        .filter(p => p.name.toLowerCase().includes(formData.searchClient.toLowerCase()) || p.email.toLowerCase().includes(formData.searchClient.toLowerCase()))
+                        .map(p => (
+                          <button
+                            key={p.id}
+                            onClick={() => {
+                              updateField("searchClient", p.name);
+                              setSearchFocused(false);
+                            }}
+                            className="w-full px-4 py-3 text-left hover:bg-black/5 flex flex-col gap-0.5 border-b border-black/5 last:border-0 transition-colors"
+                          >
+                            <span className="text-[10px] font-black uppercase tracking-tighter italic">{p.name}</span>
+                            <span className="text-[8px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
+                          </button>
+                        ))
+                      }
+                      {patients.filter(p => p.name.toLowerCase().includes(formData.searchClient.toLowerCase()) || p.email.toLowerCase().includes(formData.searchClient.toLowerCase())).length === 0 && (
+                        <div className="px-4 py-3 text-[8px] font-black uppercase text-black/20 italic">No matching signals found</div>
+                      )}
+                    </div>
+                  )}
                 </div>
+
               </div>
 
 
@@ -232,23 +290,58 @@ export function CalendarPage() {
                   <CalendarInput 
                     label="Service" 
                     value={formData.service} 
+                    type="select"
+                    options={[
+                      "General Consultation", 
+                      "Emergency Triage", 
+                      "Surgical Protocol", 
+                      "Diagnostic X-Ray", 
+                      "Laboratory Analysis", 
+                      "Post-Op Recovery", 
+                      "Pediatric Screening",
+                      "Dental Prophylaxis",
+                      "Veterinary Wellness"
+                    ]}
                     icon={<ChevronDown size={14} />} 
                     onChange={(v) => updateField("service", v)}
                   />
                   <CalendarInput 
                     label="Resources" 
                     value={formData.resources} 
+                    type="select"
+                    options={[
+                      "Room 101 - Primary", 
+                      "Room 102 - Surgery", 
+                      "Room 103 - Recovery", 
+                      "Room 104 - Pediatric", 
+                      "Room 105 - Diagnostic",
+                      "Lab 01 - Bio-Analytic",
+                      "X-Ray Bay 01",
+                      "Intensive Care Unit"
+                    ]}
                     icon={<ChevronDown size={14} />} 
                     onChange={(v) => updateField("resources", v)}
                   />
                   <CalendarInput 
                     label="Flag" 
                     value={formData.flag} 
+                    type="select"
+                    options={[
+                      "Standard Protocol", 
+                      "CRITICAL / URGENT", 
+                      "VIP / PRIORITY", 
+                      "Follow-up Mandatory", 
+                      "Research Participant",
+                      "High-Profile Signal",
+                      "Financial Clearance Pending"
+                    ]}
                     icon={<ChevronDown size={14} />} 
                     onChange={(v) => updateField("flag", v)}
                   />
                 </div>
               </div>
+
+
 
 
               {/* Action Buttons */}
