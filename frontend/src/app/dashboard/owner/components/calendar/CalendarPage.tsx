@@ -65,10 +65,14 @@ export function CalendarPage() {
     const newAppt = {
       id: Math.random().toString(36).substr(2, 9),
       day: newDay,
-      label: formData.service,
+      time: formData.time,
+      client: formData.searchClient || "Manual Allocation",
+      room: formData.resources,
+      service: formData.service,
       color: "bg-black"
     };
     setAppointments([...appointments, newAppt]);
+
     setSelectedDay(newDay);
     setIsSidebarOpen(false);
   };
@@ -130,10 +134,17 @@ export function CalendarPage() {
                   ))}
                 </div>
                 {dayNum && appts.map(a => (
-                  <div key={a.id} className="mt-auto flex justify-end">
-                    {/* Text labels removed as per request */}
+                  <div key={a.id} className="mt-3 flex flex-col gap-1 bg-white/50 p-2 rounded-xl border border-black/5">
+                     <div className="flex justify-between items-center mb-1">
+                        <span className="text-[7px] font-black text-black/30 uppercase tracking-widest">{a.time || "09:00"}</span>
+                        <div className={`w-1.5 h-1.5 rounded-full ${a.color}`} />
+                     </div>
+                     <p className="text-[10px] font-black uppercase tracking-tighter italic leading-none truncate">{a.client || a.label}</p>
+                     <p className="text-[7px] font-bold text-black/40 uppercase tracking-wider truncate">{a.service || "Standard Service"}</p>
+                     <p className="text-[7px] font-bold text-black/20 uppercase tracking-widest truncate">{a.room || "Room 101"}</p>
                   </div>
                 ))}
+
 
                 {!appts.length && dayNum && (
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
