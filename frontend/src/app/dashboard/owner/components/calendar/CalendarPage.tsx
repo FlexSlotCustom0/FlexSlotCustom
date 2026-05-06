@@ -33,28 +33,8 @@ export function CalendarPage() {
     flag: "Urgent"
   });
 
-  const [appointments, setAppointments] = useState([
-    { id: "1", day: 1, label: "Contest or Giveaway", color: "bg-[#4a6741]" },
-    { id: "2", day: 2, label: "Weekly Recap", color: "bg-black" },
-    { id: "3", day: 3, label: "User-Generated Content", color: "bg-[#a65d3f]" },
-    { id: "4", day: 4, label: "Case Study", color: "bg-black" },
-    { id: "5", day: 5, label: "Weekly Recap", color: "bg-[#9b9b9b]" },
-    { id: "6", day: 6, label: "Blog Post", color: "bg-black" },
-    { id: "7", day: 7, label: "Case Study", color: "bg-[#b68a35]" },
-    { id: "8", day: 8, label: "Fun Fact", color: "bg-black" },
-    { id: "9", day: 9, label: "Customer Testimonial", color: "bg-[#a65d3f]" },
-    { id: "10", day: 11, label: "Customer Testimonial", color: "bg-[#b68a35]" },
-    { id: "11", day: 13, label: "FAQ", color: "bg-[#a65d3f]" },
-    { id: "12", day: 14, label: "Customer Testimonial", color: "bg-[#4a6741]" },
-    { id: "13", day: 15, label: "Fun Fact", color: "bg-[#9b9b9b]" },
-    { id: "14", day: 17, label: "Blog Post", color: "bg-[#4a6741]" },
-    { id: "15", day: 19, label: "Weekly Recap", color: "bg-[#a65d3f]" },
-    { id: "16", day: 21, label: "Contest or Giveaway", color: "bg-[#b68a35]" },
-    { id: "17", day: 23, label: "Blog Post", color: "bg-[#b68a35]" },
-    { id: "18", day: 24, label: "Customer Testimonial", color: "bg-[#9b9b9b]" },
-    { id: "19", day: 27, label: "User-Generated Content", color: "bg-[#4a6741]" },
-    { id: "20", day: 29, label: "Motivational Quote", color: "bg-[#9b9b9b]" },
-  ]);
+  const [appointments, setAppointments] = useState([]);
+
 
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -99,11 +79,16 @@ export function CalendarPage() {
       {/* Main Grid - Full Width */}
       <div className="flex-1 p-12 flex flex-col gap-8 overflow-y-auto">
         <div className="px-4 mb-4">
-          <h1 className="text-7xl font-black tracking-tighter leading-none mb-1 uppercase italic">January</h1>
-          <h2 className="text-4xl font-black text-black/10 tracking-tighter leading-none uppercase italic">2026</h2>
+          <h1 className="text-7xl font-black tracking-tighter leading-none mb-1 uppercase italic">
+            {new Date(formData.when).toLocaleString('default', { month: 'long' })}
+          </h1>
+          <h2 className="text-4xl font-black text-black/10 tracking-tighter leading-none uppercase italic">
+            {new Date(formData.when).getFullYear()}
+          </h2>
         </div>
 
         <div className="flex justify-between items-center px-4">
+
 
           <div className="flex gap-4">
             {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
