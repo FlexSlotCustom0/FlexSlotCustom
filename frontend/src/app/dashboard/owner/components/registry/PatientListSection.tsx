@@ -122,7 +122,7 @@ export function PatientListSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 100 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-0 bg-[#e9e7e2] z-[500] flex flex-col p-12 overflow-y-auto custom-scrollbar"
+            className="fixed inset-0 bg-[#e9e7e2] z-[500] flex flex-col pt-6 px-12 pb-12 overflow-y-auto custom-scrollbar"
           >
             <button 
               onClick={() => setSelectedPatient(null)}
@@ -131,7 +131,7 @@ export function PatientListSection() {
               <X size={20} />
             </button>
 
-            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12 mt-12">
+            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12">
               {/* Left Column: Core Identity */}
               <div className="col-span-4 space-y-8">
                 <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
@@ -190,26 +190,26 @@ export function PatientListSection() {
                   ))}
                 </div>
 
-                {/* Historical Log */}
+                {/* Future Protocols Section */}
                 <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-8 flex-1">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-xl font-black uppercase italic tracking-tighter">Temporal Log history</h3>
-                    <button className="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:underline">View All Records</button>
+                    <h3 className="text-xl font-black uppercase italic tracking-tighter">Future Protocols</h3>
+                    <button className="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:underline">Manage Queue</button>
                   </div>
                   <div className="space-y-4">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="group flex items-center justify-between p-6 bg-black/[0.02] hover:bg-black hover:text-white rounded-[2rem] border border-black/[0.03] transition-all cursor-pointer">
+                    {[12, 15, 22].map(day => (
+                      <div key={day} className="group flex items-center justify-between p-6 bg-black/[0.02] hover:bg-emerald-500 hover:text-white rounded-[2rem] border border-black/[0.03] transition-all cursor-pointer">
                         <div className="flex items-center gap-6">
                           <div className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/10 transition-colors text-black">
-                            <Hash size={18} className="group-hover:text-white" />
+                            <Clock size={18} className="group-hover:text-white" />
                           </div>
                           <div className="space-y-1">
-                            <h4 className="text-sm font-black uppercase italic tracking-tight">Standard Consultation</h4>
-                            <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest group-hover:text-white/40">Performed by Dr. Jenkins • Room 102</p>
+                            <h4 className="text-sm font-black uppercase italic tracking-tight">Scheduled Protocol</h4>
+                            <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest group-hover:text-white/40">Assigned: Dr. Jenkins • Room 102</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20 group-hover:text-white/30">MAY 0{i}, 2026</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20 group-hover:text-white/30">JUNE {day}, 2026</span>
                           <ChevronRight size={16} className="text-black/10 group-hover:text-white" />
                         </div>
                       </div>
