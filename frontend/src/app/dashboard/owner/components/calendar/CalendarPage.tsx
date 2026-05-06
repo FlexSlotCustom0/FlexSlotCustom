@@ -7,6 +7,7 @@ import { CalendarInput } from "./CalendarInput";
 
 export function CalendarPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState(8);
   const [searchFocused, setSearchFocused] = useState(false);
 
@@ -21,7 +22,7 @@ export function CalendarPage() {
 
   // Manual Override State
   const [formData, setFormData] = useState({
-    when: "2026-01-08",
+    when: "2026-05-08",
     time: "09:00",
     end: "09:30",
     location: "Main Clinic",
@@ -34,7 +35,6 @@ export function CalendarPage() {
   });
 
   const [appointments, setAppointments] = useState([]);
-
 
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -52,23 +52,14 @@ export function CalendarPage() {
       color: "bg-black"
     };
     setAppointments([...appointments, newAppt]);
-
     setSelectedDay(newDay);
     setIsSidebarOpen(false);
   };
 
   const contentTypes = [
-    "Motivational Quote", "Customer Testimonial", "Blog Post", "Case Study",
-    "Fun Fact", "Weekly Recap", "FAQ", "Contest or Giveaway",
+    "Motivational Quote", "Customer Testimonial", "Blog Post", "Case Study", 
+    "Fun Fact", "Weekly Recap", "FAQ", "Contest or Giveaway", 
     "Behind-the-Brand", "User-Generated Content"
-  ];
-
-  const platforms = [
-    { name: "PLATFORM A", color: "bg-[#b68a35]" },
-    { name: "PLATFORM B", color: "bg-[#a65d3f]" },
-    { name: "PLATFORM C", color: "bg-[#9b9b9b]" },
-    { name: "PLATFORM D", color: "bg-[#4a6741]" },
-    { name: "PLATFORM E", color: "bg-[#7d7d7d]" },
   ];
 
   const currentMonthDate = new Date(formData.when);
@@ -90,7 +81,6 @@ export function CalendarPage() {
   const nextMonthPadding = Array.from({ length: totalCells - (firstDayOfMonth + daysInMonth) }, (_, i) => daysInMonth + i + 1);
 
   const calendarDays = [...prevMonthPadding, ...currentMonthDays, ...nextMonthPadding];
-
 
   return (
     <div className="flex h-screen bg-[#e9e7e2] text-black overflow-hidden font-sans">
@@ -115,8 +105,6 @@ export function CalendarPage() {
           ))}
         </div>
 
-
-
         <div className="flex-1 grid grid-cols-7 gap-0 border-t border-black/10 auto-rows-fr">
           {calendarDays.map((d, i) => {
             const isCurrentMonth = d > 0 && d <= daysInMonth;
@@ -127,18 +115,16 @@ export function CalendarPage() {
             if (d < 1) displayNum = prevMonthLastDay + d;
             if (d > daysInMonth) displayNum = d - daysInMonth;
 
-
             return (
-              <div
-                key={i}
-                onClick={() => { if (dayNum) { setSelectedDay(dayNum); setIsSidebarOpen(true); } }}
+              <div 
+                key={i} 
+                onClick={() => { if(dayNum) { setSelectedDay(dayNum); setIsSidebarOpen(true); } }}
                 className={`p-4 border-r border-b border-black/10 relative group transition-all ${dayNum ? "hover:bg-black/[0.02] cursor-pointer" : "bg-black/[0.01]"}`}
               >
                 <div className="flex justify-between items-start mb-2">
                   <span className={`text-xs font-black ${!isCurrentMonth ? "text-black/10" : "text-black/30"}`}>
                     {displayNum}
                   </span>
-
                   {dayNum && appts.map(a => (
                     <div key={a.id} className={`w-6 h-6 rounded-full ${a.color} shadow-sm group-hover:scale-110 transition-transform`} />
                   ))}
@@ -149,13 +135,11 @@ export function CalendarPage() {
                         <span className="text-[7px] font-black text-black/30 uppercase tracking-widest">{a.time || "09:00"}</span>
                         <div className={`w-1.5 h-1.5 rounded-full ${a.color}`} />
                      </div>
-                     <p className="text-[10px] font-black uppercase tracking-tighter italic leading-none truncate">{a.client || a.label}</p>
-                     <p className="text-[7px] font-bold text-black/40 uppercase tracking-wider truncate">{a.service || "Standard Service"}</p>
-                     <p className="text-[7px] font-bold text-black/20 uppercase tracking-widest truncate">{a.room || "Room 101"}</p>
+                     <p className="text-[10px] font-black uppercase tracking-tighter italic leading-none truncate">{a.client}</p>
+                     <p className="text-[7px] font-bold text-black/40 uppercase tracking-wider truncate">{a.service}</p>
+                     <p className="text-[7px] font-bold text-black/20 uppercase tracking-widest truncate">{a.room}</p>
                   </div>
                 ))}
-
-
                 {!appts.length && dayNum && (
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                     <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center shadow-lg scale-90 group-hover:scale-100 transition-transform">
@@ -178,8 +162,6 @@ export function CalendarPage() {
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="w-[450px] bg-white border-l border-black/5 h-screen fixed top-0 right-0 shadow-[-20px_0_50px_rgba(0,0,0,0.1)] p-12 flex flex-col gap-12 z-[200] overflow-y-auto custom-scrollbar"
           >
-
-
             <div className="flex justify-between items-center">
               <div className="space-y-1">
                 <h3 className="text-2xl font-black uppercase tracking-tighter italic leading-none">Manual Override</h3>
@@ -190,32 +172,34 @@ export function CalendarPage() {
               </button>
             </div>
 
-
-            <div className="space-y-8 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-10">
               {/* Section: Temporal Config */}
-              <div className="space-y-3">
-                <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Temporal Config</h4>
-                <div className="space-y-2">
-                  <CalendarInput
-                    label="When"
-                    value={formData.when}
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 whitespace-nowrap">Temporal Config</h4>
+                   <div className="flex-1 h-px bg-black/5" />
+                </div>
+                <div className="space-y-3">
+                  <CalendarInput 
+                    label="When" 
+                    value={formData.when} 
                     type="date"
-                    icon={<CalendarDays size={14} />}
+                    icon={<CalendarDays size={18} />} 
                     onChange={(v) => updateField("when", v)}
                   />
-                  <div className="grid grid-cols-2 gap-2">
-                    <CalendarInput
-                      label="Time"
-                      value={formData.time}
+                  <div className="grid grid-cols-2 gap-3">
+                    <CalendarInput 
+                      label="Time" 
+                      value={formData.time} 
                       type="time"
-                      icon={<Clock size={14} />}
+                      icon={<Clock size={18} />} 
                       onChange={(v) => updateField("time", v)}
                     />
-                    <CalendarInput
-                      label="End"
-                      value={formData.end}
+                    <CalendarInput 
+                      label="End" 
+                      value={formData.end} 
                       type="time"
-                      icon={<Clock size={14} />}
+                      icon={<Clock size={18} />} 
                       onChange={(v) => updateField("end", v)}
                     />
                   </div>
@@ -223,86 +207,126 @@ export function CalendarPage() {
               </div>
 
               {/* Section: Client Search */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-black uppercase tracking-widest">Client</span>
-                  <button className="text-[8px] font-black uppercase tracking-widest text-black hover:underline active:scale-95 transition-all">+ New Client</button>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 whitespace-nowrap">Client Registry</h4>
+                   <div className="flex-1 h-px bg-black/5" />
+                   <button className="text-[9px] font-black uppercase tracking-widest text-black/40 hover:text-black transition-colors">+ New Client</button>
                 </div>
-                <div className="relative group">
-                  <input
-                    type="text"
-                    placeholder="Search for a client*"
-                    value={formData.searchClient}
-                    onFocus={() => setSearchFocused(true)}
-                    onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-                    onChange={(e) => updateField("searchClient", e.target.value)}
-                    className="w-full bg-black/5 border border-transparent rounded-lg px-4 py-3 text-[10px] font-black uppercase tracking-widest placeholder:text-black/20 focus:bg-white focus:border-black focus:ring-0 transition-all outline-none"
-                  />
-                  <Search size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
-
-                  {searchFocused && formData.searchClient && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-black/10 rounded-xl shadow-2xl z-[300] max-h-48 overflow-y-auto custom-scrollbar overflow-hidden">
-                      {patients
-                        .filter(p => p.name.toLowerCase().includes(formData.searchClient.toLowerCase()) || p.email.toLowerCase().includes(formData.searchClient.toLowerCase()))
-                        .map(p => (
-                          <button
-                            key={p.id}
-                            onClick={() => {
-                              updateField("searchClient", p.name);
-                              setSearchFocused(false);
-                            }}
-                            className="w-full px-4 py-3 text-left hover:bg-black/5 flex flex-col gap-0.5 border-b border-black/5 last:border-0 transition-colors"
-                          >
-                            <span className="text-[10px] font-black uppercase tracking-tighter italic">{p.name}</span>
-                            <span className="text-[8px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
-                          </button>
-                        ))
-                      }
-                    </div>
-                  )}
-                </div>
+                <button 
+                  onClick={() => setIsSearchModalOpen(true)}
+                  className="w-full bg-black/5 border-2 border-transparent rounded-2xl px-6 py-5 flex items-center justify-between group hover:bg-white hover:border-black/10 transition-all shadow-sm"
+                >
+                  <div className="flex items-center gap-4">
+                    <Search size={18} className="text-black/10 group-hover:text-black transition-colors" />
+                    <span className="text-xs font-black uppercase tracking-[0.1em] text-black/30 group-hover:text-black transition-colors">
+                      {formData.searchClient || "SEARCH FOR A CLIENT..."}
+                    </span>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-black/5 flex items-center justify-center">
+                    <Plus size={12} className="text-black/20" />
+                  </div>
+                </button>
               </div>
 
               {/* Section: Appointment Details */}
               <div className="space-y-4">
-                <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 border-b border-black/5 pb-1">Appointment Details</h4>
-                <div className="space-y-2">
-                  <CalendarInput
-                    label="Service"
-                    value={formData.service}
+                <div className="flex items-center gap-4">
+                   <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black/30 whitespace-nowrap">Appointment Details</h4>
+                   <div className="flex-1 h-px bg-black/5" />
+                </div>
+                <div className="space-y-3">
+                  <CalendarInput 
+                    label="Service" 
+                    value={formData.service} 
                     type="select"
                     options={contentTypes}
-                    icon={<ChevronDown size={14} />}
+                    icon={<ChevronDown size={18} />} 
                     onChange={(v) => updateField("service", v)}
                   />
-                  <CalendarInput
-                    label="Resources"
-                    value={formData.resources}
+                  <CalendarInput 
+                    label="Resources" 
+                    value={formData.resources} 
                     type="select"
-                    options={["Room 101", "Room 102", "Room 103"]}
-                    icon={<ChevronDown size={14} />}
+                    options={["Room 101", "Room 102", "Room 103", "Room 104"]}
+                    icon={<ChevronDown size={18} />} 
                     onChange={(v) => updateField("resources", v)}
                   />
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 space-y-2">
-                <button
+              <div className="pt-6 space-y-3">
+                <button 
                   onClick={handleSave}
-                  className="w-full bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-black/20 hover:bg-emerald-600 hover:shadow-emerald-500/20 active:scale-95 transition-all"
+                  className="w-full bg-black text-white py-5 rounded-2xl text-xs font-black uppercase tracking-[0.3em] shadow-[0_20px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   Save Appointment
                 </button>
-                <button
+                <button 
                   onClick={() => setIsSidebarOpen(false)}
-                  className="w-full bg-white border border-black/10 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-black/5 active:scale-95 transition-all"
+                  className="w-full bg-white border-2 border-black/5 text-black/40 py-5 rounded-2xl text-xs font-black uppercase tracking-[0.3em] hover:text-black hover:border-black/10 active:scale-[0.98] transition-all"
                 >
                   Cancel
                 </button>
               </div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Patient Search Pop-up Modal */}
+      <AnimatePresence>
+        {isSearchModalOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSearchModalOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[300]"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white rounded-[3rem] shadow-2xl z-[301] p-10 flex flex-col gap-8"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="text-xl font-black uppercase italic tracking-tighter">Select Client</h3>
+                <button onClick={() => setIsSearchModalOpen(false)} className="p-2 hover:bg-black/5 rounded-full transition-colors"><X size={20} /></button>
+              </div>
+
+              <div className="relative group">
+                <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
+                <input 
+                  autoFocus
+                  type="text" 
+                  placeholder="SEARCH NAME OR EMAIL..."
+                  className="w-full bg-black/5 border-2 border-transparent rounded-2xl pl-16 pr-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none"
+                  onChange={(e) => {
+                    // Internal filtering handled below
+                  }}
+                />
+              </div>
+
+              <div className="max-h-[300px] overflow-y-auto custom-scrollbar space-y-2 pr-2">
+                {patients.map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      updateField("searchClient", p.name);
+                      setIsSearchModalOpen(false);
+                    }}
+                    className="w-full p-6 text-left hover:bg-black/5 rounded-3xl flex flex-col gap-1 border border-black/[0.03] transition-all hover:scale-[1.02] active:scale-95 group"
+                  >
+                    <span className="text-sm font-black uppercase tracking-tighter italic group-hover:text-emerald-600 transition-colors">{p.name}</span>
+                    <span className="text-[10px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
