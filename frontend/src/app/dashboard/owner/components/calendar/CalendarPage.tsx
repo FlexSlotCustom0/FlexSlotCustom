@@ -71,7 +71,25 @@ export function CalendarPage() {
     { name: "PLATFORM E", color: "bg-[#7d7d7d]" },
   ];
 
-  const calendarDays = Array.from({ length: 35 }, (_, i) => i - 3); // Jan 1st 2026 is Thursday (Index 4)
+  const currentMonthDate = new Date(formData.when);
+  const year = currentMonthDate.getFullYear();
+  const month = currentMonthDate.getMonth(); // 0-indexed
+
+  const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 (Sun) to 6 (Sat)
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+  // Previous month padding
+  const prevMonthLastDay = new Date(year, month, 0).getDate();
+  const prevMonthPadding = Array.from({ length: firstDayOfMonth }, (_, i) => -(firstDayOfMonth - 1 - i));
+  
+  // Current month days
+  const currentMonthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  
+  // Next month padding (to fill 35 or 42 cells)
+  const totalCells = (firstDayOfMonth + daysInMonth) > 35 ? 42 : 35;
+  const nextMonthPadding = Array.from({ length: totalCells - (firstDayOfMonth + daysInMonth) }, (_, i) => daysInMonth + i + 1);
+
+  const calendarDays = [...prevMonthPadding, ...currentMonthDays, ...nextMonthPadding];
 
 
   return (
@@ -99,10 +117,16 @@ export function CalendarPage() {
 
 
 
-        <div className="flex-1 grid grid-cols-7 grid-rows-5 gap-0 border-t border-black/10">
+        <div className="flex-1 grid grid-cols-7 gap-0 border-t border-black/10 auto-rows-fr">
           {calendarDays.map((d, i) => {
-            const dayNum = d > 0 && d <= 31 ? d : null;
+            const isCurrentMonth = d > 0 && d <= daysInMonth;
+            const dayNum = isCurrentMonth ? d : null;
             const appts = appointments.filter(a => a.day === dayNum);
+            
+            let displayNum = d;
+            if (d < 1) displayNum = prevMonthLastDay + d;
+            if (d > daysInMonth) displayNum = d - daysInMonth;
+
 
             return (
               <div
@@ -111,9 +135,10 @@ export function CalendarPage() {
                 className={`p-4 border-r border-b border-black/10 relative group transition-all ${dayNum ? "hover:bg-black/[0.02] cursor-pointer" : "bg-black/[0.01]"}`}
               >
                 <div className="flex justify-between items-start mb-2">
-                  <span className={`text-xs font-black ${!dayNum ? "text-black/10" : "text-black/30"}`}>
-                    {d < 1 ? 31 + d : d > 31 ? d - 31 : d}
+                  <span className={`text-xs font-black ${!isCurrentMonth ? "text-black/10" : "text-black/30"}`}>
+                    {displayNum}
                   </span>
+
                   {dayNum && appts.map(a => (
                     <div key={a.id} className={`w-6 h-6 rounded-full ${a.color} shadow-sm group-hover:scale-110 transition-transform`} />
                   ))}
