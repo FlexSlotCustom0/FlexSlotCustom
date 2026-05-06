@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Download, ArrowUpRight, ArrowDownRight, MoreHorizontal, X, Plus, User, Mail, Calendar, Hash, Activity, Shield, Phone, MapPin, Clock, FileText, ChevronRight } from "lucide-react";
+import { Search, Download, ArrowUpRight, ArrowDownRight, MoreHorizontal, X, Plus, User, Mail, Calendar, Hash, Activity, Shield, Phone, MapPin, Clock, FileText, ChevronRight, Heart, AlertCircle, CalendarDays } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function PatientListSection() {
@@ -9,14 +9,13 @@ export function PatientListSection() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeDossierTab, setActiveDossierTab] = useState("future");
 
   const [patients, setPatients] = useState([
-    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01', phone: '+1 234 567 890', location: 'San Francisco, CA' },
-    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com', status: 'Follow-up', visits: 4, lastVisit: '2026-04-28', phone: '+1 234 567 891', location: 'Los Angeles, CA' },
-    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com', status: 'New', visits: 1, lastVisit: '2026-05-04', phone: '+1 234 567 892', location: 'New York, NY' },
-    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com', status: 'Active', visits: 8, lastVisit: '2026-04-15', phone: '+1 234 567 893', location: 'Miami, FL' },
-    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com', status: 'Inactive', visits: 15, lastVisit: '2026-03-20', phone: '+1 234 567 894', location: 'Chicago, IL' },
+    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01', phone: '+1 234 567 890', location: 'San Francisco, CA', dob: '1992-04-15', bloodType: 'O+', allergies: 'Penicillin, Peanuts' },
+    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com', status: 'Follow-up', visits: 4, lastVisit: '2026-04-28', phone: '+1 234 567 891', location: 'Los Angeles, CA', dob: '1988-11-22', bloodType: 'A-', allergies: 'None' },
+    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com', status: 'New', visits: 1, lastVisit: '2026-05-04', phone: '+1 234 567 892', location: 'New York, NY', dob: '1995-07-30', bloodType: 'B+', allergies: 'Latex' },
+    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com', status: 'Active', visits: 8, lastVisit: '2026-04-15', phone: '+1 234 567 893', location: 'Miami, FL', dob: '1990-12-05', bloodType: 'AB+', allergies: 'Dust Mites' },
+    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com', status: 'Inactive', visits: 15, lastVisit: '2026-03-20', phone: '+1 234 567 894', location: 'Chicago, IL', dob: '1982-02-18', bloodType: 'O-', allergies: 'Shellfish' },
   ]);
 
   const [newPatient, setNewPatient] = useState({
@@ -28,7 +27,17 @@ export function PatientListSection() {
   const handleAddPatient = () => {
     if (!newPatient.name || !newPatient.email) return;
     const id = `PAT-${Math.floor(100 + Math.random() * 900)}`;
-    const freshPatient = { ...newPatient, id, visits: 0, lastVisit: new Date().toISOString().split('T')[0], phone: 'N/A', location: 'N/A' };
+    const freshPatient = { 
+      ...newPatient, 
+      id, 
+      visits: 0, 
+      lastVisit: new Date().toISOString().split('T')[0], 
+      phone: 'N/A', 
+      location: 'N/A',
+      dob: 'N/A',
+      bloodType: 'N/A',
+      allergies: 'N/A'
+    };
     setPatients([freshPatient, ...patients]);
     setNewPatient({ name: "", email: "", status: "New" });
     setIsAddModalOpen(false);
@@ -174,9 +183,40 @@ export function PatientListSection() {
 
               {/* Right Column: Performance & History */}
               <div className="col-span-8 space-y-8">
+                
+                {/* General Information Section */}
+                <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-8">
+                  <div className="flex items-center justify-between border-b border-black/5 pb-6">
+                    <h3 className="text-xl font-black uppercase italic tracking-tighter">General Information</h3>
+                    <div className="px-4 py-1.5 bg-black/5 rounded-full text-[9px] font-black uppercase tracking-widest text-black/40">Verified Data</div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-8">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3 text-black/20">
+                        <CalendarDays size={18} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Date of Birth</span>
+                      </div>
+                      <p className="text-lg font-black italic">{selectedPatient.dob || 'N/A'}</p>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3 text-black/20">
+                        <Heart size={18} className="text-rose-500" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Blood Type</span>
+                      </div>
+                      <p className="text-lg font-black italic">{selectedPatient.bloodType || 'N/A'}</p>
+                    </div>
+                    <div className="space-y-3 col-span-1">
+                      <div className="flex items-center gap-3 text-black/20">
+                        <AlertCircle size={18} className="text-amber-500" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Allergies</span>
+                      </div>
+                      <p className="text-sm font-black uppercase tracking-tight leading-tight text-black/60">{selectedPatient.allergies || 'NONE DETECTED'}</p>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Tabbed Visit Interface */}
-                <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-10 flex-1 min-h-[500px]">
+                {/* Future Visits Section */}
+                <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-10 flex-1">
                   {/* Future Visits Header */}
                   <div className="flex items-center justify-between border-b border-black/5 pb-6">
                     <h3 className="text-xl font-black uppercase italic tracking-tighter">Future Visits (2)</h3>
@@ -235,7 +275,6 @@ export function PatientListSection() {
                       </div>
                     </div>
                   </div>
-
                 </div>
 
               </div>
