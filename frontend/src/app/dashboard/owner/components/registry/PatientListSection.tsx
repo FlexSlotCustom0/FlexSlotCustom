@@ -9,6 +9,7 @@ export function PatientListSection() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeDossierTab, setActiveDossierTab] = useState("future");
 
   const [patients, setPatients] = useState([
     { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01', phone: '+1 234 567 890', location: 'San Francisco, CA' },
@@ -131,7 +132,7 @@ export function PatientListSection() {
               <X size={20} />
             </button>
 
-            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12">
+            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12 mt-12">
               {/* Left Column: Core Identity */}
               <div className="col-span-4 space-y-8">
                 <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
@@ -190,30 +191,90 @@ export function PatientListSection() {
                   ))}
                 </div>
 
-                {/* Future Protocols Section */}
-                <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-8 flex-1">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xl font-black uppercase italic tracking-tighter">Future Protocols</h3>
-                    <button className="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:underline">Manage Queue</button>
-                  </div>
-                  <div className="space-y-4">
-                    {[12, 15, 22].map(day => (
-                      <div key={day} className="group flex items-center justify-between p-6 bg-black/[0.02] hover:bg-emerald-500 hover:text-white rounded-[2rem] border border-black/[0.03] transition-all cursor-pointer">
-                        <div className="flex items-center gap-6">
-                          <div className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/10 transition-colors text-black">
-                            <Clock size={18} className="group-hover:text-white" />
-                          </div>
-                          <div className="space-y-1">
-                            <h4 className="text-sm font-black uppercase italic tracking-tight">Scheduled Protocol</h4>
-                            <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest group-hover:text-white/40">Assigned: Dr. Jenkins • Room 102</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20 group-hover:text-white/30">JUNE {day}, 2026</span>
-                          <ChevronRight size={16} className="text-black/10 group-hover:text-white" />
-                        </div>
-                      </div>
+                {/* Tabbed Visit Interface */}
+                <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-10 flex-1 min-h-[500px]">
+                  {/* Tabs */}
+                  <div className="flex items-center gap-12 border-b border-black/5 pb-2">
+                    {[
+                      { id: 'future', label: `Future visits (${activeDossierTab === 'future' ? 2 : 2})` },
+                      { id: 'past', label: `Past visits (15)` },
+                      { id: 'planned', label: 'Planned treatments' }
+                    ].map(tab => (
+                      <button 
+                        key={tab.id}
+                        onClick={() => setActiveDossierTab(tab.id)}
+                        className={`text-xs font-black uppercase tracking-widest pb-4 relative transition-all ${
+                          activeDossierTab === tab.id ? 'text-black' : 'text-black/20 hover:text-black/40'
+                        }`}
+                      >
+                        {tab.label}
+                        {activeDossierTab === tab.id && (
+                          <motion.div layoutId="dossierTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+                        )}
+                      </button>
                     ))}
+                  </div>
+
+                  {/* Visit Cards */}
+                  <div className="space-y-4">
+                    {activeDossierTab === 'future' ? (
+                      <>
+                        <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
+                          <div className="w-1.5 h-full bg-emerald-500 self-stretch" />
+                          <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
+                            <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">11.00-12.30</span>
+                              <p className="text-lg font-black italic">26 JUN 2026</p>
+                            </div>
+                            <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Service:</span>
+                              <p className="text-sm font-black uppercase tracking-tight italic">Root Canal Protocol</p>
+                            </div>
+                            <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Specialist:</span>
+                              <p className="text-sm font-black text-emerald-600">Dr. Sarah Jenkins</p>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="space-y-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
+                                <div className="px-4 py-1.5 bg-emerald-500/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
+                              </div>
+                              <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="bg-black/[0.02] border border-black/[0.03] rounded-[2rem] overflow-hidden flex items-center group hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all">
+                          <div className="w-1.5 h-full bg-blue-500 self-stretch" />
+                          <div className="grid grid-cols-4 w-full p-8 items-center gap-8">
+                            <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">14.30-15.30</span>
+                              <p className="text-lg font-black italic">02 JUL 2026</p>
+                            </div>
+                            <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Service:</span>
+                              <p className="text-sm font-black uppercase tracking-tight italic">Thermal Whitening</p>
+                            </div>
+                            <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Specialist:</span>
+                              <p className="text-sm font-black text-blue-600">Dr. Max Oched</p>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="space-y-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-black/20">Status:</span>
+                                <div className="px-4 py-1.5 bg-blue-500/10 text-blue-600 rounded-full text-[9px] font-black uppercase tracking-widest">Scheduled</div>
+                              </div>
+                              <ChevronRight size={20} className="text-black/10 group-hover:text-black transition-colors" />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-20 text-black/10 space-y-4">
+                        <Activity size={48} />
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em]">Historical Data Encrypted</p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
