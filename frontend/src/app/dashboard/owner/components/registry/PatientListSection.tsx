@@ -145,8 +145,12 @@ export function PatientListSection() {
               {/* Left Column: Core Identity */}
               <div className="col-span-4 space-y-8">
                 <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
-                  <div className="w-40 h-40 rounded-full bg-black flex items-center justify-center shadow-2xl relative">
-                    <span className="text-6xl font-black text-white italic">{selectedPatient.name.charAt(0)}</span>
+                  <div className="w-40 h-40 rounded-full bg-black flex items-center justify-center shadow-2xl relative overflow-hidden">
+                    {selectedPatient.profileImage ? (
+                      <img src={selectedPatient.profileImage} alt={selectedPatient.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-6xl font-black text-white italic lowercase">{selectedPatient.name.charAt(0)}</span>
+                    )}
                   </div>
                   <div className="text-center space-y-2">
                     <h2 className="text-4xl font-black uppercase tracking-tighter italic leading-none">{selectedPatient.name}</h2>
