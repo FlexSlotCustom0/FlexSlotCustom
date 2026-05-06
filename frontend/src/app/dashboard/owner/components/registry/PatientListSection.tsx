@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Download, ArrowUpRight, ArrowDownRight, MoreHorizontal, X, Plus, UserPlus } from "lucide-react";
+import { Search, Download, ArrowUpRight, ArrowDownRight, MoreHorizontal, X, Plus, User, Mail, Calendar, Hash, Activity, Shield, Phone, MapPin, Clock, FileText, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function PatientListSection() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [patients, setPatients] = useState([
-    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01' },
-    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com', status: 'Follow-up', visits: 4, lastVisit: '2026-04-28' },
-    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com', status: 'New', visits: 1, lastVisit: '2026-05-04' },
-    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com', status: 'Active', visits: 8, lastVisit: '2026-04-15' },
-    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com', status: 'Inactive', visits: 15, lastVisit: '2026-03-20' },
+    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01', phone: '+1 234 567 890', location: 'San Francisco, CA' },
+    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com', status: 'Follow-up', visits: 4, lastVisit: '2026-04-28', phone: '+1 234 567 891', location: 'Los Angeles, CA' },
+    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com', status: 'New', visits: 1, lastVisit: '2026-05-04', phone: '+1 234 567 892', location: 'New York, NY' },
+    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com', status: 'Active', visits: 8, lastVisit: '2026-04-15', phone: '+1 234 567 893', location: 'Miami, FL' },
+    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com', status: 'Inactive', visits: 15, lastVisit: '2026-03-20', phone: '+1 234 567 894', location: 'Chicago, IL' },
   ]);
 
   const [newPatient, setNewPatient] = useState({
@@ -25,15 +26,8 @@ export function PatientListSection() {
 
   const handleAddPatient = () => {
     if (!newPatient.name || !newPatient.email) return;
-
     const id = `PAT-${Math.floor(100 + Math.random() * 900)}`;
-    const freshPatient = {
-      ...newPatient,
-      id,
-      visits: 0,
-      lastVisit: new Date().toISOString().split('T')[0]
-    };
-
+    const freshPatient = { ...newPatient, id, visits: 0, lastVisit: new Date().toISOString().split('T')[0], phone: 'N/A', location: 'N/A' };
     setPatients([freshPatient, ...patients]);
     setNewPatient({ name: "", email: "", status: "New" });
     setIsAddModalOpen(false);
@@ -46,127 +40,227 @@ export function PatientListSection() {
   );
 
   return (
-    <div className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm space-y-8">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-xl font-black uppercase tracking-tighter italic">Patient Registry</h2>
-
+    <div className="relative">
+      <div className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-xl font-black uppercase tracking-tighter italic">Patient Registry</h2>
+            <p className="text-[10px] font-bold text-black/20 uppercase tracking-widest">Digital Signal Network</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setIsSearchModalOpen(true)}
+              className="flex items-center gap-3 px-6 py-3 bg-black/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black/10 transition-all active:scale-95"
+            >
+              <Search size={14} className="text-black/40" />
+              <span>Search Signals...</span>
+            </button>
+            <button 
+              onClick={() => setIsAddModalOpen(true)}
+              className="px-6 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-black/20 hover:scale-105 active:scale-95 transition-all"
+            >
+              + Add Profile
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={() => setIsSearchModalOpen(true)}
-            className="flex items-center gap-3 px-6 py-3 bg-black/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black/10 transition-all active:scale-95"
-          >
-            <Search size={14} className="text-black/40" />
-            <span>Search Signals...</span>
-          </button>
 
-          <button 
-            onClick={() => setIsAddModalOpen(true)}
-            className="px-6 py-3 bg-black text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-black/20 hover:scale-105 active:scale-95 transition-all"
-          >
-            + Add Profile
-          </button>
-        </div>
-      </div>
-
-      <div className="overflow-hidden border border-black/5 rounded-[2rem]">
-        <table className="w-full text-left">
-          <thead className="bg-black/5">
-            <tr>
-              <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Patient ID</th>
-              <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Identity</th>
-              <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Status</th>
-              <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Visits</th>
-              <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Last Signal</th>
-              <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-black/5">
-            {filteredPatients.map(p => (
-              <tr key={p.id} className="hover:bg-black/[0.01] transition-colors group">
-                <td className="px-8 py-6 text-[10px] font-black italic">{p.id}</td>
-                <td className="px-8 py-6">
-                  <div className="flex flex-col">
-                    <span className="text-sm font-black uppercase tracking-tighter italic">{p.name}</span>
-                    <span className="text-[9px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
-                  </div>
-                </td>
-                <td className="px-8 py-6">
-                  <span className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${
-                    p.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600' : 
-                    p.status === 'Follow-up' ? 'bg-amber-500/10 text-amber-600' : 
-                    p.status === 'New' ? 'bg-blue-500/10 text-blue-600' : 'bg-black/5 text-black/40'
-                  }`}>{p.status}</span>
-                </td>
-                <td className="px-8 py-6">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-black italic">{p.visits}</span>
-                    {p.visits > 10 ? <ArrowUpRight size={12} className="text-emerald-500" /> : <ArrowDownRight size={12} className="text-black/10" />}
-                  </div>
-                </td>
-                <td className="px-8 py-6 text-[10px] font-bold text-black/30">{p.lastVisit}</td>
-                <td className="px-8 py-6 text-right">
-                  <button className="p-2 text-black/10 hover:text-black transition-colors"><MoreHorizontal size={16} /></button>
-                </td>
+        <div className="overflow-hidden border border-black/5 rounded-[2rem]">
+          <table className="w-full text-left">
+            <thead className="bg-black/5">
+              <tr>
+                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Patient ID</th>
+                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Identity</th>
+                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Status</th>
+                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Visits</th>
+                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40">Last Signal</th>
+                <th className="px-8 py-5 text-[9px] font-black uppercase tracking-widest text-black/40"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-black/5">
+              {filteredPatients.map(p => (
+                <tr 
+                  key={p.id} 
+                  onClick={() => setSelectedPatient(p)}
+                  className="hover:bg-black/[0.01] transition-colors group cursor-pointer"
+                >
+                  <td className="px-8 py-6 text-[10px] font-black italic">{p.id}</td>
+                  <td className="px-8 py-6">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-black uppercase tracking-tighter italic">{p.name}</span>
+                      <span className="text-[9px] font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <span className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${
+                      p.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600' : 
+                      p.status === 'Follow-up' ? 'bg-amber-500/10 text-amber-600' : 
+                      p.status === 'New' ? 'bg-blue-500/10 text-blue-600' : 'bg-black/5 text-black/40'
+                    }`}>{p.status}</span>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black italic">{p.visits}</span>
+                      {p.visits > 10 ? <ArrowUpRight size={12} className="text-emerald-500" /> : <ArrowDownRight size={12} className="text-black/10" />}
+                    </div>
+                  </td>
+                  <td className="px-8 py-6 text-[10px] font-bold text-black/30">{p.lastVisit}</td>
+                  <td className="px-8 py-6 text-right">
+                    <button className="p-2 text-black/10 hover:text-black transition-colors"><MoreHorizontal size={16} /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Patient Search Modal */}
+      {/* Full-Page Patient Detail Overlay */}
+      <AnimatePresence>
+        {selectedPatient && (
+          <motion.div 
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed inset-0 bg-[#e9e7e2] z-[500] flex flex-col p-12 overflow-y-auto custom-scrollbar"
+          >
+            {/* Header / Nav */}
+            <div className="flex justify-between items-start mb-16">
+              <div className="flex items-center gap-6">
+                <button 
+                  onClick={() => setSelectedPatient(null)}
+                  className="w-16 h-16 rounded-full bg-white border border-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all shadow-sm active:scale-90"
+                >
+                  <X size={24} />
+                </button>
+                <div className="space-y-1">
+                  <h3 className="text-4xl font-black uppercase tracking-tighter italic leading-none">Patient Dossier</h3>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] text-black/20 italic">Registry Authorization Level 5</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                 <button className="px-8 py-4 bg-white border border-black/5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:bg-black/5 transition-all active:scale-95">Edit Identity</button>
+                 <button className="px-8 py-4 bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-black/20 hover:scale-105 transition-all active:scale-95">Archive Profile</button>
+              </div>
+            </div>
+
+            <div className="max-w-6xl mx-auto w-full grid grid-cols-12 gap-12">
+              {/* Left Column: Core Identity */}
+              <div className="col-span-4 space-y-8">
+                <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
+                  <div className="w-40 h-40 rounded-full bg-black flex items-center justify-center shadow-2xl relative">
+                    <User size={64} className="text-white" />
+                    <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center shadow-lg">
+                      <Shield size={20} className="text-white" />
+                    </div>
+                  </div>
+                  <div className="text-center space-y-2">
+                    <h2 className="text-4xl font-black uppercase tracking-tighter italic leading-none">{selectedPatient.name}</h2>
+                    <p className="text-xs font-bold text-black/20 uppercase tracking-widest">{selectedPatient.id}</p>
+                    <div className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mt-4 ${
+                      selectedPatient.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-black/5 text-black/40'
+                    }`}>
+                      {selectedPatient.status} Protocol
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-[2.5rem] p-8 border border-black/5 shadow-sm space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 border-b border-black/5 pb-2 ml-2">Contact Matrix</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
+                      <Mail size={18} className="text-black/20" />
+                      <span className="text-xs font-black uppercase tracking-tight">{selectedPatient.email}</span>
+                    </div>
+                    <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
+                      <Phone size={18} className="text-black/20" />
+                      <span className="text-xs font-black uppercase tracking-tight">{selectedPatient.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
+                      <MapPin size={18} className="text-black/20" />
+                      <span className="text-xs font-black uppercase tracking-tight">{selectedPatient.location}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Performance & History */}
+              <div className="col-span-8 space-y-8">
+                {/* Stats Row */}
+                <div className="grid grid-cols-3 gap-6">
+                  {[
+                    { label: "Total Visits", val: selectedPatient.visits, icon: <Activity size={20} />, col: "emerald" },
+                    { label: "Last Active", val: selectedPatient.lastVisit, icon: <Clock size={20} />, col: "black" },
+                    { label: "Avg. Duration", val: "45min", icon: <FileText size={20} />, col: "amber" }
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white rounded-[2rem] p-8 border border-black/5 shadow-sm space-y-3">
+                      <div className="flex justify-between items-center text-black/20">
+                        {stat.icon}
+                        <span className="text-[10px] font-black uppercase tracking-widest">{stat.label}</span>
+                      </div>
+                      <p className="text-3xl font-black italic">{stat.val}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Historical Log */}
+                <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-8 flex-1">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-xl font-black uppercase italic tracking-tighter">Temporal Log history</h3>
+                    <button className="text-[10px] font-black uppercase tracking-widest text-emerald-600 hover:underline">View All Records</button>
+                  </div>
+                  <div className="space-y-4">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="group flex items-center justify-between p-6 bg-black/[0.02] hover:bg-black hover:text-white rounded-[2rem] border border-black/[0.03] transition-all cursor-pointer">
+                        <div className="flex items-center gap-6">
+                          <div className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center group-hover:bg-white/10 group-hover:border-white/10 transition-colors text-black">
+                            <Hash size={18} className="group-hover:text-white" />
+                          </div>
+                          <div className="space-y-1">
+                            <h4 className="text-sm font-black uppercase italic tracking-tight">Standard Consultation</h4>
+                            <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest group-hover:text-white/40">Performed by Dr. Jenkins • Room 102</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-black/20 group-hover:text-white/30">MAY 0{i}, 2026</span>
+                          <ChevronRight size={16} className="text-black/10 group-hover:text-white" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quick Schedule Footer */}
+                <div className="bg-black text-white rounded-[2.5rem] p-10 shadow-2xl flex items-center justify-between overflow-hidden relative group">
+                  <div className="relative z-10 space-y-2">
+                    <h3 className="text-2xl font-black uppercase italic tracking-tighter">Schedule Next Protocol?</h3>
+                    <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Authorized slots available for next 7 days</p>
+                  </div>
+                  <button className="relative z-10 px-10 py-5 bg-emerald-500 text-white rounded-2xl text-xs font-black uppercase tracking-[0.3em] shadow-xl hover:scale-105 active:scale-95 transition-all">
+                    Initiate Session
+                  </button>
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-emerald-500/30 transition-all" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Search Modal */}
       <AnimatePresence>
         {isSearchModalOpen && (
           <>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsSearchModalOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[300]"
-            />
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] bg-white rounded-[3rem] shadow-2xl z-[301] p-12 flex flex-col gap-8"
-            >
-              <div className="flex justify-between items-center">
-                <div className="space-y-1">
-                  <h3 className="text-2xl font-black uppercase italic tracking-tighter">Signal Decoder</h3>
-                </div>
-                <button onClick={() => setIsSearchModalOpen(false)} className="p-3 hover:bg-black/5 rounded-2xl transition-colors active:scale-90"><X size={24} /></button>
-              </div>
-
-              <div className="relative group">
-                <Search size={24} className="absolute left-8 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" />
-                <input 
-                  autoFocus
-                  type="text" 
-                  placeholder="DECODE IDENTITY OR EMAIL..."
-                  className="w-full bg-black/5 border-2 border-transparent rounded-3xl pl-20 pr-8 py-6 text-lg font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsSearchModalOpen(false)} className="fixed inset-0 bg-black/60 backdrop-blur-md z-[300]" />
+            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] bg-white rounded-[3rem] shadow-2xl z-[301] p-12 flex flex-col gap-8">
+              <div className="flex justify-between items-center"><h3 className="text-2xl font-black uppercase italic tracking-tighter">Signal Decoder</h3><button onClick={() => setIsSearchModalOpen(false)} className="p-3 hover:bg-black/5 rounded-2xl transition-colors active:scale-90"><X size={24} /></button></div>
+              <div className="relative group"><Search size={24} className="absolute left-8 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-black transition-colors" /><input autoFocus type="text" placeholder="DECODE IDENTITY OR EMAIL..." className="w-full bg-black/5 border-2 border-transparent rounded-3xl pl-20 pr-8 py-6 text-lg font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /></div>
               <div className="max-h-[400px] overflow-y-auto custom-scrollbar space-y-3 pr-2">
-                {filteredPatients.length > 0 ? filteredPatients.map(p => (
-                  <button
-                    key={p.id}
-                    className="w-full p-8 text-left hover:bg-black/5 rounded-[2.5rem] flex items-center justify-between border border-black/[0.03] transition-all hover:scale-[1.02] active:scale-95 group"
-                  >
-                    <div className="flex flex-col gap-1">
-                      <span className="text-lg font-black uppercase tracking-tighter italic group-hover:text-emerald-600 transition-colors">{p.name}</span>
-                      <span className="text-xs font-bold text-black/20 uppercase tracking-widest">{p.email}</span>
-                    </div>
+                {filteredPatients.map(p => (
+                  <button key={p.id} onClick={() => { setSelectedPatient(p); setIsSearchModalOpen(false); }} className="w-full p-8 text-left hover:bg-black/5 rounded-[2.5rem] flex items-center justify-between border border-black/[0.03] transition-all hover:scale-[1.02] active:scale-95 group">
+                    <div className="flex flex-col gap-1"><span className="text-lg font-black uppercase tracking-tighter italic group-hover:text-emerald-600 transition-colors">{p.name}</span><span className="text-xs font-bold text-black/20 uppercase tracking-widest">{p.email}</span></div>
                   </button>
-                )) : (
-                  <div className="py-20 text-center">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-black/20">No Signals Found</p>
-                  </div>
-                )}
+                ))}
               </div>
             </motion.div>
           </>
@@ -177,72 +271,14 @@ export function PatientListSection() {
       <AnimatePresence>
         {isAddModalOpen && (
           <>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsAddModalOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[300]"
-            />
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white rounded-[3rem] shadow-2xl z-[301] p-12 flex flex-col gap-8"
-            >
-              <div className="flex justify-between items-center">
-                <div className="space-y-1">
-                  <h3 className="text-2xl font-black uppercase italic tracking-tighter">Initialize Profile</h3>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-black/20 italic text-right">Registry Uplink</p>
-                </div>
-                <button onClick={() => setIsAddModalOpen(false)} className="p-3 hover:bg-black/5 rounded-2xl transition-colors active:scale-90"><X size={24} /></button>
-              </div>
-
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsAddModalOpen(false)} className="fixed inset-0 bg-black/60 backdrop-blur-md z-[300]" />
+            <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }} className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] bg-white rounded-[3rem] shadow-2xl z-[301] p-12 flex flex-col gap-8">
+              <div className="flex justify-between items-center"><h3 className="text-2xl font-black uppercase italic tracking-tighter">Initialize Profile</h3><button onClick={() => setIsAddModalOpen(false)} className="p-3 hover:bg-black/5 rounded-2xl transition-colors active:scale-90"><X size={24} /></button></div>
               <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-4">Full Identity Name</label>
-                  <input 
-                    autoFocus
-                    type="text" 
-                    placeholder="ENTER FULL NAME..."
-                    className="w-full bg-black/5 border-2 border-transparent rounded-2xl px-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none"
-                    value={newPatient.name}
-                    onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-4">Neural Signal Address (Email)</label>
-                  <input 
-                    type="email" 
-                    placeholder="ENTER EMAIL ADDRESS..."
-                    className="w-full bg-black/5 border-2 border-transparent rounded-2xl px-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none"
-                    value={newPatient.email}
-                    onChange={(e) => setNewPatient({ ...newPatient, email: e.target.value })}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-4">Initial Status</label>
-                  <select 
-                    className="w-full bg-black/5 border-2 border-transparent rounded-2xl px-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none appearance-none"
-                    value={newPatient.status}
-                    onChange={(e) => setNewPatient({ ...newPatient, status: e.target.value })}
-                  >
-                    <option value="New">New</option>
-                    <option value="Active">Active</option>
-                    <option value="Follow-up">Follow-up</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                </div>
+                <div className="space-y-2"><label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-4">Full Identity Name</label><input autoFocus type="text" placeholder="ENTER FULL NAME..." className="w-full bg-black/5 border-2 border-transparent rounded-2xl px-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none" value={newPatient.name} onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })} /></div>
+                <div className="space-y-2"><label className="text-[10px] font-black uppercase tracking-widest text-black/40 ml-4">Neural Signal Address (Email)</label><input type="email" placeholder="ENTER EMAIL ADDRESS..." className="w-full bg-black/5 border-2 border-transparent rounded-2xl px-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none" value={newPatient.email} onChange={(e) => setNewPatient({ ...newPatient, email: e.target.value })} /></div>
               </div>
-
-              <button 
-                onClick={handleAddPatient}
-                className="w-full bg-black text-white py-5 rounded-2xl text-xs font-black uppercase tracking-[0.3em] shadow-[0_20px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all mt-4"
-              >
-                COMMIT PROFILE
-              </button>
+              <button onClick={handleAddPatient} className="w-full bg-black text-white py-5 rounded-2xl text-xs font-black uppercase tracking-[0.3em] shadow-[0_20px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all mt-4">COMMIT PROFILE</button>
             </motion.div>
           </>
         )}
