@@ -302,6 +302,8 @@ function LanguageSection() {
           <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Preferred Dialect</label>
           <select className="w-full p-5 bg-white border border-gray-100 rounded-3xl outline-none focus:border-black transition-all font-bold text-sm appearance-none cursor-pointer">
              <option>English (United States)</option>
+             <option>Sinhala (Sri Lanka)</option>
+             <option>Tamil (Sri Lanka)</option>
              <option>French (France)</option>
              <option>German (Germany)</option>
           </select>
@@ -309,6 +311,7 @@ function LanguageSection() {
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Timezone / Location</label>
           <select className="w-full p-5 bg-white border border-gray-100 rounded-3xl outline-none focus:border-black transition-all font-bold text-sm appearance-none cursor-pointer">
+             <option>(UTC+05:30) Colombo, Sri Lanka</option>
              <option>(UTC+07:00) Vientiane, Bangkok</option>
              <option>(UTC+00:00) London, UTC</option>
              <option>(UTC-05:00) New York, EST</option>
