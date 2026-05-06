@@ -10,6 +10,10 @@ export function CalendarPage() {
   const [selectedDay, setSelectedDay] = useState(8);
   const [searchFocused, setSearchFocused] = useState(false);
 
+  // Helper to get formatted date string (YYYY-MM-DD)
+  const getYYYYMMDD = (day: number) => `2026-05-${day < 10 ? `0${day}` : day}`;
+
+
   // Patient database from PATIENT LIST PAGE
   const patients = [
     { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com' },
@@ -51,40 +55,45 @@ export function CalendarPage() {
     }
   ]);
 
-  const days = [
-    { num: 5, label: "MON" },
-    { num: 6, label: "TUE" },
-    { num: 7, label: "WED" },
-    { num: 8, label: "THU" },
-    { num: 9, label: "FRI" },
-    { num: 10, label: "SAT" },
-    { num: 11, label: "SUN" },
-  ];
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(2026, 4, 4 + i); // Start from May 4th (Monday)
+    // If selectedDay is outside this initial week, we should ideally shift, 
+    // but for this prototype let's keep it simple or expand it.
+    return { 
+      num: 4 + i, 
+      label: d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase() 
+    };
+  });
+
 
 
   const timeSlots = ["08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
 
   const handleSave = () => {
-    // Format time for display (HH:mm -> hh:mm AM/PM)
+    // Format time for display (HH:mm -> hh:mm AM/PM) to match timeSlots
     const formatTime = (t: string) => {
       const [h, m] = t.split(":");
       const hour = parseInt(h);
       const ampm = hour >= 12 ? "PM" : "AM";
       const h12 = hour % 12 || 12;
-      return `${h12}:${m} ${ampm}`;
+      const hStr = h12 < 10 ? `0${h12}` : `${h12}`;
+      return `${hStr}:${m} ${ampm}`;
     };
 
+    const newDay = parseInt(formData.when.split("-")[2]) || selectedDay;
     const newAppt = {
       id: Math.random().toString(36).substr(2, 9),
-      day: parseInt(formData.when.split("-")[2]) || selectedDay,
+      day: newDay,
       time: formatTime(formData.time),
       client: formData.searchClient || "Unknown Client",
       with: formData.withPerson,
       location: formData.location
     };
     setAppointments([...appointments, newAppt]);
+    setSelectedDay(newDay);
     setIsSidebarOpen(false);
   };
+
 
 
   const removeAppointment = (id: string) => {
@@ -130,10 +139,11 @@ export function CalendarPage() {
                 <div className="flex-1 h-px bg-black/5" />
                 {appointments.filter(a => a.day === selectedDay && a.time === time).map(appt => (
                   <div key={appt.id} className="absolute left-32 right-10 top-2 bottom-2 bg-black text-white rounded-2xl p-4 flex justify-between items-center shadow-xl group/item z-10">
-                    <div className="space-y-1">
-                       <p className="text-[8px] font-black uppercase tracking-widest text-white/40">{appt.with} · {appt.location}</p>
-                       <h4 className="text-sm font-black uppercase tracking-tighter italic">{appt.client}</h4>
+                    <div className="space-y-0.5">
+                       <p className="text-[7px] font-black uppercase tracking-[0.2em] text-white/40">{appt.with} · {appt.location}</p>
+                       <h4 className="text-xs font-black uppercase tracking-widest italic text-white leading-tight">{appt.client}</h4>
                     </div>
+
                     <div className="flex items-center gap-2 opacity-0 group-hover/item:opacity-100 transition-opacity">
                        <button 
                         onClick={(e) => {
@@ -149,9 +159,30 @@ export function CalendarPage() {
                   </div>
                 ))}
 
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                   <button onClick={() => setIsSidebarOpen(true)} className="bg-white border border-black/10 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm hover:scale-105 transition-all">Quick Reserve</button>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-20 pointer-events-none">
+                   <button 
+                    onClick={() => {
+                      const [h, m_ampm] = time.split(":");
+                      const [m, ampm] = m_ampm.split(" ");
+                      let hour = parseInt(h);
+                      if (ampm === "PM" && hour !== 12) hour += 12;
+                      if (ampm === "AM" && hour === 12) hour = 0;
+                      const hStr = hour < 10 ? `0${hour}` : `${hour}`;
+                      
+                      setFormData(prev => ({ 
+                        ...prev, 
+                        time: `${hStr}:${m}`,
+                        when: getYYYYMMDD(selectedDay)
+                      }));
+                      setIsSidebarOpen(true);
+                    }} 
+                    className="bg-white border border-black/10 px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm hover:scale-105 transition-all pointer-events-auto"
+                   >
+                    Quick Reserve
+                   </button>
                 </div>
+
+
               </div>
             ))}
           </div>
