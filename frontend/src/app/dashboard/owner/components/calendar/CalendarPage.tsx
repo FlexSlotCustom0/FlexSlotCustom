@@ -92,40 +92,15 @@ export function CalendarPage() {
 
   return (
     <div className="flex h-screen bg-[#e9e7e2] text-black overflow-hidden font-sans">
-      {/* Left Sidebar */}
-      <div className="w-[380px] p-12 flex flex-col gap-12 overflow-y-auto custom-scrollbar border-r border-black/5">
-        <div>
-          <h1 className="text-8xl font-black tracking-tighter leading-none mb-2">January</h1>
-          <h2 className="text-6xl font-black text-black/20 tracking-tighter leading-none">2026</h2>
+      {/* Main Grid - Full Width */}
+      <div className="flex-1 p-12 flex flex-col gap-8 overflow-y-auto">
+        <div className="px-4 mb-4">
+          <h1 className="text-7xl font-black tracking-tighter leading-none mb-1 uppercase italic">January</h1>
+          <h2 className="text-4xl font-black text-black/10 tracking-tighter leading-none uppercase italic">2026</h2>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-black text-white py-3 px-4 rounded-full text-center">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Content Type</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {contentTypes.map(type => (
-              <button key={type} className="px-4 py-3 bg-white/50 border border-black/10 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex flex-wrap gap-2">
-            {platforms.map(p => (
-              <button key={p.name} className={`${p.color} text-white px-6 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm hover:scale-105 transition-all`}>
-                {p.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Grid */}
-      <div className="flex-1 p-12 flex flex-col gap-8">
         <div className="flex justify-between items-center px-4">
+
           <div className="flex gap-4">
             {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
               <div key={day} className="w-24 py-2 bg-black text-white rounded-full text-center">
