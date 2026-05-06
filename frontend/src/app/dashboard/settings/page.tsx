@@ -71,15 +71,15 @@ export default function AccountSettingsPage() {
     <div className="min-h-screen bg-white text-black font-sans flex flex-col md:flex-row overflow-hidden">
       {/* Sidebar / Navigation Rail */}
       <aside className="w-full md:w-[360px] border-r border-gray-100 flex flex-col h-auto md:h-screen sticky top-0 bg-white z-20">
-        <div className="p-10">
-          <Link 
-            href={role === "owner" ? "/dashboard/owner" : "/dashboard/customer"} 
-            className="flex items-center gap-5 group"
-          >
-            <div className="w-14 h-14 rounded-[1.2rem] bg-black flex items-center justify-center text-white shadow-xl transition-all group-hover:scale-105 active:scale-95">
-              <ChevronLeft className="w-7 h-7" strokeWidth={3} />
+        <div className="p-10 border-b border-gray-50">
+          <Link href={role === "owner" ? "/dashboard/owner" : "/dashboard/customer"} className="flex items-center gap-4 group">
+            <div className="w-12 h-12 bg-white border border-gray-100 rounded-xl flex items-center justify-center group-hover:scale-105 transition-all shadow-sm overflow-hidden">
+              <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-cover p-1" />
             </div>
-            <span className="font-bold text-2xl tracking-tight text-black">Dashboard</span>
+            <div className="flex flex-col">
+              <span className="font-bold tracking-tight text-lg text-[#1e3a8a]">FlexSlotCustom</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-300">Account Matrix</span>
+            </div>
           </Link>
         </div>
 

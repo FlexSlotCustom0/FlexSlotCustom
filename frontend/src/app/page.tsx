@@ -28,11 +28,11 @@ export default function NotionCalendarClone() {
       <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-10">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-black rounded-md flex items-center justify-center">
-                <CalendarClock className="w-5 h-5 text-white" />
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-9 h-9 bg-white border border-gray-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all shadow-sm overflow-hidden">
+                <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-cover p-1" />
               </div>
-              <span className="font-bold text-lg text-black uppercase tracking-tighter">FlexSlotCoustom</span>
+              <span className="font-black tracking-tighter text-lg text-[#1e3a8a] uppercase">FlexSlotCustom</span>
             </Link>
 
             <div className="hidden lg:flex items-center gap-6 text-[14px] font-medium text-gray-600">
@@ -45,8 +45,8 @@ export default function NotionCalendarClone() {
 
           <div className="flex items-center gap-4">
             <Link href="/login?step=login" className="text-[14px] font-medium hover:bg-gray-50 px-3 py-1.5 rounded-md transition-colors">Log in</Link>
-            <Link href="/login?step=role" className="bg-black text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-gray-800 transition-colors">
-              Get FlexSlotCoustom free
+            <Link href="/login?step=role" className="bg-[#1e3a8a] text-white text-[14px] font-bold px-4 py-1.5 rounded-md hover:bg-[#1a367c] transition-colors">
+              Get FlexSlotCustom free
             </Link>
           </div>
         </div>
@@ -70,8 +70,8 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, scale: 1 }}
             className="flex justify-center mb-6"
           >
-            <div className="w-20 h-20 bg-white border-2 border-black rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden group">
-              <CalendarClock className="w-10 h-10 text-black group-hover:scale-110 transition-transform" />
+            <div className="w-24 h-24 bg-white border border-gray-100 rounded-[2rem] flex items-center justify-center shadow-2xl relative overflow-hidden group">
+              <img src="/flexslot_logo.png" alt="FlexSlotCustom" className="w-full h-full object-cover p-3 group-hover:scale-110 transition-transform" />
             </div>
           </motion.div>
 
@@ -80,9 +80,9 @@ export default function NotionCalendarClone() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h4 className="text-gray-500 font-bold text-sm tracking-tight mb-2 uppercase">FlexSlotCoustom</h4>
-            <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
-              FlexSlotCoustom
+            <h4 className="text-[#1e3a8a] font-black text-sm tracking-[0.2em] mb-2 uppercase">FlexSlotCustom</h4>
+            <h1 className="text-7xl md:text-8xl font-serif leading-[1.1] mb-8 tracking-tight text-blue-950">
+              FlexSlotCustom
             </h1>
             <p className="text-xl md:text-2xl text-gray-500 font-medium mb-10 max-w-2xl mx-auto leading-relaxed">
               The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.
@@ -150,7 +150,7 @@ export default function NotionCalendarClone() {
                 whileTap={{ scale: 0.95 }}
                 className="absolute z-10 bg-gray-50 text-gray-400 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl border border-gray-100 shadow-sm whitespace-nowrap"
               >
-                FlexSlotCoustom
+                FlexSlotCustom
               </motion.button>
             </div>
 
@@ -342,14 +342,14 @@ export default function NotionCalendarClone() {
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-6 h-6 bg-black rounded flex items-center justify-center"><Calendar className="w-4 h-4 text-white" /></div>
-              <span className="font-bold text-black uppercase tracking-tighter">FlexSlotCoustom</span>
+              <span className="font-bold text-[#1e3a8a] uppercase tracking-tighter">FlexSlotCustom</span>
             </div>
             <div className="flex gap-4 mb-8">
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Globe className="w-4 h-4" /></Link>
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><Share2 className="w-4 h-4" /></Link>
               <Link href="#" className="p-2 bg-white rounded-lg border border-gray-200 text-gray-400 hover:text-black transition-colors"><MessageSquare className="w-4 h-4" /></Link>
             </div>
-            <p className="text-sm text-gray-400">© 2026 FlexSlotCoustom Labs, Inc.</p>
+            <p className="text-sm text-gray-400">© 2026 FlexSlotCustom Labs, Inc.</p>
           </div>
         </div>
       </footer>
