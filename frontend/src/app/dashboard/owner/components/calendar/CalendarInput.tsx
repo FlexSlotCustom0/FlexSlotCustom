@@ -2,16 +2,16 @@
 
 import { useRef } from "react";
 
-export function CalendarInput({ 
-  label, 
-  value, 
-  icon, 
+export function CalendarInput({
+  label,
+  value,
+  icon,
   type = "text",
   options = [],
-  onChange 
-}: { 
-  label: string, 
-  value: string, 
+  onChange
+}: {
+  label: string,
+  value: string,
   icon: any,
   type?: "text" | "date" | "time" | "select",
   options?: string[],
@@ -27,13 +27,13 @@ export function CalendarInput({
   };
 
   return (
-    <div 
+    <div
       onClick={handleClick}
       className="flex items-center justify-between px-3 py-2.5 bg-black/5 rounded-lg border border-transparent hover:border-black/10 hover:bg-black/[0.07] transition-all cursor-pointer group active:scale-[0.98]"
     >
       <div className="flex flex-col flex-1">
         <span className="text-[7px] font-black text-black/20 uppercase tracking-widest group-hover:text-black/40 transition-colors">{label}</span>
-        
+
         {type === "select" ? (
           <select
             ref={inputRef as any}
@@ -46,7 +46,7 @@ export function CalendarInput({
             ))}
           </select>
         ) : (
-          <input 
+          <input
             ref={inputRef as any}
             type={type}
             value={value}
