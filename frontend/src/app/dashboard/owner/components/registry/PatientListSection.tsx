@@ -174,22 +174,6 @@ export function PatientListSection() {
 
               {/* Right Column: Performance & History */}
               <div className="col-span-8 space-y-8">
-                {/* Stats Row */}
-                <div className="grid grid-cols-3 gap-6">
-                  {[
-                    { label: "Total Visits", val: selectedPatient.visits, icon: <Activity size={20} />, col: "emerald" },
-                    { label: "Last Active", val: selectedPatient.lastVisit, icon: <Clock size={20} />, col: "black" },
-                    { label: "Avg. Duration", val: "45min", icon: <FileText size={20} />, col: "amber" }
-                  ].map((stat, i) => (
-                    <div key={i} className="bg-white rounded-[2rem] p-8 border border-black/5 shadow-sm space-y-3">
-                      <div className="flex justify-between items-center text-black/20">
-                        {stat.icon}
-                        <span className="text-[10px] font-black uppercase tracking-widest">{stat.label}</span>
-                      </div>
-                      <p className="text-3xl font-black italic">{stat.val}</p>
-                    </div>
-                  ))}
-                </div>
 
                 {/* Tabbed Visit Interface */}
                 <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-10 flex-1 min-h-[500px]">
