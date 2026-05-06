@@ -55,7 +55,6 @@ export function PatientListSection() {
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <h2 className="text-xl font-black uppercase tracking-tighter italic">Patient Registry</h2>
-            <p className="text-[10px] font-bold text-black/20 uppercase tracking-widest">Digital Signal Network</p>
           </div>
           <div className="flex items-center gap-3">
             <button 
