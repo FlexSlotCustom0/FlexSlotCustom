@@ -147,23 +147,14 @@ export function PatientListSection() {
                 <div className="bg-white rounded-[3.5rem] p-12 border border-black/5 shadow-sm flex flex-col items-center gap-8">
                   <div className="w-40 h-40 rounded-full bg-black flex items-center justify-center shadow-2xl relative">
                     <User size={64} className="text-white" />
-                    <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center shadow-lg">
-                      <Shield size={20} className="text-white" />
-                    </div>
                   </div>
                   <div className="text-center space-y-2">
                     <h2 className="text-4xl font-black uppercase tracking-tighter italic leading-none">{selectedPatient.name}</h2>
-                    <p className="text-xs font-bold text-black/20 uppercase tracking-widest">{selectedPatient.id}</p>
-                    <div className={`inline-block px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mt-4 ${
-                      selectedPatient.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-black/5 text-black/40'
-                    }`}>
-                      {selectedPatient.status} Protocol
-                    </div>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-[2.5rem] p-8 border border-black/5 shadow-sm space-y-4">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 border-b border-black/5 pb-2 ml-2">Contact Matrix</h4>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-black/30 border-b border-black/5 pb-2 ml-2">Contact</h4>
                   <div className="space-y-3">
                     <div className="flex items-center gap-4 p-4 hover:bg-black/[0.02] rounded-2xl transition-colors">
                       <Mail size={18} className="text-black/20" />
@@ -188,7 +179,6 @@ export function PatientListSection() {
                 <div className="bg-white rounded-[3rem] p-10 border border-black/5 shadow-sm space-y-8">
                   <div className="flex items-center justify-between border-b border-black/5 pb-6">
                     <h3 className="text-xl font-black uppercase italic tracking-tighter">General Information</h3>
-                    <div className="px-4 py-1.5 bg-black/5 rounded-full text-[9px] font-black uppercase tracking-widest text-black/40">Verified Data</div>
                   </div>
                   <div className="grid grid-cols-3 gap-8">
                     <div className="space-y-3">
