@@ -5,8 +5,8 @@ export function SideNavItem({ icon, label, active = false, onClick }: { icon: an
     <div 
       onClick={onClick}
       className={`flex items-center gap-4 px-6 py-5 rounded-[1.8rem] text-[15px] font-bold tracking-tight transition-all relative group cursor-pointer ${active 
-        ? 'bg-black text-white shadow-2xl shadow-black/20 scale-[1.02]' 
-        : 'text-[#AEB4C1] hover:text-black hover:bg-gray-50'
+        ? 'bg-[#1e3a8a] text-white shadow-2xl shadow-blue-900/20 scale-[1.02]' 
+        : 'text-[#AEB4C1] hover:text-[#1e3a8a] hover:bg-blue-50/50'
       }`}>
       <div className={`${active ? 'text-white' : 'text-[#AEB4C1]'} transition-colors`}>{icon}</div>
       <span className="flex-1">{label}</span>

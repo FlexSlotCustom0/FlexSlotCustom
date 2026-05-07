@@ -19,8 +19,12 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "FlexSlotCoustom",
-  description: "The premier slot booking platform for Doctor Clinics and Veterinary Practices. Beautifully designed for providers and patients alike.",
+  title: "FlexSlotCustom",
+  description: "The premier adaptable reservation platform. Beautifully designed for providers and clients alike.",
+  icons: {
+    icon: "/flexslot_logo.png",
+    apple: "/flexslot_logo.png",
+  }
 };
 
 export default function RootLayout({

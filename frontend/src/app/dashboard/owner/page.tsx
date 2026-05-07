@@ -97,12 +97,15 @@ export default function OwnerDashboard() {
       </AnimatePresence>
 
       <aside className="w-72 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
-        <div className="h-20 flex items-center px-8">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 bg-black rounded-full flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-black/20">
-              <CalendarClock className="w-5 h-5 text-white" />
+        <div className="h-24 flex items-center px-8 border-b border-black/5">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-11 h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center group-hover:scale-105 transition-all shadow-sm overflow-hidden">
+              <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-contain p-1" />
             </div>
-            <span className="font-black tracking-tighter text-lg uppercase truncate">FlexSlotCoustom</span>
+            <div className="flex flex-col">
+              <span className="font-bold tracking-tight text-base text-[#1e3a8a]">FlexSlotCustom</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-gray-300">Provider Hub</span>
+            </div>
           </Link>
         </div>
 
