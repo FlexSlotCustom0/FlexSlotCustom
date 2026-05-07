@@ -30,7 +30,7 @@ export default function NotionCalendarClone() {
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-9 h-9 bg-white border border-gray-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-all shadow-sm overflow-hidden">
-                <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-cover p-1" />
+                <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-contain p-1" />
               </div>
               <span className="font-black tracking-tighter text-lg text-[#1e3a8a] uppercase">FlexSlotCustom</span>
             </Link>
@@ -71,7 +71,7 @@ export default function NotionCalendarClone() {
             className="flex justify-center mb-6"
           >
             <div className="w-24 h-24 bg-white border border-gray-100 rounded-[2rem] flex items-center justify-center shadow-2xl relative overflow-hidden group">
-              <img src="/flexslot_logo.png" alt="FlexSlotCustom" className="w-full h-full object-cover p-3 group-hover:scale-110 transition-transform" />
+              <img src="/flexslot_logo.png" alt="FlexSlotCustom" className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform" />
             </div>
           </motion.div>
 

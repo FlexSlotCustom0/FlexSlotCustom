@@ -100,7 +100,7 @@ export default function OwnerDashboard() {
         <div className="h-24 flex items-center px-8 border-b border-black/5">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-11 h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center group-hover:scale-105 transition-all shadow-sm overflow-hidden">
-              <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-cover p-1" />
+              <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-contain p-1" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold tracking-tight text-base text-[#1e3a8a]">FlexSlotCustom</span>
