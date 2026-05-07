@@ -121,7 +121,7 @@ export default function OwnerDashboard() {
       </aside>
 
       <main className="flex-1 flex flex-col overflow-y-auto relative">
-        {activeTab !== "calendar" && activeTab !== "audit" && (
+        {activeTab === "dashboard" && (
           <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
             <div className="flex items-center gap-6 flex-1">
               <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
