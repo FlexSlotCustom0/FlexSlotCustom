@@ -1,9 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CalendarDays, Clock, User, Search, X, ChevronDown, Plus } from "lucide-react";
 import { CalendarInput } from "./CalendarInput";
+
+interface Appointment {
+  id: string;
+  day: number | null;
+  time: string;
+  client: string;
+  room: string;
+  service: string;
+  color: string;
+}
+
 
 export function CalendarPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -34,7 +45,7 @@ export function CalendarPage() {
     flag: "Urgent"
   });
 
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -304,7 +315,7 @@ export function CalendarPage() {
                   type="text" 
                   placeholder="SEARCH NAME OR EMAIL..."
                   className="w-full bg-black/5 border-2 border-transparent rounded-2xl pl-16 pr-6 py-5 text-sm font-black uppercase tracking-widest focus:bg-white focus:border-black/10 focus:ring-0 transition-all outline-none"
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     // Internal filtering handled below
                   }}
                 />

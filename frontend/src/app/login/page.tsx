@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, ArrowRight, User, Store, Scissors, Code,
@@ -188,7 +188,7 @@ function AuthFlowContent() {
                   <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Define your clinical brand</p>
                 </div>
                 <div className="space-y-6">
-                  <Input label="Clinic Name" value={businessName} onChange={(e) => setBusinessName(e.target.value)} placeholder="e.g. FlexSlotCoustom Wellness" />
+                  <Input label="Clinic Name" value={businessName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBusinessName(e.target.value)} placeholder="e.g. FlexSlotCoustom Wellness" />
                   <div className="space-y-3">
                     <label className="text-[10px] font-black uppercase tracking-widest text-black/30">Practice Focus</label>
                     <div className="grid grid-cols-2 gap-3">
@@ -213,8 +213,8 @@ function AuthFlowContent() {
                   <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Secure your administrative portal</p>
                 </div>
                 <div className="space-y-6">
-                  <Input label="Primary Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="admin@practice.com" />
-                  <Input label="Master Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="••••••••" />
+                  <Input label="Primary Email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" placeholder="admin@practice.com" />
+                  <Input label="Master Password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} type="password" placeholder="••••••••" />
                 </div>
                 <button onClick={() => role === 'owner' ? setStep("practitioner") : handleFinish()} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
                   Configure Practitioner <ArrowRight size={16} />
@@ -229,7 +229,7 @@ function AuthFlowContent() {
                   <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Identify the primary caregiver</p>
                 </div>
                 <div className="space-y-6">
-                  <Input label="Full Legal Name" value={practitionerName} onChange={(e) => setPractitionerName(e.target.value)} placeholder="e.g. Dr. Sarah Anderson" />
+                  <Input label="Full Legal Name" value={practitionerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPractitionerName(e.target.value)} placeholder="e.g. Dr. Sarah Anderson" />
                   <div className="p-8 bg-black/5 rounded-[2rem] border border-dashed border-black/10 flex items-center gap-6">
                      <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white">
                         <User size={20} />
