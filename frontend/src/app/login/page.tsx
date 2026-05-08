@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-type Step = "choice" | "role" | "business" | "credentials" | "practitioner" | "services" | "build_home" | "login";
+type Step = "choice" | "role" | "business" | "credentials" | "personal_detail" | "practitioner" | "services" | "build_home" | "login";
 
 function AuthFlowContent() {
   const router = useRouter();
@@ -30,6 +30,14 @@ function AuthFlowContent() {
   const [clinicTagline, setClinicTagline] = useState("Empowering health through precision care.");
   const [publicPhone, setPublicPhone] = useState("+1 234 567 8900");
   
+  // Patient specific state
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [location, setLocation] = useState("");
+  const [dob, setDob] = useState("");
+  const [bloodType, setBloodType] = useState("");
+  const [allergies, setAllergies] = useState("");
+  
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -41,10 +49,38 @@ function AuthFlowContent() {
     setLoading(true);
     localStorage.setItem("flexslot_role", role || "owner");
     localStorage.setItem("flexslot_user_email", email || "admin@practice.com");
-    localStorage.setItem("flexslot_active_clinic_name", businessName || "FlexSlotCoustom Wellness");
-    localStorage.setItem("flexslot_active_template", selectedTemplate);
-    localStorage.setItem("flexslot_active_tagline", clinicTagline);
-    localStorage.setItem("flexslot_active_phone", publicPhone);
+    
+    if (role === 'owner') {
+      localStorage.setItem("flexslot_active_clinic_name", businessName || "FlexSlotCoustom Wellness");
+      localStorage.setItem("flexslot_active_template", selectedTemplate);
+      localStorage.setItem("flexslot_active_tagline", clinicTagline);
+      localStorage.setItem("flexslot_active_phone", publicPhone);
+    } else {
+      const newPatient = {
+        id: `PAT-${Math.floor(1000 + Math.random() * 9000)}`,
+        name: fullName,
+        email: email,
+        phone: phoneNumber,
+        location: location,
+        dob: dob,
+        bloodType: bloodType,
+        allergies: allergies,
+        status: 'New',
+        visits: 0,
+        lastVisit: new Date().toISOString().split('T')[0]
+      };
+
+      // Get existing patients or initialize empty array
+      const existingPatientsJson = localStorage.getItem("flexslot_registered_patients");
+      const existingPatients = existingPatientsJson ? JSON.parse(existingPatientsJson) : [];
+      
+      // Add new patient and save back to localStorage
+      localStorage.setItem("flexslot_registered_patients", JSON.stringify([...existingPatients, newPatient]));
+      
+      // Also save current user info for dashboard
+      localStorage.setItem("flexslot_patient_name", fullName);
+      localStorage.setItem("flexslot_patient_phone", phoneNumber);
+    }
     
     setTimeout(() => {
       if (role === 'owner') {
@@ -56,13 +92,18 @@ function AuthFlowContent() {
     }, 1500);
   };
 
-  const stepsList = [
-    { id: 'business', label: 'Business Info' },
-    { id: 'credentials', label: 'Credentials' },
-    { id: 'practitioner', label: 'Practitioner' },
-    { id: 'services', label: 'Services' },
-    { id: 'build_home', label: 'Home Page' }
-  ];
+  const stepsList = role === 'owner' 
+    ? [
+        { id: 'business', label: 'Business Info' },
+        { id: 'credentials', label: 'Credentials' },
+        { id: 'practitioner', label: 'Practitioner' },
+        { id: 'services', label: 'Services' },
+        { id: 'build_home', label: 'Home Page' }
+      ]
+    : [
+        { id: 'credentials', label: 'Credentials' },
+        { id: 'personal_detail', label: 'Personal Detail' }
+      ];
 
   const currentStepIdx = stepsList.findIndex(s => s.id === step);
 
@@ -75,8 +116,8 @@ function AuthFlowContent() {
 
       <div className="w-full max-w-5xl bg-white border border-black/10 rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] flex overflow-hidden min-h-[650px] relative z-10">
         
-        {/* Sidebar Steps (Only for Owner Registration) */}
-        {role === 'owner' && step !== 'choice' && step !== 'role' && step !== 'login' && (
+        {/* Sidebar Steps */}
+        {(role === 'owner' || role === 'customer') && step !== 'choice' && step !== 'role' && step !== 'login' && (
           <div className="w-80 bg-black/[0.02] border-r border-black/5 p-12 flex flex-col">
             <div className="flex items-center gap-4 mb-20">
               <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-2xl p-2">
@@ -216,15 +257,61 @@ function AuthFlowContent() {
             {step === "credentials" && (
               <motion.div key="credentials" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
                 <div className="space-y-2">
-                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Access Keys</h2>
-                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Secure your administrative portal</p>
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">{role === 'owner' ? "Access Keys" : "Identity Data"}</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">{role === 'owner' ? "Secure your administrative portal" : "Initialize your patient profile"}</p>
                 </div>
                 <div className="space-y-6">
-                  <Input label="Primary Email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" placeholder="admin@practice.com" />
-                  <Input label="Master Password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} type="password" placeholder="••••••••" />
+                  {role === 'owner' ? (
+                    <>
+                      <Input label="Primary Email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" placeholder="admin@practice.com" />
+                      <Input label="Master Password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} type="password" placeholder="••••••••" />
+                    </>
+                  ) : (
+                    <>
+                      <Input label="Full Name" value={fullName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)} placeholder="e.g. Alexander Wright" />
+                      <Input label="Email Address" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" placeholder="alex@example.com" />
+                      <div className="grid grid-cols-2 gap-4">
+                        <Input label="Phone Number" value={phoneNumber} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(e.target.value)} placeholder="+1 234 567 890" />
+                        <Input label="Location" value={location} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)} placeholder="San Francisco, CA" />
+                      </div>
+                    </>
+                  )}
                 </div>
-                <button onClick={() => role === 'owner' ? setStep("practitioner") : handleFinish()} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
-                  Configure Practitioner <ArrowRight size={16} />
+                <button 
+                  onClick={() => role === 'owner' ? setStep("practitioner") : setStep("personal_detail")} 
+                  className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl"
+                >
+                  {role === 'owner' ? "Configure Practitioner" : "Next: Personal Details"} <ArrowRight size={16} />
+                </button>
+              </motion.div>
+            )}
+
+            {step === "personal_detail" && (
+              <motion.div key="personal_detail" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Personal Detail</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Complete your clinical background</p>
+                </div>
+                <div className="space-y-6">
+                  <Input label="Date of Birth" value={dob} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDob(e.target.value)} type="date" />
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-black/30">Blood Type</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(type => (
+                        <button 
+                          key={type} 
+                          onClick={() => setBloodType(type)} 
+                          className={`py-3 rounded-xl border text-[10px] font-black transition-all ${bloodType === type ? 'bg-black text-white border-black' : 'bg-white border-black/5 text-black/40 hover:border-black/20'}`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <Input label="Allergics (Allergies)" value={allergies} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAllergies(e.target.value)} placeholder="e.g. Penicillin, Peanuts (or 'None')" />
+                </div>
+                <button onClick={handleFinish} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  {loading ? "INITIALIZING..." : "FINISH REGISTRATION"} <Check size={16} />
                 </button>
               </motion.div>
             )}
