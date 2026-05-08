@@ -133,7 +133,7 @@ export default function NotionCalendarClone() {
           {/* Services Content Container */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-20 relative">
 
-            {/* Category 01: Medical Channeling */}
+            {/* Medical */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -143,7 +143,6 @@ export default function NotionCalendarClone() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <Stethoscope className="w-7 h-7" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical</div>
               <h4 className="text-2xl font-serif">Expert Medical</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Professional channeling for specialized doctor clinics and private medical practices.
@@ -153,7 +152,7 @@ export default function NotionCalendarClone() {
               </button>
             </motion.div>
 
-            {/* Category 02: Veterinary Care */}
+            {/* Veterinary */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -164,7 +163,6 @@ export default function NotionCalendarClone() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <PawPrint className="w-7 h-7" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary</div>
               <h4 className="text-2xl font-serif">Compassionate Vet</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Trusted clinic scheduling for veterinary specialists and animal wellness centers.
@@ -174,7 +172,7 @@ export default function NotionCalendarClone() {
               </button>
             </motion.div>
 
-            {/* Category 03: Dental Precision */}
+            {/* Dental */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -185,7 +183,6 @@ export default function NotionCalendarClone() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <ToothIcon className="w-8 h-8" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 03: Dental</div>
               <h4 className="text-2xl font-serif">Professional Dental</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Streamlined appointments for orthodontic, cosmetic, and general dental hygiene.
@@ -195,7 +192,7 @@ export default function NotionCalendarClone() {
               </button>
             </motion.div>
 
-            {/* Category 04: Mental Health */}
+            {/* Mental Health */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -206,7 +203,6 @@ export default function NotionCalendarClone() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <Activity className="w-7 h-7" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 04: Mental Health</div>
               <h4 className="text-2xl font-serif">Psychological Wellness</h4>
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Secure and private scheduling for counseling, therapy, and cognitive sessions.
