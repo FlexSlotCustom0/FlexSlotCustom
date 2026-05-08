@@ -6,7 +6,7 @@ import {
   TrendingUp, Layers, ShieldCheck, CheckCircle2, FileText,
   Plus, ExternalLink, Scissors, Code, Stethoscope, Briefcase, Check, ArrowRight,
   Layout, Database, Zap, Cpu, Lock, Globe, Mail, Clock, ChevronDown, Share2, MessageSquare,
-  HeartPulse, Syringe, Cross, PawPrint, Bone, Laptop, Music, Bike, Coffee, User, MapPin, Terminal, CalendarClock
+  HeartPulse, Syringe, Cross, PawPrint, Bone, Laptop, Music, Bike, Coffee, User, MapPin, Terminal, CalendarClock, Activity
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -58,8 +58,9 @@ export default function NotionCalendarClone() {
         <div className="absolute inset-0 pointer-events-none">
           <FloatingIcon icon={<Stethoscope />} color="#E3F2FD" accent="#2196F3" top="15%" left="15%" />
           <FloatingIcon icon={<HeartPulse />} color="#F3E5F5" accent="#9C27B0" top="25%" right="10%" delay={0.5} />
-          <FloatingIcon icon={<Syringe />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1} />
-          <FloatingIcon icon={<Cross />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={1.5} />
+          <FloatingIcon icon={<Activity />} color="#FCE4EC" accent="#E91E63" top="45%" right="5%" delay={1} />
+          <FloatingIcon icon={<Syringe />} color="#E8F5E9" accent="#4CAF50" top="45%" left="5%" delay={1.5} />
+          <FloatingIcon icon={<Cross />} color="#FFF3E0" accent="#FF9800" bottom="20%" right="15%" delay={2} />
           <FloatingIcon icon={<PawPrint />} color="#FFEBEE" accent="#F44336" top="35%" right="25%" delay={0.8} />
           <FloatingIcon icon={<Bone />} color="#E0F2F1" accent="#009688" bottom="15%" left="20%" delay={1.2} />
         </div>
@@ -111,68 +112,107 @@ export default function NotionCalendarClone() {
       <section id="services" className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
+            <h3 className="text-4xl md:text-5xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
+            <p className="text-gray-400 font-medium italic mt-4">Four specialized channels, one unified booking experience.</p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20 relative">
 
-            {/* Split Background Effect */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-              <div className="w-[1px] h-full bg-black relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gray-400 rounded-full blur-[100px]" />
-              </div>
-            </div>
+            {/* Grid Dividers */}
+            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[1px] bg-black opacity-[0.03] hidden md:block" />
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-black opacity-[0.03] hidden md:block" />
 
             {/* Category 01: Medical Channeling */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex-1 space-y-6 text-center md:text-right group"
+              className="space-y-6 text-center md:text-right group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <Stethoscope className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical Channeling</div>
               <h4 className="text-3xl md:text-4xl font-serif">Expert Medical Care</h4>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm ml-auto">
-                Professional channeling for specialized doctor clinics and private practices.
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:ml-auto">
+                Professional channeling for specialized doctor clinics and private medical practices.
               </p>
               <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
                 Find a Specialist <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
 
-            {/* Middle Logo Anchor */}
-            <div className="relative w-32 h-64 flex items-center justify-center">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="absolute z-10 bg-gray-50 text-gray-400 text-[11px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl border border-gray-100 shadow-sm whitespace-nowrap"
-              >
-                FlexSlotCustom
-              </motion.button>
-            </div>
-
             {/* Category 02: Veterinary Care */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex-1 space-y-6 text-center md:text-left group"
+              className="space-y-6 text-center md:text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <PawPrint className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
               <h4 className="text-3xl md:text-4xl font-serif">Compassionate Pet Care</h4>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm mr-auto">
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:mr-auto">
                 Trusted clinic scheduling for veterinary specialists and animal wellness centers.
               </p>
               <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
                 Book a Vet Visit <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
+
+            {/* Category 03: Dental Precision */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6 text-center md:text-right group"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
+                <Syringe className="w-7 h-7" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 03: Dental Precision</div>
+              <h4 className="text-3xl md:text-4xl font-serif">Professional Dental Care</h4>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:ml-auto">
+                Streamlined appointments for orthodontic, cosmetic, and general dental hygiene.
+              </p>
+              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
+                Schedule Cleaning <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+
+            {/* Category 04: Mental Health */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6 text-center md:text-left group"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
+                <Activity className="w-7 h-7" />
+              </div>
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 04: Mental Health</div>
+              <h4 className="text-3xl md:text-4xl font-serif">Psychological Wellness</h4>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:mr-auto">
+                Secure and private scheduling for counseling, therapy, and cognitive sessions.
+              </p>
+              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
+                Speak with a Counselor <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+
+            {/* Center Brand Anchor */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="bg-white border border-gray-100 p-4 rounded-3xl shadow-2xl"
+              >
+                <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center">
+                  <img src="/flexslot_logo.png" alt="" className="w-full h-full object-contain p-2 brightness-0 invert" />
+                </div>
+              </motion.div>
+            </div>
 
           </div>
         </div>
