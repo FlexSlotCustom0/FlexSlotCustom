@@ -197,10 +197,10 @@ export function PatientPortalPreview({
             </div>
 
             {/* ─── MEDICAL STAFF ─── */}
-            <section className="px-16 py-32" style={{ background: ct.sectionBg }}>
-              <div className={`mb-20 ${ct.id === 'pristine' ? 'text-center' : ''}`}>
+            <section className={`px-16 ${ct.id === 'pristine' ? 'py-20' : 'py-32'}`} style={{ background: ct.sectionBg }}>
+              <div className={`${ct.id === 'pristine' ? 'mb-12 text-center' : 'mb-20'}`}>
                 <h2 style={{ color: ct.bodyText }} className={`${
-                  ct.id === 'pristine' ? 'text-7xl font-black italic' : 
+                  ct.id === 'pristine' ? 'text-5xl font-black italic' : 
                   ct.id === 'luxe' ? 'text-5xl font-bold font-serif normal-case tracking-normal' :
                   'text-5xl font-bold'
                 } tracking-tighter uppercase mb-4`}>
@@ -212,7 +212,7 @@ export function PatientPortalPreview({
                   'bg-indigo-300/30'
                 }`} />
               </div>
-              <div className={`grid gap-12 ${ct.id === 'pristine' ? 'grid-cols-2' : 'grid-cols-3'}`}>
+              <div className="grid gap-8 grid-cols-3">
                 {doctors.map(d => (
                   <div 
                     key={d.id} 
@@ -228,16 +228,16 @@ export function PatientPortalPreview({
                       boxShadow: ct.id === 'aura' ? '0 8px 32px rgba(99,102,241,0.08)' : undefined
                     }}
                   >
-                    <div className={`aspect-[4/5] relative overflow-hidden ${ct.id === 'pristine' ? 'grayscale group-hover:grayscale-0' : ''} transition-all duration-700`}>
-                      {d.photo ? <img src={d.photo} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center" style={{ background: ct.sectionBg }}><User size={64} style={{ color: ct.muted }} className="opacity-20" /></div>}
+                    <div className={`${ct.id === 'pristine' ? 'aspect-[4/3]' : 'aspect-[4/5]'} relative overflow-hidden ${ct.id === 'pristine' ? 'grayscale group-hover:grayscale-0' : ''} transition-all duration-700`}>
+                      {d.photo ? <img src={d.photo} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center" style={{ background: ct.sectionBg }}><User size={ct.id === 'pristine' ? 40 : 64} style={{ color: ct.muted }} className="opacity-20" /></div>}
                       {ct.id === 'luxe' && <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/60 to-transparent" />}
                       {ct.id === 'aura' && <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 to-transparent" />}
                     </div>
-                    <div className="p-10 space-y-4">
+                    <div className={`${ct.id === 'pristine' ? 'p-6' : 'p-10'} space-y-3`}>
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
                           <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: d.status === 'Late' ? '#ef4444' : ct.accent }}>{d.specialty || "Specialist"}</p>
-                          <h4 className={`text-3xl font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`} style={{ color: ct.bodyText }}>{d.name}</h4>
+                          <h4 className={`${ct.id === 'pristine' ? 'text-xl' : 'text-3xl'} font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`} style={{ color: ct.bodyText }}>{d.name}</h4>
                         </div>
                         <div className={`w-3 h-3 rounded-full ${d.status === 'Present' ? 'bg-emerald-500' : 'bg-amber-500'} shadow-lg`} />
                       </div>
