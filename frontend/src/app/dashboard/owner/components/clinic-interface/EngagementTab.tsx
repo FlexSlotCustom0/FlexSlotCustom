@@ -21,11 +21,16 @@ export function EngagementTab({
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
       {/* News Section */}
-      <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2"><Sparkles size={16} /> News & Broadcasts</h3>
-          <button onClick={() => setNews([...news, { id: Date.now(), title: "New Announcement", desc: "Enter a brief description...", date: new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }), photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
-        </div>
+      <section className="premium-card space-y-10">
+        <header className="flex items-center justify-between">
+          <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2"><Sparkles size={16} /> News Broadcasts</h3>
+          <div className="flex items-center gap-4">
+             <div className="h-px bg-black/5 w-40" />
+             <button onClick={() => setNews([...news, { id: Date.now(), title: "New Announcement", desc: "Enter a brief description...", date: new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }), photo: null }])} className="p-3 bg-black text-white rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-xl shadow-black/10">
+               <Plus size={16} />
+             </button>
+          </div>
+        </header>
         <div className="space-y-4">
           {news.map(n => (
             <div key={n.id} className="flex gap-6 p-6 bg-black/[0.02] rounded-[2rem] border border-black/5 items-center group hover:bg-black/5 transition-all">
@@ -47,11 +52,16 @@ export function EngagementTab({
       </section>
 
       {/* Reviews Section */}
-      <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-        <div className="flex items-center justify-between">
+      <section className="premium-card space-y-10">
+        <header className="flex items-center justify-between">
           <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2"><TrendingUp size={16} /> Patient Reviews</h3>
-          <button onClick={() => setReviews([...reviews, { id: Date.now(), text: "New review text here...", author: "Patient", rating: 5 }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
-        </div>
+          <div className="flex items-center gap-4">
+             <div className="h-px bg-black/5 w-40" />
+             <button onClick={() => setReviews([...reviews, { id: Date.now(), text: "New review text here...", author: "Patient", rating: 5 }])} className="p-3 bg-black text-white rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-xl shadow-black/10">
+               <Plus size={16} />
+             </button>
+          </div>
+        </header>
         <div className="grid grid-cols-2 gap-4">
           {reviews.map(r => (
             <div key={r.id} className="p-6 bg-black/[0.02] rounded-[2rem] border border-black/5 space-y-3 group hover:bg-black/5 transition-all">

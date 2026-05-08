@@ -42,48 +42,75 @@ export function IdentityTab({
 }: IdentityTabProps) {
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-      {/* Templates Section */}
-      <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
-            <Palette size={16} /> Global Blueprint
-          </h3>
-          <span className="text-[10px] font-black uppercase tracking-widest text-black/20 italic">Select Interface DNA</span>
-        </div>
+      {/* Blueprint Section (Visual DNA) */}
+      <section className="space-y-10">
+        <header className="space-y-2">
+          <h3 className="text-4xl font-black uppercase tracking-tighter italic">Visual DNA</h3>
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-black/20 italic">Select your clinic's public identity</p>
+        </header>
+
         <div className="grid grid-cols-3 gap-6">
-          {templates.map(t => (
-            <div 
-              key={t.id} 
-              onClick={() => setSelectedTemplate(t.id)}
-              className={`p-6 rounded-[2rem] border-2 cursor-pointer transition-all group relative overflow-hidden ${selectedTemplate === t.id ? 'border-black bg-black text-white shadow-2xl' : 'border-black/5 bg-black/[0.02] hover:border-black/20'}`}
-            >
-              <div className="relative z-10 space-y-4">
-                <div className="flex justify-between items-start">
-                   <div className="space-y-1">
-                      <p className="text-[10px] font-black uppercase tracking-widest opacity-40">{t.theme}</p>
-                      <h4 className="text-xl font-black uppercase tracking-tighter italic">{t.name}</h4>
-                   </div>
-                   {selectedTemplate === t.id && <Sparkles size={16} className="text-white animate-pulse" />}
+          {templates.map(t => {
+            const isActive = selectedTemplate === t.id;
+            const isLuxe = t.id === 'clinic-luxe';
+            const isAura = t.id === 'clinic-aura';
+
+            const bgStyle = isActive
+              ? isLuxe
+                ? 'border-[#d4af37] bg-[#0a0a0a] text-[#f5f0e8] shadow-[0_20px_60px_-10px_rgba(212,175,55,0.25)]'
+                : isAura
+                  ? 'border-indigo-400 bg-gradient-to-br from-indigo-100 via-violet-50 to-purple-100 text-indigo-900 shadow-[0_20px_60px_-10px_rgba(99,102,241,0.25)]'
+                  : 'border-black bg-black text-white shadow-[0_40px_80px_-20px_rgba(0,0,0,0.3)]'
+              : 'border-black/5 bg-white hover:border-black/10 shadow-sm';
+
+            const iconBg = isActive
+              ? isLuxe ? 'bg-[#d4af37]/20' : isAura ? 'bg-indigo-500/10' : 'bg-white/10'
+              : 'bg-black/5';
+
+            const iconColor = isActive
+              ? isLuxe ? 'text-[#d4af37]' : isAura ? 'text-indigo-500' : 'text-white'
+              : 'text-black/20';
+
+            const subColor = isActive
+              ? isLuxe ? 'text-[#d4af37]/50' : isAura ? 'text-indigo-400' : 'text-white/40'
+              : 'text-black/20';
+
+            return (
+              <div 
+                key={t.id} 
+                onClick={() => setSelectedTemplate(t.id)}
+                className={`p-8 rounded-[2.5rem] border-2 cursor-pointer transition-all group relative overflow-hidden h-[240px] flex flex-col justify-between ${bgStyle}`}
+              >
+                {/* Dot Indicator */}
+                {isActive && (
+                  <div className={`absolute top-6 right-6 w-2 h-2 rounded-full shadow-[0_0_10px_currentColor] ${
+                    isLuxe ? 'bg-[#d4af37]' : isAura ? 'bg-indigo-400' : 'bg-white'
+                  }`} />
+                )}
+
+                {/* Icon Container */}
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBg}`}>
+                  <Palette size={20} className={iconColor} />
                 </div>
-                <p className={`text-[10px] leading-relaxed font-bold ${selectedTemplate === t.id ? 'text-white/60' : 'text-black/40'}`}>{t.desc}</p>
-                <div className="flex gap-1.5">
-                   {t.colors.map((c: string, i: number) => (
-                     <div key={i} className="w-4 h-4 rounded-full border border-white/10 shadow-sm" style={{ backgroundColor: c }} />
-                   ))}
+
+                <div className="space-y-1">
+                  <h4 className={`text-xl font-black uppercase tracking-tighter italic ${isLuxe && isActive ? 'font-serif' : ''}`}>{t.name}</h4>
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${subColor}`}>{t.theme}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
       {/* Identity Section */}
-      <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-        <div className="flex items-center justify-between">
+      <section className="premium-card space-y-10">
+        <header className="space-y-1">
           <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
-            <User size={16} /> Clinic Media
+            <User size={16} /> Clinic Identity
           </h3>
-        </div>
+          <div className="h-px bg-black/5 w-full" />
+        </header>
         <div className="grid grid-cols-2 gap-10">
           <div className="space-y-3">
             <label className="text-[9px] font-black uppercase tracking-widest text-black/30">Primary Hero Banner</label>
@@ -129,12 +156,13 @@ export function IdentityTab({
               </section>
 
               {/* Contact Section */}
-              <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
-                    <Phone size={16} /> Contact Terminals
-                  </h3>
-                </div>
+      <section className="premium-card space-y-10">
+        <header className="space-y-1">
+          <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
+            <Phone size={16} /> Contact Terminals
+          </h3>
+          <div className="h-px bg-black/5 w-full" />
+        </header>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-widest text-black/30">Phone Line</label>

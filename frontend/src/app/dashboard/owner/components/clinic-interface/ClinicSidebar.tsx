@@ -16,7 +16,7 @@ export function ClinicSidebar({
 }: ClinicSidebarProps) {
   return (
     <div className="col-span-4 space-y-8">
-      <div className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm relative overflow-hidden group">
+      <div className="premium-card relative overflow-hidden group">
         <div className="relative z-10 space-y-8">
            <div className="space-y-4">
               <h3 className="text-sm font-black uppercase tracking-widest flex items-center gap-2"><Zap size={16} /> Portal Health</h3>

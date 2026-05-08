@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Phone, Clock, Mail, AlertCircle, User, ChevronRight, Activity, Star, FileText } from "lucide-react";
+import { Phone, Clock, Mail, User, ChevronRight, Activity, Star } from "lucide-react";
 
 interface PatientPortalPreviewProps {
   isPreviewOpen: boolean;
@@ -46,211 +46,287 @@ export function PatientPortalPreview({
           className="fixed inset-0 z-[1000] flex flex-col"
           style={{ background: ct.bodyBg }}
         >
-          {/* Top Admin Bar */}
-          <div className="h-12 flex items-center justify-between px-8 bg-black/90 text-white shrink-0">
-            <div className="flex items-center gap-3">
-               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-               <span className="text-[9px] font-bold uppercase tracking-[0.3em] opacity-60">Preview Mode — {templates.find(t => t.id === selectedTemplate)?.name} Template</span>
+          <div className="h-16 flex items-center justify-between px-10 bg-black text-white shrink-0">
+            <div className="flex items-center gap-6">
+               <div className="flex gap-2">
+                 <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
+                 <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20" />
+                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20" />
+               </div>
+               <div className="h-8 px-6 bg-white/5 rounded-full flex items-center gap-3 min-w-[400px]">
+                  <Activity size={12} className="text-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">portal.flexslot.custom/{clinicName.toLowerCase().replace(/\s+/g, '-')}</span>
+               </div>
             </div>
-            <button onClick={() => setIsPreviewOpen(false)} className="px-4 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all">Close Preview</button>
+            <button 
+              onClick={() => setIsPreviewOpen(false)} 
+              className="px-8 py-2 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/10"
+            >
+              Exit Preview
+            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto">
-            {/* ─── NAVIGATION BAR ─── */}
-            <nav style={{ background: ct.navBg, color: ct.navText }} className="px-12 py-4 flex items-center justify-between sticky top-0 z-50">
-              <div className="flex items-center gap-4">
-                {clinicPhoto && <img src={clinicPhoto} alt="" className="w-10 h-10 rounded-full object-cover border-2 border-white/20" />}
-                <span className="text-lg font-bold tracking-tight">{clinicName}</span>
+            {/* ─── NAV ─── */}
+            <nav 
+              style={{ background: ct.navBg, color: ct.navText }} 
+              className={`px-16 py-8 flex items-center justify-between sticky top-0 z-50 ${
+                ct.id === 'pristine' ? 'border-b border-black' : 
+                ct.id === 'aura' ? 'backdrop-blur-xl border-b border-indigo-200/30' : 
+                ct.id === 'luxe' ? 'border-b border-[#d4af37]/20' : ''
+              }`}
+            >
+              <div className="flex items-center gap-6">
+                {clinicPhoto && <img src={clinicPhoto} alt="" className={`w-12 h-12 object-cover ${ct.id === 'pristine' ? 'rounded-none' : ct.id === 'aura' ? 'rounded-2xl shadow-lg shadow-indigo-200' : 'rounded-xl shadow-lg'}`} />}
+                <span className={`text-2xl font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`}>{clinicName}</span>
               </div>
-              <div className="flex items-center gap-8 text-[11px] font-medium tracking-wide">
-                {[
-                  { label: "Home", target: "portal-hero" },
-                  { label: "About", target: "portal-hero" },
-                  { label: "Services", target: "portal-services" },
-                  { label: "Doctors", target: "portal-doctors" },
-                  { label: "Contact", target: "portal-contact" },
-                ].map(link => (
-                  <span key={link.label} onClick={() => document.getElementById(link.target)?.scrollIntoView({ behavior: "smooth", block: "start" })} className="opacity-60 hover:opacity-100 cursor-pointer transition-opacity">{link.label}</span>
+              <div className="flex items-center gap-10 text-[10px] font-black uppercase tracking-widest">
+                {["Home", "Services", "Staff", "Contact"].map(link => (
+                  <span key={link} className="opacity-40 hover:opacity-100 cursor-pointer transition-all hover:scale-105">{link}</span>
                 ))}
-                <button onClick={() => document.getElementById("portal-booking")?.scrollIntoView({ behavior: "smooth", block: "start" })} style={{ background: ct.accent, color: ct.accentText }} className="px-5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider">Book Now</button>
+                <button 
+                  style={{ background: ct.accent, color: ct.accentText, borderRadius: ct.radius }} 
+                  className={`px-8 py-3 text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl transition-all hover:scale-105 active:scale-95 ${
+                    ct.id === 'luxe' ? 'shadow-[#d4af37]/20' : ct.id === 'aura' ? 'shadow-indigo-500/20' : ''
+                  }`}
+                >
+                  Book Appointment
+                </button>
               </div>
             </nav>
 
-            {/* HERO SECTION */}
-            <section id="portal-hero" style={{ background: ct.heroBg }} className="relative min-h-[480px] flex items-center overflow-hidden">
-              {clinicBanner && <img src={clinicBanner} alt="" className="absolute inset-0 w-full h-full object-cover" />}
-              <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${ct.heroBg}ee 0%, ${ct.heroBg}88 50%, transparent 100%)` }} />
-              <div className="relative z-10 px-16 max-w-2xl space-y-6">
-                <h1 style={{ color: ct.heroText }} className="text-5xl font-bold leading-tight tracking-tight">
-                  Welcome to {clinicName}
+            {/* ─── HERO ─── */}
+            <section 
+              style={{ background: ct.heroBg, minHeight: ct.id === 'pristine' ? '600px' : '480px' }} 
+              className={`relative flex items-center overflow-hidden ${ct.id === 'pristine' ? 'justify-center text-center' : ''}`}
+            >
+              {clinicBanner && <img src={clinicBanner} alt="" className={`absolute inset-0 w-full h-full object-cover ${ct.id === 'pristine' ? 'opacity-10 grayscale' : ct.id === 'luxe' ? 'opacity-30' : 'opacity-40'}`} />}
+              <div className="absolute inset-0" style={{ 
+                background: ct.id === 'luxe' 
+                  ? `linear-gradient(135deg, ${ct.heroBg} 40%, transparent 100%)` 
+                  : ct.id === 'aura' 
+                    ? `linear-gradient(135deg, #eef2ffee 0%, #c7d2fe88 50%, #a5b4fc44 100%)` 
+                    : `linear-gradient(135deg, ${ct.heroBg}ee 0%, ${ct.heroBg}88 50%, transparent 100%)` 
+              }} />
+              
+              {/* Luxe: subtle gold shimmer overlay */}
+              {ct.id === 'luxe' && (
+                <div className="absolute inset-0 opacity-[0.03]" style={{ background: 'repeating-linear-gradient(45deg, #d4af37 0px, transparent 1px, transparent 40px, #d4af37 41px)' }} />
+              )}
+
+              {/* Aura: soft floating orbs */}
+              {ct.id === 'aura' && (
+                <>
+                  <div className="absolute top-20 right-20 w-64 h-64 bg-indigo-300/20 rounded-full blur-3xl animate-pulse" />
+                  <div className="absolute bottom-10 left-40 w-48 h-48 bg-violet-300/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+                </>
+              )}
+              
+              <div className={`relative z-10 px-16 max-w-3xl space-y-8 ${ct.id === 'pristine' ? 'flex flex-col items-center' : ''}`}>
+                {ct.id === 'luxe' && (
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="h-px w-10 bg-[#d4af37]/40" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#d4af37]/60">Excellence in Healthcare</span>
+                  </div>
+                )}
+                <h1 
+                  style={{ color: ct.heroText }} 
+                  className={`leading-none tracking-tight uppercase italic ${
+                    ct.id === 'pristine' ? 'text-9xl font-black' : 
+                    ct.id === 'luxe' ? 'text-7xl font-bold font-serif normal-case tracking-normal' : 
+                    'text-7xl font-bold'
+                  }`}
+                >
+                  {clinicName}
                 </h1>
-                <p style={{ color: ct.heroText }} className="text-base opacity-60 leading-relaxed">
+                <p style={{ color: ct.heroText }} className="text-lg opacity-60 leading-relaxed font-medium max-w-xl">
                   {clinicTagline}
                 </p>
-                <button style={{ border: `2px solid ${ct.heroText}`, color: ct.heroText }} className="px-8 py-3 rounded-lg text-sm font-semibold uppercase tracking-wider hover:opacity-80 transition-opacity bg-transparent">
-                  Read More
-                </button>
+                <div className="flex gap-4">
+                  <button 
+                    style={{ background: ct.accent, color: ct.accentText, borderRadius: ct.radius }} 
+                    className={`px-10 py-5 text-sm font-black uppercase tracking-[0.2em] hover:opacity-80 transition-opacity ${
+                      ct.id === 'luxe' ? 'shadow-lg shadow-[#d4af37]/20' : ct.id === 'aura' ? 'shadow-lg shadow-indigo-500/20' : ''
+                    }`}
+                  >
+                    Schedule Visit
+                  </button>
+                  {ct.id === 'pristine' && (
+                    <button style={{ border: '2px solid black' }} className="px-10 py-5 text-sm font-black uppercase tracking-[0.2em]">Explore</button>
+                  )}
+                  {ct.id === 'luxe' && (
+                    <button className="px-10 py-5 text-sm font-bold uppercase tracking-[0.2em] border border-[#d4af37]/30 text-[#f5f0e8] hover:border-[#d4af37]/60 transition-all" style={{ borderRadius: ct.radius }}>Our Specialists</button>
+                  )}
+                  {ct.id === 'aura' && (
+                    <button className="px-10 py-5 text-sm font-bold uppercase tracking-[0.2em] bg-white/40 backdrop-blur-md text-indigo-700 border border-indigo-200 hover:bg-white/60 transition-all" style={{ borderRadius: ct.radius }}>Learn More</button>
+                  )}
+                </div>
               </div>
             </section>
 
-            {/* ─── QUICK INFO BAR ─── */}
-            <div id="portal-contact" style={{ background: ct.accent, color: ct.accentText }} className="grid grid-cols-3 divide-x divide-white/10">
-              <div className="p-6 flex items-center gap-4 justify-center">
-                <Phone size={18} className="opacity-60" />
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">Phone</p>
-                  <p className="text-sm font-semibold">{contact.phone}</p>
+            {/* ─── CONTACT STRIP ─── */}
+            <div 
+              style={{ background: ct.accent, color: ct.accentText }} 
+              className={`grid grid-cols-3 divide-x ${
+                ct.id === 'pristine' ? 'divide-white/10 border-y border-black' : 
+                ct.id === 'luxe' ? 'divide-[#0a0a0a]/20' : 
+                'divide-white/10'
+              }`}
+            >
+              <div className="p-10 flex flex-col items-center gap-4 justify-center">
+                <Phone size={24} className="opacity-40" />
+                <div className="text-center">
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Phone</p>
+                  <p className={`text-lg font-black italic ${ct.id === 'luxe' ? 'font-serif normal-case' : ''}`}>{contact.phone}</p>
                 </div>
               </div>
-              <div className="p-6 flex items-center gap-4 justify-center">
-                <Clock size={18} className="opacity-60" />
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">Hours</p>
-                  <p className="text-sm font-semibold">{hours.open} — {hours.close}</p>
+              <div className="p-10 flex flex-col items-center gap-4 justify-center">
+                <Clock size={24} className="opacity-40" />
+                <div className="text-center">
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Hours</p>
+                  <p className={`text-lg font-black italic ${ct.id === 'luxe' ? 'font-serif normal-case' : ''}`}>{hours.open} - {hours.close}</p>
                 </div>
               </div>
-              <div className="p-6 flex items-center gap-4 justify-center">
-                <Mail size={18} className="opacity-60" />
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">Email</p>
-                  <p className="text-sm font-semibold">{contact.email}</p>
+              <div className="p-10 flex flex-col items-center gap-4 justify-center">
+                <Mail size={24} className="opacity-40" />
+                <div className="text-center">
+                  <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Email</p>
+                  <p className={`text-lg font-black italic ${ct.id === 'luxe' ? 'font-serif normal-case' : ''}`}>{contact.email}</p>
                 </div>
               </div>
             </div>
 
-            {/* ─── DELAY WARNING ─── */}
-            {doctors.some(d => d.status === 'Late') && (
-              <div className="mx-16 mt-8 bg-amber-50 border border-amber-200 p-5 rounded-xl flex items-center gap-4">
-                 <AlertCircle className="text-amber-600 shrink-0" size={18} />
-                 <p className="text-sm text-amber-800">Schedule notice: Current average delay is <strong>+{doctors.reduce((a: any,c: any)=>a+c.delay,0)} minutes</strong>. Appointment times may shift slightly.</p>
+            {/* ─── MEDICAL STAFF ─── */}
+            <section className="px-16 py-32" style={{ background: ct.sectionBg }}>
+              <div className={`mb-20 ${ct.id === 'pristine' ? 'text-center' : ''}`}>
+                <h2 style={{ color: ct.bodyText }} className={`${
+                  ct.id === 'pristine' ? 'text-7xl font-black italic' : 
+                  ct.id === 'luxe' ? 'text-5xl font-bold font-serif normal-case tracking-normal' :
+                  'text-5xl font-bold'
+                } tracking-tighter uppercase mb-4`}>
+                  {ct.id === 'luxe' ? 'Our Specialists' : 'Medical Staff'}
+                </h2>
+                <div className={`h-1 w-40 ${
+                  ct.id === 'pristine' ? 'bg-black/5 mx-auto' : 
+                  ct.id === 'luxe' ? 'bg-[#d4af37]/30' : 
+                  'bg-indigo-300/30'
+                }`} />
               </div>
-            )}
-
-            {/* ─── DOCTORS SECTION (VIDA STYLE) ─── */}
-            <section id="portal-doctors" className="px-16 py-16" style={{ background: ct.sectionBg }}>
-              <div className="mb-10">
-                <h2 className="text-3xl font-bold tracking-tight" style={{ color: ct.bodyText }}>Our Doctors and Medical Professionals</h2>
-                <p className="text-sm mt-1" style={{ color: ct.muted }}>Our Specialists</p>
-              </div>
-              <div className="grid grid-cols-4 gap-6">
+              <div className={`grid gap-12 ${ct.id === 'pristine' ? 'grid-cols-2' : 'grid-cols-3'}`}>
                 {doctors.map(d => (
-                  <div key={d.id} className="rounded-2xl overflow-hidden shadow-lg transition-all hover:shadow-xl hover:-translate-y-1" style={{ background: ct.cardBg, borderColor: ct.cardBorder, borderWidth: 1 }}>
-                    <div className="aspect-[3/4] relative overflow-hidden" style={{ background: ct.sectionBg }}>
-                      {d.photo ? (
-                        <img src={d.photo} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <User size={48} style={{ color: ct.muted }} className="opacity-30" />
-                        </div>
-                      )}
+                  <div 
+                    key={d.id} 
+                    className={`group relative overflow-hidden transition-all ${
+                      ct.id === 'aura' ? 'backdrop-blur-lg' : ''
+                    }`} 
+                    style={{ 
+                      background: ct.cardBg, 
+                      borderRadius: ct.radius, 
+                      border: ct.id === 'pristine' ? '1px solid black' : 
+                              ct.id === 'luxe' ? '1px solid #2a2a2a' :
+                              `1px solid ${ct.cardBorder}`,
+                      boxShadow: ct.id === 'aura' ? '0 8px 32px rgba(99,102,241,0.08)' : undefined
+                    }}
+                  >
+                    <div className={`aspect-[4/5] relative overflow-hidden ${ct.id === 'pristine' ? 'grayscale group-hover:grayscale-0' : ''} transition-all duration-700`}>
+                      {d.photo ? <img src={d.photo} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" /> : <div className="w-full h-full flex items-center justify-center" style={{ background: ct.sectionBg }}><User size={64} style={{ color: ct.muted }} className="opacity-20" /></div>}
+                      {ct.id === 'luxe' && <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/60 to-transparent" />}
+                      {ct.id === 'aura' && <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 to-transparent" />}
                     </div>
-                    <div className="p-5 space-y-2">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: d.status === 'Late' ? '#d97706' : ct.accent }}>{d.specialty || "General"}</p>
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-base font-bold" style={{ color: ct.bodyText }}>{d.name}</h4>
-                        <ChevronRight size={16} style={{ color: ct.accent }} />
+                    <div className="p-10 space-y-4">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: d.status === 'Late' ? '#ef4444' : ct.accent }}>{d.specialty || "Specialist"}</p>
+                          <h4 className={`text-3xl font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`} style={{ color: ct.bodyText }}>{d.name}</h4>
+                        </div>
+                        <div className={`w-3 h-3 rounded-full ${d.status === 'Present' ? 'bg-emerald-500' : 'bg-amber-500'} shadow-lg`} />
                       </div>
-                      <p className="text-xs italic leading-relaxed" style={{ color: ct.muted }}>"{d.quote || "Dedicated to patient care."}"</p>
-                      {d.status === 'Late' && d.delay > 0 && (
-                        <p className="text-[10px] font-bold text-amber-600 mt-1">⏱ Running {d.delay} min late</p>
-                      )}
+                      <p className="text-xs leading-relaxed opacity-60 font-bold" style={{ color: ct.bodyText }}>"{d.quote || "Dedicated to excellence."}"</p>
                     </div>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* ─── SERVICES SECTION ─── */}
-            <section id="portal-services" className="px-16 py-16" style={{ background: ct.bodyBg }}>
-              <h2 className="text-3xl font-bold tracking-tight mb-2" style={{ color: ct.bodyText }}>Our Services</h2>
-              <p className="text-sm mb-10" style={{ color: ct.muted }}>Comprehensive healthcare solutions for you and your family</p>
-              <div className="grid grid-cols-3 gap-6">
+            {/* ─── SERVICES ─── */}
+            <section className="px-16 py-32" style={{ background: ct.bodyBg }}>
+              <div className="flex items-end justify-between mb-16">
+                 <div className="space-y-2">
+                    <h2 className={`text-5xl font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`} style={{ color: ct.bodyText }}>
+                      {ct.id === 'luxe' ? 'Clinical Services' : 'Our Services'}
+                    </h2>
+                    <p className="text-sm opacity-40 font-bold uppercase tracking-widest" style={{ color: ct.bodyText }}>
+                      {ct.id === 'luxe' ? 'Tailored care for discerning patients' : 'Solutions for your health'}
+                    </p>
+                 </div>
+                 <div className={`h-px flex-1 mx-10 mb-4 ${ct.id === 'luxe' ? 'bg-[#d4af37]/10' : ct.id === 'aura' ? 'bg-indigo-200/30' : 'bg-black/5'}`} />
+              </div>
+              <div className="grid grid-cols-3 gap-8">
                 {services.map(s => (
-                  <div key={s.id} className="rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 cursor-pointer" style={{ background: ct.cardBg, border: `1px solid ${ct.cardBorder}` }}>
-                    <div className="h-40 overflow-hidden" style={{ background: ct.sectionBg }}>
-                      {s.photo ? <img src={s.photo} alt="" className="w-full h-full object-cover" /> : (
-                        <div className="w-full h-full flex items-center justify-center"><Activity size={32} style={{ color: ct.muted }} className="opacity-20" /></div>
-                      )}
+                  <div key={s.id} className="group relative">
+                    <div className={`aspect-video overflow-hidden mb-6 ${ct.id === 'aura' ? 'shadow-lg shadow-indigo-200/20' : ''}`} style={{ borderRadius: ct.radius }}>
+                      {s.photo ? <img src={s.photo} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" /> : <div className="w-full h-full flex items-center justify-center" style={{ background: ct.sectionBg }}><Activity size={32} style={{ color: ct.muted }} className="opacity-20" /></div>}
                     </div>
-                    <div className="p-5 flex items-center justify-between">
-                      <span className="text-sm font-semibold" style={{ color: ct.bodyText }}>{s.name}</span>
-                      <ChevronRight size={16} style={{ color: ct.accent }} />
+                    <div className="flex items-center justify-between">
+                       <h4 className={`text-xl font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`} style={{ color: ct.bodyText }}>{s.name}</h4>
+                       <ChevronRight size={20} className="opacity-20 group-hover:opacity-100 transition-all translate-x-[-10px] group-hover:translate-x-0" />
                     </div>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* ─── REVIEWS (GOOGLE STYLE) ─── */}
-            {reviews.length > 0 && (
-              <section className="px-16 py-16" style={{ background: ct.sectionBg }}>
-                <h2 className="text-3xl font-bold tracking-tight mb-10" style={{ color: ct.bodyText }}>Patient Reviews</h2>
-                <div className="grid grid-cols-3 gap-6">
-                  {reviews.map(r => (
-                    <div key={r.id} className="rounded-2xl p-6 space-y-4 shadow-sm hover:shadow-md transition-shadow" style={{ background: ct.cardBg, border: `1px solid ${ct.cardBorder}` }}>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ background: ct.accent }}>
-                          {r.author[0]}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold" style={{ color: ct.bodyText }}>{r.author}</p>
-                          <p className="text-[10px]" style={{ color: ct.muted }}>Verified Patient</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-0.5">
-                        {Array.from({ length: r.rating || 5 }).map((_, i) => (
-                          <Star key={i} size={14} fill="#facc15" className="text-yellow-400" />
+            {/* ─── REVIEWS (Aura & Luxe only) ─── */}
+            {(ct.id === 'luxe' || ct.id === 'aura') && reviews.length > 0 && (
+              <section className="px-16 py-24" style={{ background: ct.sectionBg }}>
+                <h2 className={`text-4xl font-black uppercase tracking-tighter italic mb-16 ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`} style={{ color: ct.bodyText }}>
+                  {ct.id === 'luxe' ? 'Patient Testimonials' : 'What Patients Say'}
+                </h2>
+                <div className="grid grid-cols-3 gap-8">
+                  {reviews.map((r, i) => (
+                    <div key={i} className="p-8 space-y-4" style={{ 
+                      background: ct.cardBg, 
+                      borderRadius: ct.radius, 
+                      border: `1px solid ${ct.cardBorder}`,
+                      backdropFilter: ct.id === 'aura' ? 'blur(16px)' : undefined,
+                      boxShadow: ct.id === 'aura' ? '0 8px 32px rgba(99,102,241,0.06)' : undefined
+                    }}>
+                      <div className="flex gap-1">
+                        {[...Array(r.rating)].map((_, j) => (
+                          <Star key={j} size={14} className={ct.id === 'luxe' ? 'text-[#d4af37] fill-[#d4af37]' : 'text-indigo-400 fill-indigo-400'} />
                         ))}
                       </div>
-                      <p className="text-sm leading-relaxed" style={{ color: ct.bodyText }}>{r.text}</p>
+                      <p className="text-sm leading-relaxed opacity-70" style={{ color: ct.bodyText }}>"{r.text}"</p>
+                      <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: ct.accent }}>{r.author}</p>
                     </div>
                   ))}
                 </div>
               </section>
             )}
-
-            {/* ─── NEWS & UPDATES (VIDA STYLE) ─── */}
-            {news.length > 0 && (
-              <section className="px-16 py-16" style={{ background: ct.bodyBg }}>
-                <h2 className="text-3xl font-bold tracking-tight mb-2" style={{ color: ct.bodyText }}>News & Updates</h2>
-                <p className="text-sm mb-10" style={{ color: ct.muted }}>List of our featured resources</p>
-                <div className="grid grid-cols-4 gap-6">
-                  {news.map(n => (
-                    <div key={n.id} className="group cursor-pointer">
-                      <div className="aspect-video rounded-xl overflow-hidden mb-4 shadow-sm" style={{ background: ct.sectionBg }}>
-                        {n.photo ? <img src={n.photo} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" /> : (
-                          <div className="w-full h-full flex items-center justify-center"><FileText size={24} style={{ color: ct.muted }} className="opacity-20" /></div>
-                        )}
-                      </div>
-                      <h4 className="text-sm font-bold leading-snug mb-2 group-hover:underline" style={{ color: ct.accent }}>{n.title}</h4>
-                      <p className="text-xs leading-relaxed mb-2" style={{ color: ct.muted }}>{n.desc || ""}</p>
-                      <span className="text-[11px] font-semibold flex items-center gap-1" style={{ color: ct.bodyText }}>read more <ChevronRight size={12} /></span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* ─── CTA / BOOKING ─── */}
-            <section id="portal-booking" className="px-16 py-20 text-center" style={{ background: ct.heroBg }}>
-              <h2 className="text-4xl font-bold mb-4" style={{ color: ct.heroText }}>Book Your Appointment</h2>
-              <p className="text-base mb-8 opacity-60" style={{ color: ct.heroText }}>Schedule your visit online in seconds. We're ready to care for you.</p>
-              <button className="px-10 py-4 rounded-xl text-sm font-bold uppercase tracking-wider shadow-2xl hover:scale-105 active:scale-95 transition-all" style={{ background: ct.accentText === '#fff' ? '#fff' : ct.accent, color: ct.accentText === '#fff' ? ct.accent : ct.accentText }}>
-                Request Instant Slot
-              </button>
-            </section>
 
             {/* ─── FOOTER ─── */}
-            <footer style={{ background: ct.navBg, color: ct.navText }} className="px-16 py-10">
-              <div className="flex justify-between items-start">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold">{clinicName}</h3>
-                  <p className="text-xs opacity-40">{contact.email} · {contact.phone}</p>
-                  <p className="text-xs opacity-40">Open {hours.open} — {hours.close}</p>
+            <footer 
+              style={{ background: ct.navBg, color: ct.navText }} 
+              className={`px-16 py-20 ${
+                ct.id === 'pristine' ? 'border-t border-black' : 
+                ct.id === 'luxe' ? 'border-t border-[#d4af37]/10' : 
+                'border-t border-indigo-200/20'
+              }`}
+            >
+              <div className="flex justify-between items-end">
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center p-2 ${ct.id === 'luxe' ? 'bg-[#d4af37]' : 'bg-black'}`}><img src="/flexslot_logo.png" className="brightness-0 invert object-contain" /></div>
+                     <h3 className={`text-3xl font-black uppercase tracking-tighter italic ${ct.id === 'luxe' ? 'font-serif normal-case tracking-normal' : ''}`}>{clinicName}</h3>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold opacity-40 uppercase tracking-widest">{contact.email} · {contact.phone}</p>
+                    <p className="text-xs font-bold opacity-40 uppercase tracking-widest">Open {hours.open} - {hours.close}</p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-[10px] uppercase tracking-widest opacity-30">Powered by</p>
-                  <p className="text-sm font-bold mt-1">FlexSlot</p>
+                <div className="text-right space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-[0.5em] opacity-20">Infrastructure by</p>
+                  <p className="text-2xl font-black italic tracking-tighter uppercase">FlexSlot</p>
                 </div>
               </div>
             </footer>

@@ -8,20 +8,35 @@ import { ClinicSidebar } from "./ClinicSidebar";
 import { PatientPortalPreview } from "./PatientPortalPreview";
 
 const templates = [
-  { id: 'clinic-sigma', name: 'Sigma Engine', theme: 'Monochrome High-Contrast', desc: 'Strict clinical excellence. Perfect for high-volume diagnostic centers.', colors: ['#000000', '#ffffff', '#10b981'] },
-  { id: 'clinic-clean', name: 'Pure Minimal', theme: 'Warm Scandi-Clinical', desc: 'Soft tones and high whitespace. Ideal for wellness and therapy clinics.', colors: ['#f5f5f4', '#1c1917', '#78716c'] },
-  { id: 'clinic-medical', name: 'Classic Health', theme: 'Professional Medical', desc: 'Trusted navy and slate palette. Best for established general practices.', colors: ['#1e293b', '#f8fafc', '#2563eb'] }
+  { id: 'clinic-pristine', name: 'Pristine', theme: 'Swiss Minimalism', desc: 'Monochromatic clinical precision with editorial typography and stark whitespace.', colors: ['#000000', '#ffffff', '#666666'] },
+  { id: 'clinic-luxe', name: 'Luxe', theme: 'Private Practice Elite', desc: 'Dark luxury aesthetic with gold accents — built for premium private clinics.', colors: ['#0a0a0a', '#d4af37', '#1a1a1a'] },
+  { id: 'clinic-aura', name: 'Aura', theme: 'Modern Wellness', desc: 'Soft lavender gradients and frosted glass — a calming, modern patient experience.', colors: ['#eef2ff', '#6366f1', '#818cf8'] }
 ];
 
 const tpl: Record<string, any> = {
-  'clinic-sigma': { heroBg: '#000', heroText: '#fff', bodyBg: '#f9f9f9', bodyText: '#000', accent: '#000', accentText: '#fff', navBg: '#000', navText: '#fff', cardBg: '#fff', cardBorder: '#00000008', sectionBg: '#f2f2f2', muted: '#666' },
-  'clinic-clean': { heroBg: '#f5f5f4', heroText: '#1c1917', bodyBg: '#fff', bodyText: '#1c1917', accent: '#78716c', accentText: '#fff', navBg: '#f5f5f4', navText: '#1c1917', cardBg: '#fff', cardBorder: '#e7e5e4', sectionBg: '#fafaf9', muted: '#a8a29e' },
-  'clinic-medical': { heroBg: '#1e293b', heroText: '#fff', bodyBg: '#fff', bodyText: '#1e293b', accent: '#2563eb', accentText: '#fff', navBg: '#1e293b', navText: '#fff', cardBg: '#fff', cardBorder: '#e2e8f0', sectionBg: '#f8fafc', muted: '#64748b' }
+  'clinic-pristine': { 
+    id: 'pristine', heroBg: '#fff', heroText: '#000', bodyBg: '#fff', bodyText: '#000', 
+    accent: '#000', accentText: '#fff', navBg: '#fff', navText: '#000', 
+    cardBg: '#fff', cardBorder: '#00000008', sectionBg: '#fcfcfc', muted: '#888',
+    radius: '0px', font: 'sans'
+  },
+  'clinic-luxe': { 
+    id: 'luxe', heroBg: '#0a0a0a', heroText: '#f5f0e8', bodyBg: '#0f0f0f', bodyText: '#f5f0e8', 
+    accent: '#d4af37', accentText: '#0a0a0a', navBg: '#0a0a0a', navText: '#f5f0e8', 
+    cardBg: '#1a1a1a', cardBorder: '#2a2a2a', sectionBg: '#111111', muted: '#777',
+    radius: '1rem', font: 'serif'
+  },
+  'clinic-aura': { 
+    id: 'aura', heroBg: '#eef2ff', heroText: '#1e1b4b', bodyBg: '#f5f3ff', bodyText: '#312e81', 
+    accent: '#6366f1', accentText: '#fff', navBg: 'rgba(238,242,255,0.7)', navText: '#312e81', 
+    cardBg: 'rgba(255,255,255,0.6)', cardBorder: '#c7d2fe', sectionBg: '#eef2ff', muted: '#818cf8',
+    radius: '2.5rem', font: 'sans'
+  }
 };
 
 export function ClinicSetupSection() {
   const [activeSubTab, setActiveSubTab] = useState("identity");
-  const [selectedTemplate, setSelectedTemplate] = useState("clinic-sigma");
+  const [selectedTemplate, setSelectedTemplate] = useState("clinic-pristine");
   const [clinicName, setClinicName] = useState("Kindred Wellness");
   const [clinicTagline, setClinicTagline] = useState("Empowering health through precision care and compassionate medical expertise.");
   const [clinicBanner, setClinicBanner] = useState<string | null>(null);
@@ -106,17 +121,14 @@ export function ClinicSetupSection() {
     input.click();
   };
 
-  const ct = tpl[selectedTemplate] || tpl['clinic-sigma'];
+  const ct = tpl[selectedTemplate] || tpl['clinic-pristine'];
 
   return (
     <div className="grid grid-cols-12 gap-12">
-      <div className="col-span-8 space-y-10">
-        <header className="flex items-center justify-between">
-          <div className="space-y-1">
-             <h2 className="text-4xl font-black uppercase tracking-tighter italic">Clinic Interface Builder</h2>
-             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-black/20 italic">Architecting Patient Experience</p>
-          </div>
-          <button onClick={handleSave} className="px-10 py-4 bg-emerald-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all">Deploy Interface</button>
+      <div className="col-span-8 space-y-12">
+        <header className="space-y-2">
+           <h2 className="premium-header">Clinic Interface</h2>
+           <p className="premium-sub">Architecting Patient Experience</p>
         </header>
 
         <nav className="flex gap-1.5 bg-black/5 p-1.5 rounded-2xl w-fit">
@@ -171,6 +183,15 @@ export function ClinicSetupSection() {
             handleFileUpload={handleFileUpload}
           />
         )}
+
+        <div className="pt-10">
+          <button 
+            onClick={handleSave} 
+            className="w-full py-8 bg-black text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all"
+          >
+            Deploy Clinic Portal
+          </button>
+        </div>
       </div>
 
       <ClinicSidebar 
