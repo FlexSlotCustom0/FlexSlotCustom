@@ -11,6 +11,21 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+const ToothIcon = ({ className }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className} 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M12 2C15 2 19 3 19 8C19 11 18 13 16 15C15 16 14 18 14 20C14 21 14 22 14 22H10C10 22 10 21 10 20C10 18 9 16 8 15C6 13 5 11 5 8C5 3 9 2 12 2Z" />
+    <path d="M12 8C13 6 15 6 15 6" />
+  </svg>
+);
+
 
 export default function NotionCalendarClone() {
 
@@ -113,11 +128,10 @@ export default function NotionCalendarClone() {
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
-            <p className="text-gray-400 font-medium italic mt-4">Four specialized channels, one unified booking experience.</p>
           </div>
 
-            {/* Services Content Container */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20 relative">
+          {/* Services Content Container */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20 relative">
 
             {/* Category 01: Medical Channeling */}
             <motion.div
@@ -126,7 +140,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-right group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-10">
                 <Stethoscope className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical Channeling</div>
@@ -146,7 +160,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-10">
                 <PawPrint className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
@@ -166,8 +180,8 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-right group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
-                <Syringe className="w-7 h-7" />
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-10">
+                <ToothIcon className="w-8 h-8" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 03: Dental Precision</div>
               <h4 className="text-3xl md:text-4xl font-serif">Professional Dental Care</h4>
@@ -186,7 +200,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-10">
                 <Activity className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 04: Mental Health</div>
