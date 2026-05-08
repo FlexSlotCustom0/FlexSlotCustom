@@ -10,19 +10,30 @@ export function PatientListSection() {
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [patients, setPatients] = useState([
-    { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01', phone: '+1 234 567 890', location: 'San Francisco, CA', dob: '1992-04-15', bloodType: 'O+', allergies: 'Penicillin, Peanuts' },
-    { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com', status: 'Follow-up', visits: 4, lastVisit: '2026-04-28', phone: '+1 234 567 891', location: 'Los Angeles, CA', dob: '1988-11-22', bloodType: 'A-', allergies: 'None' },
-    { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com', status: 'New', visits: 1, lastVisit: '2026-05-04', phone: '+1 234 567 892', location: 'New York, NY', dob: '1995-07-30', bloodType: 'B+', allergies: 'Latex' },
-    { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com', status: 'Active', visits: 8, lastVisit: '2026-04-15', phone: '+1 234 567 893', location: 'Miami, FL', dob: '1990-12-05', bloodType: 'AB+', allergies: 'Dust Mites' },
-    { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com', status: 'Inactive', visits: 15, lastVisit: '2026-03-20', phone: '+1 234 567 894', location: 'Chicago, IL', dob: '1982-02-18', bloodType: 'O-', allergies: 'Shellfish' },
-  ]);
-
+  const [patients, setPatients] = useState<any[]>([]);
   const [newPatient, setNewPatient] = useState({
     name: "",
     email: "",
     status: "New"
   });
+
+  useEffect(() => {
+    // Initial demo data
+    const demoPatients = [
+      { id: 'PAT-001', name: 'Alexander Wright', email: 'alex@example.com', status: 'Active', visits: 12, lastVisit: '2026-05-01', phone: '+1 234 567 890', location: 'San Francisco, CA', dob: '1992-04-15', bloodType: 'O+', allergies: 'Penicillin, Peanuts' },
+      { id: 'PAT-002', name: 'Sarah Jenkins', email: 'sarah.j@example.com', status: 'Follow-up', visits: 4, lastVisit: '2026-04-28', phone: '+1 234 567 891', location: 'Los Angeles, CA', dob: '1988-11-22', bloodType: 'A-', allergies: 'None' },
+      { id: 'PAT-003', name: 'Michael Chen', email: 'm.chen@example.com', status: 'New', visits: 1, lastVisit: '2026-05-04', phone: '+1 234 567 892', location: 'New York, NY', dob: '1995-07-30', bloodType: 'B+', allergies: 'Latex' },
+      { id: 'PAT-004', name: 'Emily Rodriguez', email: 'emily.r@example.com', status: 'Active', visits: 8, lastVisit: '2026-04-15', phone: '+1 234 567 893', location: 'Miami, FL', dob: '1990-12-05', bloodType: 'AB+', allergies: 'Dust Mites' },
+      { id: 'PAT-005', name: 'David Thompson', email: 'd.thompson@example.com', status: 'Inactive', visits: 15, lastVisit: '2026-03-20', phone: '+1 234 567 894', location: 'Chicago, IL', dob: '1982-02-18', bloodType: 'O-', allergies: 'Shellfish' },
+    ];
+
+    // Load registered patients from localStorage
+    const registeredPatientsJson = localStorage.getItem("flexslot_registered_patients");
+    const registeredPatients = registeredPatientsJson ? JSON.parse(registeredPatientsJson) : [];
+
+    // Merge and set
+    setPatients([...registeredPatients, ...demoPatients]);
+  }, []);
 
   const handleAddPatient = () => {
     if (!newPatient.name || !newPatient.email) return;
