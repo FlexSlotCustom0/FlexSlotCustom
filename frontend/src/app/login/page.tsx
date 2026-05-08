@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-type Step = "choice" | "role" | "business" | "credentials" | "practitioner" | "services" | "build_home" | "login";
+type Step = "choice" | "role" | "business" | "credentials" | "practitioner" | "services" | "build_home" | "login" | "patient_profile";
 
 function AuthFlowContent() {
   const router = useRouter();
@@ -29,6 +29,14 @@ function AuthFlowContent() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("clinic-pristine");
   const [clinicTagline, setClinicTagline] = useState("Empowering health through precision care.");
   const [publicPhone, setPublicPhone] = useState("+1 234 567 8900");
+
+  // Patient Profile State
+  const [patientName, setPatientName] = useState("");
+  const [patientDob, setPatientDob] = useState("");
+  const [patientPhone, setPatientPhone] = useState("");
+  const [patientAddress, setPatientAddress] = useState("");
+  const [bloodType, setBloodType] = useState("A+");
+  const [allergies, setAllergies] = useState("");
   
   const [loading, setLoading] = useState(false);
 
@@ -41,10 +49,20 @@ function AuthFlowContent() {
     setLoading(true);
     localStorage.setItem("flexslot_role", role || "owner");
     localStorage.setItem("flexslot_user_email", email || "admin@practice.com");
-    localStorage.setItem("flexslot_active_clinic_name", businessName || "FlexSlotCoustom Wellness");
-    localStorage.setItem("flexslot_active_template", selectedTemplate);
-    localStorage.setItem("flexslot_active_tagline", clinicTagline);
-    localStorage.setItem("flexslot_active_phone", publicPhone);
+    
+    if (role === 'owner') {
+      localStorage.setItem("flexslot_active_clinic_name", businessName || "FlexSlotCoustom Wellness");
+      localStorage.setItem("flexslot_active_template", selectedTemplate);
+      localStorage.setItem("flexslot_active_tagline", clinicTagline);
+      localStorage.setItem("flexslot_active_phone", publicPhone);
+    } else {
+      localStorage.setItem("flexslot_patient_name", patientName);
+      localStorage.setItem("flexslot_patient_dob", patientDob);
+      localStorage.setItem("flexslot_patient_phone", patientPhone);
+      localStorage.setItem("flexslot_patient_address", patientAddress);
+      localStorage.setItem("flexslot_blood_type", bloodType);
+      localStorage.setItem("flexslot_allergies", allergies);
+    }
     
     setTimeout(() => {
       if (role === 'owner') {
@@ -223,8 +241,46 @@ function AuthFlowContent() {
                   <Input label="Primary Email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} type="email" placeholder="admin@practice.com" />
                   <Input label="Master Password" value={password} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} type="password" placeholder="••••••••" />
                 </div>
-                <button onClick={() => role === 'owner' ? setStep("practitioner") : handleFinish()} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
-                  Configure Practitioner <ArrowRight size={16} />
+                <button onClick={() => role === 'owner' ? setStep("practitioner") : setStep("patient_profile")} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  {role === 'owner' ? "Configure Practitioner" : "Patient Profile"} <ArrowRight size={16} />
+                </button>
+              </motion.div>
+            )}
+            {step === "patient_profile" && (
+              <motion.div key="patient_profile" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-black tracking-tighter uppercase italic">Patient Profile</h2>
+                  <p className="text-black/30 text-xs font-bold uppercase tracking-widest">Complete your medical identity</p>
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <Input label="Full Legal Name" value={patientName} onChange={(e: any) => setPatientName(e.target.value)} placeholder="e.g. John Doe" />
+                  <Input label="Date of Birth" value={patientDob} onChange={(e: any) => setPatientDob(e.target.value)} type="date" />
+                  <Input label="Phone Number" value={patientPhone} onChange={(e: any) => setPatientPhone(e.target.value)} placeholder="+1 234 567 8900" />
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-black/30">Blood Type</label>
+                    <select 
+                      value={bloodType} 
+                      onChange={(e) => setBloodType(e.target.value)}
+                      className="w-full px-8 py-5 bg-black/5 border-transparent rounded-[1.5rem] text-xs font-black uppercase tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-black transition-all shadow-inner"
+                    >
+                      {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(t => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <Input label="Residential Address" value={patientAddress} onChange={(e: any) => setPatientAddress(e.target.value)} placeholder="123 Medical St, Health City" />
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-black/30">Special Notes / Allergies</label>
+                  <textarea 
+                    value={allergies} 
+                    onChange={(e) => setAllergies(e.target.value)}
+                    placeholder="e.g. Penicillin, Peanuts, etc."
+                    className="w-full px-8 py-5 bg-black/5 border-transparent rounded-[1.5rem] text-xs font-black uppercase tracking-widest focus:outline-none focus:bg-white focus:ring-2 focus:ring-black transition-all shadow-inner h-24 resize-none"
+                  />
+                </div>
+                <button onClick={handleFinish} className="w-full py-6 bg-black text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl">
+                  {loading ? "AUTHENTICATING..." : "COMPLETE REGISTRATION"} <ArrowRight size={16} />
                 </button>
               </motion.div>
             )}

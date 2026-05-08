@@ -83,9 +83,13 @@ export function DashboardCommandCenter({ bookings, doneCount, notesCount, onComp
                   {/* Middle Row: Patient Name & Reason */}
                   <div className="flex items-end justify-between gap-4">
                     <div className="space-y-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
+                        <span className="text-[8px] font-black uppercase tracking-widest text-emerald-600">Active Signal - Calling</span>
+                      </div>
                       <h2 className="text-4xl font-black tracking-tighter uppercase italic leading-none text-transparent bg-clip-text bg-gradient-to-br from-black to-black/40">{ongoing.clientName}</h2>
                       <div className="flex items-center gap-2 pt-1">
-                        <span className="px-2 py-0.5 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest rounded-full">Routine Checkup</span>
+                        <span className="px-2 py-0.5 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest rounded-full">{ongoing.serviceName}</span>
                         <p className="text-black/40 text-[8px] font-bold uppercase tracking-[0.2em] italic">Consultation In_Progress</p>
                       </div>
                     </div>
@@ -94,8 +98,28 @@ export function DashboardCommandCenter({ bookings, doneCount, notesCount, onComp
                       onClick={onComplete}
                       className="px-5 py-2.5 bg-black text-white rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.1)] active:scale-95 shrink-0"
                     >
-                      Complete
+                      Complete Session
                     </button>
+                  </div>
+
+                  {/* Patient Clinical Details - NEW */}
+                  <div className="grid grid-cols-3 gap-4 p-5 bg-white/40 rounded-2xl border border-emerald-500/10 backdrop-blur-sm">
+                    <div>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-black/30 mb-1">Date of Birth</p>
+                      <p className="text-xs font-black uppercase tracking-tighter">{ongoing.dob || "12 / 04 / 1998"}</p>
+                    </div>
+                    <div>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-black/30 mb-1">Blood Type</p>
+                      <p className="text-xs font-black uppercase tracking-tighter text-emerald-700">{ongoing.bloodType || "O+"}</p>
+                    </div>
+                    <div>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-black/30 mb-1">Contact</p>
+                      <p className="text-xs font-black uppercase tracking-tighter">{ongoing.phone || "+1 234 567 8900"}</p>
+                    </div>
+                    <div className="col-span-3 pt-2 border-t border-emerald-500/5">
+                      <p className="text-[8px] font-black uppercase tracking-widest text-black/30 mb-1">Allergies & Medical Intelligence</p>
+                      <p className="text-xs font-black uppercase tracking-tighter text-red-500 italic">{ongoing.allergies || "No specific contraindications found in registry."}</p>
+                    </div>
                   </div>
 
                   {/* Footer Row: Doctor info */}

@@ -33,14 +33,14 @@ export default function OwnerDashboard() {
     if (savedNotes) setNotesCount(parseInt(savedNotes));
 
     const dummy = [
-      { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM', practitioner: 'Dr. Anderson' },
-      { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM', practitioner: 'Dr. Jenkins' },
-      { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM', practitioner: 'Dr. Wright' },
-      { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM', practitioner: 'Dr. Anderson' },
-      { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM', practitioner: 'Dr. Jenkins' },
-      { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM', practitioner: 'Dr. Anderson' },
-      { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM', practitioner: 'Dr. Wright' },
-      { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM', practitioner: 'Dr. Jenkins' }
+      { id: '1', clientName: 'Alexander Wright', serviceName: 'General Consultation', slotTime: '10:30 AM', practitioner: 'Dr. Anderson', dob: '15/05/1990', bloodType: 'A+', phone: '+1 555-0101', allergies: 'Penicillin' },
+      { id: '2', clientName: 'Sarah Jenkins', serviceName: 'Diagnostic Scan', slotTime: '11:15 AM', practitioner: 'Dr. Jenkins', dob: '22/08/1985', bloodType: 'O-', phone: '+1 555-0102', allergies: 'None' },
+      { id: '3', clientName: 'Michael Chen', serviceName: 'Orthopedic Follow-up', slotTime: '12:00 PM', practitioner: 'Dr. Wright', dob: '10/11/1992', bloodType: 'B+', phone: '+1 555-0103', allergies: 'Latex' },
+      { id: '4', clientName: 'Emily Rodriguez', serviceName: 'Pediatric Checkup', slotTime: '01:30 PM', practitioner: 'Dr. Anderson', dob: '05/02/2018', bloodType: 'AB+', phone: '+1 555-0104', allergies: 'Peanuts' },
+      { id: '5', clientName: 'David Thompson', serviceName: 'Cardiology Screening', slotTime: '02:45 PM', practitioner: 'Dr. Jenkins', dob: '30/01/1970', bloodType: 'O+', phone: '+1 555-0105', allergies: 'Sulfa Drugs' },
+      { id: '6', clientName: 'Jessica Lee', serviceName: 'Physical Therapy', slotTime: '03:30 PM', practitioner: 'Dr. Anderson', dob: '12/06/1995', bloodType: 'A-', phone: '+1 555-0106', allergies: 'None' },
+      { id: '7', clientName: 'Robert Garcia', serviceName: 'Dental Cleaning', slotTime: '04:15 PM', practitioner: 'Dr. Wright', dob: '18/09/1982', bloodType: 'B-', phone: '+1 555-0107', allergies: 'Iodine' },
+      { id: '8', clientName: 'Sophie Bennett', serviceName: 'Dermatology Review', slotTime: '05:00 PM', practitioner: 'Dr. Jenkins', dob: '07/04/2000', bloodType: 'AB-', phone: '+1 555-0108', allergies: 'None' }
     ];
 
     let loadedBookings = null;
