@@ -127,7 +127,7 @@ export default function NotionCalendarClone() {
       <section id="services" className="py-24 bg-white border-y border-gray-50 flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-serif tracking-tight text-black">Dual-Care Excellence.</h3>
+            <h3 className="text-4xl md:text-5xl font-serif tracking-tight text-black">Integrated Clinical Specialization.</h3>
           </div>
 
           {/* Services Content Container */}
@@ -147,9 +147,6 @@ export default function NotionCalendarClone() {
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Professional channeling for specialized doctor clinics and private medical practices.
               </p>
-              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Find Doctor <ArrowRight className="w-4 h-4" />
-              </button>
             </motion.div>
 
             {/* Veterinary */}
@@ -167,9 +164,6 @@ export default function NotionCalendarClone() {
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Trusted clinic scheduling for veterinary specialists and animal wellness centers.
               </p>
-              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Book Vet <ArrowRight className="w-4 h-4" />
-              </button>
             </motion.div>
 
             {/* Dental */}
@@ -187,9 +181,6 @@ export default function NotionCalendarClone() {
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Streamlined appointments for orthodontic, cosmetic, and general dental hygiene.
               </p>
-              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Schedule <ArrowRight className="w-4 h-4" />
-              </button>
             </motion.div>
 
             {/* Mental Health */}
@@ -207,9 +198,6 @@ export default function NotionCalendarClone() {
               <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Secure and private scheduling for counseling, therapy, and cognitive sessions.
               </p>
-              <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Get Help <ArrowRight className="w-4 h-4" />
-              </button>
             </motion.div>
 
           </div>
