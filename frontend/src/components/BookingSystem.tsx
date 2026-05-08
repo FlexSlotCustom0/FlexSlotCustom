@@ -46,6 +46,21 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
         setSlots(initial);
         localStorage.setItem("flexslot_available_slots", JSON.stringify(initial));
       }
+      
+      // Pre-fill from localStorage if available
+      const registeredName = localStorage.getItem("flexslot_patient_name");
+      const registeredEmail = localStorage.getItem("flexslot_user_email");
+      const registeredPhone = localStorage.getItem("flexslot_patient_phone");
+      
+      if (registeredName || registeredEmail || registeredPhone) {
+        setFormData(prev => ({
+          ...prev,
+          name: registeredName || prev.name,
+          email: registeredEmail || prev.email,
+          phone: registeredPhone || prev.phone
+        }));
+      }
+
       setStep("slots");
       setSelectedSlot(null);
     }
@@ -80,6 +95,37 @@ export function BookingSystem({ clinicId, primaryColor = "#000", isOpen, onClose
       };
       bookings.push(newBooking);
       localStorage.setItem("flexslot_bookings", JSON.stringify(bookings));
+
+      // 3. Ensure patient is in registered list for owner
+      const patients = JSON.parse(localStorage.getItem("flexslot_registered_patients") || "[]");
+      const patientIndex = patients.findIndex((p: any) => p.email === formData.email);
+      
+      if (patientIndex > -1) {
+        // Update existing patient's last visit and phone/location if they changed
+        patients[patientIndex] = {
+          ...patients[patientIndex],
+          lastVisit: selectedSlot.date,
+          visits: (patients[patientIndex].visits || 0) + 1,
+          phone: formData.phone || patients[patientIndex].phone
+        };
+      } else {
+        // Add as new patient if not found
+        patients.push({
+          id: `PAT-${Math.floor(1000 + Math.random() * 9000)}`,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          location: localStorage.getItem("flexslot_patient_location") || 'Online',
+          dob: localStorage.getItem("flexslot_patient_dob") || 'N/A',
+          bloodType: localStorage.getItem("flexslot_patient_blood_type") || 'N/A',
+          allergies: localStorage.getItem("flexslot_patient_allergies") || 'N/A',
+          status: 'Active',
+          visits: 1,
+          lastVisit: selectedSlot.date
+        });
+      }
+      localStorage.setItem("flexslot_registered_patients", JSON.stringify(patients));
+
       window.dispatchEvent(new Event('storage'));
 
       setIsSubmitting(false);
