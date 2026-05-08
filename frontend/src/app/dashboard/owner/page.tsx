@@ -14,6 +14,7 @@ import { DashboardCommandCenter } from "./components/dashboard/DashboardCommandC
 import { ClinicSetupSection } from "./components/clinic-interface/ClinicSetupSection";
 import { CalendarPage } from "./components/calendar/CalendarPage";
 import { PatientListSection } from "./components/registry/PatientListSection";
+import { SystemRegistrySection } from "./components/registry/SystemRegistrySection";
 
 export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -116,10 +117,13 @@ export default function OwnerDashboard() {
           <SideNavItem icon={<Users size={18} />} label="Patient List" active={activeTab === "audit"} onClick={() => setActiveTab("audit")} />
         </nav>
 
-        <div className="p-6 border-t border-black/5">
-          <button className="flex items-center gap-3 px-3 py-2 text-black/40 hover:text-black transition-colors font-bold text-xs uppercase tracking-widest w-full">
-            <Settings size={14} /> System Registry
-          </button>
+        <div className="p-6 border-t border-black/5 space-y-2">
+          <SideNavItem 
+            icon={<Settings size={18} />} 
+            label="System Registry" 
+            active={activeTab === "registry"} 
+            onClick={() => setActiveTab("registry")} 
+          />
         </div>
       </aside>
 
@@ -176,6 +180,7 @@ export default function OwnerDashboard() {
           {activeTab === "ui" && <ClinicSetupSection />}
           {activeTab === "calendar" && <CalendarPage />}
           {activeTab === "audit" && <PatientListSection />}
+          {activeTab === "registry" && <SystemRegistrySection />}
         </div>
       </main>
     </div>
