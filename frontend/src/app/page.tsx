@@ -131,85 +131,88 @@ export default function NotionCalendarClone() {
           </div>
 
           {/* Services Content Container */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20 relative">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-20 relative">
 
             {/* Category 01: Medical Channeling */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="space-y-6 text-center md:text-right group"
+              className="space-y-6 text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:-translate-x-32">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <Stethoscope className="w-7 h-7" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical Channeling</div>
-              <h4 className="text-3xl md:text-4xl font-serif">Expert Medical Care</h4>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:ml-auto">
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical</div>
+              <h4 className="text-2xl font-serif">Expert Medical</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Professional channeling for specialized doctor clinics and private medical practices.
               </p>
               <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Find a Specialist <ArrowRight className="w-4 h-4" />
+                Find Doctor <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
 
             {/* Category 02: Veterinary Care */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="space-y-6 text-center md:text-left group"
+              transition={{ delay: 0.1 }}
+              className="space-y-6 text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-32">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <PawPrint className="w-7 h-7" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
-              <h4 className="text-3xl md:text-4xl font-serif">Compassionate Pet Care</h4>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:mr-auto">
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary</div>
+              <h4 className="text-2xl font-serif">Compassionate Vet</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Trusted clinic scheduling for veterinary specialists and animal wellness centers.
               </p>
               <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Book a Vet Visit <ArrowRight className="w-4 h-4" />
+                Book Vet <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
 
             {/* Category 03: Dental Precision */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="space-y-6 text-center md:text-right group"
+              transition={{ delay: 0.2 }}
+              className="space-y-6 text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:-translate-x-32">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <ToothIcon className="w-8 h-8" />
               </div>
-              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 03: Dental Precision</div>
-              <h4 className="text-3xl md:text-4xl font-serif">Professional Dental Care</h4>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:ml-auto">
+              <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 03: Dental</div>
+              <h4 className="text-2xl font-serif">Professional Dental</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Streamlined appointments for orthodontic, cosmetic, and general dental hygiene.
               </p>
               <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Schedule Cleaning <ArrowRight className="w-4 h-4" />
+                Schedule <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
 
             {/* Category 04: Mental Health */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="space-y-6 text-center md:text-left group"
+              transition={{ delay: 0.3 }}
+              className="space-y-6 text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-32">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10">
                 <Activity className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 04: Mental Health</div>
-              <h4 className="text-3xl md:text-4xl font-serif">Psychological Wellness</h4>
-              <p className="text-gray-500 font-medium leading-relaxed max-w-sm md:mr-auto">
+              <h4 className="text-2xl font-serif">Psychological Wellness</h4>
+              <p className="text-gray-500 font-medium leading-relaxed text-sm">
                 Secure and private scheduling for counseling, therapy, and cognitive sessions.
               </p>
               <button className="inline-flex items-center gap-2 text-black font-bold text-sm tracking-tight border-b-2 border-black pb-1 hover:gap-4 transition-all">
-                Speak with a Counselor <ArrowRight className="w-4 h-4" />
+                Get Help <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
 
