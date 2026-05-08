@@ -41,7 +41,7 @@ export function SystemRegistrySection() {
       <header className="flex justify-between items-end">
         <div className="space-y-2">
           <h2 className="text-4xl font-black tracking-tighter uppercase italic">System Registry</h2>
-          <p className="text-black/30 text-[10px] font-black uppercase tracking-[0.3em]">Governance & B2B Architecture</p>
+          <p className="text-black/30 text-[10px] font-black uppercase tracking-[0.3em]">Governance & Subscription Matrix</p>
         </div>
         
         <div className="flex bg-black/5 p-1 rounded-2xl">
@@ -59,7 +59,7 @@ export function SystemRegistrySection() {
               activeSubTab === 'billing' ? 'bg-white shadow-lg text-black' : 'text-black/30 hover:text-black'
             }`}
           >
-            B2B Subscription
+            Subscription Details
           </button>
         </div>
       </header>
@@ -88,14 +88,14 @@ export function SystemRegistrySection() {
                     <h3 className="text-[10px] font-black uppercase tracking-widest text-black/20">Communication Matrix</h3>
                     <div className="space-y-6">
                        <Input label="Official Contact" value={phone} onChange={(e: any) => setPhone(e.target.value)} icon={<Phone size={16} />} />
-                       <Input label="Administrative Email" value="admin@clinic.com" readOnly icon={<Mail size={16} />} />
+                       <Input label="Administrative Email" value="admin@clinic.com" readOnly={true} icon={<Mail size={16} />} />
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <h3 className="text-[10px] font-black uppercase tracking-widest text-black/20">Spatial Registry</h3>
                     <div className="space-y-6">
-                       <Input label="Physical Coordinates" value="123 Medical St, Health City, ZU 8001" icon={<MapPin size={16} />} />
+                       <Input label="Physical Coordinates" value="123 Medical St, Health City, ZU 8001" onChange={() => {}} icon={<MapPin size={16} />} />
                     </div>
                   </div>
                 </div>
@@ -189,6 +189,27 @@ export function SystemRegistrySection() {
                 </div>
 
                 <div className="space-y-6">
+                  <h3 className="text-[10px] font-black uppercase tracking-widest text-black/20">Included Capabilities</h3>
+                  <div className="space-y-3">
+                     {[
+                       { label: "Appointment Engine v2", status: "Active" },
+                       { label: "AI Patient Profile Analytics", status: "Active" },
+                       { label: "Multi-Practitioner Sync", status: "Active" },
+                       { label: "Custom Domain Registry", status: "Active" },
+                       { label: "HIPAA Secure Storage", status: "Active" }
+                     ].map((service, i) => (
+                       <div key={i} className="flex items-center justify-between p-4 bg-black/5 rounded-2xl">
+                          <span className="text-[10px] font-black uppercase tracking-widest">{service.label}</span>
+                          <div className="flex items-center gap-2">
+                             <div className="w-1 h-1 bg-emerald-500 rounded-full" />
+                             <span className="text-[8px] font-black uppercase text-emerald-600">{service.status}</span>
+                          </div>
+                       </div>
+                     ))}
+                  </div>
+                </div>
+
+                <div className="space-y-6">
                   <h3 className="text-[10px] font-black uppercase tracking-widest text-black/20">Payment Authority</h3>
                   <div className="p-8 border border-black/10 rounded-[2.5rem] flex items-center justify-between group hover:border-black transition-all cursor-pointer">
                      <div className="flex items-center gap-5">
@@ -208,10 +229,10 @@ export function SystemRegistrySection() {
                 </div>
               </div>
 
-              {/* Right: Payment Feed (B2B Billing to FlexSlot) */}
+              {/* Right: Payment Feed (Subscription Billing to FlexSlot) */}
               <div className="col-span-7 space-y-8">
                  <div className="flex justify-between items-center">
-                    <h3 className="text-[10px] font-black uppercase tracking-widest text-black/20">Financial Stream (to FlexSlot)</h3>
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-black/20">Subscription History</h3>
                     <button className="text-[10px] font-black uppercase tracking-widest text-blue-600 hover:underline">Download Registry</button>
                  </div>
                  
@@ -252,10 +273,10 @@ function Input({ label, value, onChange, icon, readOnly = false }: any) {
         </div>
         <input 
           value={value} 
-          onChange={onChange} 
+          onChange={readOnly ? undefined : (onChange || (() => {}))}
           readOnly={readOnly}
           className={`w-full pl-16 pr-8 py-5 rounded-[1.5rem] text-xs font-black uppercase tracking-widest focus:outline-none transition-all ${
-            readOnly ? 'bg-black/[0.02] text-black/30' : 'bg-black/5 focus:bg-white focus:ring-2 focus:ring-black shadow-inner'
+            readOnly ? 'bg-black/[0.02] text-black/30 cursor-not-allowed' : 'bg-black/5 focus:bg-white focus:ring-2 focus:ring-black shadow-inner'
           }`} 
         />
       </div>

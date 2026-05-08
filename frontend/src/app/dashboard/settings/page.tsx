@@ -68,7 +68,7 @@ export default function AccountSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen bg-white text-black font-sans flex flex-col md:flex-row overflow-hidden">
       {/* Sidebar / Navigation Rail */}
       <aside className="w-full md:w-[360px] border-r border-gray-100 flex flex-col h-auto md:h-screen sticky top-0 bg-white z-20">
         <div className="p-10 border-b border-gray-50">

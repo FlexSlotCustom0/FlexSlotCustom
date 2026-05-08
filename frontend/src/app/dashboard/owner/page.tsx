@@ -80,7 +80,7 @@ export default function OwnerDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans flex overflow-hidden">
+    <div className="h-screen bg-white text-black font-sans flex overflow-hidden">
       <AnimatePresence>
         {isApplying && (
           <motion.div
