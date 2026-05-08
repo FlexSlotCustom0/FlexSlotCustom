@@ -96,20 +96,20 @@ export default function OwnerDashboard() {
         )}
       </AnimatePresence>
 
-      <aside className="w-72 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
-        <div className="h-24 flex items-center px-8 border-b border-black/5">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center group-hover:scale-105 transition-all shadow-sm overflow-hidden">
-              <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-contain p-1" />
+      <aside className="w-80 bg-white border-r border-black/5 flex flex-col h-screen sticky top-0 z-20">
+        <div className="h-32 flex items-center px-10 border-b border-black/5">
+          <Link href="/" className="flex items-center gap-4 group">
+            <div className="w-14 h-14 bg-black rounded-[1.2rem] flex items-center justify-center group-hover:scale-105 transition-all shadow-xl overflow-hidden p-2">
+              <img src="/flexslot_logo.png" alt="FlexSlotCustom Logo" className="w-full h-full object-contain brightness-0 invert" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold tracking-tight text-base text-[#1e3a8a]">FlexSlotCustom</span>
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-gray-300">Provider Hub</span>
+              <span className="font-black tracking-tighter text-lg uppercase italic leading-none">FlexSlot</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-black/20 italic">Provider Hub</span>
             </div>
           </Link>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-3">
+        <nav className="flex-1 px-6 py-10 space-y-2">
           <SideNavItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={activeTab === "dashboard"} onClick={() => setActiveTab("dashboard")} />
           <SideNavItem icon={<Layout size={18} />} label="Clinic Setup" active={activeTab === "ui"} onClick={() => setActiveTab("ui")} />
           <SideNavItem icon={<CalendarDays size={18} />} label="Calendar" active={activeTab === "calendar"} onClick={() => setActiveTab("calendar")} />
@@ -125,9 +125,9 @@ export default function OwnerDashboard() {
 
       <main className="flex-1 flex flex-col overflow-y-auto relative">
         {activeTab === "dashboard" && (
-          <header className="h-20 bg-white border-b border-black/5 px-8 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
-            <div className="flex items-center gap-6 flex-1">
-              <h1 className="text-xl font-black uppercase tracking-tighter italic">Dashboard</h1>
+          <header className="h-24 bg-white border-b border-black/5 px-10 flex items-center justify-between sticky top-0 z-[100] backdrop-blur-md">
+            <div className="flex items-center gap-8 flex-1">
+              <h1 className="text-3xl font-black uppercase tracking-tighter italic">Core Intelligence</h1>
               <div className="flex items-center gap-2 bg-black/5 p-1 rounded-xl ml-4">
                 <button
                   onClick={() => {

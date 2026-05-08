@@ -21,13 +21,18 @@ export function StaffServicesTab({
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
       {/* Staff Section */}
-      <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-        <div className="flex items-center justify-between">
+      <section className="premium-card space-y-10">
+        <header className="flex items-center justify-between">
           <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
             <Stethoscope size={16} /> Practitioner Flow
           </h3>
-          <button onClick={() => setDoctors([...doctors, { id: Date.now(), name: "New Doctor", room: "TBD", specialty: "General Physician", quote: "Dedicated to patient care.", status: "Present", delay: 0, photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
-        </div>
+          <div className="flex items-center gap-4">
+             <div className="h-px bg-black/5 w-40" />
+             <button onClick={() => setDoctors([...doctors, { id: Date.now(), name: "New Doctor", room: "TBD", specialty: "General Physician", quote: "Dedicated to patient care.", status: "Present", delay: 0, photo: null }])} className="p-3 bg-black text-white rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-xl shadow-black/10">
+               <Plus size={16} />
+             </button>
+          </div>
+        </header>
         <div className="space-y-4">
           {doctors.map(doc => (
             <div key={doc.id} className="flex gap-6 p-6 bg-black/[0.02] rounded-[2rem] items-start border border-black/5 hover:bg-black/5 transition-all">
@@ -84,13 +89,18 @@ export function StaffServicesTab({
       </section>
 
       {/* Services Section */}
-      <section className="bg-white border border-black/5 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-        <div className="flex items-center justify-between">
+      <section className="premium-card space-y-10">
+        <header className="flex items-center justify-between">
           <h3 className="text-xs font-black uppercase tracking-widest flex items-center gap-2">
             <Activity size={16} /> Service Protocol
           </h3>
-          <button onClick={() => setServices([...services, { id: Date.now(), name: "New Service", photo: null }])} className="p-2 bg-black text-white rounded-full"><Plus size={16} /></button>
-        </div>
+          <div className="flex items-center gap-4">
+             <div className="h-px bg-black/5 w-40" />
+             <button onClick={() => setServices([...services, { id: Date.now(), name: "New Service", photo: null }])} className="p-3 bg-black text-white rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-xl shadow-black/10">
+               <Plus size={16} />
+             </button>
+          </div>
+        </header>
         <div className="grid grid-cols-2 gap-4">
           {services.map(s => (
             <div key={s.id} className="p-5 bg-black/[0.02] rounded-[2rem] border border-black/5 flex items-center gap-4 group hover:bg-black/5 transition-all">

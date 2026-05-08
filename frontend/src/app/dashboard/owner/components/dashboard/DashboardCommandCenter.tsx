@@ -133,21 +133,21 @@ export function DashboardCommandCenter({ bookings, doneCount, notesCount, onComp
                     layout
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center justify-between p-6 rounded-[2rem] hover:bg-black/5 transition-all group"
+                    className="flex items-center justify-between p-8 rounded-[2.5rem] hover:bg-black/5 transition-all group border border-transparent hover:border-black/5"
                   >
-                    <div className="flex items-center gap-6">
-                      <div className="w-12 h-12 bg-black/5 rounded-2xl flex flex-col items-center justify-center group-hover:bg-black group-hover:text-white transition-all">
-                        <span className="text-[10px] font-black leading-none">{u.slotTime.split(' ')[0]}</span>
-                        <span className="text-[8px] font-black opacity-40 uppercase">{u.slotTime.split(' ')[1]}</span>
+                    <div className="flex items-center gap-8">
+                      <div className="w-16 h-16 bg-black rounded-[1.5rem] flex flex-col items-center justify-center text-white shadow-xl shadow-black/10 group-hover:scale-110 transition-all">
+                        <span className="text-xs font-black leading-none">{u.slotTime.split(' ')[0]}</span>
+                        <span className="text-[8px] font-black opacity-40 uppercase tracking-widest">{u.slotTime.split(' ')[1]}</span>
                       </div>
                       <div>
-                        <h4 className="text-lg font-black uppercase tracking-tighter italic">{u.clientName}</h4>
-                        <p className="text-[10px] font-bold text-black/30 uppercase tracking-widest italic">{u.serviceName} · {u.practitioner}</p>
+                        <h4 className="text-2xl font-black uppercase tracking-tighter italic">{u.clientName}</h4>
+                        <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.2em] italic">{u.serviceName} · {u.practitioner}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button className="p-4 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-sm"><Phone size={16} /></button>
-                      <button className="p-4 text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-sm"><MailIcon size={16} /></button>
+                    <div className="flex items-center gap-3">
+                      <button className="w-12 h-12 flex items-center justify-center text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-xl"><Phone size={18} /></button>
+                      <button className="w-12 h-12 flex items-center justify-center text-black/20 hover:text-black hover:bg-white rounded-2xl transition-all shadow-none hover:shadow-xl"><MailIcon size={18} /></button>
                     </div>
                   </motion.div>
                 ))}
