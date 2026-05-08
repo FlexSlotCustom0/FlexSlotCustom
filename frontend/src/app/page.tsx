@@ -140,7 +140,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-right group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-24">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:-translate-x-32">
                 <Stethoscope className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 01: Medical Channeling</div>
@@ -160,7 +160,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-24">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-32">
                 <PawPrint className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 02: Veterinary Care</div>
@@ -180,7 +180,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-right group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-24">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:-translate-x-32">
                 <ToothIcon className="w-8 h-8" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 03: Dental Precision</div>
@@ -200,7 +200,7 @@ export default function NotionCalendarClone() {
               viewport={{ once: true }}
               className="space-y-6 text-center md:text-left group"
             >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-24">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-3xl mb-4 group-hover:scale-110 transition-transform shadow-xl shadow-black/10 md:translate-x-32">
                 <Activity className="w-7 h-7" />
               </div>
               <div className="text-[10px] font-black tracking-widest text-gray-400 uppercase">Category 04: Mental Health</div>
