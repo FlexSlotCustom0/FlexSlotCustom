@@ -80,6 +80,10 @@ function AuthFlowContent() {
       // Also save current user info for dashboard
       localStorage.setItem("flexslot_patient_name", fullName);
       localStorage.setItem("flexslot_patient_phone", phoneNumber);
+      localStorage.setItem("flexslot_patient_location", location);
+      localStorage.setItem("flexslot_patient_dob", dob);
+      localStorage.setItem("flexslot_patient_blood_type", bloodType);
+      localStorage.setItem("flexslot_patient_allergies", allergies);
     }
     
     setTimeout(() => {
