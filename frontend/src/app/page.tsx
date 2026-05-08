@@ -116,11 +116,8 @@ export default function NotionCalendarClone() {
             <p className="text-gray-400 font-medium italic mt-4">Four specialized channels, one unified booking experience.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20 relative">
-
-            {/* Grid Dividers */}
-            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[1px] bg-black opacity-[0.03] hidden md:block" />
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-black opacity-[0.03] hidden md:block" />
+            {/* Services Content Container */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-20 relative">
 
             {/* Category 01: Medical Channeling */}
             <motion.div
