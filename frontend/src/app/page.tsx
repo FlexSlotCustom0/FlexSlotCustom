@@ -199,18 +199,6 @@ export default function NotionCalendarClone() {
               </button>
             </motion.div>
 
-            {/* Center Brand Anchor */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
-              <motion.div 
-                whileHover={{ scale: 1.05 }}
-                className="bg-white border border-gray-100 p-4 rounded-3xl shadow-2xl"
-              >
-                <div className="w-12 h-12 bg-black rounded-2xl flex items-center justify-center">
-                  <img src="/flexslot_logo.png" alt="" className="w-full h-full object-contain p-2 brightness-0 invert" />
-                </div>
-              </motion.div>
-            </div>
-
           </div>
         </div>
       </section>
